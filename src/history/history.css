@@ -221,6 +221,7 @@ body {
 .btn-action:hover {
   background: #f5f5f5;
   border-color: #bdbdbd;
+  transform: translateY(-1px);
 }
 
 .btn-open:hover {
@@ -394,6 +395,7 @@ body {
 .btn-file:not(:disabled):hover {
   border-color: #9fb6cf;
   background: #f7fbff;
+  transform: translateY(-1px);
 }
 
 .files-list {

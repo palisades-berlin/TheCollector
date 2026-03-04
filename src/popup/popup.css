@@ -9,6 +9,11 @@ body {
 
 .hidden { display: none !important; }
 
+@keyframes popup-fade-up {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .header {
   background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
   color: #fff;
@@ -17,6 +22,7 @@ body {
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 4px 14px rgba(21,101,192,0.3);
+  animation: popup-fade-up 220ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 .header-left {
@@ -52,6 +58,7 @@ body {
   color: #5f6f89;
   cursor: pointer;
   border-bottom: 2px solid transparent;
+  transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .tab-btn.active {
@@ -61,6 +68,9 @@ body {
 }
 
 .panel { background: #fff; }
+.panel {
+  animation: popup-fade-up 220ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
 
 .action-section,
 .add-section {
@@ -238,6 +248,7 @@ kbd {
 .btn-footer:hover {
   background: #f5f5f5;
   border-color: #bdbdbd;
+  transform: translateY(-1px);
 }
 
 .btn-footer.danger:hover {
@@ -258,6 +269,7 @@ kbd {
   border-bottom: 1px solid #f0f4f8;
   gap: 6px;
   transition: background 0.15s ease;
+  animation: popup-fade-up 180ms cubic-bezier(0.2, 0, 0, 1) both;
 }
 
 .url-item:hover {

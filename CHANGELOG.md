@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.6 - 2026-03-04
+- Updated preview editor canvas typography to match the project UI type stack.
+- Improved annotation text consistency for text tool, blur label, stamp overlay, and exported edits.
+
+## 1.3.5 - 2026-03-04
+- Added subtle, elegant micro-animations across popup, options, history, and preview styles.
+- Enhanced hover/press/focus motion feedback using CSS-only transitions and spring-style easing.
+- Kept all business logic and feature flows unchanged.
+- Preserved reduced-motion accessibility safeguards.
+
 ## 1.3.4 - 2026-03-04
 - Renamed project branding from `Collector` to `THE Collector` across UI, manifest metadata, and documentation.
 

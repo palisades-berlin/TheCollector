@@ -13,6 +13,11 @@ body {
   min-height: 100vh;
 }
 
+@keyframes preview-fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* ── Toolbar ── */
 .toolbar {
   position: sticky;
@@ -27,6 +32,7 @@ body {
   gap: 16px;
   flex-wrap: wrap;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 4px 14px rgba(21,101,192,0.3);
+  animation: preview-fade-up 240ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 .toolbar-left {
@@ -88,6 +94,7 @@ body {
   background: #e9f0f8;
   border-bottom: 1px solid #d6e0ec;
   flex-wrap: wrap;
+  animation: preview-fade-up 260ms cubic-bezier(0.2, 0, 0, 1) both;
 }
 
 .mode-notice {
@@ -118,6 +125,7 @@ body {
 .btn-edit:hover {
   border-color: #97b6d8;
   background: #f8fbff;
+  transform: translateY(-1px);
 }
 
 .btn-edit.active {
@@ -189,6 +197,7 @@ body {
   background: rgba(255,255,255,0.25);
   border-color: rgba(255,255,255,0.65);
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
 }
 
 .btn-dl svg {
@@ -237,6 +246,7 @@ body {
   position: relative;
   display: inline-block;
   line-height: 0;
+  animation: preview-fade-up 260ms cubic-bezier(0.2, 0, 0, 1) both;
 }
 
 .screenshot {
@@ -244,6 +254,12 @@ body {
   border-radius: 4px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.1);
   display: block;
+  transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.stage:hover .screenshot {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.14);
 }
 
 .annotation-layer {

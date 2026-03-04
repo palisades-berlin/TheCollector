@@ -42,6 +42,10 @@ const PDF_PAGE = {
   letter: { w: 612, h: 792 },
 };
 const GOOGLE_DOCS_PIXEL_LIMIT = 25_000_000;
+const UI_CANVAS_FONT_FAMILY =
+  '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+const EMOJI_FONT_FAMILY =
+  '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
 
 let currentBlob = null;
 let sourceUrl = '';
@@ -335,7 +339,7 @@ function refreshOverlayCanvas() {
 function drawAnnotationPreview(ctx, ann, sx, sy, toView) {
   if (ann.type === 'text') {
     ctx.save();
-    ctx.font = '600 14px Segoe UI';
+    ctx.font = `600 14px ${UI_CANVAS_FONT_FAMILY}`;
     ctx.fillStyle = '#ffecb3';
     ctx.strokeStyle = '#263238';
     ctx.lineWidth = 3;
@@ -349,7 +353,7 @@ function drawAnnotationPreview(ctx, ann, sx, sy, toView) {
 
   if (ann.type === 'emoji') {
     ctx.save();
-    ctx.font = '24px Segoe UI Emoji, Apple Color Emoji, Noto Color Emoji';
+    ctx.font = `24px ${EMOJI_FONT_FAMILY}`;
     ctx.fillText(ann.emoji, ann.x * sx, ann.y * sy);
     ctx.restore();
     return;
@@ -364,7 +368,7 @@ function drawAnnotationPreview(ctx, ann, sx, sy, toView) {
     ctx.setLineDash([5, 4]);
     ctx.strokeRect(vr.x, vr.y, vr.w, vr.h);
     ctx.fillStyle = '#fff';
-    ctx.font = '600 11px Segoe UI';
+    ctx.font = `600 11px ${UI_CANVAS_FONT_FAMILY}`;
     ctx.fillText('BLUR', vr.x + 6, vr.y + 14);
     ctx.restore();
   } else if (ann.type === 'highlight') {
@@ -594,7 +598,7 @@ function applyAnnotation(ctx, canvas, ann) {
   if (ann.type === 'text') {
     ctx.save();
     const size = Math.max(18, Math.round(canvas.width / 80));
-    ctx.font = `600 ${size}px Segoe UI`;
+    ctx.font = `600 ${size}px ${UI_CANVAS_FONT_FAMILY}`;
     ctx.lineWidth = Math.max(3, Math.round(size / 8));
     ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
     ctx.fillStyle = '#fff7c2';
@@ -607,7 +611,7 @@ function applyAnnotation(ctx, canvas, ann) {
   if (ann.type === 'emoji') {
     ctx.save();
     const size = Math.max(28, Math.round(canvas.width / 38));
-    ctx.font = `${size}px Segoe UI Emoji, Apple Color Emoji, Noto Color Emoji`;
+    ctx.font = `${size}px ${EMOJI_FONT_FAMILY}`;
     ctx.fillText(ann.emoji, ann.x, ann.y);
     ctx.restore();
   }
@@ -629,7 +633,7 @@ function drawStampOverlay(ctx, width, height, url, timestamp) {
   const gap = Math.round(fontSize * 0.35);
 
   ctx.save();
-  ctx.font = `600 ${fontSize}px Segoe UI`;
+  ctx.font = `600 ${fontSize}px ${UI_CANVAS_FONT_FAMILY}`;
   const w1 = ctx.measureText(line1).width;
   const w2 = ctx.measureText(line2).width;
   const boxW = Math.min(width - pad * 2, Math.max(w1, w2) + pad * 2);
