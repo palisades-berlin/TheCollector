@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.1.3`.
+Current extension version: `1.1.4`.
 
 ## Overview
 Collector includes two modes:
@@ -99,6 +99,13 @@ When a capture exceeds safe canvas limits, Collector uses oversized fallback han
 ## Local checks
 ```bash
 node tests/url-utils.test.mjs
+```
+
+## Release Packaging
+Create a release zip that excludes local/development artifacts such as `node_modules`, tests, and git metadata:
+
+```bash
+./scripts/package-release.sh
 ```
 
 ## Security & Privacy

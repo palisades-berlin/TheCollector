@@ -25,6 +25,15 @@ const optionsBtn = document.getElementById('optionsBtn');
 
 const urlCount = document.getElementById('urlCount');
 const toastEl = document.getElementById('toast');
+const urlListEl = document.getElementById('url-list');
+const emptyStateEl = document.getElementById('empty-state');
+const addBtn = document.getElementById('btn-add');
+const addAllBtn = document.getElementById('btn-add-all');
+const copyBtn = document.getElementById('btn-copy');
+const exportBtn = document.getElementById('btn-export');
+const exportCsvBtn = document.getElementById('btn-export-csv');
+const emailBtn = document.getElementById('btn-email');
+const clearBtn = document.getElementById('btn-clear');
 
 let capturing = false;
 let toastTimer = null;
@@ -168,30 +177,27 @@ function createUrlItemEl(url) {
 }
 
 function renderList(urls) {
-  const list = document.getElementById('url-list');
-  const empty = document.getElementById('empty-state');
   updateBadge(urls.length);
 
   if (urls.length === 0) {
-    list.style.display = 'none';
-    empty.style.display = 'flex';
+    urlListEl.style.display = 'none';
+    emptyStateEl.style.display = 'flex';
     return;
   }
 
-  list.style.display = 'block';
-  empty.style.display = 'none';
-  list.innerHTML = '';
+  urlListEl.style.display = 'block';
+  emptyStateEl.style.display = 'none';
+  urlListEl.innerHTML = '';
   urls.forEach((url, i) => {
     const item = createUrlItemEl(url);
     item.querySelector('.url-index').textContent = String(i + 1);
-    list.appendChild(item);
+    urlListEl.appendChild(item);
   });
 }
 
 function resetClearButton() {
-  const btn = document.getElementById('btn-clear');
-  btn.classList.remove('confirming');
-  btn.textContent = 'Clear All';
+  clearBtn.classList.remove('confirming');
+  clearBtn.textContent = 'Clear All';
 }
 
 captureBtn.addEventListener('click', async () => {
@@ -266,7 +272,7 @@ optionsBtn.addEventListener('click', () => {
 chrome.runtime.onMessage.addListener((msg) => {
   switch (msg.type) {
     case MSG.SW_PROGRESS: {
-      const { percent } = msg.payload;
+      const percent = Number(msg?.payload?.percent ?? 0);
       const label = percent < 88 ? 'Capturing...' : percent < 100 ? 'Stitching...' : 'Done!';
       setProgress(percent, label);
       break;
@@ -275,14 +281,14 @@ chrome.runtime.onMessage.addListener((msg) => {
       showDone(msg.payload || {});
       break;
     case MSG.SW_ERROR:
-      showError(msg.payload.error);
+      showError(msg?.payload?.error || 'Unknown error');
       break;
     default:
       break;
   }
 });
 
-document.getElementById('btn-add').addEventListener('click', async () => {
+addBtn.addEventListener('click', async () => {
   try {
     const raw = await getCurrentTabUrl();
     if (!isCollectibleUrl(raw)) {
@@ -314,7 +320,7 @@ document.getElementById('btn-add').addEventListener('click', async () => {
   }
 });
 
-document.getElementById('btn-add-all').addEventListener('click', async () => {
+addAllBtn.addEventListener('click', async () => {
   try {
     const rawUrls = await getAllTabUrls();
     const validUrls = rawUrls.filter(isCollectibleUrl);
@@ -346,7 +352,7 @@ document.getElementById('btn-add-all').addEventListener('click', async () => {
   }
 });
 
-document.getElementById('btn-copy').addEventListener('click', async () => {
+copyBtn.addEventListener('click', async () => {
   try {
     const urls = await loadUrls();
     if (urls.length === 0) {
@@ -360,7 +366,7 @@ document.getElementById('btn-copy').addEventListener('click', async () => {
   }
 });
 
-document.getElementById('btn-export').addEventListener('click', async () => {
+exportBtn.addEventListener('click', async () => {
   try {
     const urls = await loadUrls();
     if (urls.length === 0) {
@@ -382,7 +388,7 @@ document.getElementById('btn-export').addEventListener('click', async () => {
   }
 });
 
-document.getElementById('btn-export-csv').addEventListener('click', async () => {
+exportCsvBtn.addEventListener('click', async () => {
   try {
     const urls = await loadUrls();
     if (urls.length === 0) {
@@ -405,7 +411,7 @@ document.getElementById('btn-export-csv').addEventListener('click', async () => 
   }
 });
 
-document.getElementById('btn-email').addEventListener('click', async () => {
+emailBtn.addEventListener('click', async () => {
   try {
     const urls = await loadUrls();
     if (urls.length === 0) {
@@ -424,18 +430,16 @@ document.getElementById('btn-email').addEventListener('click', async () => {
   }
 });
 
-document.getElementById('btn-clear').addEventListener('click', async () => {
-  const btn = document.getElementById('btn-clear');
-
+clearBtn.addEventListener('click', async () => {
   try {
-    if (!btn.classList.contains('confirming')) {
+    if (!clearBtn.classList.contains('confirming')) {
       const urls = await loadUrls();
       if (urls.length === 0) {
         showToast('List is already empty');
         return;
       }
-      btn.classList.add('confirming');
-      btn.textContent = 'Confirm Clear';
+      clearBtn.classList.add('confirming');
+      clearBtn.textContent = 'Confirm Clear';
       clearTimeout(clearConfirmTimer);
       clearConfirmTimer = setTimeout(resetClearButton, 3000);
       return;

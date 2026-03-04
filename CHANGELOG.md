@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.4 - 2026-03-04
+- Hardened popup message handling against missing payloads to prevent runtime UI errors.
+- Cached frequently used popup DOM references to reduce repeated lookups.
+- Added release packaging script `scripts/package-release.sh`.
+- Added README release packaging instructions.
+
 ## 1.1.3 - 2026-03-04
 - Merged `screen-collector` and `url-collector` into one extension: `Collector`.
 - Replaced popup with a two-tab interface: `Capture` and `URLs`.
