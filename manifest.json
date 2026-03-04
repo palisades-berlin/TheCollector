@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Collector",
-  "version": "1.3.3",
+  "name": "THE Collector",
+  "version": "1.3.4",
   "description": "Capture full-page screenshots and collect clean URLs from tabs. Data stays local.",
   "permissions": [
     "activeTab",
@@ -30,7 +30,7 @@
       "48": "assets/icons/icon48.png",
       "128": "assets/icons/icon128.png"
     },
-    "default_title": "Collector"
+    "default_title": "THE Collector"
   },
   "options_ui": {
     "page": "src/options/options.html",

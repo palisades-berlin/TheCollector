@@ -178,7 +178,7 @@ function drainThumbLoadQueue() {
 
 function debugThumbQueue(event, extra = {}) {
   if (!DEBUG_THUMB_QUEUE) return;
-  console.debug('[Collector][HistoryThumbQueue]', {
+  console.debug('[THE Collector][HistoryThumbQueue]', {
     event,
     queueDepth: thumbLoadQueue.length,
     activeWorkers: thumbLoadWorkers,

@@ -1,6 +1,6 @@
-# Collector v1.1.3
+# THE Collector v1.1.3
 
-Collector now combines screenshot capture and URL collection in one extension.
+THE Collector now combines screenshot capture and URL collection in one extension.
 
 ## Highlights
 - Merged `screen-collector` and `url-collector` into a single codebase.

@@ -442,6 +442,6 @@ chrome.commands.onCommand.addListener(async (command) => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab?.id) return;
   captureTab(tab.id).catch((err) =>
-    console.error('[collector] Capture error:', err)
+    console.error('[THE Collector] Capture error:', err)
   );
 });

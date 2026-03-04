@@ -1,6 +1,6 @@
-# Collector 1.1.3 - Release Notes
+# THE Collector 1.1.3 - Release Notes
 
-Collector now combines screenshot capture and URL collection in a single extension.
+THE Collector now combines screenshot capture and URL collection in a single extension.
 
 ## What's new
 - New unified popup with two tabs:
@@ -13,7 +13,7 @@ Collector now combines screenshot capture and URL collection in a single extensi
   - Duplicate prevention
   - Copy / TXT / CSV / Email export
   - Remove and clear actions
-- Branding and UI labels have been unified to `Collector`.
+- Branding and UI labels have been unified to `THE Collector`.
 - Added internal test coverage for URL utility logic.
 
 ## Notes

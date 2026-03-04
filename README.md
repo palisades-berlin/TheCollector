@@ -1,11 +1,11 @@
-# Collector
+# THE Collector
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.3.3`.
+Current extension version: `1.3.4`.
 
 ## Overview
-Collector includes two modes:
+THE Collector includes two modes:
 - Capture: full-page screenshots with local history, editing, and export
 - URLs: collect clean tab URLs (tracking params removed), copy/export/email, and manage a saved list
 
@@ -82,7 +82,7 @@ The capture pipeline is split across extension contexts:
 - Save-As behavior for downloads
 
 ## Oversized Capture Behavior
-When a capture exceeds safe canvas limits, Collector uses oversized fallback handling and split-aware preview behavior for stable rendering and review of large pages.
+When a capture exceeds safe canvas limits, THE Collector uses oversized fallback handling and split-aware preview behavior for stable rendering and review of large pages.
 
 ## Install (Unpacked)
 1. Open `chrome://extensions` (or `edge://extensions`).
@@ -123,7 +123,7 @@ Create a release zip that excludes local/development artifacts such as `node_mod
 
 ## Repository Layout
 ```text
-Collector/
+THE Collector/
 ├── manifest.json
 ├── assets/icons/
 └── src/

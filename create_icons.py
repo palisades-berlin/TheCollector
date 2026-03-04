@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate camera-style PNG icons for screen-collector.
+"""Generate camera-style PNG icons for THE Collector.
 Visual style matches url-collector: same palette (#0d47a1/#1565c0),
 rounded-rect body, darker top rail, detailed multi-ring lens.
 """
