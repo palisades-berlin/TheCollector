@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.3.14 - 2026-03-04
+- Improved popup capture error messages with user-friendly wording.
+- Added clear guidance for restricted contexts:
+  - `chrome://` / `edge://` internal pages
+  - `chrome-extension://` pages
+  - other browser-restricted hosts
+- Replaced raw technical error output in popup with plain-action guidance.
+
+## 1.3.13 - 2026-03-04
+- Added one-click export presets in Preview toolbar using existing export logic:
+  - `Email`: exports JPG and opens an email draft
+  - `Docs`: copies image with Docs-safe sizing
+  - `PDF Auto`: exports PDF with `Auto` page size
+- Added preset button styling and guarded preset execution to avoid parallel actions.
+- Kept core export pipeline unchanged (preset wrappers only).
+
+## 1.3.12 - 2026-03-04
+- Added client-side History Search + Filters with no backend/schema risk:
+  - domain filter
+  - date range filter (from/to)
+  - export type filter (PNG/JPG/PDF)
+- Added reset action for filters and filtered-count display (`x of y screenshots`).
+- Preserved clear-all semantics to operate on the full history set, not just filtered results.
+- Stored `blobType` in screenshot meta records to support lightweight export-type filtering.
+
 ## 1.3.11 - 2026-03-04
 - Made Options permission-state language more user friendly and less technical.
 - Reworded permission titles/descriptions to explain user benefit in plain terms.

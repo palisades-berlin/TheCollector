@@ -96,6 +96,55 @@ body {
   animation: pulse 0.8s ease-in-out infinite alternate;
 }
 
+/* ── Filters ── */
+.filters {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.2fr) repeat(2, minmax(140px, 1fr)) minmax(130px, 1fr) auto;
+  gap: 10px;
+  padding: 12px 20px 0;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.filter-item span {
+  font-size: 11px;
+  font-weight: 700;
+  color: #607589;
+  text-transform: uppercase;
+  letter-spacing: 0.35px;
+}
+
+.filter-item input,
+.filter-item select {
+  width: 100%;
+  border: 1.5px solid #ccd8e7;
+  border-radius: 8px;
+  background: #fff;
+  color: #1a2f45;
+  font-size: 12px;
+  padding: 7px 9px;
+}
+
+.filter-item input:focus,
+.filter-item select:focus {
+  outline: none;
+  border-color: #90caf9;
+  box-shadow: 0 0 0 2px rgba(144, 202, 249, 0.2);
+}
+
+.filter-actions {
+  justify-content: flex-end;
+}
+
+.filter-actions .btn-clear {
+  margin-top: auto;
+}
+
 /* ── Grid ── */
 .grid {
   display: grid;
@@ -288,6 +337,12 @@ body {
   padding: 80px;
   color: #90a4ae;
   font-size: 13px;
+}
+
+@media (max-width: 980px) {
+  .filters {
+    grid-template-columns: repeat(2, minmax(160px, 1fr));
+  }
 }
 
 /* ── Files Overlay ── */

@@ -175,6 +175,7 @@ function toMetaRecord(record) {
     splitTotalH: Number(record.splitTotalH || 0),
     stitchedFrom: record.stitchedFrom || '',
     hasThumbBlob: Boolean(record.thumbBlob),
+    blobType: record.blobType || record.blob?.type || 'image/png',
     captureDurationMs: Number(
       captureReport.durationMs || record.captureDurationMs || 0
     ),

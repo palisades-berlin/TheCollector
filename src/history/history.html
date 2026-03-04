@@ -34,6 +34,33 @@
     </div>
   </div>
 
+  <section class="filters" aria-label="History filters">
+    <label class="filter-item">
+      <span>Domain</span>
+      <input id="filterDomain" type="text" placeholder="e.g. example.com" />
+    </label>
+    <label class="filter-item">
+      <span>From</span>
+      <input id="filterFrom" type="date" />
+    </label>
+    <label class="filter-item">
+      <span>To</span>
+      <input id="filterTo" type="date" />
+    </label>
+    <label class="filter-item">
+      <span>Export Type</span>
+      <select id="filterType">
+        <option value="all">All</option>
+        <option value="png">PNG</option>
+        <option value="jpg">JPG</option>
+        <option value="pdf">PDF</option>
+      </select>
+    </label>
+    <div class="filter-item filter-actions">
+      <button id="resetFiltersBtn" class="btn-clear btn-neutral" type="button">Reset Filters</button>
+    </div>
+  </section>
+
   <!-- Grid -->
   <div id="historySkeleton" class="grid grid-skeleton">
     <div class="skeleton-card">

@@ -305,12 +305,45 @@ function setProgress(percent, text) {
   progressText.textContent = text || `${percent}%`;
 }
 
+function toFriendlyCaptureError(rawMessage) {
+  const message = String(rawMessage || '').trim();
+  const lower = message.toLowerCase();
+
+  if (
+    lower.includes('cannot access a chrome:// url') ||
+    lower.includes('cannot access a edge:// url')
+  ) {
+    return 'Browser internal pages cannot be captured. Open a regular website tab and try again.';
+  }
+
+  if (lower.includes('cannot access contents of url') && lower.includes('chrome-extension://')) {
+    return 'Extension pages cannot be captured. Switch to the webpage you want to capture and try again.';
+  }
+
+  if (
+    lower.includes('extension manifest must request permission to access this host') ||
+    lower.includes('cannot access contents of url')
+  ) {
+    return 'This page is restricted by browser permissions and cannot be captured. Try another tab.';
+  }
+
+  if (lower.includes('cannot access') && lower.includes('about:')) {
+    return 'Special browser pages cannot be captured. Open a regular website tab and try again.';
+  }
+
+  if (lower.includes('no active tab found')) {
+    return 'No active tab found. Click into a webpage tab and try again.';
+  }
+
+  return message || 'Capture failed. Please try again on a regular webpage tab.';
+}
+
 function showError(msg) {
   capturing = false;
   captureBtn.disabled = false;
   progressEl.classList.add('hidden');
   errorMsgEl.classList.remove('hidden');
-  errorMsgEl.textContent = `Error: ${msg}`;
+  errorMsgEl.textContent = toFriendlyCaptureError(msg);
 }
 
 function showDone(payload = {}) {

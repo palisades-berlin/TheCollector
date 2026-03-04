@@ -213,6 +213,26 @@ body {
   border-color: rgba(255,255,255,0.25);
 }
 
+.preset-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 2px;
+}
+
+.btn-dl-preset {
+  background: rgba(227, 242, 253, 0.16);
+  border-color: rgba(179, 229, 252, 0.5);
+  color: #eef7ff;
+  font-size: 11.5px;
+  padding: 7px 10px;
+}
+
+.btn-dl-preset:hover {
+  background: rgba(227, 242, 253, 0.28);
+  border-color: rgba(179, 229, 252, 0.75);
+}
+
 .btn-dl:disabled {
   opacity: 0.65;
   cursor: default;

@@ -16,6 +16,11 @@ const countEl = document.getElementById('count');
 const clearAllBtn = document.getElementById('clearAllBtn');
 const openFilesBtn = document.getElementById('openFilesBtn');
 const cardTpl = document.getElementById('cardTpl');
+const filterDomainEl = document.getElementById('filterDomain');
+const filterFromEl = document.getElementById('filterFrom');
+const filterToEl = document.getElementById('filterTo');
+const filterTypeEl = document.getElementById('filterType');
+const resetFiltersBtn = document.getElementById('resetFiltersBtn');
 
 const filesOverlayEl = document.getElementById('filesOverlay');
 const closeFilesBtn = document.getElementById('closeFilesBtn');
@@ -28,6 +33,7 @@ const deleteSelectedBtn = document.getElementById('deleteSelected');
 const fileRowTpl = document.getElementById('fileRowTpl');
 const CAPTURE_REPORTS_KEY = 'captureReports';
 
+let allRecords = [];
 let records = [];
 let groups = [];
 const selectedBaseIds = new Set();
@@ -36,6 +42,12 @@ const THUMB_LOAD_CONCURRENCY = 4;
 const thumbLoadQueue = [];
 let thumbLoadWorkers = 0;
 let captureReports = [];
+const filters = {
+  domain: '',
+  fromDate: '',
+  toDate: '',
+  type: 'all',
+};
 const DEBUG_THUMB_QUEUE =
   new URLSearchParams(window.location.search).get('debugThumbQueue') === '1' ||
   window.localStorage.getItem('sc_debug_thumb_queue') === '1';
@@ -48,27 +60,29 @@ init().catch((err) => {
 });
 
 async function init() {
+  wireFilters();
   await refreshAll();
 }
 
 async function refreshAll() {
   captureReports = await loadCaptureReports();
   try {
-    records = await listScreenshotMeta();
+    allRecords = await listScreenshotMeta();
   } catch (err) {
     // Safety net for old/partial DB schema states.
     if (String(err?.message || '').includes('object stores was not found')) {
       const full = await listScreenshots();
-      records = full.map((r) => ({
+      allRecords = full.map((r) => ({
         ...r,
         byteSize: r.blob?.size || 0,
+        blobType: r.blobType || r.blob?.type || 'image/png',
       }));
     } else {
       throw err;
     }
   }
-  groups = buildGroups(records);
-  records.sort((a, b) => b.timestamp - a.timestamp);
+  allRecords.sort((a, b) => b.timestamp - a.timestamp);
+  applyFilters();
   if (historySkeletonEl) historySkeletonEl.classList.add('hidden');
   loadingEl.classList.add('hidden');
   renderCaptureDiagnostics();
@@ -76,17 +90,90 @@ async function refreshAll() {
   renderFilesOverlay(true);
 }
 
+function wireFilters() {
+  filterDomainEl.addEventListener('input', () => {
+    filters.domain = String(filterDomainEl.value || '').trim().toLowerCase();
+    applyFiltersAndRender();
+  });
+  filterFromEl.addEventListener('change', () => {
+    filters.fromDate = filterFromEl.value || '';
+    applyFiltersAndRender();
+  });
+  filterToEl.addEventListener('change', () => {
+    filters.toDate = filterToEl.value || '';
+    applyFiltersAndRender();
+  });
+  filterTypeEl.addEventListener('change', () => {
+    filters.type = filterTypeEl.value || 'all';
+    applyFiltersAndRender();
+  });
+  resetFiltersBtn.addEventListener('click', () => {
+    filterDomainEl.value = '';
+    filterFromEl.value = '';
+    filterToEl.value = '';
+    filterTypeEl.value = 'all';
+    filters.domain = '';
+    filters.fromDate = '';
+    filters.toDate = '';
+    filters.type = 'all';
+    applyFiltersAndRender(true);
+  });
+}
+
+function applyFiltersAndRender(resetSelection = false) {
+  applyFilters();
+  renderMainView();
+  renderFilesOverlay(resetSelection);
+}
+
+function applyFilters() {
+  const fromTs = filters.fromDate
+    ? new Date(`${filters.fromDate}T00:00:00`).getTime()
+    : null;
+  const toTs = filters.toDate
+    ? new Date(`${filters.toDate}T23:59:59.999`).getTime()
+    : null;
+  records = allRecords.filter((record) => {
+    if (filters.domain) {
+      const domain = getRecordDomain(record);
+      if (!domain.includes(filters.domain)) return false;
+    }
+    if (fromTs !== null && Number(record.timestamp || 0) < fromTs) return false;
+    if (toTs !== null && Number(record.timestamp || 0) > toTs) return false;
+    if (filters.type !== 'all' && getRecordExportType(record) !== filters.type) return false;
+    return true;
+  });
+  groups = buildGroups(records);
+  selectedBaseIds.clear();
+}
+
+function getRecordDomain(record) {
+  try {
+    return new URL(record.url).hostname.toLowerCase();
+  } catch {
+    return String(record.url || '').toLowerCase();
+  }
+}
+
+function getRecordExportType(record) {
+  const type = String(record.blobType || '').toLowerCase();
+  if (type.includes('pdf')) return 'pdf';
+  if (type.includes('jpeg') || type.includes('jpg')) return 'jpg';
+  return 'png';
+}
+
 function renderMainView() {
   thumbLoadQueue.length = 0;
   debugThumbQueue('reset');
   gridEl.innerHTML = '';
+  const hasAnyRecords = allRecords.length > 0;
 
   if (records.length === 0) {
     emptyEl.classList.remove('hidden');
     gridEl.classList.add('hidden');
-    clearAllBtn.classList.add('hidden');
-    openFilesBtn.classList.add('hidden');
-    countEl.textContent = '';
+    clearAllBtn.classList.toggle('hidden', !hasAnyRecords);
+    openFilesBtn.classList.toggle('hidden', !hasAnyRecords);
+    updateCount(0, allRecords.length);
     return;
   }
 
@@ -94,7 +181,7 @@ function renderMainView() {
   gridEl.classList.remove('hidden');
   clearAllBtn.classList.remove('hidden');
   openFilesBtn.classList.remove('hidden');
-  updateCount(records.length);
+  updateCount(records.length, allRecords.length);
 
   for (const record of records) {
     gridEl.appendChild(buildCard(record));
@@ -213,8 +300,16 @@ function openPreview(id) {
   chrome.tabs.create({ url });
 }
 
-function updateCount(n) {
-  countEl.textContent = `· ${n} screenshot${n !== 1 ? 's' : ''}`;
+function updateCount(filtered, total) {
+  if (total === 0) {
+    countEl.textContent = '';
+    return;
+  }
+  if (total > filtered) {
+    countEl.textContent = `· ${filtered} of ${total} screenshots`;
+    return;
+  }
+  countEl.textContent = `· ${filtered} screenshot${filtered !== 1 ? 's' : ''}`;
 }
 
 function enqueueThumbLoad(id, canvasEl) {
@@ -567,10 +662,10 @@ deleteSelectedBtn.addEventListener('click', async () => {
 });
 
 clearAllBtn.addEventListener('click', async () => {
-  const total = records.length;
+  const total = allRecords.length;
   if (!confirm(`Delete all ${total} screenshot${total !== 1 ? 's' : ''}? This cannot be undone.`)) return;
 
-  await deleteScreenshots(records.map((record) => record.id));
+  await deleteScreenshots(allRecords.map((record) => record.id));
   showToast('All screenshots deleted.', 'success');
   await refreshAll();
 });

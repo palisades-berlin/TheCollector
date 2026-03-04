@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.3.11`.
+Current extension version: `1.3.14`.
 
 ## Overview
 THE Collector includes two modes:
@@ -37,6 +37,7 @@ The capture pipeline is split across extension contexts:
 - Quota-aware capture throttling and retry/backoff
 - Progress/result surfaced in popup UI
 - Capture reliability telemetry (duration, tiles, retries, fallback/error summary) for troubleshooting
+- User-friendly popup error messages for restricted pages (e.g. `chrome://` and extension pages)
 
 ### URL Collection
 - Add current tab URL
@@ -62,6 +63,10 @@ The capture pipeline is split across extension contexts:
 - Optional URL + timestamp stamp
 - URL in preview sanitized to clickable `http/https` only
 - Clipboard copy with optional Docs-limit resize behavior
+- One-click export presets:
+  - `Email` (JPG export + opens draft)
+  - `Docs` (copy with Docs-safe sizing)
+  - `PDF Auto` (PDF export using `Auto` page size preset)
 
 ### Export
 - PNG
@@ -73,6 +78,10 @@ The capture pipeline is split across extension contexts:
 ### History & Storage
 - Local persistence in IndexedDB
 - Open, single delete, and clear-all flows
+- Client-side History filters:
+  - domain text filter
+  - date range filter (from/to)
+  - export type filter (`PNG`, `JPG`, `PDF`)
 - History diagnostics:
   - Per-capture “why slow” hints (slow duration, retries/backoffs, oversized auto-scale fallback)
   - Latest capture failure note (if the most recent run failed)

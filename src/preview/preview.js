@@ -22,6 +22,9 @@ const downloadPngBtn = document.getElementById('downloadPng');
 const downloadJpgBtn = document.getElementById('downloadJpg');
 const downloadPdfBtn = document.getElementById('downloadPdf');
 const copyImageBtn = document.getElementById('copyImage');
+const presetEmailBtn = document.getElementById('presetEmail');
+const presetDocsBtn = document.getElementById('presetDocs');
+const presetPdfAutoBtn = document.getElementById('presetPdfAuto');
 const pdfPageSizeEl = document.getElementById('pdfPageSize');
 const stampOverlayEl = document.getElementById('stampOverlay');
 const clearEditsBtn = document.getElementById('clearEdits');
@@ -68,6 +71,7 @@ let settings = {
   fitClipboardToDocsLimit: true,
 };
 let hasAutoDownloaded = false;
+let presetRunning = false;
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
@@ -417,6 +421,77 @@ copyImageBtn.addEventListener('click', async () => {
   await copyToClipboard().catch((err) => showError(`Copy failed: ${err.message}`));
 });
 
+if (presetEmailBtn) {
+  presetEmailBtn.addEventListener('click', async () => {
+    await runPreset('email').catch((err) => showError(`Email preset failed: ${err.message}`));
+  });
+}
+if (presetDocsBtn) {
+  presetDocsBtn.addEventListener('click', async () => {
+    await runPreset('docs').catch((err) => showError(`Docs preset failed: ${err.message}`));
+  });
+}
+if (presetPdfAutoBtn) {
+  presetPdfAutoBtn.addEventListener('click', async () => {
+    await runPreset('pdf_auto').catch((err) => showError(`PDF Auto preset failed: ${err.message}`));
+  });
+}
+
+async function runPreset(kind) {
+  if (presetRunning) return;
+  presetRunning = true;
+  setPresetButtonsDisabled(true);
+  try {
+    if (kind === 'email') {
+      await runExport('jpg');
+      openEmailDraft();
+      showToast('Email preset ready: JPG exported + draft opened.', 'success');
+      return;
+    }
+    if (kind === 'docs') {
+      await copyToClipboard({ forceDocsFit: true });
+      showToast('Docs preset ready: image copied with Docs-safe sizing.', 'success');
+      return;
+    }
+    if (kind === 'pdf_auto') {
+      const previousSize = pdfPageSizeEl.value;
+      pdfPageSizeEl.value = 'auto';
+      try {
+        await runExport('pdf');
+      } finally {
+        pdfPageSizeEl.value = previousSize;
+      }
+      showToast('PDF Auto preset ready.', 'success');
+      return;
+    }
+    throw new Error(`Unknown preset: ${kind}`);
+  } finally {
+    setPresetButtonsDisabled(false);
+    presetRunning = false;
+  }
+}
+
+function setPresetButtonsDisabled(disabled) {
+  if (presetEmailBtn) presetEmailBtn.disabled = disabled;
+  if (presetDocsBtn) presetDocsBtn.disabled = disabled;
+  if (presetPdfAutoBtn) presetPdfAutoBtn.disabled = disabled;
+}
+
+function openEmailDraft() {
+  const subject = 'Screenshot from THE Collector';
+  const source = sanitizeHttpUrl(sourceUrl);
+  const bodyLines = ['I exported a screenshot from THE Collector.'];
+  if (source) bodyLines.push(`Source: ${source}`);
+  bodyLines.push(`Captured: ${new Date(captureTimestamp).toLocaleString()}`);
+  bodyLines.push('', 'Please attach the exported JPG file.');
+  const href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+  const a = document.createElement('a');
+  a.href = href;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
 async function runExport(format) {
   if (!currentBlob) {
     throw new Error('Export is unavailable before image load.');
@@ -458,7 +533,7 @@ async function runExport(format) {
   throw new Error(`Unsupported export format: ${format}`);
 }
 
-async function copyToClipboard() {
+async function copyToClipboard(options = {}) {
   if (!currentBlob) {
     throw new Error('Copy is unavailable before image load.');
   }
@@ -467,7 +542,8 @@ async function copyToClipboard() {
   }
 
   const base = await buildEditedCanvas();
-  const fitted = maybeFitForDocsLimit(base, settings.fitClipboardToDocsLimit);
+  const shouldFit = Boolean(options.forceDocsFit) || Boolean(settings.fitClipboardToDocsLimit);
+  const fitted = maybeFitForDocsLimit(base, shouldFit);
   const blob = await canvasToBlob(fitted, 'image/png');
   const item = new ClipboardItem({ 'image/png': blob });
   await navigator.clipboard.write([item]);
