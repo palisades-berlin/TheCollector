@@ -1,12 +1,15 @@
-# SCREEN Collector
+# Collector
 
-Manifest V3 browser extension for Chrome and Edge that captures full-page screenshots, supports local history, provides in-preview editing, and exports to PNG, JPG, and PDF.
+Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.0.33`.
+Current extension version: `1.1.3`.
 
 ## Overview
-SCREEN Collector captures a full page by scrolling the active tab, collecting viewport tiles, and stitching them into a final image.  
-All capture data is stored locally in extension storage (IndexedDB); there is no backend upload pipeline.
+Collector includes two modes:
+- Capture: full-page screenshots with local history, editing, and export
+- URLs: collect clean tab URLs (tracking params removed), copy/export/email, and manage a saved list
+
+All data remains in extension-local storage; there is no backend upload pipeline.
 
 ## Core Architecture
 The capture pipeline is split across extension contexts:
@@ -33,6 +36,17 @@ The capture pipeline is split across extension contexts:
 - Per-tab capture mutex to prevent conflicting concurrent runs
 - Quota-aware capture throttling and retry/backoff
 - Progress/result surfaced in popup UI
+
+### URL Collection
+- Add current tab URL
+- Add all URLs from current window
+- Automatic tracking-parameter cleanup (UTM, gclid, fbclid, and similar)
+- URL deduplication (normalized compare)
+- Open/remove individual URLs
+- Copy all URLs to clipboard
+- Export as TXT or CSV
+- Send URL list via email draft
+- Clear list with confirmation
 
 ### Preview & Editing
 - Click-to-zoom preview
@@ -68,7 +82,7 @@ The capture pipeline is split across extension contexts:
 - Save-As behavior for downloads
 
 ## Oversized Capture Behavior
-When a capture exceeds safe canvas limits, SCREEN Collector uses oversized fallback handling and split-aware preview behavior for stable rendering and review of large pages.
+When a capture exceeds safe canvas limits, Collector uses oversized fallback handling and split-aware preview behavior for stable rendering and review of large pages.
 
 ## Install (Unpacked)
 1. Open `chrome://extensions` (or `edge://extensions`).
@@ -77,10 +91,15 @@ When a capture exceeds safe canvas limits, SCREEN Collector uses oversized fallb
 4. Pin the extension if needed.
 
 ## Basic Usage
-1. Open any page.
-2. Trigger capture from the toolbar button or `Alt+Shift+P`.
-3. Review/edit in Preview.
-4. Export or manage captures in History.
+1. Open the extension popup.
+2. Use the `Capture` tab for screenshots (`Alt+Shift+P` also works).
+3. Use the `URLs` tab to collect, clean, and export links.
+4. Use History/Options for screenshot management and defaults.
+
+## Local checks
+```bash
+node tests/url-utils.test.mjs
+```
 
 ## Security & Privacy
 - Captures remain in extension-local storage unless downloaded by the user.
@@ -97,7 +116,7 @@ When a capture exceeds safe canvas limits, SCREEN Collector uses oversized fallb
 
 ## Repository Layout
 ```text
-SCREEN Collector/
+Collector/
 ├── manifest.json
 ├── assets/icons/
 └── src/
