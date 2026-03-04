@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.3.6`.
+Current extension version: `1.3.7`.
 
 ## Overview
 THE Collector includes two modes:
@@ -113,6 +113,26 @@ Create a release zip that excludes local/development artifacts such as `node_mod
 - Deleting from History removes stored records from IndexedDB.
 - Uninstalling the extension clears extension storage per browser behavior.
 - No backend upload path exists in this codebase.
+
+## Permission Scope (Phase A)
+Phase A focuses on dead-permission cleanup only. Current audit result: no removable runtime permission without behavior risk.
+
+- Required: `activeTab`
+  - Needed for temporary host access on the user-invoked tab during capture/injection flows.
+- Required: `tabs`
+  - Needed for active/current-window queries, opening history/preview tabs, and capture-tab operations.
+- Required: `scripting`
+  - Needed to inject/execute capture logic in the target tab.
+- Required: `storage`
+  - Needed for URL list persistence (`local`) and settings (`sync`).
+- Required: `offscreen`
+  - Needed for offscreen stitching/composition document lifecycle.
+- Required: `unlimitedStorage`
+  - Retained for screenshot history reliability on larger capture datasets.
+- Optional: `downloads`
+  - Requested/revoked by user in Options; used only for explicit export/download flows.
+
+Next refinement phases should focus on architectural reductions (not blind permission removal), especially around large-capture storage strategy.
 
 ## Current Constraints
 - Cross-origin iframe capture is incomplete.

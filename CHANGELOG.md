@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.7 - 2026-03-04
+- Implemented Permission Scope Phase A as a dead-permission audit with no risky removals.
+- Documented required vs optional permission rationale in README for review/release traceability.
+- Kept runtime permission set unchanged to preserve all capture, storage, and export flows.
+
 ## 1.3.6 - 2026-03-04
 - Updated preview editor canvas typography to match the project UI type stack.
 - Improved annotation text consistency for text tool, blur label, stamp overlay, and exported edits.
