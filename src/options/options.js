@@ -14,6 +14,16 @@ const statusEl = document.getElementById('status');
 const downloadsStatusEl = document.getElementById('downloadsStatus');
 const grantDownloadsBtn = document.getElementById('grantDownloads');
 const revokeDownloadsBtn = document.getElementById('revokeDownloads');
+const permBadgeEls = {
+  activeTab: document.getElementById('perm-activeTab'),
+  tabs: document.getElementById('perm-tabs'),
+  scripting: document.getElementById('perm-scripting'),
+  storage: document.getElementById('perm-storage'),
+  offscreen: document.getElementById('perm-offscreen'),
+  unlimitedStorage: document.getElementById('perm-unlimitedStorage'),
+  downloads: document.getElementById('perm-downloads'),
+};
+let permissionPollTimer = null;
 
 init().catch((err) => showStatus(`Failed to load settings: ${err.message}`));
 
@@ -26,6 +36,7 @@ async function init() {
   saveAsEl.checked = settings.saveAs;
   fitClipboardToDocsLimitEl.checked = settings.fitClipboardToDocsLimit;
   await refreshPermissionStatus();
+  setupPermissionStatusRefresh();
 }
 
 saveBtn.addEventListener('click', async () => {
@@ -113,12 +124,60 @@ window.addEventListener('keydown', (e) => {
 });
 
 async function refreshPermissionStatus() {
-  const hasDownloads = await chrome.permissions.contains({ permissions: ['downloads'] });
+  const hasDownloads = await hasPermission('downloads');
   downloadsStatusEl.textContent = `Downloads permission: ${hasDownloads ? 'granted' : 'not granted'}`;
   grantDownloadsBtn.disabled = hasDownloads;
   revokeDownloadsBtn.disabled = !hasDownloads;
+  setBadge('downloads', hasDownloads ? 'Optional: On' : 'Optional: Off', hasDownloads ? 'ok' : 'off');
+  await refreshCorePermissionBadges();
 }
 
 function showStatus(msg) {
   statusEl.textContent = msg;
+}
+
+async function hasPermission(permission) {
+  try {
+    return await chrome.permissions.contains({ permissions: [permission] });
+  } catch {
+    return false;
+  }
+}
+
+async function refreshCorePermissionBadges() {
+  const requiredPermissions = ['activeTab', 'tabs', 'scripting', 'storage', 'offscreen', 'unlimitedStorage'];
+  const checks = await Promise.all(requiredPermissions.map((perm) => hasPermission(perm)));
+  for (let i = 0; i < requiredPermissions.length; i++) {
+    const perm = requiredPermissions[i];
+    const granted = checks[i];
+    setBadge(perm, granted ? 'Available' : 'Check browser', granted ? 'ok' : 'warn');
+  }
+}
+
+function setBadge(permission, text, variant) {
+  const el = permBadgeEls[permission];
+  if (!el) return;
+  el.textContent = text;
+  el.classList.remove('ok', 'off', 'warn');
+  if (variant) el.classList.add(variant);
+}
+
+function setupPermissionStatusRefresh() {
+  if (permissionPollTimer) clearInterval(permissionPollTimer);
+  permissionPollTimer = setInterval(() => {
+    refreshPermissionStatus().catch(() => {});
+  }, 8000);
+
+  window.addEventListener('focus', () => {
+    refreshPermissionStatus().catch(() => {});
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) refreshPermissionStatus().catch(() => {});
+  });
+  window.addEventListener('beforeunload', () => {
+    if (permissionPollTimer) {
+      clearInterval(permissionPollTimer);
+      permissionPollTimer = null;
+    }
+  });
 }

@@ -104,6 +104,17 @@ body {
   padding: 20px;
 }
 
+.capture-diagnostics {
+  margin: 14px 20px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ffcdd2;
+  background: #fff5f5;
+  color: #b71c1c;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .grid-skeleton .skeleton-card {
   background: #fff;
   border: 1px solid #e3e8ef;
@@ -191,6 +202,13 @@ body {
 .card-meta {
   font-size: 11px;
   color: #90a4ae;
+}
+
+.card-diagnostic {
+  margin-top: 5px;
+  font-size: 11px;
+  color: #607d8b;
+  line-height: 1.35;
 }
 
 .card-actions {

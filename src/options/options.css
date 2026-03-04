@@ -158,3 +158,65 @@ body {
   font-size: 13px;
   color: #4b6277;
 }
+
+.perm-list {
+  display: grid;
+  gap: 8px;
+}
+
+.perm-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid #e3e8ef;
+  border-radius: 10px;
+  background: #fbfdff;
+}
+
+.perm-text {
+  min-width: 0;
+}
+
+.perm-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1d3d61;
+  margin-bottom: 2px;
+}
+
+.perm-desc {
+  font-size: 12px;
+  color: #607589;
+  line-height: 1.35;
+}
+
+.perm-badge {
+  flex-shrink: 0;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid #cfd8e3;
+  color: #546678;
+  background: #f3f6fa;
+}
+
+.perm-badge.ok {
+  border-color: #b7e1c6;
+  color: #2e7d32;
+  background: #eef9f1;
+}
+
+.perm-badge.off {
+  border-color: #eac9c9;
+  color: #b71c1c;
+  background: #fff3f3;
+}
+
+.perm-badge.warn {
+  border-color: #f0d7a2;
+  color: #8a5a00;
+  background: #fff8e8;
+}

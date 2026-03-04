@@ -7,6 +7,7 @@ import {
 } from '../shared/url-utils.js';
 
 const URL_LIMIT = 500;
+const URL_UNDO_KEY = 'urlsUndoSnapshot';
 
 const captureTabBtn = document.getElementById('captureTabBtn');
 const urlsTabBtn = document.getElementById('urlsTabBtn');
@@ -33,12 +34,15 @@ const copyBtn = document.getElementById('btn-copy');
 const exportBtn = document.getElementById('btn-export');
 const exportCsvBtn = document.getElementById('btn-export-csv');
 const emailBtn = document.getElementById('btn-email');
+const restoreBtn = document.getElementById('btn-restore');
 const clearBtn = document.getElementById('btn-clear');
 
 let capturing = false;
 let toastTimer = null;
 let clearConfirmTimer = null;
 let urlMutationQueue = Promise.resolve();
+let currentUrlCount = 0;
+let undoUrlCount = 0;
 
 function setActiveTab(mode) {
   const showCapture = mode === 'capture';
@@ -83,6 +87,18 @@ function loadUrls() {
       Array.isArray(result.urls)
         ? result.urls.filter((u) => typeof u === 'string')
         : []
+  );
+}
+
+function loadUndoSnapshot() {
+  return chromeCall((done) => chrome.storage.local.get({ [URL_UNDO_KEY]: null }, done)).then(
+    (result) => {
+      const snapshot = result[URL_UNDO_KEY];
+      if (!snapshot || !Array.isArray(snapshot.urls)) return null;
+      const urls = snapshot.urls.filter((u) => typeof u === 'string');
+      if (urls.length === 0) return null;
+      return { urls };
+    }
   );
 }
 
@@ -141,6 +157,14 @@ function updateBadge(count) {
   urlCount.textContent = `${count} URL${count === 1 ? '' : 's'}`;
 }
 
+function updateRestoreButtonState() {
+  const canRestore = currentUrlCount === 0 && undoUrlCount > 0;
+  restoreBtn.disabled = !canRestore;
+  restoreBtn.title = canRestore
+    ? `Restore ${undoUrlCount} URL${undoUrlCount === 1 ? '' : 's'} from last clear`
+    : 'Restore is available after clearing URLs';
+}
+
 function createUrlItemEl(url) {
   const item = document.createElement('div');
   item.className = 'url-item';
@@ -177,6 +201,7 @@ function createUrlItemEl(url) {
 }
 
 function renderList(urls) {
+  currentUrlCount = urls.length;
   updateBadge(urls.length);
 
   if (urls.length === 0) {
@@ -193,11 +218,63 @@ function renderList(urls) {
     item.querySelector('.url-index').textContent = String(i + 1);
     urlListEl.appendChild(item);
   });
+  updateRestoreButtonState();
 }
 
 function resetClearButton() {
   clearBtn.classList.remove('confirming');
   clearBtn.textContent = 'Clear All';
+}
+
+async function refreshUndoState() {
+  const snapshot = await loadUndoSnapshot();
+  undoUrlCount = snapshot?.urls?.length || 0;
+  updateRestoreButtonState();
+}
+
+function clearUrlsWithUndoSnapshot() {
+  const run = urlMutationQueue.then(async () => {
+    const state = await chromeCall((done) =>
+      chrome.storage.local.get({ urls: [] }, done)
+    );
+    const current = Array.isArray(state.urls)
+      ? state.urls.filter((u) => typeof u === 'string')
+      : [];
+
+    const payload = { urls: [] };
+    if (current.length > 0) {
+      payload[URL_UNDO_KEY] = { urls: current, savedAt: Date.now() };
+    }
+
+    await chromeCall((done) => chrome.storage.local.set(payload, done));
+    return { urls: [], snapshotCount: current.length };
+  });
+  urlMutationQueue = run.catch(() => {});
+  return run;
+}
+
+function restoreUrlsFromSnapshot() {
+  const run = urlMutationQueue.then(async () => {
+    const state = await chromeCall((done) =>
+      chrome.storage.local.get({ urls: [], [URL_UNDO_KEY]: null }, done)
+    );
+    const snapshot = state[URL_UNDO_KEY];
+    const restoredUrls =
+      snapshot && Array.isArray(snapshot.urls)
+        ? snapshot.urls.filter((u) => typeof u === 'string')
+        : [];
+
+    if (restoredUrls.length === 0) {
+      return { restored: false, urls: Array.isArray(state.urls) ? state.urls : [] };
+    }
+
+    await chromeCall((done) =>
+      chrome.storage.local.set({ urls: restoredUrls, [URL_UNDO_KEY]: null }, done)
+    );
+    return { restored: true, urls: restoredUrls, restoredCount: restoredUrls.length };
+  });
+  urlMutationQueue = run.catch(() => {});
+  return run;
 }
 
 captureBtn.addEventListener('click', async () => {
@@ -430,6 +507,26 @@ emailBtn.addEventListener('click', async () => {
   }
 });
 
+restoreBtn.addEventListener('click', async () => {
+  try {
+    if (restoreBtn.disabled) {
+      showToast('Nothing to restore');
+      return;
+    }
+    const result = await restoreUrlsFromSnapshot();
+    if (!result.restored) {
+      showToast('Nothing to restore');
+      await refreshUndoState();
+      return;
+    }
+    renderList(result.urls);
+    await refreshUndoState();
+    showToast(`Restored ${result.restoredCount} URL${result.restoredCount === 1 ? '' : 's'}`);
+  } catch (err) {
+    reportError(err, 'Could not restore URLs');
+  }
+});
+
 clearBtn.addEventListener('click', async () => {
   try {
     if (!clearBtn.classList.contains('confirming')) {
@@ -447,9 +544,14 @@ clearBtn.addEventListener('click', async () => {
 
     clearTimeout(clearConfirmTimer);
     resetClearButton();
-    const urls = await mutateUrls(() => []);
-    renderList(urls);
-    showToast('List cleared');
+    const result = await clearUrlsWithUndoSnapshot();
+    renderList(result.urls);
+    await refreshUndoState();
+    showToast(
+      result.snapshotCount > 0
+        ? `List cleared (can restore ${result.snapshotCount} URL${result.snapshotCount === 1 ? '' : 's'})`
+        : 'List cleared'
+    );
   } catch (err) {
     reportError(err, 'Could not clear list');
   }
@@ -460,6 +562,7 @@ clearBtn.addEventListener('click', async () => {
   try {
     const initialUrls = await loadUrls();
     renderList(initialUrls);
+    await refreshUndoState();
   } catch (err) {
     reportError(err, 'Could not load stored URLs');
   }

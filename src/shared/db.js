@@ -155,6 +155,7 @@ export async function saveTile(jobId, index, x, y, blob, crop = null, tileSize =
 }
 
 function toMetaRecord(record) {
+  const captureReport = record.captureReport || {};
   return {
     id: record.id,
     url: record.url || '',
@@ -174,6 +175,24 @@ function toMetaRecord(record) {
     splitTotalH: Number(record.splitTotalH || 0),
     stitchedFrom: record.stitchedFrom || '',
     hasThumbBlob: Boolean(record.thumbBlob),
+    captureDurationMs: Number(
+      captureReport.durationMs || record.captureDurationMs || 0
+    ),
+    captureTotalTiles: Number(
+      captureReport.totalTiles || record.captureTotalTiles || 0
+    ),
+    captureCapturedTiles: Number(
+      captureReport.capturedTiles || record.captureCapturedTiles || 0
+    ),
+    captureRetries: Number(captureReport.retries || record.captureRetries || 0),
+    captureQuotaBackoffs: Number(
+      captureReport.quotaBackoffs || record.captureQuotaBackoffs || 0
+    ),
+    captureFallbackUsed:
+      captureReport.fallbackUsed || record.captureFallbackUsed || 'none',
+    captureMode:
+      captureReport.captureMode || record.captureMode || 'page',
+    captureError: captureReport.error || record.captureError || '',
   };
 }
 

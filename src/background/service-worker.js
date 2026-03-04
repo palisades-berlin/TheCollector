@@ -13,6 +13,8 @@ import { getSettings } from '../shared/settings.js';
 let offscreenReady = false;
 let offscreenInitPromise = null;
 const activeCaptures = new Set(); // tabId set
+const CAPTURE_REPORTS_KEY = 'captureReports';
+const CAPTURE_REPORTS_LIMIT = 30;
 
 async function hasOffscreenDocument() {
   try {
@@ -192,11 +194,26 @@ async function captureVisibleTabWithRetry(windowId, captureState) {
       if (!isCaptureQuotaError(err) || attempt === CAPTURE_RETRY_MAX_ATTEMPTS) {
         throw err;
       }
+      captureState.retryCount = Number(captureState.retryCount || 0) + 1;
+      captureState.quotaBackoffCount = Number(captureState.quotaBackoffCount || 0) + 1;
       await sleep(CAPTURE_RETRY_BASE_DELAY_MS * attempt);
     }
   }
 
   throw new Error('captureVisibleTab retry loop ended unexpectedly');
+}
+
+async function persistCaptureReport(report) {
+  try {
+    const stored = await chrome.storage.local.get({ [CAPTURE_REPORTS_KEY]: [] });
+    const current = Array.isArray(stored[CAPTURE_REPORTS_KEY])
+      ? stored[CAPTURE_REPORTS_KEY]
+      : [];
+    const next = [report, ...current].slice(0, CAPTURE_REPORTS_LIMIT);
+    await chrome.storage.local.set({ [CAPTURE_REPORTS_KEY]: next });
+  } catch {
+    // Do not fail capture flows due to telemetry persistence issues.
+  }
 }
 
 // ─── Core capture logic ───────────────────────────────────────────────────────
@@ -210,6 +227,12 @@ async function captureTab(tabId) {
   let captureId = null;
   let stitchSucceeded = false;
   let firstThumbBlob = null;
+  const captureStartedAt = Date.now();
+  let totalTiles = 0;
+  let capturedTiles = 0;
+  let captureModeUsed = 'page';
+  let fallbackUsed = 'none';
+  const captureState = { lastCaptureAt: 0, retryCount: 0, quotaBackoffCount: 0 };
 
   try {
   // Inject content script (guard in agent prevents double-injection issues)
@@ -225,7 +248,8 @@ async function captureTab(tabId) {
 
   const cols = Math.ceil(scrollW / viewW);
   const rows = Math.ceil(scrollH / viewH);
-  const totalTiles = cols * rows;
+  totalTiles = cols * rows;
+  captureModeUsed = captureMode || 'page';
 
   broadcast(MSG.SW_PROGRESS, { percent: 5, tabId });
 
@@ -243,8 +267,6 @@ async function captureTab(tabId) {
   const id = crypto.randomUUID();
   captureId = id;
   let done = 0;
-
-  const captureState = { lastCaptureAt: 0 };
 
   try {
     for (let row = 0; row < rows; row++) {
@@ -301,6 +323,7 @@ async function captureTab(tabId) {
         );
 
         done++;
+        capturedTiles = done;
         const percent = 5 + Math.round((done / totalTiles) * 80);
         broadcast(MSG.SW_PROGRESS, { percent, tabId });
       }
@@ -331,14 +354,31 @@ async function captureTab(tabId) {
   stitchSucceeded = true;
 
   const resultIds = Array.isArray(stitchResult?.ids) ? stitchResult.ids : [id];
-  if (firstThumbBlob instanceof Blob) {
-    const finalRecord = await getScreenshot(id);
-    if (finalRecord?.blob) {
-      await saveScreenshot({
-        ...finalRecord,
-        thumbBlob: firstThumbBlob,
-      });
-    }
+  const finalRecord = await getScreenshot(id);
+  if (finalRecord?.blob) {
+    fallbackUsed = finalRecord.autoScaledFromOversized ? 'oversized_autoscale' : 'none';
+    const captureReport = {
+      durationMs: Date.now() - captureStartedAt,
+      totalTiles,
+      capturedTiles,
+      retries: Number(captureState.retryCount || 0),
+      quotaBackoffs: Number(captureState.quotaBackoffCount || 0),
+      fallbackUsed,
+      captureMode: captureModeUsed,
+    };
+    await saveScreenshot({
+      ...finalRecord,
+      ...(firstThumbBlob instanceof Blob ? { thumbBlob: firstThumbBlob } : {}),
+      captureReport,
+    });
+    await persistCaptureReport({
+      ok: true,
+      id,
+      timestamp: Date.now(),
+      url: finalRecord.url || '',
+      title: finalRecord.title || '',
+      ...captureReport,
+    });
   }
   const settings = await getSettings();
   const formatForDirectDownload =
@@ -368,7 +408,7 @@ async function captureTab(tabId) {
     tabId,
     split: false,
     partCount: 1,
-    captureMode: captureMode || 'page',
+    captureMode: captureModeUsed,
     downloadedDirectly,
     skippedPdfDirectDownload,
   });
@@ -384,6 +424,21 @@ async function captureTab(tabId) {
   }
 
   return id;
+  } catch (err) {
+    await persistCaptureReport({
+      ok: false,
+      timestamp: Date.now(),
+      tabId,
+      durationMs: Date.now() - captureStartedAt,
+      totalTiles,
+      capturedTiles,
+      retries: Number(captureState.retryCount || 0),
+      quotaBackoffs: Number(captureState.quotaBackoffCount || 0),
+      fallbackUsed,
+      captureMode: captureModeUsed,
+      error: err?.message || 'Unknown capture error',
+    });
+    throw err;
   } finally {
     activeCaptures.delete(tabId);
     // Offscreen stitch deletes tiles on success; cleanup leftovers on failure.

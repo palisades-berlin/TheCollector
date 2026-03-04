@@ -11,6 +11,7 @@ const gridEl = document.getElementById('grid');
 const emptyEl = document.getElementById('empty');
 const loadingEl = document.getElementById('loading');
 const historySkeletonEl = document.getElementById('historySkeleton');
+const captureDiagnosticsEl = document.getElementById('captureDiagnostics');
 const countEl = document.getElementById('count');
 const clearAllBtn = document.getElementById('clearAllBtn');
 const openFilesBtn = document.getElementById('openFilesBtn');
@@ -25,6 +26,7 @@ const selectedCountEl = document.getElementById('selectedCount');
 const downloadSelectedBtn = document.getElementById('downloadSelected');
 const deleteSelectedBtn = document.getElementById('deleteSelected');
 const fileRowTpl = document.getElementById('fileRowTpl');
+const CAPTURE_REPORTS_KEY = 'captureReports';
 
 let records = [];
 let groups = [];
@@ -33,6 +35,7 @@ let filesOverlayClosing = false;
 const THUMB_LOAD_CONCURRENCY = 4;
 const thumbLoadQueue = [];
 let thumbLoadWorkers = 0;
+let captureReports = [];
 const DEBUG_THUMB_QUEUE =
   new URLSearchParams(window.location.search).get('debugThumbQueue') === '1' ||
   window.localStorage.getItem('sc_debug_thumb_queue') === '1';
@@ -49,6 +52,7 @@ async function init() {
 }
 
 async function refreshAll() {
+  captureReports = await loadCaptureReports();
   try {
     records = await listScreenshotMeta();
   } catch (err) {
@@ -67,6 +71,7 @@ async function refreshAll() {
   records.sort((a, b) => b.timestamp - a.timestamp);
   if (historySkeletonEl) historySkeletonEl.classList.add('hidden');
   loadingEl.classList.add('hidden');
+  renderCaptureDiagnostics();
   renderMainView();
   renderFilesOverlay(true);
 }
@@ -102,6 +107,7 @@ function buildCard(record) {
   const canvas = node.querySelector('.thumb-canvas');
   const urlEl = node.querySelector('.card-url');
   const metaEl = node.querySelector('.card-meta');
+  const diagnosticEl = node.querySelector('.card-diagnostic');
   const openBtn = node.querySelector('.btn-open');
   const deleteBtn = node.querySelector('.btn-delete');
 
@@ -122,6 +128,13 @@ function buildCard(record) {
   const suffix = hints.length ? ` · ${hints.join(' · ')}` : '';
   metaEl.textContent =
     `${new Date(record.timestamp).toLocaleDateString()} · ${record.width}×${record.height}px${suffix}`;
+  const diagnosticText = buildCardDiagnosticText(record);
+  if (diagnosticText) {
+    diagnosticEl.textContent = diagnosticText;
+    diagnosticEl.classList.remove('hidden');
+  } else {
+    diagnosticEl.classList.add('hidden');
+  }
 
   card.addEventListener('click', (e) => {
     if (e.target.closest('button')) return;
@@ -136,6 +149,63 @@ function buildCard(record) {
   });
 
   return node;
+}
+
+async function loadCaptureReports() {
+  try {
+    const state = await chrome.storage.local.get({ [CAPTURE_REPORTS_KEY]: [] });
+    return Array.isArray(state[CAPTURE_REPORTS_KEY]) ? state[CAPTURE_REPORTS_KEY] : [];
+  } catch {
+    return [];
+  }
+}
+
+function renderCaptureDiagnostics() {
+  if (!captureDiagnosticsEl) return;
+  const lastFailed = captureReports.find((r) => r && r.ok === false && r.error);
+  if (!lastFailed) {
+    captureDiagnosticsEl.classList.add('hidden');
+    captureDiagnosticsEl.textContent = '';
+    return;
+  }
+  const durationPart =
+    Number(lastFailed.durationMs || 0) > 0
+      ? ` after ${formatDuration(lastFailed.durationMs)}`
+      : '';
+  const tilePart =
+    Number(lastFailed.totalTiles || 0) > 0
+      ? ` (${Number(lastFailed.capturedTiles || 0)}/${Number(lastFailed.totalTiles || 0)} tiles captured)`
+      : '';
+  captureDiagnosticsEl.textContent = `Last capture failed${durationPart}${tilePart}: ${lastFailed.error}`;
+  captureDiagnosticsEl.classList.remove('hidden');
+}
+
+function buildCardDiagnosticText(record) {
+  const durationMs = Number(record.captureDurationMs || 0);
+  const totalTiles = Number(record.captureTotalTiles || 0);
+  const retries = Number(record.captureRetries || 0);
+  const quotaBackoffs = Number(record.captureQuotaBackoffs || 0);
+  const fallbackUsed = String(record.captureFallbackUsed || 'none');
+  const notes = [];
+
+  if (fallbackUsed === 'oversized_autoscale') {
+    notes.push('Auto-scaled oversized page');
+  }
+  if (durationMs >= 12000) {
+    const tileText = totalTiles > 0 ? `, ${totalTiles} tiles` : '';
+    notes.push(`Slow capture (${formatDuration(durationMs)}${tileText})`);
+  }
+  if (retries > 0 || quotaBackoffs > 0) {
+    notes.push(`Capture retries: ${retries} (quota backoffs: ${quotaBackoffs})`);
+  }
+
+  return notes.join(' · ');
+}
+
+function formatDuration(ms) {
+  const seconds = Math.max(0, Number(ms || 0)) / 1000;
+  if (seconds < 10) return `${seconds.toFixed(1)}s`;
+  return `${Math.round(seconds)}s`;
 }
 
 function openPreview(id) {

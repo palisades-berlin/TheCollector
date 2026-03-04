@@ -87,6 +87,62 @@
     </section>
 
     <section class="card">
+      <h2>Permission Scope & Status</h2>
+      <p class="muted">What each permission does for you and whether it is currently available.</p>
+      <div class="perm-list" role="list" aria-label="Permission status list">
+        <div class="perm-item" role="listitem">
+          <div class="perm-text">
+            <div class="perm-title">Current tab access (`activeTab`)</div>
+            <div class="perm-desc">Lets THE Collector read the page you are currently on when you start a capture.</div>
+          </div>
+          <span id="perm-activeTab" class="perm-badge" aria-live="polite">Checking…</span>
+        </div>
+        <div class="perm-item" role="listitem">
+          <div class="perm-text">
+            <div class="perm-title">Tab management (`tabs`)</div>
+            <div class="perm-desc">Lets the extension find your active tab and open History/Preview pages when needed.</div>
+          </div>
+          <span id="perm-tabs" class="perm-badge" aria-live="polite">Checking…</span>
+        </div>
+        <div class="perm-item" role="listitem">
+          <div class="perm-text">
+            <div class="perm-title">Page capture helper (`scripting`)</div>
+            <div class="perm-desc">Lets the extension run capture code on the page so full-page screenshots work correctly.</div>
+          </div>
+          <span id="perm-scripting" class="perm-badge" aria-live="polite">Checking…</span>
+        </div>
+        <div class="perm-item" role="listitem">
+          <div class="perm-text">
+            <div class="perm-title">Local storage (`storage`)</div>
+            <div class="perm-desc">Saves your URLs, settings, and capture data on your device.</div>
+          </div>
+          <span id="perm-storage" class="perm-badge" aria-live="polite">Checking…</span>
+        </div>
+        <div class="perm-item" role="listitem">
+          <div class="perm-text">
+            <div class="perm-title">Background image processing (`offscreen`)</div>
+            <div class="perm-desc">Combines screenshot tiles in the background without interrupting your current tab.</div>
+          </div>
+          <span id="perm-offscreen" class="perm-badge" aria-live="polite">Checking…</span>
+        </div>
+        <div class="perm-item" role="listitem">
+          <div class="perm-text">
+            <div class="perm-title">Extra local space (`unlimitedStorage`)</div>
+            <div class="perm-desc">Helps keep large or many screenshots from being dropped due to browser quota limits.</div>
+          </div>
+          <span id="perm-unlimitedStorage" class="perm-badge" aria-live="polite">Checking…</span>
+        </div>
+        <div class="perm-item" role="listitem">
+          <div class="perm-text">
+            <div class="perm-title">File downloads (`downloads`, optional)</div>
+            <div class="perm-desc">Allows one-click downloads from the extension. You can turn this on or off above anytime.</div>
+          </div>
+          <span id="perm-downloads" class="perm-badge" aria-live="polite">Checking…</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
       <h2>Clipboard</h2>
       <label class="check-row">
         <input id="fitClipboardToDocsLimit" type="checkbox" />

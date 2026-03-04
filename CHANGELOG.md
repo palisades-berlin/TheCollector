@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.3.11 - 2026-03-04
+- Made Options permission-state language more user friendly and less technical.
+- Reworded permission titles/descriptions to explain user benefit in plain terms.
+- Updated status badge text to clearer labels (`Available`, `Check browser`, `Optional: On/Off`).
+
+## 1.3.10 - 2026-03-04
+- Implemented Permission Scope Phase B in Options (clarity-focused, no permission scope changes).
+- Added inline “why we need this permission” copy for required and optional permissions.
+- Added real-time permission status badges (required + optional) with periodic/focus refresh.
+- Kept manifest permission set unchanged for stability.
+
+## 1.3.9 - 2026-03-04
+- Added capture reliability telemetry persistence for each capture attempt:
+  - duration, tile counts, retry/backoff counts, capture mode, fallback used, and error summary.
+- Saved reliability metadata into screenshot meta records for History card diagnostics.
+- Added History diagnostics UI:
+  - per-card “why slow” hints
+  - top-line “last capture failed” note with concise reason and context.
+- Kept capture/export business logic unchanged; this is observability-only UX.
+
+## 1.3.8 - 2026-03-04
+- Added URL list session restore in popup: `Restore Last Clear` (single-step undo snapshot).
+- Clear-all now stores the previous URL list as an undo snapshot before clearing.
+- Restore action is enabled only when the list is empty to avoid accidental overwrite.
+- Added disabled-state styling for footer actions to keep UX clear and stable.
+
 ## 1.3.7 - 2026-03-04
 - Implemented Permission Scope Phase A as a dead-permission audit with no risky removals.
 - Documented required vs optional permission rationale in README for review/release traceability.
