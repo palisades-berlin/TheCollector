@@ -6,7 +6,9 @@ import {
   CAPTURE_RETRY_BASE_DELAY_MS,
 } from '../shared/constants.js';
 import { saveTile, deleteTiles, getScreenshot, saveScreenshot } from '../shared/db.js';
+import { sanitizeFilenameSegment, sanitizeDirPath } from '../shared/filename.js';
 import { getSettings } from '../shared/settings.js';
+import { toPositiveInt } from '../shared/validation.js';
 
 // ─── Offscreen document management ───────────────────────────────────────────
 
@@ -91,26 +93,6 @@ function broadcast(type, payload) {
 function isCaptureQuotaError(err) {
   const msg = (err?.message || String(err || '')).toUpperCase();
   return msg.includes('MAX_CAPTURE_VISIBLE_TAB_CALLS_PER_SECOND');
-}
-
-function sanitizeFilenameSegment(raw) {
-  return String(raw || '')
-    .replace(/[<>:"/\\|?*\x00-\x1f]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 90);
-}
-
-function sanitizeDirPath(raw) {
-  if (!raw) return '';
-  return String(raw)
-    .replace(/\\/g, '/')
-    .replace(/[^a-zA-Z0-9/_-]/g, '')
-    .replace(/\.\./g, '')
-    .replace(/\/{2,}/g, '/')
-    .replace(/^\/+/, '')
-    .replace(/\/+$/, '')
-    .slice(0, 120);
 }
 
 function buildFilename({ title, index, total, ext, directory }) {
@@ -452,7 +434,12 @@ async function captureTab(tabId) {
 
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg.type === MSG.CAPTURE_START) {
-    captureTab(msg.payload.tabId)
+    const tabId = toPositiveInt(msg?.payload?.tabId);
+    if (!tabId) {
+      sendResponse({ ok: false, error: 'Invalid tab id' });
+      return false;
+    }
+    captureTab(tabId)
       .then((id) => sendResponse({ ok: true, id }))
       .catch((err) => {
         broadcast(MSG.SW_ERROR, { error: err.message });

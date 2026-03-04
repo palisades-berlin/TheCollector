@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.19 - 2026-03-04
+- Implemented low-risk code review fixes without changing business behavior:
+  - fixed popup restore-button state refresh when list becomes empty
+  - added debounce to History domain filtering to reduce re-render churn
+  - hardened preview image setup with explicit load-error handling and object URL cleanup
+  - added CAPTURE_START tab-id validation in service worker message handling
+- Extracted duplicate filename/path sanitizers to shared helper module.
+- Added focused unit tests for shared helpers and state/validation utilities.
+
 ## 1.3.18 - 2026-03-04
 - Consolidated popup/history/options/preview styling into a shared Design Token system.
 - Expanded `src/shared/ui.css` token palette (colors, radius, typography, shadows, motion).

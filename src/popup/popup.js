@@ -6,6 +6,7 @@ import {
   isCollectibleUrl,
   escapeCsvCell,
 } from '../shared/url-utils.js';
+import { canRestoreUrls } from '../shared/url-list-state.js';
 
 const URL_LIMIT = 500;
 const URL_UNDO_KEY = 'urlsUndoSnapshot';
@@ -150,7 +151,7 @@ function updateBadge(count) {
 }
 
 function updateRestoreButtonState() {
-  const canRestore = currentUrlCount === 0 && undoUrlCount > 0;
+  const canRestore = canRestoreUrls(currentUrlCount, undoUrlCount);
   restoreBtn.disabled = !canRestore;
   restoreBtn.title = canRestore
     ? `Restore ${undoUrlCount} URL${undoUrlCount === 1 ? '' : 's'} from last clear`
@@ -199,6 +200,7 @@ function renderList(urls) {
   if (urls.length === 0) {
     urlListEl.style.display = 'none';
     emptyStateEl.style.display = 'flex';
+    updateRestoreButtonState();
     return;
   }
 

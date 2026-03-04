@@ -4,6 +4,7 @@ import {
   getScreenshot,
   deleteScreenshots,
 } from '../shared/db.js';
+import { sanitizeFilenameSegment, sanitizeDirPath } from '../shared/filename.js';
 import { getSettings } from '../shared/settings.js';
 import { showToast } from '../shared/toast.js';
 
@@ -45,6 +46,7 @@ const thumbLoadQueue = [];
 let thumbLoadWorkers = 0;
 let captureReports = [];
 let dismissedCaptureDiagnosticKey = '';
+let filterDomainTimer = null;
 const filters = {
   domain: '',
   fromDate: '',
@@ -95,8 +97,12 @@ async function refreshAll() {
 
 function wireFilters() {
   filterDomainEl.addEventListener('input', () => {
-    filters.domain = String(filterDomainEl.value || '').trim().toLowerCase();
-    applyFiltersAndRender();
+    if (filterDomainTimer) clearTimeout(filterDomainTimer);
+    filterDomainTimer = setTimeout(() => {
+      filters.domain = String(filterDomainEl.value || '').trim().toLowerCase();
+      applyFiltersAndRender();
+      filterDomainTimer = null;
+    }, 150);
   });
   filterFromEl.addEventListener('change', () => {
     filters.fromDate = filterFromEl.value || '';
@@ -111,6 +117,10 @@ function wireFilters() {
     applyFiltersAndRender();
   });
   resetFiltersBtn.addEventListener('click', () => {
+    if (filterDomainTimer) {
+      clearTimeout(filterDomainTimer);
+      filterDomainTimer = null;
+    }
     filterDomainEl.value = '';
     filterFromEl.value = '';
     filterToEl.value = '';
@@ -501,26 +511,6 @@ function blobExt(blob) {
   if (type.includes('jpeg')) return 'jpg';
   if (type.includes('pdf')) return 'pdf';
   return 'png';
-}
-
-function sanitizeFilenameSegment(raw) {
-  return String(raw || '')
-    .replace(/[<>:"/\\|?*\x00-\x1f]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 90);
-}
-
-function sanitizeDirPath(raw) {
-  if (!raw) return '';
-  return String(raw)
-    .replace(/\\/g, '/')
-    .replace(/[^a-zA-Z0-9/_-]/g, '')
-    .replace(/\.\./g, '')
-    .replace(/\/{2,}/g, '/')
-    .replace(/^\/+/, '')
-    .replace(/\/+$/, '')
-    .slice(0, 120);
 }
 
 function buildFilename({ title, ext, directory, partIndex, partTotal }) {

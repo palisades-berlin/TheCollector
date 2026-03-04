@@ -145,7 +145,13 @@ async function init() {
 async function setupSinglePreview(record) {
   currentBlob = record.blob;
   const objectUrl = URL.createObjectURL(record.blob);
-  screenshotImg.src = objectUrl;
+  return new Promise((resolve, reject) => {
+    const cleanup = () => {
+      screenshotImg.onload = null;
+      screenshotImg.onerror = null;
+      URL.revokeObjectURL(objectUrl);
+    };
+
     screenshotImg.onload = () => {
       naturalW = screenshotImg.naturalWidth;
       naturalH = screenshotImg.naturalHeight;
@@ -154,8 +160,17 @@ async function setupSinglePreview(record) {
       stageEl.classList.remove('hidden');
       screenshotImg.classList.remove('hidden');
       refreshOverlayCanvas();
-      URL.revokeObjectURL(objectUrl);
-  };
+      cleanup();
+      resolve();
+    };
+
+    screenshotImg.onerror = () => {
+      cleanup();
+      reject(new Error('Failed to render screenshot image.'));
+    };
+
+    screenshotImg.src = objectUrl;
+  });
 }
 
 function showError(msg) {
