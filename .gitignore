@@ -21,3 +21,6 @@ dist/
 
 # Build artifacts
 *.zip
+
+# Local maintainer notes
+CLAUDE.md

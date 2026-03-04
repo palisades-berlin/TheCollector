@@ -138,7 +138,7 @@ function bucketTilesByChunk(tiles, chunks) {
   return buckets;
 }
 
-async function renderChunk(tiles, chunkX, chunkY, chunkW, chunkH) {
+async function renderChunk(tiles, chunkX, chunkY, chunkW, chunkH, includeThumb = true) {
   const canvas = document.createElement('canvas');
   canvas.width = chunkW;
   canvas.height = chunkH;
@@ -181,7 +181,7 @@ async function renderChunk(tiles, chunkX, chunkY, chunkW, chunkH) {
   }
 
   const blob = await canvasToBlob(canvas, 'image/png');
-  const thumbBlob = await createThumbBlob(canvas);
+  const thumbBlob = includeThumb ? await createThumbBlob(canvas) : null;
   return { blob, thumbBlob };
 }
 
@@ -201,7 +201,8 @@ async function renderScaledFromChunks({ chunks, bucketedTiles, totalW, totalH })
       chunk.x,
       chunk.y,
       chunk.w,
-      chunk.h
+      chunk.h,
+      false
     );
     const decoded = await decodeTile(rendered.blob);
     const dx = Math.round(chunk.x * scale);

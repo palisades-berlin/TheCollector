@@ -30,6 +30,12 @@ let records = [];
 let groups = [];
 const selectedBaseIds = new Set();
 let filesOverlayClosing = false;
+const THUMB_LOAD_CONCURRENCY = 4;
+const thumbLoadQueue = [];
+let thumbLoadWorkers = 0;
+const DEBUG_THUMB_QUEUE =
+  new URLSearchParams(window.location.search).get('debugThumbQueue') === '1' ||
+  window.localStorage.getItem('sc_debug_thumb_queue') === '1';
 
 init().catch((err) => {
   if (historySkeletonEl) historySkeletonEl.classList.add('hidden');
@@ -66,6 +72,8 @@ async function refreshAll() {
 }
 
 function renderMainView() {
+  thumbLoadQueue.length = 0;
+  debugThumbQueue('reset');
   gridEl.innerHTML = '';
 
   if (records.length === 0) {
@@ -98,13 +106,7 @@ function buildCard(record) {
   const deleteBtn = node.querySelector('.btn-delete');
 
   canvas.classList.remove('thumb-broken');
-  loadCardThumbWhenReady(record.id, canvas).catch(() => {
-    if (canvas.isConnected) {
-      const ctx = canvas.getContext('2d');
-      if (ctx) ctx.clearRect(0, 0, canvas.width || 1, canvas.height || 1);
-      canvas.classList.add('thumb-broken');
-    }
-  });
+  enqueueThumbLoad(record.id, canvas);
 
   try {
     urlEl.textContent = new URL(record.url).hostname;
@@ -143,6 +145,45 @@ function openPreview(id) {
 
 function updateCount(n) {
   countEl.textContent = `· ${n} screenshot${n !== 1 ? 's' : ''}`;
+}
+
+function enqueueThumbLoad(id, canvasEl) {
+  thumbLoadQueue.push({ id, canvasEl });
+  debugThumbQueue('enqueue', { id });
+  drainThumbLoadQueue();
+}
+
+function drainThumbLoadQueue() {
+  while (thumbLoadWorkers < THUMB_LOAD_CONCURRENCY && thumbLoadQueue.length > 0) {
+    const next = thumbLoadQueue.shift();
+    thumbLoadWorkers++;
+    debugThumbQueue('start', { id: next.id });
+    loadCardThumbWhenReady(next.id, next.canvasEl)
+      .catch(() => {
+        const canvas = next.canvasEl;
+        if (canvas?.isConnected) {
+          const ctx = canvas.getContext('2d');
+          if (ctx) ctx.clearRect(0, 0, canvas.width || 1, canvas.height || 1);
+          canvas.classList.add('thumb-broken');
+        }
+        debugThumbQueue('error', { id: next.id });
+      })
+      .finally(() => {
+        thumbLoadWorkers--;
+        debugThumbQueue('done', { id: next.id });
+        drainThumbLoadQueue();
+      });
+  }
+}
+
+function debugThumbQueue(event, extra = {}) {
+  if (!DEBUG_THUMB_QUEUE) return;
+  console.debug('[SCREEN Collector][HistoryThumbQueue]', {
+    event,
+    queueDepth: thumbLoadQueue.length,
+    activeWorkers: thumbLoadWorkers,
+    ...extra,
+  });
 }
 
 async function loadCardThumb(id, canvasEl) {

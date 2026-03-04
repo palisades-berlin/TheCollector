@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that captures full-page screenshots, supports local history, provides in-preview editing, and exports to PNG, JPG, and PDF.
 
-Current extension version: `1.0.32`
+Current extension version: `1.0.33`.
 
 ## Overview
 SCREEN Collector captures a full page by scrolling the active tab, collecting viewport tiles, and stitching them into a final image.  
