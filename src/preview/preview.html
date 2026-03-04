@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>screen-collector: Preview</title>
+  <link rel="stylesheet" href="preview.css" />
+</head>
+<body>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <div class="brand">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+        </svg>
+        screen-collector
+      </div>
+      <div class="toolbar-meta">
+        <a id="sourceUrl" class="source-url" target="_blank" rel="noopener"></a>
+        <span id="captureTime" class="meta-item"></span>
+        <span id="dimensions" class="meta-item"></span>
+      </div>
+    </div>
+    <div class="toolbar-actions">
+      <button id="downloadPng" class="btn-dl">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+        </svg>
+        Save PNG
+      </button>
+      <button id="downloadJpg" class="btn-dl btn-dl-secondary">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+        </svg>
+        Save JPG
+      </button>
+      <span class="zoom-hint">Click image to zoom</span>
+    </div>
+  </div>
+
+  <!-- Image area -->
+  <div id="imageContainer" class="image-container">
+    <img id="screenshot" class="screenshot fit hidden" alt="Full-page screenshot" />
+  </div>
+
+  <div id="loading" class="status-msg">Loading screenshot…</div>
+  <div id="errorMsg" class="status-msg error hidden"></div>
+
+  <script type="module" src="preview.js"></script>
+</body>
+</html>

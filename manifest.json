@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "screen-collector",
+  "version": "1.0.0",
+  "description": "Capture full-page screenshots with one click. All data stored locally, never uploaded.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs",
+    "offscreen",
+    "unlimitedStorage"
+  ],
+  "optional_permissions": ["downloads"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "src/background/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "32": "assets/icons/icon32.png",
+      "48": "assets/icons/icon48.png",
+      "128": "assets/icons/icon128.png"
+    },
+    "default_title": "screen-collector: Capture Full Page"
+  },
+  "commands": {
+    "capture-fullpage": {
+      "suggested_key": {
+        "default": "Alt+Shift+P",
+        "mac": "Alt+Shift+P"
+      },
+      "description": "Capture the full page"
+    }
+  }
+}
