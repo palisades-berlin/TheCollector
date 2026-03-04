@@ -5,7 +5,7 @@ import {
   CAPTURE_RETRY_MAX_ATTEMPTS,
   CAPTURE_RETRY_BASE_DELAY_MS,
 } from '../shared/constants.js';
-import { saveTile, deleteTiles, getScreenshot } from '../shared/db.js';
+import { saveTile, deleteTiles, getScreenshot, saveScreenshot } from '../shared/db.js';
 import { getSettings } from '../shared/settings.js';
 
 // ─── Offscreen document management ───────────────────────────────────────────
@@ -209,6 +209,7 @@ async function captureTab(tabId) {
 
   let captureId = null;
   let stitchSucceeded = false;
+  let firstThumbBlob = null;
 
   try {
   // Inject content script (guard in agent prevents double-injection issues)
@@ -286,6 +287,9 @@ async function captureTab(tabId) {
               w: Math.max(1, Math.round(viewW * dpr)),
               h: Math.max(1, Math.round(viewH * dpr)),
             };
+        if (tileIndex === 0 && !firstThumbBlob) {
+          firstThumbBlob = blob;
+        }
         await saveTile(
           id,
           tileIndex,
@@ -326,9 +330,16 @@ async function captureTab(tabId) {
   }
   stitchSucceeded = true;
 
-  const split = Boolean(stitchResult?.split);
-  const partCount = Number(stitchResult?.partCount || 1);
   const resultIds = Array.isArray(stitchResult?.ids) ? stitchResult.ids : [id];
+  if (firstThumbBlob instanceof Blob) {
+    const finalRecord = await getScreenshot(id);
+    if (finalRecord?.blob) {
+      await saveScreenshot({
+        ...finalRecord,
+        thumbBlob: firstThumbBlob,
+      });
+    }
+  }
   const settings = await getSettings();
   const formatForDirectDownload =
     settings.defaultExportFormat === 'jpg' ? 'jpg' : 'png';
@@ -355,8 +366,8 @@ async function captureTab(tabId) {
   broadcast(MSG.SW_DONE, {
     id,
     tabId,
-    split,
-    partCount,
+    split: false,
+    partCount: 1,
     captureMode: captureMode || 'page',
     downloadedDirectly,
     skippedPdfDirectDownload,
@@ -366,10 +377,6 @@ async function captureTab(tabId) {
   if (!downloadedDirectly) {
     const q = new URLSearchParams({ id });
     if (captureMode) q.set('mode', captureMode);
-    if (split) {
-      q.set('split', '1');
-      q.set('parts', String(partCount));
-    }
     const previewUrl = chrome.runtime.getURL(
       `src/preview/preview.html?${q.toString()}`
     );

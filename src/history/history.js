@@ -2,7 +2,6 @@ import {
   listScreenshotMeta,
   listScreenshots,
   getScreenshot,
-  saveScreenshot,
   deleteScreenshots,
 } from '../shared/db.js';
 import { getSettings } from '../shared/settings.js';
@@ -31,12 +30,6 @@ let records = [];
 let groups = [];
 const selectedBaseIds = new Set();
 let filesOverlayClosing = false;
-const thumbQueue = [];
-let thumbWorkers = 0;
-const MAX_THUMB_WORKERS = 4;
-const THUMB_MAX_W = 720;
-const THUMB_MAX_H = 540;
-const tempThumbBlobUrls = new Set();
 
 init().catch((err) => {
   if (historySkeletonEl) historySkeletonEl.classList.add('hidden');
@@ -73,9 +66,6 @@ async function refreshAll() {
 }
 
 function renderMainView() {
-  for (const url of tempThumbBlobUrls) URL.revokeObjectURL(url);
-  tempThumbBlobUrls.clear();
-  thumbQueue.length = 0;
   gridEl.innerHTML = '';
 
   if (records.length === 0) {
@@ -101,19 +91,20 @@ function renderMainView() {
 function buildCard(record) {
   const node = cardTpl.content.cloneNode(true);
   const card = node.querySelector('.card');
-  const img = node.querySelector('.thumb-img');
+  const canvas = node.querySelector('.thumb-canvas');
   const urlEl = node.querySelector('.card-url');
   const metaEl = node.querySelector('.card-meta');
   const openBtn = node.querySelector('.btn-open');
   const deleteBtn = node.querySelector('.btn-delete');
 
-  img.removeAttribute('src');
-  img.classList.remove('thumb-broken');
-  img.onerror = () => {
-    img.classList.add('thumb-broken');
-    img.removeAttribute('src');
-  };
-  queueThumbLoad(record, img);
+  canvas.classList.remove('thumb-broken');
+  loadCardThumbWhenReady(record.id, canvas).catch(() => {
+    if (canvas.isConnected) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) ctx.clearRect(0, 0, canvas.width || 1, canvas.height || 1);
+      canvas.classList.add('thumb-broken');
+    }
+  });
 
   try {
     urlEl.textContent = new URL(record.url).hostname;
@@ -154,142 +145,57 @@ function updateCount(n) {
   countEl.textContent = `· ${n} screenshot${n !== 1 ? 's' : ''}`;
 }
 
-function queueThumbLoad(record, imgEl) {
-  thumbQueue.push({ record, imgEl });
-  drainThumbQueue();
-}
-
-function drainThumbQueue() {
-  while (thumbWorkers < MAX_THUMB_WORKERS && thumbQueue.length > 0) {
-    const next = thumbQueue.shift();
-    thumbWorkers++;
-    loadThumb(next.record, next.imgEl)
-      .catch(() => {
-        if (next.imgEl?.isConnected) next.imgEl.classList.add('thumb-broken');
-      })
-      .finally(() => {
-        thumbWorkers--;
-        drainThumbQueue();
-      });
-  }
-}
-
-async function loadThumb(meta, imgEl) {
-  if (!imgEl?.isConnected) return;
-  const record = meta.blob ? meta : await getScreenshot(meta.id);
+async function loadCardThumb(id, canvasEl) {
+  if (!canvasEl?.isConnected) return;
+  const record = await getScreenshot(id);
   if (!record?.blob) {
-    await deleteScreenshots([meta.id]).catch(() => {});
+    await deleteScreenshots([id]).catch(() => {});
     return;
   }
-  const src = await createThumbSrc(record, meta);
-  if (!imgEl.isConnected) return;
-  imgEl.src = src;
-}
-
-async function createThumbSrc(record, meta) {
-  if (record.thumbBlob instanceof Blob) {
-    return blobToDataUrl(record.thumbBlob);
-  }
-  const blob = record.blob;
-  if (!(blob instanceof Blob)) throw new Error('Missing blob for thumbnail');
-
+  const thumbBlob =
+    record.thumbBlob instanceof Blob && record.thumbBlob.size > 0
+      ? record.thumbBlob
+      : record.blob;
+  const bitmap = await createImageBitmap(thumbBlob);
   try {
-    const thumbBlob = await renderThumbBlob(blob, meta);
-    saveScreenshot({
-      ...record,
-      thumbBlob,
-    }).catch(() => {});
-    return blobToDataUrl(thumbBlob);
-  } catch {
-    const objectUrl = URL.createObjectURL(blob);
-    tempThumbBlobUrls.add(objectUrl);
-    return objectUrl;
+    if (!canvasEl.isConnected) return;
+    drawThumbBitmapCover(canvasEl, bitmap);
+  } finally {
+    if (typeof bitmap.close === 'function') bitmap.close();
   }
 }
 
-async function renderThumbBlob(blob, meta) {
-  let decoded = null;
-  let decodedW = Number(meta?.width || 0);
-  let decodedH = Number(meta?.height || 0);
-
-  if (typeof createImageBitmap === 'function') {
-    try {
-      decoded = await createImageBitmap(blob);
-      decodedW = decoded.width;
-      decodedH = decoded.height;
-    } catch (_) {}
+async function loadCardThumbWhenReady(id, canvasEl) {
+  if (!canvasEl) return;
+  // buildCard runs before insertion into the grid; wait until mounted + laid out.
+  for (let i = 0; i < 10; i++) {
+    if (canvasEl.isConnected && canvasEl.clientWidth > 0 && canvasEl.clientHeight > 0) {
+      break;
+    }
+    await nextFrame();
   }
+  await loadCardThumb(id, canvasEl);
+}
 
-  if (!decoded) {
-    const img = await loadImageFromBlob(blob);
-    decoded = img;
-    decodedW = img.naturalWidth || img.width || decodedW;
-    decodedH = img.naturalHeight || img.height || decodedH;
-  }
+function nextFrame() {
+  return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+}
 
-  const size = fitSize(decodedW, decodedH, THUMB_MAX_W, THUMB_MAX_H) || {
-    w: Math.max(1, Math.min(THUMB_MAX_W, decodedW || 1)),
-    h: Math.max(1, Math.min(THUMB_MAX_H, decodedH || 1)),
-  };
-  const canvas = document.createElement('canvas');
-  canvas.width = size.w;
-  canvas.height = size.h;
+function drawThumbBitmapCover(canvas, bitmap) {
+  const targetW = Math.max(1, canvas.clientWidth || 320);
+  const targetH = Math.max(1, canvas.clientHeight || 240);
+  const ratio = Math.max(targetW / bitmap.width, targetH / bitmap.height);
+  const drawW = Math.max(1, Math.round(bitmap.width * ratio));
+  const drawH = Math.max(1, Math.round(bitmap.height * ratio));
+  const dx = Math.round((targetW - drawW) / 2);
+  const dy = Math.round((targetH - drawH) / 2);
+
+  canvas.width = targetW;
+  canvas.height = targetH;
   const ctx = canvas.getContext('2d');
-  if (!ctx) return blob;
-  ctx.drawImage(decoded, 0, 0, size.w, size.h);
-
-  if (typeof decoded.close === 'function') decoded.close();
-  if (decoded instanceof HTMLImageElement && decoded.__thumbObjectUrl) {
-    URL.revokeObjectURL(decoded.__thumbObjectUrl);
-  }
-  return await canvasToBlob(canvas, 'image/jpeg', 0.86);
-}
-
-function blobToDataUrl(blob) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error('Failed to read blob'));
-    reader.onload = () => resolve(String(reader.result || ''));
-    reader.readAsDataURL(blob);
-  });
-}
-
-function loadImageFromBlob(blob) {
-  return new Promise((resolve, reject) => {
-    const objectUrl = URL.createObjectURL(blob);
-    const img = new Image();
-    img.onload = () => {
-      img.__thumbObjectUrl = objectUrl;
-      resolve(img);
-    };
-    img.onerror = () => {
-      URL.revokeObjectURL(objectUrl);
-      reject(new Error('Failed to decode image'));
-    };
-    img.src = objectUrl;
-  });
-}
-
-function fitSize(width, height, maxW, maxH) {
-  if (!width || !height) return null;
-  const scale = Math.min(1, maxW / width, maxH / height);
-  return {
-    w: Math.max(1, Math.round(width * scale)),
-    h: Math.max(1, Math.round(height * scale)),
-  };
-}
-
-function canvasToBlob(canvas, type, quality) {
-  return new Promise((resolve, reject) => {
-    canvas.toBlob(
-      (out) => {
-        if (out) resolve(out);
-        else reject(new Error('canvas.toBlob returned null'));
-      },
-      type,
-      quality
-    );
-  });
+  if (!ctx) return;
+  ctx.clearRect(0, 0, targetW, targetH);
+  ctx.drawImage(bitmap, dx, dy, drawW, drawH);
 }
 
 // ─── Files overlay ───────────────────────────────────────────────────────────

@@ -3,7 +3,7 @@
 ## Project Summary
 `screen-collector` is a Chrome/Edge extension (Manifest V3) for full-page screenshot capture.  
 Implementation is plain JavaScript modules loaded directly by the browser extension runtime (no bundler).
-Current extension version: `1.0.13`.
+Current extension version: `1.0.23`.
 
 ## Current Scope
 - Full-page capture from popup and keyboard shortcut (`Alt+Shift+P`).

@@ -50,7 +50,7 @@ async function stitch(id, totalW, totalH, sourceUrl, title) {
       return { ids: [id], partCount: 1, split: false };
     }
 
-    // Oversized fallback: split into a grid of chunks and persist each chunk.
+    // Oversized fallback: stitch to a single scaled image within canvas limits.
     if (tiles.some((tile) => {
       const { width, height } = tileDimensions(tile);
       return width <= 0 || height <= 0;
@@ -58,43 +58,27 @@ async function stitch(id, totalW, totalH, sourceUrl, title) {
       await hydrateTileDimensions(tiles);
     }
     const chunks = buildChunks(totalW, totalH);
-    const totalParts = chunks.length;
     const bucketedTiles = bucketTilesByChunk(tiles, chunks);
-    const ids = [];
-
-    for (const chunk of chunks) {
-      const rendered = await renderChunk(
-        bucketedTiles[chunk.part - 1],
-        chunk.x,
-        chunk.y,
-        chunk.w,
-        chunk.h
-      );
-      const chunkId = chunk.part === 1 ? id : `${id}__part_${chunk.part}`;
-      const chunkTitle = `${baseTitle} (Part ${chunk.part}/${totalParts})`;
-
-      await saveScreenshot({
-        id: chunkId,
-        url: sourceUrl,
-        title: chunkTitle,
-        timestamp: baseTimestamp + chunk.part,
-        blob: rendered.blob,
-        thumbBlob: rendered.thumbBlob,
-        width: chunk.w,
-        height: chunk.h,
-        splitBaseId: id,
-        splitPart: chunk.part,
-        splitCount: totalParts,
-        splitX: chunk.x,
-        splitY: chunk.y,
-        splitTotalW: totalW,
-        splitTotalH: totalH,
-      });
-
-      ids.push(chunkId);
-    }
-
-    return { ids, partCount: ids.length, split: true };
+    const stitched = await renderScaledFromChunks({
+      chunks,
+      bucketedTiles,
+      totalW,
+      totalH,
+    });
+    await saveScreenshot({
+      id,
+      url: sourceUrl,
+      title: `${baseTitle} (Auto-stitched)`,
+      timestamp: baseTimestamp,
+      blob: stitched.blob,
+      thumbBlob: stitched.thumbBlob,
+      width: stitched.width,
+      height: stitched.height,
+      originalWidth: totalW,
+      originalHeight: totalH,
+      autoScaledFromOversized: true,
+    });
+    return { ids: [id], partCount: 1, split: false };
   } finally {
     await deleteTiles(id);
   }
@@ -199,6 +183,41 @@ async function renderChunk(tiles, chunkX, chunkY, chunkW, chunkH) {
   const blob = await canvasToBlob(canvas, 'image/png');
   const thumbBlob = await createThumbBlob(canvas);
   return { blob, thumbBlob };
+}
+
+async function renderScaledFromChunks({ chunks, bucketedTiles, totalW, totalH }) {
+  const scale = Math.min(1, MAX_CANVAS_SIDE / Math.max(totalW, totalH));
+  const outW = Math.max(1, Math.round(totalW * scale));
+  const outH = Math.max(1, Math.round(totalH * scale));
+  const outCanvas = document.createElement('canvas');
+  outCanvas.width = outW;
+  outCanvas.height = outH;
+  const outCtx = outCanvas.getContext('2d');
+  if (!outCtx) throw new Error('Failed to create oversized stitch canvas');
+
+  for (const chunk of chunks) {
+    const rendered = await renderChunk(
+      bucketedTiles[chunk.part - 1],
+      chunk.x,
+      chunk.y,
+      chunk.w,
+      chunk.h
+    );
+    const decoded = await decodeTile(rendered.blob);
+    const dx = Math.round(chunk.x * scale);
+    const dy = Math.round(chunk.y * scale);
+    const dw = Math.max(1, Math.round(chunk.w * scale));
+    const dh = Math.max(1, Math.round(chunk.h * scale));
+    outCtx.drawImage(decoded, 0, 0, decoded.width || decoded.naturalWidth, decoded.height || decoded.naturalHeight, dx, dy, dw, dh);
+    if (typeof decoded.close === 'function') decoded.close();
+  }
+
+  return {
+    blob: await canvasToBlob(outCanvas, 'image/png'),
+    thumbBlob: await createThumbBlob(outCanvas),
+    width: outW,
+    height: outH,
+  };
 }
 
 function tileDimensions(tile) {

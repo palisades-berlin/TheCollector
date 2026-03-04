@@ -1,7 +1,7 @@
 # screen-collector Product Specification
 
 Updated: 2026-03-04
-Extension Version: `1.0.13`
+Extension Version: `1.0.23`
 
 ## 1. Product Goal
 `screen-collector` is a Manifest V3 browser extension for Chrome/Edge that captures full-page screenshots and keeps all capture data local to the user’s browser profile.

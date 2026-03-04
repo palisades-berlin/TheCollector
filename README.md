@@ -1,7 +1,7 @@
 # screen-collector
 
 Browser extension (Manifest V3) for full-page screenshots with local history, preview editing, and PNG/JPG/PDF export.
-Current extension version: `1.0.13`.
+Current extension version: `1.0.23`.
 
 For complete scope and constraints, see [PRODUCT_SPEC.md](PRODUCT_SPEC.md).
 

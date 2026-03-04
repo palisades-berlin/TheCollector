@@ -1,27 +1,19 @@
-import { getScreenshot, saveScreenshot } from '../shared/db.js';
+import { getScreenshot } from '../shared/db.js';
 import { getSettings } from '../shared/settings.js';
 import { MSG } from '../shared/messages.js';
 import { showToast } from '../shared/toast.js';
-import { MAX_CANVAS_SIDE } from '../shared/constants.js';
 
 const params = new URLSearchParams(location.search);
 const id = params.get('id');
-const splitFromQuery = params.get('split') === '1';
-const splitPartsFromQuery = Number(params.get('parts') || '1');
 const modeFromQuery = params.get('mode') || 'page';
 
 const stageEl = document.getElementById('stage');
 const screenshotImg = document.getElementById('screenshot');
 const annotationLayer = document.getElementById('annotationLayer');
 const imageContainer = document.getElementById('imageContainer');
-const splitGalleryEl = document.getElementById('splitGallery');
 const imageSkeletonEl = document.getElementById('imageSkeleton');
 const loadingEl = document.getElementById('loading');
 const errorMsgEl = document.getElementById('errorMsg');
-const splitNoticeEl = document.getElementById('splitNotice');
-const splitNoticeTextEl = document.getElementById('splitNoticeText');
-const stitchSplitBtn = document.getElementById('stitchSplitBtn');
-const openHistoryFromSplitBtn = document.getElementById('openHistoryFromSplit');
 const modeNoticeEl = document.getElementById('modeNotice');
 const sourceUrlEl = document.getElementById('sourceUrl');
 const captureTimeEl = document.getElementById('captureTime');
@@ -72,10 +64,6 @@ let settings = {
   fitClipboardToDocsLimit: true,
 };
 let hasAutoDownloaded = false;
-let splitOverviewMode = false;
-const splitObjectUrls = [];
-let splitParts = [];
-let splitBaseId = '';
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
@@ -130,15 +118,7 @@ async function init() {
     captureTimeEl.textContent = new Date(record.timestamp).toLocaleString();
     dimensionsEl.textContent = `${record.width} × ${record.height} px`;
 
-    if (splitFromQuery && splitPartsFromQuery > 1) {
-      splitNoticeTextEl.textContent =
-        `Oversized capture shown as ${splitPartsFromQuery} parts. ` +
-        'Open History for individual part management.';
-      splitNoticeEl.classList.remove('hidden');
-      await setupSplitOverview(record);
-    } else {
-      await setupSinglePreview(record);
-    }
+    await setupSinglePreview(record);
 
     if (modeFromQuery === 'iframe') {
       modeNoticeEl.textContent = 'Captured using same-origin iframe mode.';
@@ -170,189 +150,6 @@ async function setupSinglePreview(record) {
   };
 }
 
-function baseCaptureId(rawId) {
-  return rawId.replace(/__part_\d+$/, '');
-}
-
-function splitPartNumber(rawId, baseId) {
-  if (rawId === baseId) return 1;
-  const m = rawId.match(/__part_(\d+)$/);
-  return m ? Number(m[1]) : Number.POSITIVE_INFINITY;
-}
-
-async function setupSplitOverview(record) {
-  splitOverviewMode = true;
-  currentBlob = null;
-  stageEl.classList.add('hidden');
-  screenshotImg.classList.add('hidden');
-  imageContainer.classList.add('split-overview');
-  imageContainer.classList.remove('zoomed');
-  splitGalleryEl.classList.remove('hidden');
-  if (zoomHintEl) zoomHintEl.textContent = 'Click part to zoom';
-  if (editbarEl) editbarEl.classList.add('hidden');
-  setExportButtonsDisabled(true);
-
-  const baseId = baseCaptureId(record.id || id);
-  splitBaseId = baseId;
-  const expectedParts = Math.max(1, splitPartsFromQuery);
-  const parts = [];
-  for (let n = 1; n <= expectedParts; n++) {
-    const partId = n === 1 ? baseId : `${baseId}__part_${n}`;
-    const part = await getScreenshot(partId);
-    if (part) parts.push(part);
-  }
-  parts.sort((a, b) => splitPartNumber(a.id, baseId) - splitPartNumber(b.id, baseId));
-  splitParts = parts;
-  if (stitchSplitBtn) stitchSplitBtn.disabled = parts.length < 2;
-
-  for (const part of parts) {
-    const url = URL.createObjectURL(part.blob);
-    splitObjectUrls.push(url);
-
-    const card = document.createElement('div');
-    card.className = 'split-part-card';
-
-    const img = document.createElement('img');
-    img.className = 'split-part-img';
-    img.alt = part.title || 'Split capture part';
-    img.src = url;
-    img.addEventListener('click', (e) => {
-      if (e.shiftKey) {
-        const wasZoomed = img.classList.contains('zoomed');
-        const others = splitGalleryEl.querySelectorAll('.split-part-img.zoomed');
-        for (const other of others) {
-          if (other !== img) other.classList.remove('zoomed');
-        }
-        img.classList.toggle('zoomed', !wasZoomed);
-        return;
-      }
-      img.classList.toggle('zoomed');
-    });
-
-    const meta = document.createElement('div');
-    const n = splitPartNumber(part.id, baseId);
-    meta.className = 'split-part-meta';
-    meta.textContent = Number.isFinite(n) ? `Part ${n} · ${part.width}×${part.height}` : `${part.width}×${part.height}`;
-
-    card.appendChild(img);
-    card.appendChild(meta);
-    splitGalleryEl.appendChild(card);
-  }
-
-  loadingEl.classList.add('hidden');
-  imageSkeletonEl.classList.add('hidden');
-}
-
-async function stitchSplitToEditableCopy() {
-  if (!splitOverviewMode || splitParts.length < 2) return;
-
-  if (!stitchSplitBtn) return;
-  stitchSplitBtn.disabled = true;
-  const originalLabel = stitchSplitBtn.textContent;
-  stitchSplitBtn.textContent = 'Stitching…';
-
-  try {
-    const layout = buildSplitLayout(splitParts, splitBaseId);
-    if (!layout.totalW || !layout.totalH) {
-      throw new Error('Split layout is invalid');
-    }
-    const maxSide = Math.max(layout.totalW, layout.totalH);
-    const scale = maxSide > MAX_CANVAS_SIDE ? MAX_CANVAS_SIDE / maxSide : 1;
-    const outW = Math.max(1, Math.round(layout.totalW * scale));
-    const outH = Math.max(1, Math.round(layout.totalH * scale));
-
-    const canvas = document.createElement('canvas');
-    canvas.width = outW;
-    canvas.height = outH;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) throw new Error('Failed to create stitch canvas');
-
-    for (const item of layout.items) {
-      const decoded = await decodeImageBlob(item.record.blob);
-      const dx = Math.round(item.x * scale);
-      const dy = Math.round(item.y * scale);
-      const dw = Math.max(1, Math.round(item.w * scale));
-      const dh = Math.max(1, Math.round(item.h * scale));
-      ctx.drawImage(decoded, 0, 0, decoded.width || decoded.naturalWidth, decoded.height || decoded.naturalHeight, dx, dy, dw, dh);
-      if (typeof decoded.close === 'function') decoded.close();
-    }
-
-    const stitchedBlob = await canvasToBlob(canvas, 'image/png');
-    const thumbBlob = await createThumbBlob(canvas);
-    const stitchedId = `${splitBaseId}__stitched_${Date.now()}`;
-    const stitchedTitle = `${document.title.replace(/^screen-collector\s*·\s*/i, '')} (Stitched)`;
-
-    await saveScreenshot({
-      id: stitchedId,
-      url: sourceUrl,
-      title: stitchedTitle,
-      timestamp: Date.now(),
-      blob: stitchedBlob,
-      thumbBlob,
-      width: outW,
-      height: outH,
-      stitchedFrom: splitBaseId,
-    });
-
-    if (scale < 1) {
-      showToast('Stitched copy created (scaled to browser canvas limit).', 'info', 3200);
-    } else {
-      showToast('Stitched copy created.', 'success');
-    }
-
-    const url = chrome.runtime.getURL(`src/preview/preview.html?id=${stitchedId}`);
-    chrome.tabs.create({ url });
-  } catch (err) {
-    showToast(`Stitch failed: ${err.message}`, 'error', 3400);
-  } finally {
-    stitchSplitBtn.disabled = false;
-    stitchSplitBtn.textContent = originalLabel;
-  }
-}
-
-function buildSplitLayout(parts, baseId) {
-  const withMeta = parts.every((p) =>
-    Number.isFinite(p.splitX) &&
-    Number.isFinite(p.splitY) &&
-    Number.isFinite(p.splitTotalW) &&
-    Number.isFinite(p.splitTotalH)
-  );
-
-  if (withMeta) {
-    const totalW = Math.max(...parts.map((p) => Number(p.splitTotalW || 0)));
-    const totalH = Math.max(...parts.map((p) => Number(p.splitTotalH || 0)));
-    const items = parts.map((p) => ({
-      record: p,
-      x: Number(p.splitX || 0),
-      y: Number(p.splitY || 0),
-      w: Number(p.width || 0),
-      h: Number(p.height || 0),
-    }));
-    return { items, totalW, totalH };
-  }
-
-  // Best-effort fallback for older captures without split metadata:
-  // stack parts vertically in split order.
-  let y = 0;
-  let maxW = 0;
-  const items = parts
-    .sort((a, b) => splitPartNumber(a.id, baseId) - splitPartNumber(b.id, baseId))
-    .map((p) => {
-      const item = { record: p, x: 0, y, w: Number(p.width || 0), h: Number(p.height || 0) };
-      y += item.h;
-      maxW = Math.max(maxW, item.w);
-      return item;
-    });
-  return { items, totalW: maxW, totalH: y };
-}
-
-function setExportButtonsDisabled(disabled) {
-  downloadPngBtn.disabled = disabled;
-  downloadJpgBtn.disabled = disabled;
-  downloadPdfBtn.disabled = disabled;
-  copyImageBtn.disabled = disabled;
-}
-
 function showError(msg) {
   loadingEl.classList.add('hidden');
   imageSkeletonEl.classList.add('hidden');
@@ -361,7 +158,6 @@ function showError(msg) {
 }
 
 function maybeAutoDownload() {
-  if (splitOverviewMode) return;
   if (settings.autoDownloadMode !== 'after_preview' || hasAutoDownloaded) return;
   hasAutoDownloaded = true;
   setTimeout(() => {
@@ -619,7 +415,7 @@ copyImageBtn.addEventListener('click', async () => {
 
 async function runExport(format) {
   if (!currentBlob) {
-    throw new Error('Export is unavailable in split overview mode.');
+    throw new Error('Export is unavailable before image load.');
   }
 
   if (format === 'png') {
@@ -660,7 +456,7 @@ async function runExport(format) {
 
 async function copyToClipboard() {
   if (!currentBlob) {
-    throw new Error('Copy is unavailable in split overview mode.');
+    throw new Error('Copy is unavailable before image load.');
   }
   if (!navigator.clipboard?.write || typeof ClipboardItem === 'undefined') {
     throw new Error('Clipboard image copy is not supported in this browser context.');
@@ -904,21 +700,6 @@ function canvasToBlob(canvas, type, quality) {
   });
 }
 
-async function createThumbBlob(sourceCanvas) {
-  const maxW = 720;
-  const maxH = 540;
-  const scale = Math.min(1, maxW / sourceCanvas.width, maxH / sourceCanvas.height);
-  const outW = Math.max(1, Math.round(sourceCanvas.width * scale));
-  const outH = Math.max(1, Math.round(sourceCanvas.height * scale));
-  const canvas = document.createElement('canvas');
-  canvas.width = outW;
-  canvas.height = outH;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return null;
-  ctx.drawImage(sourceCanvas, 0, 0, outW, outH);
-  return canvasToBlob(canvas, 'image/jpeg', 0.84);
-}
-
 // ─── Smart PDF splitting ──────────────────────────────────────────────────────
 
 async function buildPdfFromCanvas(canvas, pageSize) {
@@ -1130,22 +911,3 @@ function fmt(n) {
 }
 
 init();
-
-window.addEventListener('beforeunload', () => {
-  for (const url of splitObjectUrls) {
-    URL.revokeObjectURL(url);
-  }
-});
-
-if (openHistoryFromSplitBtn) {
-  openHistoryFromSplitBtn.addEventListener('click', () => {
-    const url = chrome.runtime.getURL('src/history/history.html');
-    chrome.tabs.create({ url });
-  });
-}
-
-if (stitchSplitBtn) {
-  stitchSplitBtn.addEventListener('click', () => {
-    stitchSplitToEditableCopy();
-  });
-}

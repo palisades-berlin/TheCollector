@@ -85,6 +85,11 @@ body {
   border-color: rgba(239,154,154,0.6);
 }
 
+.btn-clear.btn-neutral:hover {
+  background: rgba(179, 229, 252, 0.25);
+  border-color: rgba(179, 229, 252, 0.62);
+}
+
 .btn-clear.confirming {
   background: rgba(239,154,154,0.3);
   border-color: rgba(239,154,154,0.7);
@@ -150,15 +155,13 @@ body {
   overflow: hidden;
 }
 
-.thumb-img {
+.thumb-canvas {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top center;
   display: block;
 }
 
-.thumb-img.thumb-broken {
+.thumb-canvas.thumb-broken {
   background:
     linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%),
     repeating-linear-gradient(
