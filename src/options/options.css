@@ -3,24 +3,18 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-  background:
-    radial-gradient(140% 120% at 0% 0%, rgba(255, 255, 255, 0.7), rgba(240, 244, 248, 0.7)),
-    linear-gradient(140deg, #eaf3fb 0%, #dce9f7 100%);
+  background: #f0f4f8;
   color: #1a1a2e;
 }
 
 .header {
-  background:
-    radial-gradient(120% 200% at 0% 0%, rgba(255, 255, 255, 0.24), transparent 55%),
-    linear-gradient(135deg, rgba(21, 101, 192, 0.92) 0%, rgba(13, 71, 161, 0.92) 100%);
+  background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
   color: #fff;
   padding: 14px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
 .brand {
@@ -40,13 +34,10 @@ body {
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(172, 195, 219, 0.5);
-  border-radius: 18px;
+  background: #fff;
+  border: 1px solid #dce5ef;
+  border-radius: 12px;
   padding: 14px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 14px 28px rgba(18, 44, 76, 0.1);
 }
 
 .card h2 {
@@ -65,14 +56,14 @@ body {
 .row select {
   min-width: 170px;
   padding: 6px 8px;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1.5px solid #ccd8e7;
 }
 
 .text-input {
   min-width: 220px;
   padding: 6px 8px;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1.5px solid #ccd8e7;
 }
 
@@ -115,8 +106,8 @@ body {
 
 .btn {
   border: 1.5px solid #c3d2e6;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  background: #fff;
   color: #1d3d61;
   padding: 7px 11px;
   font-size: 12px;
@@ -125,8 +116,7 @@ body {
 }
 
 .btn:hover {
-  background: #f2f8ff;
-  box-shadow: 0 8px 16px rgba(25, 118, 210, 0.12);
+  background: #f8fbff;
 }
 
 .btn-secondary {
@@ -152,62 +142,4 @@ body {
 .status {
   font-size: 13px;
   color: #4b6277;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
-/* Liquid Glass overrides */
-.header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.32);
-  box-shadow: var(--liquid-shadow), var(--liquid-specular);
-}
-
-.main {
-  max-width: 860px;
-  padding: 24px;
-  gap: 16px;
-}
-
-.card {
-  border-radius: var(--liquid-radius-lg);
-}
-
-.row select,
-.text-input {
-  background: rgba(255, 255, 255, 0.58);
-  border-color: rgba(179, 202, 226, 0.62);
-  box-shadow: var(--liquid-specular);
-}
-
-.btn {
-  border-color: rgba(180, 201, 224, 0.64);
-  box-shadow: var(--liquid-specular);
-}
-
-.btn-primary {
-  background: linear-gradient(140deg, rgba(30, 125, 226, 0.94) 0%, rgba(16, 89, 170, 0.94) 100%);
-}
-
-@media (min-width: 1024px) {
-  .main {
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-  }
-
-  .actions {
-    grid-column: 1 / -1;
-    position: sticky;
-    bottom: 12px;
-    padding: 12px 14px;
-    border-radius: var(--liquid-radius-xl);
-    background: rgba(255, 255, 255, 0.52);
-    border: 1px solid rgba(255, 255, 255, 0.42);
-    backdrop-filter: blur(12px) saturate(140%);
-    -webkit-backdrop-filter: blur(12px) saturate(140%);
-  }
 }

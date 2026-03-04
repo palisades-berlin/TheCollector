@@ -1,6 +1,5 @@
 import { getSettings, setSettings } from '../shared/settings.js';
 import { showToast } from '../shared/toast.js';
-import { initLiquidUI } from '../shared/liquid.js';
 
 const defaultExportFormatEl = document.getElementById('defaultExportFormat');
 const defaultPdfPageSizeEl = document.getElementById('defaultPdfPageSize');
@@ -19,10 +18,6 @@ const revokeDownloadsBtn = document.getElementById('revokeDownloads');
 init().catch((err) => showStatus(`Failed to load settings: ${err.message}`));
 
 async function init() {
-  initLiquidUI({
-    enableTilt: true,
-    tiltSelector: '.card, .btn, .header',
-  });
   const settings = await getSettings();
   defaultExportFormatEl.value = settings.defaultExportFormat;
   defaultPdfPageSizeEl.value = settings.defaultPdfPageSize;
