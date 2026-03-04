@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 - 2026-03-04
+- Applied a UX/UI polish pass across popup, history, options, and preview.
+- Introduced a shared token expansion for motion, radius, shadow, and glass surfaces in `src/shared/ui.css`.
+- Added liquid-glass aesthetics (translucent layered surfaces, backdrop blur, highlight gradients).
+- Increased corner roundness hierarchy for cards, buttons, overlays, and controls.
+- Added/refined micro-animations for panels, badges, hover/press states, and toasts.
+- Added reduced-motion fallbacks in polished page styles.
+
 ## 1.1.4 - 2026-03-04
 - Hardened popup message handling against missing payloads to prevent runtime UI errors.
 - Cached frequently used popup DOM references to reduce repeated lookups.

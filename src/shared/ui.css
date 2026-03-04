@@ -8,16 +8,29 @@
 
   --sc-r-sm: 8px;
   --sc-r-md: 12px;
+  --sc-r-lg: 16px;
+  --sc-r-xl: 20px;
+  --sc-r-pill: 999px;
 
   --sc-sh-1: 0 1px 3px rgba(0, 0, 0, 0.1);
   --sc-sh-2: 0 4px 14px rgba(21, 101, 192, 0.3);
+  --sc-sh-soft: 0 12px 30px rgba(12, 34, 66, 0.12);
+  --sc-sh-lift: 0 16px 34px rgba(12, 34, 66, 0.18);
 
   --sc-t-fast: 120ms;
   --sc-t-mid: 180ms;
-  --sc-t-slow: 240ms;
+  --sc-t-slow: 260ms;
   --sc-ease: cubic-bezier(0.2, 0, 0, 1);
+  --sc-ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
 
   --sc-focus: #64b5f6;
+
+  --sc-surface: rgba(255, 255, 255, 0.7);
+  --sc-surface-strong: rgba(255, 255, 255, 0.82);
+  --sc-border-soft: rgba(255, 255, 255, 0.55);
+  --sc-border-std: rgba(180, 202, 226, 0.46);
+  --sc-blur-sm: 10px;
+  --sc-blur-md: 16px;
 }
 
 :focus-visible {
@@ -29,9 +42,13 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+  background:
+    radial-gradient(110% 220% at 0% 0%, rgba(255, 255, 255, 0.22), transparent 55%),
+    linear-gradient(135deg, rgba(21, 101, 192, 0.9) 0%, rgba(13, 71, 161, 0.9) 100%);
   color: #fff;
   box-shadow: var(--sc-sh-1), var(--sc-sh-2);
+  backdrop-filter: blur(var(--sc-blur-sm));
+  -webkit-backdrop-filter: blur(var(--sc-blur-sm));
 }
 
 .sc-header-nav {
@@ -79,6 +96,19 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.sc-glass-panel {
+  background: var(--sc-surface);
+  border: 1px solid var(--sc-border-soft);
+  border-radius: var(--sc-r-xl);
+  box-shadow: var(--sc-sh-soft);
+  backdrop-filter: blur(var(--sc-blur-md));
+  -webkit-backdrop-filter: blur(var(--sc-blur-md));
+}
+
+.sc-glass-panel:hover {
+  box-shadow: var(--sc-sh-lift);
 }
 
 button,
