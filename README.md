@@ -1,7 +1,7 @@
-# screen-collector
+# SCREEN Collector
 
 Browser extension (Manifest V3) for full-page screenshots with local history, preview editing, and PNG/JPG/PDF export.
-Current extension version: `1.0.23`.
+Current extension version: `1.0.25`.
 
 For complete scope and constraints, see [PRODUCT_SPEC.md](PRODUCT_SPEC.md).
 
@@ -51,7 +51,7 @@ Open popup → **Settings** to configure:
 
 ## Repository Layout
 ```text
-screen-collector/
+SCREEN Collector/
 ├── manifest.json
 ├── src/
 │   ├── background/      # service worker

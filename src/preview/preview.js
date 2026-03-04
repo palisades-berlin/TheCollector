@@ -114,7 +114,7 @@ async function init() {
       sourceUrlEl.setAttribute('aria-disabled', 'true');
       sourceUrlEl.style.pointerEvents = 'none';
     }
-    document.title = `screen-collector · ${record.title || record.url}`;
+    document.title = `SCREEN Collector · ${record.title || record.url}`;
     captureTimeEl.textContent = new Date(record.timestamp).toLocaleString();
     dimensionsEl.textContent = `${record.width} × ${record.height} px`;
 
@@ -504,7 +504,7 @@ async function triggerDownloadBlob(blob, ext) {
   const hasDownloads = await chrome.permissions.contains({
     permissions: ['downloads'],
   });
-  const titleText = document.title.replace(/^screen-collector\s*·\s*/i, '').trim() || 'screenshot';
+  const titleText = document.title.replace(/^SCREEN Collector\s*·\s*/i, '').trim() || 'screenshot';
 
   if (hasDownloads) {
     try {

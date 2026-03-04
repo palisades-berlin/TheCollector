@@ -67,6 +67,20 @@ body {
   border: 1.5px solid #ccd8e7;
 }
 
+.dir-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hidden-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .check-row {
   display: flex;
   align-items: flex-start;

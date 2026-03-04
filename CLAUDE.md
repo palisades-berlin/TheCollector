@@ -1,9 +1,9 @@
-# screen-collector — Maintainer Context
+# SCREEN Collector — Maintainer Context
 
 ## Project Summary
-`screen-collector` is a Chrome/Edge extension (Manifest V3) for full-page screenshot capture.  
+`SCREEN Collector` is a Chrome/Edge extension (Manifest V3) for full-page screenshot capture.  
 Implementation is plain JavaScript modules loaded directly by the browser extension runtime (no bundler).
-Current extension version: `1.0.23`.
+Current extension version: `1.0.25`.
 
 ## Current Scope
 - Full-page capture from popup and keyboard shortcut (`Alt+Shift+P`).
@@ -59,7 +59,7 @@ Maintain alignment with the existing extension style:
 10. Worker opens preview tab (with split metadata when applicable).
 
 ## Storage Model
-IndexedDB database: `screen-collector` (v2)
+IndexedDB database: `SCREEN Collector` (v2)
 - Store `screenshots`: final persisted captures.
 - Store `pending_tiles`: temporary per-capture tile buffer.
 

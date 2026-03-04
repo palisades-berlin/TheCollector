@@ -5,6 +5,8 @@ const defaultExportFormatEl = document.getElementById('defaultExportFormat');
 const defaultPdfPageSizeEl = document.getElementById('defaultPdfPageSize');
 const autoDownloadModeEl = document.getElementById('autoDownloadMode');
 const downloadDirectoryEl = document.getElementById('downloadDirectory');
+const pickDirectoryBtn = document.getElementById('pickDirectoryBtn');
+const pickDirectoryInput = document.getElementById('pickDirectoryInput');
 const saveAsEl = document.getElementById('saveAs');
 const fitClipboardToDocsLimitEl = document.getElementById('fitClipboardToDocsLimit');
 const saveBtn = document.getElementById('saveBtn');
@@ -76,6 +78,30 @@ revokeDownloadsBtn.addEventListener('click', async () => {
   } catch (err) {
     showStatus(`Permission removal failed: ${err.message}`);
     showToast(`Permission removal failed: ${err.message}`, 'error', 3200);
+  }
+});
+
+pickDirectoryBtn.addEventListener('click', () => {
+  pickDirectoryInput.value = '';
+  pickDirectoryInput.click();
+});
+
+pickDirectoryInput.addEventListener('change', () => {
+  const files = pickDirectoryInput.files;
+  if (!files || files.length === 0) return;
+
+  const first = files[0];
+  const rel = String(first.webkitRelativePath || '');
+  const folder = rel.includes('/') ? rel.split('/')[0] : '';
+  if (!folder) return;
+
+  const current = downloadDirectoryEl.value.trim();
+  // If user already entered nested path manually, keep suffix and replace root.
+  if (current.includes('/')) {
+    const suffix = current.split('/').slice(1).join('/');
+    downloadDirectoryEl.value = suffix ? `${folder}/${suffix}` : folder;
+  } else {
+    downloadDirectoryEl.value = folder;
   }
 });
 
