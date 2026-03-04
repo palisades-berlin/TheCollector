@@ -5,8 +5,10 @@ const progressEl = document.getElementById('progress');
 const progressFill = document.getElementById('progressFill');
 const progressText = document.getElementById('progressText');
 const doneMsgEl = document.getElementById('doneMsg');
+const doneMsgTextEl = document.getElementById('doneMsgText');
 const errorMsgEl = document.getElementById('errorMsg');
 const historyBtn = document.getElementById('historyBtn');
+const optionsBtn = document.getElementById('optionsBtn');
 
 let capturing = false;
 
@@ -53,10 +55,25 @@ function showError(msg) {
   errorMsgEl.textContent = `Error: ${msg}`;
 }
 
-function showDone() {
+function showDone(payload = {}) {
   capturing = false;
   progressEl.classList.add('hidden');
   doneMsgEl.classList.remove('hidden');
+  if (payload.downloadedDirectly && payload.split && payload.partCount > 1) {
+    doneMsgTextEl.textContent = `Done — downloaded ${payload.partCount} split images.`;
+  } else if (payload.downloadedDirectly) {
+    doneMsgTextEl.textContent = 'Done — downloaded screenshot.';
+  } else if (payload.skippedPdfDirectDownload) {
+    doneMsgTextEl.textContent = 'Done — PDF direct download not supported, opening preview…';
+  } else if (payload.split && payload.partCount > 1) {
+    doneMsgTextEl.textContent = `Done — split into ${payload.partCount} images. Opening part 1…`;
+  } else if (payload.captureMode === 'iframe') {
+    doneMsgTextEl.textContent = 'Done — iframe capture mode used. Opening preview…';
+  } else if (payload.captureMode === 'element') {
+    doneMsgTextEl.textContent = 'Done — inner scroll capture mode used. Opening preview…';
+  } else {
+    doneMsgTextEl.textContent = 'Done — opening preview…';
+  }
   // Auto-close popup after showing "done"
   setTimeout(() => window.close(), 1500);
 }
@@ -66,6 +83,11 @@ function showDone() {
 historyBtn.addEventListener('click', () => {
   const url = chrome.runtime.getURL('src/history/history.html');
   chrome.tabs.create({ url });
+  window.close();
+});
+
+optionsBtn.addEventListener('click', () => {
+  chrome.runtime.openOptionsPage();
   window.close();
 });
 
@@ -81,7 +103,7 @@ chrome.runtime.onMessage.addListener((msg) => {
       break;
     }
     case MSG.SW_DONE:
-      showDone();
+      showDone(msg.payload || {});
       break;
     case MSG.SW_ERROR:
       showError(msg.payload.error);

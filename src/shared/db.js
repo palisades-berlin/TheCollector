@@ -1,4 +1,10 @@
-import { DB_NAME, DB_VERSION, STORE_NAME, TILES_STORE } from './constants.js';
+import {
+  DB_NAME,
+  DB_VERSION,
+  STORE_NAME,
+  META_STORE,
+  TILES_STORE,
+} from './constants.js';
 
 let _db = null;
 
@@ -9,10 +15,30 @@ function openDB() {
 
     req.onupgradeneeded = (e) => {
       const db = e.target.result;
+      const oldVersion = e.oldVersion || 0;
 
       if (!db.objectStoreNames.contains(STORE_NAME)) {
         const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
         store.createIndex('timestamp', 'timestamp');
+      }
+
+      if (!db.objectStoreNames.contains(META_STORE)) {
+        const meta = db.createObjectStore(META_STORE, { keyPath: 'id' });
+        meta.createIndex('timestamp', 'timestamp');
+      }
+
+      // Backfill lightweight metadata entries for existing screenshots.
+      // Run again for v4 to repair profiles that reached v3 without META_STORE.
+      if (oldVersion < 4) {
+        const tx = e.target.transaction;
+        const screenshotStore = tx.objectStore(STORE_NAME);
+        const metaStore = tx.objectStore(META_STORE);
+        screenshotStore.openCursor().onsuccess = (ev) => {
+          const cursor = ev.target.result;
+          if (!cursor) return;
+          metaStore.put(toMetaRecord(cursor.value));
+          cursor.continue();
+        };
       }
 
       // Temporary tile buffer: tiles are written here during capture,
@@ -36,8 +62,9 @@ function openDB() {
 export async function saveScreenshot(record) {
   const db = await openDB();
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const tx = db.transaction([STORE_NAME, META_STORE], 'readwrite');
     tx.objectStore(STORE_NAME).put(record);
+    tx.objectStore(META_STORE).put(toMetaRecord(record));
     tx.oncomplete = () => resolve(record.id);
     tx.onerror = () => reject(tx.error);
   });
@@ -62,11 +89,38 @@ export async function listScreenshots() {
   });
 }
 
+export async function listScreenshotMeta() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const req = db.transaction(META_STORE).objectStore(META_STORE).getAll();
+    req.onsuccess = () =>
+      resolve(req.result.sort((a, b) => b.timestamp - a.timestamp));
+    req.onerror = () => reject(req.error);
+  });
+}
+
 export async function deleteScreenshot(id) {
   const db = await openDB();
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const tx = db.transaction([STORE_NAME, META_STORE], 'readwrite');
     tx.objectStore(STORE_NAME).delete(id);
+    tx.objectStore(META_STORE).delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+export async function deleteScreenshots(ids) {
+  if (!Array.isArray(ids) || ids.length === 0) return;
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction([STORE_NAME, META_STORE], 'readwrite');
+    const screenshotStore = tx.objectStore(STORE_NAME);
+    const metaStore = tx.objectStore(META_STORE);
+    for (const id of ids) {
+      screenshotStore.delete(id);
+      metaStore.delete(id);
+    }
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
   });
@@ -74,14 +128,53 @@ export async function deleteScreenshot(id) {
 
 // ─── Pending tiles (capture buffer) ──────────────────────────────────────────
 
-export async function saveTile(jobId, index, x, y, blob) {
+export async function saveTile(jobId, index, x, y, blob, crop = null, tileSize = null) {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(TILES_STORE, 'readwrite');
-    tx.objectStore(TILES_STORE).put({ id: `${jobId}:${index}`, jobId, index, x, y, blob });
+    const record = {
+      id: `${jobId}:${index}`,
+      jobId,
+      index,
+      x,
+      y,
+      blob,
+      w: Number(tileSize?.w || 0) > 0 ? Number(tileSize.w) : 0,
+      h: Number(tileSize?.h || 0) > 0 ? Number(tileSize.h) : 0,
+    };
+    if (crop) {
+      record.sx = crop.sx;
+      record.sy = crop.sy;
+      record.sw = crop.sw;
+      record.sh = crop.sh;
+    }
+    tx.objectStore(TILES_STORE).put(record);
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
   });
+}
+
+function toMetaRecord(record) {
+  return {
+    id: record.id,
+    url: record.url || '',
+    title: record.title || '',
+    timestamp: Number(record.timestamp || Date.now()),
+    width: Number(record.width || 0),
+    height: Number(record.height || 0),
+    byteSize:
+      Number(record.byteSize || 0) ||
+      Number(record.blob?.size || 0),
+    splitBaseId: record.splitBaseId || '',
+    splitPart: Number(record.splitPart || 0),
+    splitCount: Number(record.splitCount || 0),
+    splitX: Number(record.splitX || 0),
+    splitY: Number(record.splitY || 0),
+    splitTotalW: Number(record.splitTotalW || 0),
+    splitTotalH: Number(record.splitTotalH || 0),
+    stitchedFrom: record.stitchedFrom || '',
+    hasThumbBlob: Boolean(record.thumbBlob),
+  };
 }
 
 export async function getTiles(jobId) {

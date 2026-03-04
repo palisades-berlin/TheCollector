@@ -1,49 +1,71 @@
 # screen-collector
 
-Full-page screenshot Chrome extension (Manifest V3). One click captures the entire scrollable page.
+Browser extension (Manifest V3) for full-page screenshots with local history, preview editing, and PNG/JPG/PDF export.
+Current extension version: `1.0.13`.
 
-## Loading the Extension
+For complete scope and constraints, see [PRODUCT_SPEC.md](PRODUCT_SPEC.md).
 
-1. Open Chrome → `chrome://extensions`
-2. Enable **Developer mode** (top-right toggle)
-3. Click **Load unpacked** → select this `screen-collector/` folder
-4. The camera icon appears in the toolbar
+## Install (Unpacked)
+1. Open `chrome://extensions` (or `edge://extensions`).
+2. Enable **Developer mode**.
+3. Click **Load unpacked** and select this repository folder.
+4. Pin the extension if needed.
 
-## Usage
+## Basic Use
+- Click the toolbar icon and choose **Capture Full Page**.
+- Or use `Alt+Shift+P`.
+- After capture, preview opens automatically.
 
-- **Click the toolbar icon** → "Capture Full Page" button
-- **Keyboard shortcut:** `Alt+Shift+P` (customisable at `chrome://extensions/shortcuts`)
-- A preview tab opens automatically when capture completes
-- In the preview tab: click image to zoom, PNG/JPG download buttons in toolbar
+## Capture Behavior
+- Captures the full page by scrolling and stitching multiple viewport tiles.
+- Hides fixed/sticky page elements during capture to reduce repeated headers/footers.
+- Uses stable handling for long captures, including quota-aware retries.
 
-## How It Works
+## Preview Capabilities
+- Zoom in/out by clicking the image.
+- Edit before export: crop, blur, highlight, text, shape, emoji.
+- Optional source URL + capture timestamp stamp.
+- Copy image to clipboard from Preview (with optional Docs-limit resizing from settings).
+- Export as:
+  - PNG
+  - JPG
+  - PDF (`Auto`, `A4`, `Letter`)
 
-1. Content script injected → measures full page dimensions
-2. Fixed/sticky elements hidden to avoid repeating headers
-3. Page scrolled tile-by-tile; each viewport captured via `captureVisibleTab`
-4. Tiles stitched in an offscreen document using HTML Canvas
-5. Result saved to IndexedDB (local only, never uploaded)
-6. Preview tab opened with the assembled image
+## Oversized Pages
+- Pages that exceed single-canvas limits are saved as multiple image parts.
+- Preview opens in split overview mode and displays all parts side-by-side.
+- Click a part to toggle zoom; `Shift+click` zooms one part and collapses other zoomed parts.
+- History remains available for individual part management.
 
-## File Structure
+## Settings
+Open popup → **Settings** to configure:
+- default export format
+- default PDF page size
+- auto-download on preview load
+- optional downloads permission (grant/revoke)
 
-```
+## Storage
+- Captures are stored locally in IndexedDB.
+- History view supports open, delete, and clear-all.
+- No remote upload pipeline exists in this project.
+
+## Repository Layout
+```text
 screen-collector/
 ├── manifest.json
 ├── src/
-│   ├── background/service-worker.js   # Orchestrates capture
-│   ├── content/capture-agent.js       # Injected: scrolling + metrics
-│   ├── offscreen/offscreen.js         # Canvas stitching + IDB save
-│   ├── popup/                         # Toolbar popup UI
-│   ├── preview/                       # Full preview tab
-│   ├── history/                       # Browse & delete past captures
-│   └── shared/                        # db.js, messages.js, constants.js
+│   ├── background/      # service worker
+│   ├── content/         # injected capture agent
+│   ├── offscreen/       # stitching document
+│   ├── popup/           # action popup
+│   ├── preview/         # review/edit/export page
+│   ├── history/         # saved captures UI
+│   ├── options/         # extension settings page
+│   └── shared/          # constants/messages/db/settings
 └── assets/icons/
 ```
 
-## Known Limitations
-
-- Fixed elements are hidden (not repositioned) during capture — they appear in the first tile only once page is restored
-- Pages taller/wider than 16 000 px fail with an error (multi-image fallback planned)
-- Cross-origin iFrames are not captured
-- PDF export not yet implemented
+## Current Limitations
+- Cross-origin iframe capture is incomplete.
+- Highly custom JavaScript scroll implementations are best-effort.
+- Split overview is for visual review; edit/export tools are currently disabled in that mode.

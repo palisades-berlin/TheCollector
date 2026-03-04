@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <title>screen-collector: Preview</title>
+  <link rel="stylesheet" href="../shared/ui.css" />
   <link rel="stylesheet" href="preview.css" />
 </head>
-<body>
+<body class="sc-page-enter">
 
   <!-- Toolbar -->
-  <div class="toolbar">
+  <div class="toolbar sc-header">
     <div class="toolbar-left">
       <div class="brand">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -23,6 +24,16 @@
       </div>
     </div>
     <div class="toolbar-actions">
+      <nav class="sc-header-nav" aria-label="Primary">
+        <a class="sc-header-link" href="../history/history.html">History</a>
+        <a class="sc-header-link" href="../options/options.html">Options</a>
+      </nav>
+      <label class="pdf-size-wrap" for="pdfPageSize">PDF size</label>
+      <select id="pdfPageSize" class="pdf-size" aria-label="PDF page size">
+        <option value="auto">Auto</option>
+        <option value="a4">A4</option>
+        <option value="letter">Letter</option>
+      </select>
       <button id="downloadPng" class="btn-dl">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
@@ -35,13 +46,47 @@
         </svg>
         Save JPG
       </button>
+      <button id="downloadPdf" class="btn-dl btn-dl-secondary">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+        </svg>
+        Save PDF
+      </button>
+      <button id="copyImage" class="btn-dl btn-dl-secondary">Copy</button>
       <span class="zoom-hint">Click image to zoom</span>
     </div>
   </div>
 
+  <div id="splitNotice" class="split-notice hidden" role="status">
+    <span id="splitNoticeText"></span>
+    <button id="stitchSplitBtn" class="split-notice-btn">Stitch Parts</button>
+    <button id="openHistoryFromSplit" class="split-notice-btn">Open History</button>
+  </div>
+  <div id="modeNotice" class="mode-notice hidden" role="status"></div>
+
+  <div class="editbar">
+    <span class="edit-label">Edit:</span>
+    <button id="toolCrop" class="btn-edit">Crop</button>
+    <button id="toolBlur" class="btn-edit">Blur</button>
+    <button id="toolHighlight" class="btn-edit">Highlight</button>
+    <button id="toolText" class="btn-edit">Text</button>
+    <button id="toolShape" class="btn-edit">Shape</button>
+    <button id="toolEmoji" class="btn-edit">Emoji</button>
+    <button id="clearEdits" class="btn-edit btn-edit-secondary">Clear edits</button>
+    <label class="overlay-toggle">
+      <input id="stampOverlay" type="checkbox" checked />
+      Stamp URL + timestamp
+    </label>
+  </div>
+
   <!-- Image area -->
   <div id="imageContainer" class="image-container">
-    <img id="screenshot" class="screenshot fit hidden" alt="Full-page screenshot" />
+    <div id="imageSkeleton" class="preview-skeleton sc-skeleton"></div>
+    <div id="splitGallery" class="split-gallery hidden" aria-label="Split capture overview"></div>
+    <div id="stage" class="stage hidden">
+      <img id="screenshot" class="screenshot fit" alt="Full-page screenshot" />
+      <canvas id="annotationLayer" class="annotation-layer"></canvas>
+    </div>
   </div>
 
   <div id="loading" class="status-msg">Loading screenshot…</div>

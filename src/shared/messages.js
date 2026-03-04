@@ -19,4 +19,5 @@ export const MSG = {
 
   // Preview Tab → Service Worker
   PT_GET: 'PT_GET',
+  PT_DOWNLOAD: 'PT_DOWNLOAD',
 };

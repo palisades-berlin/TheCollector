@@ -40,7 +40,7 @@
     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
     </svg>
-    Done — opening preview…
+    <span id="doneMsgText">Done — opening preview…</span>
   </div>
 
   <!-- Error -->
@@ -49,7 +49,10 @@
   <!-- Footer -->
   <div class="footer">
     <span class="shortcut">Shortcut: <kbd>Alt+Shift+P</kbd></span>
-    <button id="historyBtn" class="btn-history" aria-label="Open screenshot history">History</button>
+    <div class="footer-actions">
+      <button id="historyBtn" class="btn-history" aria-label="Open screenshot history">History</button>
+      <button id="optionsBtn" class="btn-history" aria-label="Open extension settings">Settings</button>
+    </div>
   </div>
 
   <script type="module" src="popup.js"></script>
