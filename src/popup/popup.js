@@ -1,4 +1,5 @@
 import { MSG } from '../shared/messages.js';
+import { showToast } from '../shared/toast.js';
 import {
   cleanUrl,
   normalizeUrlForCompare,
@@ -25,7 +26,6 @@ const historyBtn = document.getElementById('historyBtn');
 const optionsBtn = document.getElementById('optionsBtn');
 
 const urlCount = document.getElementById('urlCount');
-const toastEl = document.getElementById('toast');
 const urlListEl = document.getElementById('url-list');
 const emptyStateEl = document.getElementById('empty-state');
 const addBtn = document.getElementById('btn-add');
@@ -38,7 +38,6 @@ const restoreBtn = document.getElementById('btn-restore');
 const clearBtn = document.getElementById('btn-clear');
 
 let capturing = false;
-let toastTimer = null;
 let clearConfirmTimer = null;
 let urlMutationQueue = Promise.resolve();
 let currentUrlCount = 0;
@@ -56,13 +55,6 @@ function setActiveTab(mode) {
 
 captureTabBtn.addEventListener('click', () => setActiveTab('capture'));
 urlsTabBtn.addEventListener('click', () => setActiveTab('urls'));
-
-function showToast(msg) {
-  toastEl.textContent = msg;
-  toastEl.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1800);
-}
 
 function chromeCall(invoke) {
   return new Promise((resolve, reject) => {
@@ -342,8 +334,10 @@ function showError(msg) {
   capturing = false;
   captureBtn.disabled = false;
   progressEl.classList.add('hidden');
-  errorMsgEl.classList.remove('hidden');
-  errorMsgEl.textContent = toFriendlyCaptureError(msg);
+  const friendly = toFriendlyCaptureError(msg);
+  errorMsgEl.classList.add('hidden');
+  errorMsgEl.textContent = friendly;
+  showToast(friendly);
 }
 
 function showDone(payload = {}) {

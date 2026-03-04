@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.3.18 - 2026-03-04
+- Consolidated popup/history/options/preview styling into a shared Design Token system.
+- Expanded `src/shared/ui.css` token palette (colors, radius, typography, shadows, motion).
+- Replaced hardcoded module CSS color/radius literals with token references across all UI stylesheets.
+- Preserved existing business logic and runtime behavior (style-only refactor).
+
+## 1.3.17 - 2026-03-04
+- Consolidated UX/UI layer between URL and SCREEN flows without changing business logic.
+- Migrated popup to shared toast component (`src/shared/toast.js`) used by other modules.
+- Added shared typography tokens (`--sc-font-sans`, `--sc-font-mono`) and applied them across popup/history/options/preview.
+- Removed popup-only toast markup/styles to standardize notification behavior.
+
+## 1.3.16 - 2026-03-04
+- Changed popup capture error UX to toast notifications (matching URL collector module behavior).
+- Friendly capture errors (e.g. restricted `chrome://` pages) now surface via toast instead of inline error block.
+
+## 1.3.15 - 2026-03-04
+- Added dismiss (`×`) control for the History “Last capture failed…” diagnostics banner.
+- Dismissed banner stays hidden for the same failure message during the current session.
+- Kept capture telemetry and filtering logic unchanged.
+
 ## 1.3.14 - 2026-03-04
 - Improved popup capture error messages with user-friendly wording.
 - Added clear guidance for restricted contexts:

@@ -2,9 +2,9 @@
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-  background: #f0f4f8;
-  color: #1a1a2e;
+  font-family: var(--sc-font-sans);
+  background: var(--sc-color-bg);
+  color: var(--sc-color-text);
 }
 
 @keyframes options-fade-up {
@@ -13,8 +13,8 @@ body {
 }
 
 .header {
-  background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
-  color: #fff;
+  background: var(--sc-header-grad);
+  color: var(--sc-color-surface);
   padding: 14px 20px;
   display: flex;
   align-items: center;
@@ -40,9 +40,9 @@ body {
 }
 
 .card {
-  background: #fff;
-  border: 1px solid #dce5ef;
-  border-radius: 12px;
+  background: var(--sc-color-surface);
+  border: 1px solid var(--sc-color-border-panel);
+  border-radius: var(--sc-r-md);
   padding: 14px;
   animation: options-fade-up 220ms cubic-bezier(0.2, 0, 0, 1) both;
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
@@ -51,7 +51,7 @@ body {
 .card:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(12, 50, 92, 0.12);
-  border-color: #b8cde2;
+  border-color: var(--sc-color-border-panel);
 }
 
 .card h2 {
@@ -70,15 +70,15 @@ body {
 .row select {
   min-width: 170px;
   padding: 6px 8px;
-  border-radius: 8px;
-  border: 1.5px solid #ccd8e7;
+  border-radius: var(--sc-r-sm);
+  border: 1.5px solid var(--sc-color-border-strong);
 }
 
 .text-input {
   min-width: 220px;
   padding: 6px 8px;
-  border-radius: 8px;
-  border: 1.5px solid #ccd8e7;
+  border-radius: var(--sc-r-sm);
+  border: 1.5px solid var(--sc-color-border-strong);
 }
 
 .dir-picker {
@@ -103,7 +103,7 @@ body {
 }
 
 .muted {
-  color: #607589;
+  color: var(--sc-color-text-muted);
   margin: 0 0 10px;
   font-size: 13px;
   line-height: 1.4;
@@ -119,10 +119,10 @@ body {
 }
 
 .btn {
-  border: 1.5px solid #c3d2e6;
-  border-radius: 8px;
-  background: #fff;
-  color: #1d3d61;
+  border: 1.5px solid var(--sc-color-border-strong);
+  border-radius: var(--sc-r-sm);
+  background: var(--sc-color-surface);
+  color: var(--sc-color-text-strong);
   padding: 7px 11px;
   font-size: 12px;
   font-weight: 600;
@@ -130,22 +130,22 @@ body {
 }
 
 .btn:hover {
-  background: #f8fbff;
+  background: var(--sc-color-surface-alt);
   transform: translateY(-1px);
 }
 
 .btn-secondary {
-  color: #445f79;
+  color: var(--sc-color-text-muted);
 }
 
 .btn-primary {
-  background: #1976d2;
-  color: #fff;
-  border-color: #1976d2;
+  background: var(--sc-color-primary);
+  color: var(--sc-color-surface);
+  border-color: var(--sc-color-primary);
 }
 
 .btn-primary:hover {
-  background: #1565c0;
+  background: var(--sc-color-primary-strong);
 }
 
 .actions {
@@ -156,7 +156,7 @@ body {
 
 .status {
   font-size: 13px;
-  color: #4b6277;
+  color: var(--sc-color-text-muted);
 }
 
 .perm-list {
@@ -170,9 +170,9 @@ body {
   justify-content: space-between;
   gap: 10px;
   padding: 10px;
-  border: 1px solid #e3e8ef;
-  border-radius: 10px;
-  background: #fbfdff;
+  border: 1px solid var(--sc-color-border);
+  border-radius: var(--sc-r-md);
+  background: var(--sc-color-surface-soft);
 }
 
 .perm-text {
@@ -182,41 +182,41 @@ body {
 .perm-title {
   font-size: 12px;
   font-weight: 700;
-  color: #1d3d61;
+  color: var(--sc-color-text-strong);
   margin-bottom: 2px;
 }
 
 .perm-desc {
   font-size: 12px;
-  color: #607589;
+  color: var(--sc-color-text-muted);
   line-height: 1.35;
 }
 
 .perm-badge {
   flex-shrink: 0;
   padding: 3px 8px;
-  border-radius: 999px;
+  border-radius: var(--sc-r-pill);
   font-size: 11px;
   font-weight: 700;
-  border: 1px solid #cfd8e3;
-  color: #546678;
-  background: #f3f6fa;
+  border: 1px solid var(--sc-color-border-strong);
+  color: var(--sc-color-text-ui);
+  background: var(--sc-color-surface-soft);
 }
 
 .perm-badge.ok {
-  border-color: #b7e1c6;
-  color: #2e7d32;
-  background: #eef9f1;
+  border-color: var(--sc-color-success-border);
+  color: var(--sc-color-success);
+  background: var(--sc-color-success-bg);
 }
 
 .perm-badge.off {
-  border-color: #eac9c9;
-  color: #b71c1c;
-  background: #fff3f3;
+  border-color: var(--sc-color-error-border);
+  color: var(--sc-color-danger);
+  background: var(--sc-color-error-bg);
 }
 
 .perm-badge.warn {
-  border-color: #f0d7a2;
-  color: #8a5a00;
-  background: #fff8e8;
+  border-color: var(--sc-color-warning-border);
+  color: var(--sc-color-warning-strong);
+  background: var(--sc-color-warning-bg);
 }

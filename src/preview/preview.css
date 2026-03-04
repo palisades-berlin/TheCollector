@@ -5,9 +5,9 @@ html, body {
 }
 
 body {
-  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-  background: #f0f4f8;
-  color: #1a1a2e;
+  font-family: var(--sc-font-sans);
+  background: var(--sc-color-bg);
+  color: var(--sc-color-text);
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -23,8 +23,8 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
-  color: #fff;
+  background: var(--sc-header-grad);
+  color: var(--sc-color-surface);
   padding: 10px 20px;
   display: flex;
   align-items: center;
@@ -71,12 +71,12 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 320px;
-  font-family: 'Consolas', 'Menlo', monospace;
+  font-family: var(--sc-font-mono);
 }
 
 .source-url:hover {
   text-decoration: underline;
-  color: #fff;
+  color: var(--sc-color-surface);
 }
 
 .meta-item {
@@ -91,31 +91,31 @@ body {
   align-items: center;
   gap: 8px;
   padding: 8px 20px;
-  background: #e9f0f8;
-  border-bottom: 1px solid #d6e0ec;
+  background: var(--sc-color-surface-toolbar);
+  border-bottom: 1px solid var(--sc-color-border-toolbar);
   flex-wrap: wrap;
   animation: preview-fade-up 260ms cubic-bezier(0.2, 0, 0, 1) both;
 }
 
 .mode-notice {
   padding: 8px 20px;
-  background: #fff8e1;
-  border-bottom: 1px solid #ffe082;
-  color: #8d6e00;
+  background: var(--sc-color-warning-bg);
+  border-bottom: 1px solid var(--sc-color-warning-border);
+  color: var(--sc-color-warning);
   font-size: 12px;
 }
 
 .edit-label {
   font-size: 12px;
-  color: #26415c;
+  color: var(--sc-color-text-strong);
   font-weight: 700;
 }
 
 .btn-edit {
-  border: 1.5px solid #c9d6e6;
-  background: #fff;
-  color: #173a5e;
-  border-radius: 8px;
+  border: 1.5px solid var(--sc-color-border-strong);
+  background: var(--sc-color-surface);
+  color: var(--sc-color-text-strong);
+  border-radius: var(--sc-r-sm);
   padding: 6px 10px;
   font-size: 12px;
   font-weight: 600;
@@ -123,19 +123,19 @@ body {
 }
 
 .btn-edit:hover {
-  border-color: #97b6d8;
-  background: #f8fbff;
+  border-color: var(--sc-color-primary-border);
+  background: var(--sc-color-surface-alt);
   transform: translateY(-1px);
 }
 
 .btn-edit.active {
-  background: #1976d2;
-  color: #fff;
-  border-color: #1976d2;
+  background: var(--sc-color-primary);
+  color: var(--sc-color-surface);
+  border-color: var(--sc-color-primary);
 }
 
 .btn-edit-secondary {
-  color: #6b7f96;
+  color: var(--sc-color-text-muted);
 }
 
 .overlay-toggle {
@@ -143,7 +143,7 @@ body {
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: #2a4460;
+  color: var(--sc-color-text-strong);
   margin-left: 8px;
 }
 
@@ -163,9 +163,9 @@ body {
 
 .pdf-size {
   background: rgba(255,255,255,0.12);
-  color: #fff;
+  color: var(--sc-color-surface);
   border: 1.5px solid rgba(255,255,255,0.35);
-  border-radius: 8px;
+  border-radius: var(--sc-r-sm);
   font-size: 12px;
   font-weight: 600;
   padding: 6px 10px;
@@ -173,7 +173,7 @@ body {
 }
 
 .pdf-size option {
-  color: #1a1a2e;
+  color: var(--sc-color-text);
 }
 
 .btn-dl {
@@ -182,9 +182,9 @@ body {
   gap: 5px;
   padding: 7px 13px;
   background: rgba(255,255,255,0.15);
-  color: #fff;
+  color: var(--sc-color-surface);
   border: 1.5px solid rgba(255,255,255,0.4);
-  border-radius: 8px;
+  border-radius: var(--sc-r-sm);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -223,7 +223,7 @@ body {
 .btn-dl-preset {
   background: rgba(227, 242, 253, 0.16);
   border-color: rgba(179, 229, 252, 0.5);
-  color: #eef7ff;
+  color: var(--sc-color-surface);
   font-size: 11.5px;
   padding: 7px 10px;
 }
@@ -258,8 +258,8 @@ body {
 .preview-skeleton {
   width: min(78vw, 980px);
   height: min(68vh, 980px);
-  border-radius: 12px;
-  border: 1px solid #dce5ef;
+  border-radius: var(--sc-r-md);
+  border: 1px solid var(--sc-color-border-panel);
 }
 
 .stage {
@@ -270,8 +270,8 @@ body {
 }
 
 .screenshot {
-  border: 1px solid #e3e8ef;
-  border-radius: 4px;
+  border: 1px solid var(--sc-color-border);
+  border-radius: var(--sc-r-xs);
   box-shadow: 0 4px 24px rgba(0,0,0,0.1);
   display: block;
   transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
@@ -315,12 +315,12 @@ body {
 .status-msg {
   text-align: center;
   padding: 60px;
-  color: #90a4ae;
+  color: var(--sc-color-text-faint);
   font-size: 14px;
 }
 
 .status-msg.error {
-  color: #c62828;
+  color: var(--sc-color-error);
 }
 
 .hidden { display: none !important; }

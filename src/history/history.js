@@ -12,6 +12,8 @@ const emptyEl = document.getElementById('empty');
 const loadingEl = document.getElementById('loading');
 const historySkeletonEl = document.getElementById('historySkeleton');
 const captureDiagnosticsEl = document.getElementById('captureDiagnostics');
+const captureDiagnosticsTextEl = document.getElementById('captureDiagnosticsText');
+const captureDiagnosticsDismissEl = document.getElementById('captureDiagnosticsDismiss');
 const countEl = document.getElementById('count');
 const clearAllBtn = document.getElementById('clearAllBtn');
 const openFilesBtn = document.getElementById('openFilesBtn');
@@ -42,6 +44,7 @@ const THUMB_LOAD_CONCURRENCY = 4;
 const thumbLoadQueue = [];
 let thumbLoadWorkers = 0;
 let captureReports = [];
+let dismissedCaptureDiagnosticKey = '';
 const filters = {
   domain: '',
   fromDate: '',
@@ -252,7 +255,13 @@ function renderCaptureDiagnostics() {
   const lastFailed = captureReports.find((r) => r && r.ok === false && r.error);
   if (!lastFailed) {
     captureDiagnosticsEl.classList.add('hidden');
-    captureDiagnosticsEl.textContent = '';
+    if (captureDiagnosticsTextEl) captureDiagnosticsTextEl.textContent = '';
+    dismissedCaptureDiagnosticKey = '';
+    return;
+  }
+  const diagnosticKey = `${lastFailed.timestamp || ''}|${lastFailed.error || ''}`;
+  if (dismissedCaptureDiagnosticKey === diagnosticKey) {
+    captureDiagnosticsEl.classList.add('hidden');
     return;
   }
   const durationPart =
@@ -263,7 +272,11 @@ function renderCaptureDiagnostics() {
     Number(lastFailed.totalTiles || 0) > 0
       ? ` (${Number(lastFailed.capturedTiles || 0)}/${Number(lastFailed.totalTiles || 0)} tiles captured)`
       : '';
-  captureDiagnosticsEl.textContent = `Last capture failed${durationPart}${tilePart}: ${lastFailed.error}`;
+  if (captureDiagnosticsTextEl) {
+    captureDiagnosticsTextEl.textContent =
+      `Last capture failed${durationPart}${tilePart}: ${lastFailed.error}`;
+  }
+  captureDiagnosticsDismissEl?.setAttribute('data-key', diagnosticKey);
   captureDiagnosticsEl.classList.remove('hidden');
 }
 
@@ -294,6 +307,11 @@ function formatDuration(ms) {
   if (seconds < 10) return `${seconds.toFixed(1)}s`;
   return `${Math.round(seconds)}s`;
 }
+
+captureDiagnosticsDismissEl?.addEventListener('click', () => {
+  dismissedCaptureDiagnosticKey = captureDiagnosticsDismissEl.getAttribute('data-key') || '';
+  captureDiagnosticsEl?.classList.add('hidden');
+});
 
 function openPreview(id) {
   const url = chrome.runtime.getURL(`src/preview/preview.html?id=${id}`);
