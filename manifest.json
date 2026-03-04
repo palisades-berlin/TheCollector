@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "SCREEN Collector",
-  "version": "1.0.25",
+  "version": "1.0.32",
   "description": "Capture full-page screenshots with one click. All data stored locally, never uploaded.",
   "permissions": [
     "activeTab",
@@ -30,7 +30,7 @@
       "48": "assets/icons/icon48.png",
       "128": "assets/icons/icon128.png"
     },
-    "default_title": "screen-collector: Capture Full Page"
+    "default_title": "SCREEN Collector: Capture Full Page"
   },
   "options_ui": {
     "page": "src/options/options.html",
