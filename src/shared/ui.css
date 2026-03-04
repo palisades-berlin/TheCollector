@@ -1,114 +1,67 @@
 :root {
-  --sc-sp-1: 4px;
-  --sc-sp-2: 8px;
-  --sc-sp-3: 12px;
-  --sc-sp-4: 16px;
-  --sc-sp-5: 20px;
-  --sc-sp-6: 24px;
+  --spring-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --liquid-tint-rgb: 160, 203, 255;
+  --liquid-tint: rgba(var(--liquid-tint-rgb), 0.18);
+  --liquid-blur: 16px;
+  --liquid-sat: 165%;
+  --liquid-radius-sm: 1rem;
+  --liquid-radius-md: 1.5rem;
+  --liquid-radius-lg: 2rem;
+  --liquid-radius-xl: 3rem;
+  --liquid-stroke: rgba(255, 255, 255, 0.42);
+  --liquid-stroke-strong: rgba(255, 255, 255, 0.72);
+  --liquid-fill: rgba(255, 255, 255, 0.16);
+  --liquid-fill-strong: rgba(255, 255, 255, 0.24);
+  --liquid-shadow: 0 18px 42px rgba(10, 24, 46, 0.2);
+  --liquid-shadow-soft: 0 10px 28px rgba(10, 24, 46, 0.14);
+  --liquid-specular: inset -10px -8px 0px -11px rgba(255, 255, 255, 1);
+  --liquid-focus: #8cc9ff;
+  --liquid-active-scale: 1.02;
+  --liquid-idle-opacity: 0.82;
+}
 
-  --sc-r-sm: 8px;
-  --sc-r-md: 12px;
-  --sc-r-lg: 16px;
-  --sc-r-xl: 20px;
-  --sc-r-pill: 999px;
-
-  --sc-sh-1: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --sc-sh-2: 0 4px 14px rgba(21, 101, 192, 0.3);
-  --sc-sh-soft: 0 12px 30px rgba(12, 34, 66, 0.12);
-  --sc-sh-lift: 0 16px 34px rgba(12, 34, 66, 0.18);
-
-  --sc-t-fast: 120ms;
-  --sc-t-mid: 180ms;
-  --sc-t-slow: 260ms;
-  --sc-ease: cubic-bezier(0.2, 0, 0, 1);
-  --sc-ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
-
-  --sc-focus: #64b5f6;
-
-  --sc-surface: rgba(255, 255, 255, 0.7);
-  --sc-surface-strong: rgba(255, 255, 255, 0.82);
-  --sc-border-soft: rgba(255, 255, 255, 0.55);
-  --sc-border-std: rgba(180, 202, 226, 0.46);
-  --sc-blur-sm: 10px;
-  --sc-blur-md: 16px;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --liquid-tint-rgb: 104, 144, 194;
+    --liquid-tint: rgba(var(--liquid-tint-rgb), 0.2);
+    --liquid-fill: rgba(22, 34, 53, 0.48);
+    --liquid-fill-strong: rgba(20, 30, 50, 0.62);
+    --liquid-stroke: rgba(205, 224, 255, 0.28);
+    --liquid-stroke-strong: rgba(223, 236, 255, 0.4);
+    --liquid-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    --liquid-shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.32);
+    --liquid-specular: inset -10px -8px 0px -11px rgba(255, 255, 255, 0.45);
+  }
 }
 
 :focus-visible {
-  outline: 2px solid var(--sc-focus);
+  outline: 2px solid var(--liquid-focus);
   outline-offset: 2px;
 }
 
-.sc-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
+.liquid-surface {
+  position: relative;
   background:
-    radial-gradient(110% 220% at 0% 0%, rgba(255, 255, 255, 0.22), transparent 55%),
-    linear-gradient(135deg, rgba(21, 101, 192, 0.9) 0%, rgba(13, 71, 161, 0.9) 100%);
-  color: #fff;
-  box-shadow: var(--sc-sh-1), var(--sc-sh-2);
-  backdrop-filter: blur(var(--sc-blur-sm));
-  -webkit-backdrop-filter: blur(var(--sc-blur-sm));
+    radial-gradient(140% 110% at 0% 0%, rgba(255, 255, 255, 0.32), transparent 55%),
+    radial-gradient(130% 120% at 100% 120%, rgba(var(--liquid-tint-rgb), 0.14), transparent 62%),
+    var(--liquid-fill);
+  border: 1px solid var(--liquid-stroke);
+  border-radius: var(--liquid-radius-md);
+  box-shadow: var(--liquid-shadow-soft), var(--liquid-specular);
+  backdrop-filter: blur(var(--liquid-blur)) saturate(var(--liquid-sat));
+  -webkit-backdrop-filter: blur(var(--liquid-blur)) saturate(var(--liquid-sat));
 }
 
-.sc-header-nav {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sc-sp-2);
-}
-
-.sc-header-link {
-  color: rgba(255, 255, 255, 0.86);
-  text-decoration: none;
-  font-size: 12px;
-  font-weight: 600;
-  border: 1.5px solid rgba(255, 255, 255, 0.28);
-  border-radius: var(--sc-r-sm);
-  padding: 6px 10px;
-  transition:
-    background var(--sc-t-fast) var(--sc-ease),
-    border-color var(--sc-t-fast) var(--sc-ease),
-    color var(--sc-t-fast) var(--sc-ease);
-}
-
-.sc-header-link:hover {
-  background: rgba(255, 255, 255, 0.16);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.46);
-}
-
-.sc-header-link[aria-current='page'] {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.68);
-  background: rgba(255, 255, 255, 0.14);
-}
-
-.sc-page-enter {
-  animation: sc-page-enter var(--sc-t-slow) var(--sc-ease) both;
-}
-
-@keyframes sc-page-enter {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.sc-glass-panel {
-  background: var(--sc-surface);
-  border: 1px solid var(--sc-border-soft);
-  border-radius: var(--sc-r-xl);
-  box-shadow: var(--sc-sh-soft);
-  backdrop-filter: blur(var(--sc-blur-md));
-  -webkit-backdrop-filter: blur(var(--sc-blur-md));
-}
-
-.sc-glass-panel:hover {
-  box-shadow: var(--sc-sh-lift);
+.liquid-lens::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    conic-gradient(from 180deg at 50% 50%, rgba(255, 255, 255, 0) 0deg, rgba(255, 255, 255, 0.22) 54deg, rgba(255, 255, 255, 0) 115deg, rgba(255, 255, 255, 0.18) 198deg, rgba(255, 255, 255, 0) 360deg);
+  mix-blend-mode: screen;
+  opacity: 0.46;
 }
 
 button,
@@ -116,11 +69,49 @@ a,
 input,
 select {
   transition:
-    background var(--sc-t-fast) var(--sc-ease),
-    border-color var(--sc-t-fast) var(--sc-ease),
-    color var(--sc-t-fast) var(--sc-ease),
-    box-shadow var(--sc-t-fast) var(--sc-ease),
-    transform var(--sc-t-fast) var(--sc-ease);
+    transform 200ms var(--spring-easing),
+    filter 180ms ease,
+    opacity 180ms ease,
+    background 200ms ease,
+    border-color 200ms ease,
+    box-shadow 220ms ease;
+}
+
+button,
+.sc-header-link,
+.btn,
+.btn-history,
+.btn-action,
+.btn-dl,
+.btn-edit,
+.btn-file,
+.btn-clear,
+.tab-btn,
+.btn-footer,
+.btn-add,
+.btn-add-all,
+.btn-capture {
+  opacity: var(--liquid-idle-opacity);
+}
+
+button:hover,
+a:hover,
+.sc-header-link:hover,
+.btn:hover,
+.btn-history:hover,
+.btn-action:hover,
+.btn-dl:hover,
+.btn-edit:hover,
+.btn-file:hover,
+.btn-clear:hover,
+.tab-btn:hover,
+.btn-footer:hover,
+.btn-add:hover,
+.btn-add-all:hover,
+.btn-capture:hover {
+  opacity: 1;
+  transform: translateZ(0) scale(var(--liquid-active-scale));
+  filter: brightness(1.15);
 }
 
 button:active,
@@ -128,11 +119,50 @@ button:active,
   transform: scale(0.98);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-    scroll-behavior: auto !important;
+.sc-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  color: #fff;
+  box-shadow: var(--liquid-shadow), var(--liquid-specular);
+}
+
+.sc-header-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sc-header-link {
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: var(--liquid-radius-sm);
+  padding: 7px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: var(--liquid-specular);
+}
+
+.sc-header-link[aria-current='page'] {
+  border-color: var(--liquid-stroke-strong);
+  background: rgba(255, 255, 255, 0.18);
+  opacity: 1;
+}
+
+.sc-page-enter {
+  animation: sc-page-enter 420ms var(--spring-easing) both;
+}
+
+@keyframes sc-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(7px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -144,12 +174,12 @@ button:active,
 .sc-skeleton {
   background: linear-gradient(
     90deg,
-    rgba(220, 230, 241, 0.68) 20%,
-    rgba(236, 242, 249, 0.95) 38%,
-    rgba(220, 230, 241, 0.68) 56%
+    rgba(255, 255, 255, 0.1) 20%,
+    rgba(255, 255, 255, 0.36) 40%,
+    rgba(255, 255, 255, 0.12) 60%
   );
   background-size: 480px 100%;
-  animation: sc-shimmer 1.1s linear infinite;
+  animation: sc-shimmer 1.2s linear infinite;
 }
 
 .sc-toast-host {
@@ -168,28 +198,75 @@ button:active,
   min-width: 220px;
   max-width: min(440px, calc(100vw - 32px));
   padding: 10px 12px;
-  border-radius: 10px;
+  border-radius: var(--liquid-radius-sm);
   color: #fff;
   font-size: 13px;
   line-height: 1.35;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  animation: sc-toast-in var(--sc-t-mid) var(--sc-ease) both;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow: var(--liquid-shadow-soft), var(--liquid-specular);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  animation: sc-toast-in 260ms var(--spring-easing) both;
 }
 
-.sc-toast.info { background: #1976d2; }
-.sc-toast.success { background: #2e7d32; }
-.sc-toast.error { background: #c62828; }
+.sc-toast.info { background: rgba(25, 118, 210, 0.62); }
+.sc-toast.success { background: rgba(46, 125, 50, 0.62); }
+.sc-toast.error { background: rgba(198, 40, 40, 0.62); }
 
 .sc-toast.leaving {
-  animation: sc-toast-out var(--sc-t-mid) var(--sc-ease) both;
+  animation: sc-toast-out 160ms ease both;
 }
 
 @keyframes sc-toast-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes sc-toast-out {
   from { opacity: 1; transform: translateY(0); }
   to { opacity: 0; transform: translateY(8px); }
+}
+
+@media (min-width: 1024px) {
+  .sc-header-nav {
+    position: sticky;
+    top: 10px;
+    padding: 6px;
+    border-radius: var(--liquid-radius-xl);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --liquid-fill: rgba(245, 247, 252, 0.98);
+    --liquid-fill-strong: rgba(245, 247, 252, 0.98);
+    --liquid-stroke: rgba(165, 186, 210, 0.9);
+  }
+
+  .liquid-surface,
+  .sc-toast,
+  .sc-header-nav {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --liquid-stroke: rgba(255, 255, 255, 0.9);
+    --liquid-stroke-strong: rgba(255, 255, 255, 1);
+    --liquid-focus: #ffffff;
+  }
 }

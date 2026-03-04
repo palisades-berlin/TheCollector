@@ -9,7 +9,7 @@
 <body class="sc-page-enter">
 
   <!-- Toolbar -->
-  <div class="toolbar sc-header">
+  <div class="toolbar sc-header liquid-surface liquid-lens" data-liquid-shrink data-liquid-tilt>
     <div class="toolbar-left">
       <div class="brand">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -59,7 +59,7 @@
 
   <div id="modeNotice" class="mode-notice hidden" role="status"></div>
 
-  <div class="editbar">
+  <div class="editbar liquid-surface" data-liquid-tilt>
     <span class="edit-label">Edit:</span>
     <button id="toolCrop" class="btn-edit">Crop</button>
     <button id="toolBlur" class="btn-edit">Blur</button>
@@ -75,7 +75,7 @@
   </div>
 
   <!-- Image area -->
-  <div id="imageContainer" class="image-container">
+  <div id="imageContainer" class="image-container liquid-surface" data-liquid-tilt>
     <div id="imageSkeleton" class="preview-skeleton sc-skeleton"></div>
     <div id="stage" class="stage hidden">
       <img id="screenshot" class="screenshot fit" alt="Full-page screenshot" />

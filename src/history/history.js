@@ -6,6 +6,7 @@ import {
 } from '../shared/db.js';
 import { getSettings } from '../shared/settings.js';
 import { showToast } from '../shared/toast.js';
+import { initLiquidUI } from '../shared/liquid.js';
 
 const gridEl = document.getElementById('grid');
 const emptyEl = document.getElementById('empty');
@@ -45,6 +46,10 @@ init().catch((err) => {
 });
 
 async function init() {
+  initLiquidUI({
+    enableTilt: true,
+    tiltSelector: '.card, .files-panel, .btn-action',
+  });
   await refreshAll();
 }
 

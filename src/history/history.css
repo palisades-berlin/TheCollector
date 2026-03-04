@@ -484,3 +484,50 @@ body {
     transition: none !important;
   }
 }
+
+/* Liquid Glass overrides */
+.header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.32);
+}
+
+.grid {
+  padding: 22px;
+  gap: 18px;
+}
+
+.card,
+.grid-skeleton .skeleton-card,
+.files-panel {
+  border-radius: var(--liquid-radius-lg);
+}
+
+.card,
+.files-panel {
+  box-shadow: var(--liquid-shadow-soft), var(--liquid-specular);
+}
+
+.btn-clear,
+.btn-action,
+.btn-file,
+.files-close {
+  border-radius: var(--liquid-radius-sm);
+  box-shadow: var(--liquid-specular);
+}
+
+.files-overlay {
+  backdrop-filter: blur(6px) saturate(120%);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+}
+
+@media (min-width: 1024px) {
+  .header-actions {
+    position: sticky;
+    top: 10px;
+    padding: 6px 8px;
+    border-radius: var(--liquid-radius-xl);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    backdrop-filter: blur(10px) saturate(130%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+  }
+}

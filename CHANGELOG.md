@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.0 - 2026-03-04
+- Redesigned the full extension UI with a Liquid Glass visual system across popup, history, options, and preview.
+- Added reusable liquid design tokens (`--liquid-blur`, `--liquid-tint`, `--spring-easing`) and shared glass utility classes.
+- Implemented lensed/refraction-style overlays, specular highlights, and radial transparency falloff for glass surfaces.
+- Added shared interaction engine (`src/shared/liquid.js`) for:
+  - adaptive tint initialization
+  - scroll-aware shrinking chrome (scale 1 -> 0.7 with spring easing)
+  - tilt parallax (DeviceOrientation + pointer fallback)
+- Extended accessibility support with reduced-motion, reduced-transparency, and high-contrast handling.
+
 ## 1.2.0 - 2026-03-04
 - Applied a UX/UI polish pass across popup, history, options, and preview.
 - Introduced a shared token expansion for motion, radius, shadow, and glass surfaces in `src/shared/ui.css`.

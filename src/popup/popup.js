@@ -5,6 +5,7 @@ import {
   isCollectibleUrl,
   escapeCsvCell,
 } from '../shared/url-utils.js';
+import { initLiquidUI } from '../shared/liquid.js';
 
 const URL_LIMIT = 500;
 
@@ -456,6 +457,11 @@ clearBtn.addEventListener('click', async () => {
 });
 
 (async function init() {
+  initLiquidUI({
+    enableTilt: true,
+    shrinkSelector: '.header, .tabs',
+    tiltSelector: '[data-liquid-tilt]',
+  });
   setActiveTab('capture');
   try {
     const initialUrls = await loadUrls();

@@ -2,7 +2,7 @@
 
 ## Project Summary
 `Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.2.0`.
+Current extension version: `1.3.0`.
 
 ## Engineering Rules
 - Keep behavior stable and avoid core logic rewrites unless required.

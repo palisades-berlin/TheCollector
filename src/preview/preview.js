@@ -2,6 +2,7 @@ import { getScreenshot } from '../shared/db.js';
 import { getSettings } from '../shared/settings.js';
 import { MSG } from '../shared/messages.js';
 import { showToast } from '../shared/toast.js';
+import { initLiquidUI } from '../shared/liquid.js';
 
 const params = new URLSearchParams(location.search);
 const id = params.get('id');
@@ -81,6 +82,10 @@ function sanitizeHttpUrl(url) {
 }
 
 async function init() {
+  initLiquidUI({
+    enableTilt: true,
+    tiltSelector: '.toolbar, .editbar, .btn-dl, .btn-edit, #stage',
+  });
   if (!id) {
     showError('No screenshot ID in URL.');
     return;
