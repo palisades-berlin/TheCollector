@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.8 - 2026-03-05
+
+- Version bump release for current `main` state and synced version pointers.
+
 ## 1.9.7 - 2026-03-05
 
 - Added a dedicated UX/UI calibration gate tied to the canonical Figma source of truth:
