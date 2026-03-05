@@ -99,17 +99,6 @@ export async function listScreenshotMeta() {
   });
 }
 
-export async function deleteScreenshot(id) {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction([STORE_NAME, META_STORE], 'readwrite');
-    tx.objectStore(STORE_NAME).delete(id);
-    tx.objectStore(META_STORE).delete(id);
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
-
 export async function deleteScreenshots(ids) {
   if (!Array.isArray(ids) || ids.length === 0) return;
   const db = await openDB();

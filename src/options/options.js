@@ -25,6 +25,11 @@ const permBadgeEls = {
 };
 let permissionPollTimer = null;
 
+function logNonFatal(context, err) {
+  if (window.localStorage.getItem('sc_debug_non_fatal') !== '1') return;
+  console.debug('[THE Collector][non-fatal]', context, err);
+}
+
 init().catch((err) => showStatus(`Failed to load settings: ${err.message}`));
 
 async function init() {
@@ -165,14 +170,22 @@ function setBadge(permission, text, variant) {
 function setupPermissionStatusRefresh() {
   if (permissionPollTimer) clearInterval(permissionPollTimer);
   permissionPollTimer = setInterval(() => {
-    refreshPermissionStatus().catch(() => {});
+    refreshPermissionStatus().catch((err) =>
+      logNonFatal('refreshPermissionStatus.interval', err)
+    );
   }, 8000);
 
   window.addEventListener('focus', () => {
-    refreshPermissionStatus().catch(() => {});
+    refreshPermissionStatus().catch((err) =>
+      logNonFatal('refreshPermissionStatus.focus', err)
+    );
   });
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) refreshPermissionStatus().catch(() => {});
+    if (!document.hidden) {
+      refreshPermissionStatus().catch((err) =>
+        logNonFatal('refreshPermissionStatus.visibility', err)
+      );
+    }
   });
   window.addEventListener('beforeunload', () => {
     if (permissionPollTimer) {

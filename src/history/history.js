@@ -4,7 +4,8 @@ import {
   getScreenshot,
   deleteScreenshots,
 } from '../shared/db.js';
-import { sanitizeFilenameSegment, sanitizeDirPath } from '../shared/filename.js';
+import { buildDownloadFilename } from '../shared/filename.js';
+import { chromeDownloadBlob, anchorDownloadBlob } from '../shared/download.js';
 import { getSettings } from '../shared/settings.js';
 import { showToast } from '../shared/toast.js';
 
@@ -56,6 +57,11 @@ const filters = {
 const DEBUG_THUMB_QUEUE =
   new URLSearchParams(window.location.search).get('debugThumbQueue') === '1' ||
   window.localStorage.getItem('sc_debug_thumb_queue') === '1';
+
+function logNonFatal(context, err) {
+  if (window.localStorage.getItem('sc_debug_non_fatal') !== '1') return;
+  console.debug('[THE Collector][non-fatal]', context, err);
+}
 
 init().catch((err) => {
   if (historySkeletonEl) historySkeletonEl.classList.add('hidden');
@@ -196,9 +202,11 @@ function renderMainView() {
   openFilesBtn.classList.remove('hidden');
   updateCount(records.length, allRecords.length);
 
+  const fragment = document.createDocumentFragment();
   for (const record of records) {
-    gridEl.appendChild(buildCard(record));
+    fragment.appendChild(buildCard(record));
   }
+  gridEl.appendChild(fragment);
 }
 
 function buildCard(record) {
@@ -220,11 +228,7 @@ function buildCard(record) {
   } catch {
     urlEl.textContent = record.url;
   }
-  const hints = [];
-  if (record.splitCount > 1 && record.splitPart > 0) {
-    hints.push(`Part ${record.splitPart}/${record.splitCount}`);
-  }
-  if (record.stitchedFrom) hints.push('Stitched');
+  const hints = buildRecordHints(record);
   const suffix = hints.length ? ` · ${hints.join(' · ')}` : '';
   metaEl.textContent =
     `${new Date(record.timestamp).toLocaleDateString()} · ${record.width}×${record.height}px${suffix}`;
@@ -255,7 +259,8 @@ async function loadCaptureReports() {
   try {
     const state = await chrome.storage.local.get({ [CAPTURE_REPORTS_KEY]: [] });
     return Array.isArray(state[CAPTURE_REPORTS_KEY]) ? state[CAPTURE_REPORTS_KEY] : [];
-  } catch {
+  } catch (err) {
+    logNonFatal('loadCaptureReports', err);
     return [];
   }
 }
@@ -383,7 +388,7 @@ async function loadCardThumb(id, canvasEl) {
   if (!canvasEl?.isConnected) return;
   const record = await getScreenshot(id);
   if (!record?.blob) {
-    await deleteScreenshots([id]).catch(() => {});
+    await deleteScreenshots([id]).catch((err) => logNonFatal('deleteScreenshots', err));
     return;
   }
   const thumbBlob =
@@ -447,10 +452,20 @@ function buildGroups(allRecords) {
     .sort((a, b) => b.timestamp - a.timestamp);
 }
 
+function buildRecordHints(record) {
+  const hints = [];
+  if (record.splitCount > 1 && record.splitPart > 0) {
+    hints.push(`Part ${record.splitPart}/${record.splitCount}`);
+  }
+  if (record.stitchedFrom) hints.push('Stitched');
+  return hints;
+}
+
 function renderFilesOverlay(resetSelection = false) {
   filesListEl.innerHTML = '';
   if (resetSelection) selectedBaseIds.clear();
 
+  const fragment = document.createDocumentFragment();
   for (const group of groups) {
     const node = fileRowTpl.content.cloneNode(true);
     const row = node.querySelector('.file-row');
@@ -468,11 +483,7 @@ function renderFilesOverlay(resetSelection = false) {
     });
 
     const record = group.records[0];
-    const hints = [];
-    if (record.splitCount > 1 && record.splitPart > 0) {
-      hints.push(`Part ${record.splitPart}/${record.splitCount}`);
-    }
-    if (record.stitchedFrom) hints.push('Stitched');
+    const hints = buildRecordHints(record);
     const suffix = hints.length ? ` (${hints.join(', ')})` : '';
     link.textContent = `${group.url || '(no source URL)'}${suffix}`;
     link.title = group.url;
@@ -481,8 +492,9 @@ function renderFilesOverlay(resetSelection = false) {
     sizeEl.textContent = formatBytes(group.totalBytes);
     dateEl.textContent = new Date(group.timestamp).toLocaleString();
 
-    filesListEl.appendChild(node);
+    fragment.appendChild(node);
   }
+  filesListEl.appendChild(fragment);
 
   filesStatusEl.textContent = '';
   updateSelectionUi();
@@ -513,51 +525,29 @@ function blobExt(blob) {
   return 'png';
 }
 
-function buildFilename({ title, ext, directory, partIndex, partTotal }) {
-  const ts = new Date().toISOString().replace(/[:.]/g, '-');
-  const safeTitle = sanitizeFilenameSegment(title) || 'screenshot';
-  const suffix = partTotal > 1 ? `-part-${partIndex + 1}` : '';
-  const baseName = `${safeTitle}-${ts}${suffix}.${ext}`;
-  const dir = sanitizeDirPath(directory);
-  return dir ? `${dir}/${baseName}` : baseName;
-}
-
-function fallbackDownload(blob, ext) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `screenshot-${Date.now()}.${ext}`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 1500);
-}
-
 async function downloadRecord(record, settings, partIndex, partTotal, titleHint, allowSaveAs) {
   const ext = blobExt(record.blob);
   const hasDownloads = await chrome.permissions.contains({ permissions: ['downloads'] });
   if (!hasDownloads) {
-    fallbackDownload(record.blob, ext);
+    await anchorDownloadBlob({
+      blob: record.blob,
+      filename: `screenshot-${Date.now()}.${ext}`,
+    });
     return;
   }
 
-  const filename = buildFilename({
+  const filename = buildDownloadFilename({
     title: titleHint || record.url || record.title || 'screenshot',
+    index: partIndex,
+    total: partTotal,
     ext,
     directory: settings.downloadDirectory,
-    partIndex,
-    partTotal,
   });
-  const url = URL.createObjectURL(record.blob);
-  try {
-    await chrome.downloads.download({
-      url,
-      filename,
-      saveAs: partTotal > 1 ? false : Boolean(allowSaveAs && settings.saveAs),
-    });
-  } finally {
-    setTimeout(() => URL.revokeObjectURL(url), 1500);
-  }
+  await chromeDownloadBlob({
+    blob: record.blob,
+    filename,
+    saveAs: partTotal > 1 ? false : Boolean(allowSaveAs && settings.saveAs),
+  });
 }
 
 openFilesBtn.addEventListener('click', () => {

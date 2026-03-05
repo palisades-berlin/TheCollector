@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.3.22 - 2026-03-05
+- Improved History rendering performance without behavior changes:
+  - switched main screenshot grid rendering to `DocumentFragment` batching
+  - switched files overlay row rendering to `DocumentFragment` batching
+
+## 1.3.21 - 2026-03-05
+- Refactored duplicated filename and download logic into shared helpers:
+  - added `buildDownloadFilename` in `src/shared/filename.js`
+  - added shared download helpers in `src/shared/download.js`
+  - migrated service worker, history, and preview to shared helpers
+- Replaced duplicated History split/stitch hint formatting with one helper.
+- Added non-fatal debug logging wrappers for previously swallowed catches in service worker, history, and options.
+- Added unit coverage for `buildDownloadFilename`.
+
+## 1.3.20 - 2026-03-05
+- Removed unused symbols without changing behavior:
+  - removed unused `PT_GET` message constant
+  - removed unused `editbarEl` and `zoomHintEl` references in Preview
+  - removed unused `deleteScreenshot` helper export from shared DB module
+
 ## 1.3.19 - 2026-03-04
 - Implemented low-risk code review fixes without changing business behavior:
   - fixed popup restore-button state refresh when list becomes empty

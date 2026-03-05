@@ -6,7 +6,8 @@ import {
   CAPTURE_RETRY_BASE_DELAY_MS,
 } from '../shared/constants.js';
 import { saveTile, deleteTiles, getScreenshot, saveScreenshot } from '../shared/db.js';
-import { sanitizeFilenameSegment, sanitizeDirPath } from '../shared/filename.js';
+import { buildDownloadFilename } from '../shared/filename.js';
+import { chromeDownloadBlob } from '../shared/download.js';
 import { getSettings } from '../shared/settings.js';
 import { toPositiveInt } from '../shared/validation.js';
 
@@ -84,24 +85,21 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+function logNonFatal(context, err) {
+  if (globalThis?.THE_COLLECTOR_DEBUG_NON_FATAL !== true) return;
+  console.debug('[THE Collector][non-fatal]', context, err);
+}
+
 function broadcast(type, payload) {
   chrome.runtime.sendMessage({ type, payload }).catch(() => {
     // Popup may be closed — that's fine
+    logNonFatal('broadcast', { type });
   });
 }
 
 function isCaptureQuotaError(err) {
   const msg = (err?.message || String(err || '')).toUpperCase();
   return msg.includes('MAX_CAPTURE_VISIBLE_TAB_CALLS_PER_SECOND');
-}
-
-function buildFilename({ title, index, total, ext, directory }) {
-  const ts = new Date().toISOString().replace(/[:.]/g, '-');
-  const safeTitle = sanitizeFilenameSegment(title) || 'screenshot';
-  const partSuffix = total > 1 ? `-part-${index + 1}` : '';
-  const name = `${safeTitle}-${ts}${partSuffix}.${ext}`;
-  const dir = sanitizeDirPath(directory);
-  return dir ? `${dir}/${name}` : name;
 }
 
 async function hasDownloadsPermission() {
@@ -124,12 +122,7 @@ async function convertPngBlobToJpeg(blob) {
 }
 
 async function downloadBlob({ blob, filename, saveAs }) {
-  const url = URL.createObjectURL(blob);
-  try {
-    await chrome.downloads.download({ url, filename, saveAs });
-  } finally {
-    setTimeout(() => URL.revokeObjectURL(url), 1500);
-  }
+  await chromeDownloadBlob({ blob, filename, saveAs });
 }
 
 async function downloadCaptureParts({
@@ -148,7 +141,7 @@ async function downloadCaptureParts({
     if (!record?.blob) throw new Error(`Missing screenshot part: ${ids[i]}`);
     const blob =
       format === 'jpg' ? await convertPngBlobToJpeg(record.blob) : record.blob;
-    const filename = buildFilename({
+    const filename = buildDownloadFilename({
       title: titleHint || record.title || record.url || 'screenshot',
       index: i,
       total,
@@ -193,8 +186,9 @@ async function persistCaptureReport(report) {
       : [];
     const next = [report, ...current].slice(0, CAPTURE_REPORTS_LIMIT);
     await chrome.storage.local.set({ [CAPTURE_REPORTS_KEY]: next });
-  } catch {
+  } catch (err) {
     // Do not fail capture flows due to telemetry persistence issues.
+    logNonFatal('persistCaptureReport', err);
   }
 }
 
@@ -312,7 +306,9 @@ async function captureTab(tabId) {
     }
   } finally {
     // Restore page state (fixed elements, scroll position) even on failures
-    await sendToTab(tabId, MSG.CS_RESTORE).catch(() => {});
+    await sendToTab(tabId, MSG.CS_RESTORE).catch((err) =>
+      logNonFatal('CS_RESTORE', err)
+    );
   }
   broadcast(MSG.SW_PROGRESS, { percent: 88, tabId });
 
@@ -425,7 +421,9 @@ async function captureTab(tabId) {
     activeCaptures.delete(tabId);
     // Offscreen stitch deletes tiles on success; cleanup leftovers on failure.
     if (captureId && !stitchSucceeded) {
-      await deleteTiles(captureId).catch(() => {});
+      await deleteTiles(captureId).catch((err) =>
+        logNonFatal('deleteTiles', err)
+      );
     }
   }
 }
@@ -459,7 +457,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
       if (!(blob instanceof Blob)) {
         throw new Error('Download payload is missing blob data');
       }
-      const filename = buildFilename({
+      const filename = buildDownloadFilename({
         title: msg.payload?.title || 'screenshot',
         index: Number(msg.payload?.partIndex || 0),
         total: Math.max(1, Number(msg.payload?.partTotal || 1)),

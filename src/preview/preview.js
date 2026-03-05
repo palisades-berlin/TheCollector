@@ -2,6 +2,7 @@ import { getScreenshot } from '../shared/db.js';
 import { getSettings } from '../shared/settings.js';
 import { MSG } from '../shared/messages.js';
 import { showToast } from '../shared/toast.js';
+import { anchorDownloadBlob } from '../shared/download.js';
 
 const params = new URLSearchParams(location.search);
 const id = params.get('id');
@@ -28,8 +29,6 @@ const presetPdfAutoBtn = document.getElementById('presetPdfAuto');
 const pdfPageSizeEl = document.getElementById('pdfPageSize');
 const stampOverlayEl = document.getElementById('stampOverlay');
 const clearEditsBtn = document.getElementById('clearEdits');
-const editbarEl = document.querySelector('.editbar');
-const zoomHintEl = document.querySelector('.zoom-hint');
 
 const toolButtons = {
   crop: document.getElementById('toolCrop'),
@@ -585,16 +584,6 @@ function maybeFitForDocsLimit(canvas, shouldFit) {
   return out;
 }
 
-function triggerDownload(href, filename) {
-  const a = document.createElement('a');
-  a.href = href;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(href), 1500);
-}
-
 async function triggerDownloadBlob(blob, ext) {
   const hasDownloads = await chrome.permissions.contains({
     permissions: ['downloads'],
@@ -622,7 +611,7 @@ async function triggerDownloadBlob(blob, ext) {
   }
 
   const fallbackName = `screenshot-${Date.now()}.${ext}`;
-  triggerDownload(URL.createObjectURL(blob), fallbackName);
+  await anchorDownloadBlob({ blob, filename: fallbackName });
 }
 
 async function buildEditedCanvas() {

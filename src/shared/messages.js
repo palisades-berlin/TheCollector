@@ -18,6 +18,5 @@ export const MSG = {
   SW_ERROR: 'SW_ERROR',
 
   // Preview Tab → Service Worker
-  PT_GET: 'PT_GET',
   PT_DOWNLOAD: 'PT_DOWNLOAD',
 };
