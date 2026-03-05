@@ -1,5 +1,59 @@
 # Changelog
 
+## 1.3.34 - 2026-03-05
+- Fixed the Options `Choose Folder` action to use a real folder-picker flow (`showDirectoryPicker`) where supported, instead of always invoking upload-style folder selection.
+- Kept existing fallback behavior via hidden `webkitdirectory` input for environments without `showDirectoryPicker`.
+- Preserved download-directory path handling behavior (existing nested suffix retention remains unchanged).
+
+## 1.3.33 - 2026-03-05
+- Added popup performance debug instrumentation for startup/lazy-load timing:
+  - logs in `src/popup/popup.js` for popup init, URL-count preload, and URLs panel lazy-load timing
+  - logs in `src/popup/urls-panel.js` for URLs panel init and list render timing
+- Debug logging can be enabled with `localStorage.sc_debug_popup_perf = '1'` (or `?debugPopupPerf=1` in popup URL).
+
+## 1.3.32 - 2026-03-05
+- Further reduced initial popup-open latency by splitting popup logic into lazy-loaded modules:
+  - `src/popup/popup.js` now focuses on capture flow and lightweight tab shell
+  - URL collector logic moved to `src/popup/urls-panel.js`, loaded only when `URLs` tab is opened
+- Added lightweight URL-count preload for the badge without hydrating the full URL panel.
+- Preserved existing URL/capture behavior and controls.
+
+## 1.3.31 - 2026-03-05
+- Fixed slow initial popup open by deferring expensive URL DOM hydration until the `URLs` tab is first shown.
+- Kept URL count badge available at startup via lightweight URL state preload.
+- Preserved popup stability by avoiding async lazy-init races in initial tab rendering.
+
+## 1.3.30 - 2026-03-05
+- Fixed popup regression introduced by lazy URL panel initialization.
+- Restored eager URL state loading on popup init for stability.
+- Kept low-risk popup performance improvements:
+  - delegated URL list action handling
+  - `DocumentFragment` batching for URL list rendering
+- Added defensive delegated-click target handling to avoid edge-case event target errors.
+
+## 1.3.29 - 2026-03-05
+- Improved first-popup-open responsiveness without changing business logic:
+  - deferred URL list load/render until the `URLs` tab is first opened
+  - replaced per-row URL button listeners with delegated list click handling
+  - batched URL row insertion with `DocumentFragment`
+- Capture tab startup remains the default initial view.
+
+## 1.3.28 - 2026-03-05
+- Reworked capture-agent DOM scans with staged filters to reduce startup overhead on very large pages:
+  - replaced broad `querySelectorAll('*')` scans with TreeWalker-based traversal
+  - added cheap renderability/size/scrollability gates before expensive style checks
+  - applied staged filtering in dominant scroll-container detection and fixed/sticky suppression scan
+- No business logic changes; capture behavior remains functionally equivalent.
+
+## 1.3.27 - 2026-03-05
+- Added stitch-pass decode caching for oversized offscreen rendering:
+  - `src/offscreen/offscreen.js` now reuses decoded source tiles across chunk renders in oversized mode
+  - decoded tile resources are explicitly released after the stitch pass
+- Added memoized edited-canvas pipeline for Preview export/copy:
+  - `src/preview/preview.js` now caches edited canvases by edit revision + stamp state
+  - cache invalidates on edit mutations and when a new screenshot loads
+- No business logic changes; behavior and outputs are preserved.
+
 ## 1.3.26 - 2026-03-05
 - Introduced a shared protocol constants strategy for content-script messaging to prevent string drift:
   - service worker now syncs protocol IDs from `MSG` into `window.__THE_COLLECTOR_PROTOCOL` before capture-agent execution

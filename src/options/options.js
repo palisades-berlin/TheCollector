@@ -97,7 +97,21 @@ revokeDownloadsBtn.addEventListener('click', async () => {
   }
 });
 
-pickDirectoryBtn.addEventListener('click', () => {
+pickDirectoryBtn.addEventListener('click', async () => {
+  if (typeof window.showDirectoryPicker === 'function') {
+    try {
+      const handle = await window.showDirectoryPicker();
+      const folder = String(handle?.name || '').trim();
+      if (!folder) return;
+      applySelectedFolder(folder);
+      return;
+    } catch (err) {
+      // Ignore user-cancel in picker UX and only debug-log other non-fatal errors.
+      if (err?.name !== 'AbortError') {
+        logNonFatal('pickDirectoryBtn.showDirectoryPicker', err);
+      }
+    }
+  }
   pickDirectoryInput.value = '';
   pickDirectoryInput.click();
 });
@@ -110,15 +124,7 @@ pickDirectoryInput.addEventListener('change', () => {
   const rel = String(first.webkitRelativePath || '');
   const folder = rel.includes('/') ? rel.split('/')[0] : '';
   if (!folder) return;
-
-  const current = downloadDirectoryEl.value.trim();
-  // If user already entered nested path manually, keep suffix and replace root.
-  if (current.includes('/')) {
-    const suffix = current.split('/').slice(1).join('/');
-    downloadDirectoryEl.value = suffix ? `${folder}/${suffix}` : folder;
-  } else {
-    downloadDirectoryEl.value = folder;
-  }
+  applySelectedFolder(folder);
 });
 
 window.addEventListener('keydown', (e) => {
@@ -193,4 +199,15 @@ function setupPermissionStatusRefresh() {
       permissionPollTimer = null;
     }
   });
+}
+
+function applySelectedFolder(folder) {
+  const current = downloadDirectoryEl.value.trim();
+  // If user already entered nested path manually, keep suffix and replace root.
+  if (current.includes('/')) {
+    const suffix = current.split('/').slice(1).join('/');
+    downloadDirectoryEl.value = suffix ? `${folder}/${suffix}` : folder;
+    return;
+  }
+  downloadDirectoryEl.value = folder;
 }

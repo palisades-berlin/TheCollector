@@ -138,7 +138,15 @@ function bucketTilesByChunk(tiles, chunks) {
   return buckets;
 }
 
-async function renderChunk(tiles, chunkX, chunkY, chunkW, chunkH, includeThumb = true) {
+async function renderChunk(
+  tiles,
+  chunkX,
+  chunkY,
+  chunkW,
+  chunkH,
+  includeThumb = true,
+  decodedCache = null
+) {
   const canvas = document.createElement('canvas');
   canvas.width = chunkW;
   canvas.height = chunkH;
@@ -146,7 +154,9 @@ async function renderChunk(tiles, chunkX, chunkY, chunkW, chunkH, includeThumb =
   if (!ctx) throw new Error('Failed to create 2D canvas context');
 
   for (const tile of tiles) {
-    const decoded = await decodeTile(tile.blob);
+    const decoded = decodedCache
+      ? await getCachedDecodedTile(tile, decodedCache)
+      : await decodeTile(tile.blob);
     const fullW = decoded.width || decoded.naturalWidth;
     const fullH = decoded.height || decoded.naturalHeight;
     const srcX = tile.sx ?? 0;
@@ -175,7 +185,7 @@ async function renderChunk(tiles, chunkX, chunkY, chunkW, chunkH, includeThumb =
       ctx.drawImage(decoded, sx, sy, overlap.w, overlap.h, dx, dy, overlap.w, overlap.h);
     }
 
-    if (typeof decoded.close === 'function') {
+    if (!decodedCache && typeof decoded.close === 'function') {
       decoded.close();
     }
   }
@@ -195,22 +205,28 @@ async function renderScaledFromChunks({ chunks, bucketedTiles, totalW, totalH })
   const outCtx = outCanvas.getContext('2d');
   if (!outCtx) throw new Error('Failed to create oversized stitch canvas');
 
-  for (const chunk of chunks) {
-    const rendered = await renderChunk(
-      bucketedTiles[chunk.part - 1],
-      chunk.x,
-      chunk.y,
-      chunk.w,
-      chunk.h,
-      false
-    );
-    const decoded = await decodeTile(rendered.blob);
-    const dx = Math.round(chunk.x * scale);
-    const dy = Math.round(chunk.y * scale);
-    const dw = Math.max(1, Math.round(chunk.w * scale));
-    const dh = Math.max(1, Math.round(chunk.h * scale));
-    outCtx.drawImage(decoded, 0, 0, decoded.width || decoded.naturalWidth, decoded.height || decoded.naturalHeight, dx, dy, dw, dh);
-    if (typeof decoded.close === 'function') decoded.close();
+  const decodedCache = new Map();
+  try {
+    for (const chunk of chunks) {
+      const rendered = await renderChunk(
+        bucketedTiles[chunk.part - 1],
+        chunk.x,
+        chunk.y,
+        chunk.w,
+        chunk.h,
+        false,
+        decodedCache
+      );
+      const decoded = await decodeTile(rendered.blob);
+      const dx = Math.round(chunk.x * scale);
+      const dy = Math.round(chunk.y * scale);
+      const dw = Math.max(1, Math.round(chunk.w * scale));
+      const dh = Math.max(1, Math.round(chunk.h * scale));
+      outCtx.drawImage(decoded, 0, 0, decoded.width || decoded.naturalWidth, decoded.height || decoded.naturalHeight, dx, dy, dw, dh);
+      if (typeof decoded.close === 'function') decoded.close();
+    }
+  } finally {
+    releaseDecodedTileCache(decodedCache);
   }
 
   return {
@@ -219,6 +235,21 @@ async function renderScaledFromChunks({ chunks, bucketedTiles, totalW, totalH })
     width: outW,
     height: outH,
   };
+}
+
+async function getCachedDecodedTile(tile, decodedCache) {
+  const key = tile.id || `${tile.jobId || ''}:${tile.index || ''}`;
+  if (!decodedCache.has(key)) {
+    decodedCache.set(key, await decodeTile(tile.blob));
+  }
+  return decodedCache.get(key);
+}
+
+function releaseDecodedTileCache(decodedCache) {
+  for (const decoded of decodedCache.values()) {
+    if (typeof decoded?.close === 'function') decoded.close();
+  }
+  decodedCache.clear();
 }
 
 function tileDimensions(tile) {

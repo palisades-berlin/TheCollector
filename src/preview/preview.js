@@ -68,6 +68,13 @@ let settings = {
 };
 let hasAutoDownloaded = false;
 let presetRunning = false;
+let editedCanvasRevision = 0;
+const editedCanvasMemo = new Map();
+
+function markEditedCanvasDirty() {
+  editedCanvasRevision++;
+  editedCanvasMemo.clear();
+}
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
@@ -140,6 +147,7 @@ async function init() {
 
 async function setupSinglePreview(record) {
   currentBlob = record.blob;
+  markEditedCanvasDirty();
   const objectUrl = URL.createObjectURL(record.blob);
   return new Promise((resolve, reject) => {
     const cleanup = () => {
@@ -214,6 +222,7 @@ clearEditsBtn.addEventListener('click', () => {
   cropRect = null;
   draftRect = null;
   annotations = [];
+  markEditedCanvasDirty();
   refreshOverlayCanvas();
 });
 
@@ -248,7 +257,10 @@ annotationLayer.addEventListener('pointerdown', (e) => {
 
   if (activeTool === 'text') {
     const text = prompt('Enter label text:');
-    if (text) annotations.push({ type: 'text', x: pt.x, y: pt.y, text });
+    if (text) {
+      annotations.push({ type: 'text', x: pt.x, y: pt.y, text });
+      markEditedCanvasDirty();
+    }
     pointerStart = null;
     draftRect = null;
     refreshOverlayCanvas();
@@ -257,6 +269,7 @@ annotationLayer.addEventListener('pointerdown', (e) => {
   if (activeTool === 'emoji') {
     const emoji = prompt('Enter emoji:', '🔒') || '🔒';
     annotations.push({ type: 'emoji', x: pt.x, y: pt.y, emoji });
+    markEditedCanvasDirty();
     pointerStart = null;
     draftRect = null;
     refreshOverlayCanvas();
@@ -281,10 +294,24 @@ annotationLayer.addEventListener('pointerup', () => {
     return;
   }
 
-  if (activeTool === 'crop') cropRect = { ...draftRect };
-  if (activeTool === 'blur') annotations.push({ type: 'blur', rect: { ...draftRect } });
-  if (activeTool === 'highlight') annotations.push({ type: 'highlight', rect: { ...draftRect } });
-  if (activeTool === 'shape') annotations.push({ type: 'shape', rect: { ...draftRect } });
+  let mutated = false;
+  if (activeTool === 'crop') {
+    cropRect = { ...draftRect };
+    mutated = true;
+  }
+  if (activeTool === 'blur') {
+    annotations.push({ type: 'blur', rect: { ...draftRect } });
+    mutated = true;
+  }
+  if (activeTool === 'highlight') {
+    annotations.push({ type: 'highlight', rect: { ...draftRect } });
+    mutated = true;
+  }
+  if (activeTool === 'shape') {
+    annotations.push({ type: 'shape', rect: { ...draftRect } });
+    mutated = true;
+  }
+  if (mutated) markEditedCanvasDirty();
 
   pointerStart = null;
   draftRect = null;
@@ -612,6 +639,10 @@ async function triggerDownloadBlob(blob, ext) {
 }
 
 async function buildEditedCanvas() {
+  const memoKey = `${editedCanvasRevision}|stamp:${stampOverlayEl.checked ? 1 : 0}`;
+  const cached = editedCanvasMemo.get(memoKey);
+  if (cached) return cached;
+
   const base = await decodeImageToCanvas(currentBlob);
   const ctx = base.getContext('2d');
 
@@ -632,9 +663,11 @@ async function buildEditedCanvas() {
     out.width = w;
     out.height = h;
     out.getContext('2d').drawImage(base, x, y, w, h, 0, 0, w, h);
+    editedCanvasMemo.set(memoKey, out);
     return out;
   }
 
+  editedCanvasMemo.set(memoKey, base);
   return base;
 }
 

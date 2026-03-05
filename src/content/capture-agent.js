@@ -168,25 +168,30 @@
   function detectDominantScrollableElement() {
     const viewportArea = Math.max(1, window.innerWidth * window.innerHeight);
     let best = null;
-    const candidates = document.querySelectorAll('*');
-
-    for (const el of candidates) {
-      if (!isElementScrollable(el)) continue;
+    walkElements(document, (el) => {
+      if (!isElementScrollable(el)) return;
       const rect = el.getBoundingClientRect();
       const clamped = clampRectToViewport(rect);
       const visibleArea = clamped.width * clamped.height;
-      if (visibleArea < viewportArea * ELEMENT_MIN_AREA_RATIO) continue;
+      if (visibleArea < viewportArea * ELEMENT_MIN_AREA_RATIO) return;
 
       if (!best || visibleArea > best.visibleArea) {
         best = { el, visibleArea };
       }
-    }
+    });
     return best;
   }
 
   function isElementScrollable(el) {
     if (!(el instanceof Element)) return false;
     if (el === document.documentElement || el === document.body) return false;
+    if (!hasRenderableBox(el)) return false;
+    if (el.clientWidth < 80 || el.clientHeight < 80) return false;
+
+    // Fast structural gate before expensive computed-style checks.
+    const scrollableY = el.scrollHeight > el.clientHeight + ELEMENT_MIN_SCROLL_DELTA;
+    const scrollableX = el.scrollWidth > el.clientWidth + ELEMENT_MIN_SCROLL_DELTA;
+    if (!scrollableY && !scrollableX) return false;
 
     const cs = window.getComputedStyle(el);
     const canScrollY = /(auto|scroll|overlay)/.test(cs.overflowY);
@@ -196,7 +201,6 @@
     if (!vertical && !horizontal) return false;
 
     if (cs.visibility === 'hidden' || cs.display === 'none') return false;
-    if (el.clientWidth < 80 || el.clientHeight < 80) return false;
     return true;
   }
 
@@ -271,14 +275,32 @@
   }
 
   function suppressFixedInDocument(doc, out) {
-    const all = doc.querySelectorAll('*');
-    for (const el of all) {
-      const pos = doc.defaultView.getComputedStyle(el).position;
+    const view = doc.defaultView;
+    if (!view) return;
+
+    walkElements(doc, (el) => {
+      if (!hasRenderableBox(el)) return;
+      const pos = view.getComputedStyle(el).position;
       if (pos === 'fixed' || pos === 'sticky') {
         out.push({ el, visibility: el.style.visibility });
         el.style.setProperty('visibility', 'hidden', 'important');
       }
+    });
+  }
+
+  function walkElements(doc, visitor) {
+    const root = doc.documentElement || doc;
+    const walker = doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+    let node = walker.currentNode;
+    while (node) {
+      visitor(node);
+      node = walker.nextNode();
     }
+  }
+
+  function hasRenderableBox(el) {
+    if (!el || typeof el.getClientRects !== 'function') return false;
+    return el.getClientRects().length > 0;
   }
 
   function restoreFixed() {
