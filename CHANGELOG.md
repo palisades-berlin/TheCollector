@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.56 - 2026-03-05
+
+- Added CI artifact publishing for packaged extension zip:
+  - uploads `dist/the-collector-v*.zip` via `actions/upload-artifact@v4`
+  - fails the workflow if the expected zip is missing
+- Keeps push/PR runs producing a downloadable package output for quick verification.
+
 ## 1.3.55 - 2026-03-05
 
 - Hardened release packaging script (`scripts/package-release.sh`):

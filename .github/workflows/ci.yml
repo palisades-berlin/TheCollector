@@ -31,3 +31,10 @@ jobs:
             echo "Unexpected development artifacts found in release zip."
             exit 1
           fi
+
+      - name: Upload release zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: the-collector-release-zip
+          path: dist/the-collector-v*.zip
+          if-no-files-found: error
