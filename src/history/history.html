@@ -16,7 +16,7 @@
           />
         </svg>
         THE Collector History
-        <span class="badge" id="count" aria-live="polite"></span>
+        <span class="badge sc-pill" id="count" aria-live="polite"></span>
       </div>
       <div class="header-actions">
         <nav class="sc-header-nav" aria-label="Primary">
@@ -25,16 +25,24 @@
         </nav>
         <button
           id="compareBtn"
-          class="btn-clear btn-neutral hidden"
+          class="btn-clear sc-btn sc-btn-sm btn-neutral hidden"
           aria-label="Compare two screenshots"
           disabled
         >
           Compare (0/2)
         </button>
-        <button id="openFilesBtn" class="btn-clear hidden" aria-label="Open files overlay">
+        <button
+          id="openFilesBtn"
+          class="btn-clear sc-btn sc-btn-sm hidden"
+          aria-label="Open files overlay"
+        >
           Files
         </button>
-        <button id="clearAllBtn" class="btn-clear hidden" aria-label="Delete all screenshots">
+        <button
+          id="clearAllBtn"
+          class="btn-clear sc-btn sc-btn-sm hidden"
+          aria-label="Delete all screenshots"
+        >
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path
               d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
@@ -48,19 +56,19 @@
     <section class="filters" aria-label="History filters">
       <label class="filter-item">
         <span>Domain</span>
-        <input id="filterDomain" type="text" placeholder="e.g. example.com" />
+        <input id="filterDomain" class="sc-input" type="text" placeholder="e.g. example.com" />
       </label>
       <label class="filter-item">
         <span>From</span>
-        <input id="filterFrom" type="date" />
+        <input id="filterFrom" class="sc-input" type="date" />
       </label>
       <label class="filter-item">
         <span>To</span>
-        <input id="filterTo" type="date" />
+        <input id="filterTo" class="sc-input" type="date" />
       </label>
       <label class="filter-item">
         <span>Export Type</span>
-        <select id="filterType">
+        <select id="filterType" class="sc-select">
           <option value="all">All</option>
           <option value="png">PNG</option>
           <option value="jpg">JPG</option>
@@ -68,7 +76,7 @@
         </select>
       </label>
       <div class="filter-item filter-actions">
-        <button id="resetFiltersBtn" class="btn-clear btn-neutral" type="button">
+        <button id="resetFiltersBtn" class="btn-clear sc-btn sc-btn-sm btn-neutral" type="button">
           Reset Filters
         </button>
       </div>
@@ -97,11 +105,17 @@
         <div class="skeleton-line small sc-skeleton"></div>
       </div>
     </div>
-    <div id="captureDiagnostics" class="capture-diagnostics hidden" aria-live="polite">
+    <div
+      id="captureDiagnostics"
+      class="capture-diagnostics sc-banner sc-banner-warn hidden"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
       <span id="captureDiagnosticsText"></span>
       <button
         id="captureDiagnosticsDismiss"
-        class="capture-diagnostics-dismiss"
+        class="capture-diagnostics-dismiss sc-btn sc-btn-sm"
         type="button"
         aria-label="Dismiss capture diagnostic"
       >
@@ -111,7 +125,7 @@
     <div id="grid" class="grid hidden"></div>
 
     <!-- Empty state -->
-    <div id="empty" class="empty hidden">
+    <div id="empty" class="empty sc-state-empty hidden" role="status" aria-live="polite">
       <svg
         width="52"
         height="52"
@@ -129,20 +143,26 @@
     </div>
 
     <!-- Loading -->
-    <div id="loading" class="loading hidden">Loading…</div>
+    <div id="loading" class="loading sc-state-loading hidden" role="status" aria-live="polite">
+      Loading…
+    </div>
 
     <!-- Files overlay -->
     <div
       id="filesOverlay"
-      class="files-overlay hidden"
+      class="files-overlay sc-modal hidden"
       role="dialog"
       aria-modal="true"
       aria-label="Files"
     >
-      <div class="files-panel">
+      <div class="files-panel sc-card">
         <div class="files-titlebar">
           <div class="files-title">Files</div>
-          <button id="closeFilesBtn" class="files-close" aria-label="Close files overlay">
+          <button
+            id="closeFilesBtn"
+            class="files-close sc-btn sc-btn-secondary"
+            aria-label="Close files overlay"
+          >
             Close
           </button>
         </div>
@@ -152,8 +172,8 @@
             <span id="selectedCount">(0 Selected)</span>
           </label>
           <div class="files-actions">
-            <button id="downloadSelected" class="btn-file" disabled>Download</button>
-            <button id="deleteSelected" class="btn-file" disabled>Delete</button>
+            <button id="downloadSelected" class="btn-file sc-btn" disabled>Download</button>
+            <button id="deleteSelected" class="btn-file sc-btn" disabled>Delete</button>
           </div>
         </div>
         <div id="filesList" class="files-list"></div>
@@ -163,7 +183,7 @@
 
     <!-- Card template -->
     <template id="cardTpl">
-      <div class="card">
+      <div class="card sc-card">
         <div class="card-thumb">
           <canvas class="thumb-canvas" aria-hidden="true"></canvas>
         </div>
@@ -173,7 +193,7 @@
           <div class="card-diagnostic hidden"></div>
         </div>
         <div class="card-actions">
-          <button class="btn-action btn-compare">
+          <button class="btn-action sc-btn sc-btn-sm btn-compare">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path
                 d="M10 3H5c-1.1 0-2 .9-2 2v5h2V5h5V3zm9 0h-5v2h5v5h2V5c0-1.1-.9-2-2-2zm0 16h-5v2h5c1.1 0 2-.9 2-2v-5h-2v5zM5 14H3v5c0 1.1.9 2 2 2h5v-2H5v-5zm1-3h12v2H6z"
@@ -181,7 +201,7 @@
             </svg>
             Compare
           </button>
-          <button class="btn-action btn-open">
+          <button class="btn-action sc-btn sc-btn-sm btn-open">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path
                 d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"
@@ -189,7 +209,7 @@
             </svg>
             Open
           </button>
-          <button class="btn-action btn-delete">
+          <button class="btn-action sc-btn sc-btn-sm sc-btn-danger btn-delete">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path
                 d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"

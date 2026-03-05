@@ -23,6 +23,16 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
 - `src/shared/db.js`: IndexedDB access primitives.
 - `src/shared/repos/*.js`: persistence access wrappers for screenshots, tiles, URLs, and settings.
 - `src/shared/*` utilities: filename, download, validation, UI helpers, and URL/history model logic.
+- `src/shared/ui.css`: global design tokens (`--sc-*`) and shared UI primitives (`sc-*` component classes).
+
+## Design System Contract
+
+- Figma file `THECollector - UI Kit & Screens` is the single source of truth for UX/UI and components.
+- Code mirrors Figma through:
+  - global tokens in `src/shared/ui.css`
+  - surface semantic tokens in `src/popup/popup.css` (`--popup-*`) and `src/history/history.css` (`--history-*`)
+  - shared primitive classes (`sc-btn`, `sc-input`, `sc-select`, `sc-card`, `sc-tab*`, `sc-pill*`, `sc-banner*`, `sc-modal`).
+- Detailed handoff rules and mapping: `docs/ui-handoff.md`.
 
 ## Primary Data Flows
 

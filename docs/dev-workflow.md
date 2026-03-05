@@ -59,6 +59,13 @@ Packaging script guardrails:
   - `CLAUDE.md`
   - `CHANGELOG.md`
 
+## UI/UX Handoff Rule
+
+- Figma file `THECollector - UI Kit & Screens` is the project UI single source of truth.
+- Before introducing new screen-level styles, implement or update shared primitives/tokens in `src/shared/ui.css`.
+- Keep surface-level CSS tokenized (`--popup-*`, `--history-*`) and avoid new hardcoded visual values when an existing token exists.
+- Reference `docs/ui-handoff.md` for component/state/accessibility contracts used for engineering handoff.
+
 ## CI
 
 - GitHub Actions workflow: `.github/workflows/ci.yml`

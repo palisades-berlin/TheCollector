@@ -44,6 +44,11 @@ function setActiveTab(mode) {
   urlsTabBtn.setAttribute('aria-selected', showCapture ? 'false' : 'true');
   capturePanel.classList.toggle('hidden', !showCapture);
   urlsPanel.classList.toggle('hidden', showCapture);
+  if (showCapture) {
+    captureTabBtn.focus();
+  } else {
+    urlsTabBtn.focus();
+  }
 }
 
 async function ensureUrlsPanelReady() {
@@ -85,6 +90,22 @@ urlsTabBtn.addEventListener('click', () => {
   });
 });
 
+for (const tabButton of [captureTabBtn, urlsTabBtn]) {
+  tabButton.addEventListener('keydown', (event) => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    event.preventDefault();
+    if (tabButton === captureTabBtn) {
+      setActiveTab('urls');
+      ensureUrlsPanelReady().catch((err) => {
+        reportNonFatal('load URL panel', err);
+        showToast('Could not load URL panel');
+      });
+    } else {
+      setActiveTab('capture');
+    }
+  });
+}
+
 captureBtn.addEventListener('click', async () => {
   if (capturing) return;
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -98,6 +119,7 @@ captureBtn.addEventListener('click', async () => {
 function startCapture(tabId) {
   capturing = true;
   captureBtn.disabled = true;
+  capturePanel.setAttribute('aria-busy', 'true');
   errorMsgEl.classList.add('hidden');
   doneMsgEl.classList.add('hidden');
   progressEl.classList.remove('hidden');
@@ -149,9 +171,10 @@ function toFriendlyCaptureError(rawMessage) {
 function showError(msg) {
   capturing = false;
   captureBtn.disabled = false;
+  capturePanel.setAttribute('aria-busy', 'false');
   progressEl.classList.add('hidden');
   const friendly = toFriendlyCaptureError(msg);
-  errorMsgEl.classList.add('hidden');
+  errorMsgEl.classList.remove('hidden');
   errorMsgEl.textContent = friendly;
   showToast(friendly);
 }
@@ -159,6 +182,7 @@ function showError(msg) {
 function showDone(payload = {}) {
   capturing = false;
   captureBtn.disabled = false;
+  capturePanel.setAttribute('aria-busy', 'false');
   progressEl.classList.add('hidden');
   doneMsgEl.classList.remove('hidden');
 

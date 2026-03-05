@@ -1,5 +1,46 @@
 # Changelog
 
+## 1.5.6 - 2026-03-05
+
+- Completed handoff hardening pass (step 6) for design-system-driven implementation:
+  - added `docs/ui-handoff.md` as the engineering contract for tokens, shared primitives, accessibility states, and screen mapping
+  - documented Figma (`THECollector - UI Kit & Screens`) as the project UI single source of truth
+  - updated architecture/workflow docs to codify token-first implementation and Dev Mode handoff expectations.
+- Synced maintainer-facing docs and version pointers (`README.md`, `CLAUDE.md`) to current release version.
+
+## 1.5.5 - 2026-03-05
+
+- Completed UX/UI step 5 (states + accessibility pass) across popup, history, and options:
+  - added shared state primitives in `src/shared/ui.css` (`sc-banner` variants and `sc-state-empty/loading`)
+  - improved live-region semantics (`role`/`aria-live`/`aria-atomic`) for progress, success, error, empty, loading, and status messages
+  - enabled keyboard discoverability for popup tab switching (arrow key navigation) and URL row action visibility on `:focus-within`
+  - added busy-state signaling (`aria-busy`) for capture/history loading flows.
+- Fixed popup inline error visibility regression in `src/popup/popup.js` (error text now displays instead of remaining hidden).
+
+## 1.5.4 - 2026-03-05
+
+- Executed shared component normalization pass (step 4) across popup, history sidebar, and options:
+  - added reusable shared primitives in `src/shared/ui.css` for `sc-card`, `sc-input`, `sc-select`, `sc-btn` variants/sizes, `sc-tablist/sc-tab`, `sc-pill`, `sc-modal`, and `sc-kbd`
+  - wired popup/history/options markup to consume shared classes while preserving existing behavior and IDs
+  - aligned dynamic history card/files panel structure with shared card primitives for consistent Dev Mode handoff.
+- Kept local screen-specific styling in place where needed, with shared tokenized components now serving as the default base layer.
+
+## 1.5.3 - 2026-03-05
+
+- Continued UX/UI refactor rollout with a token-first pass for the main workspace sidebar (`src/history/history.css`):
+  - introduced a semantic `--history-*` token layer mapped to shared design tokens
+  - migrated header, filters, grid/cards, empty/loading, diagnostics, and files overlay styles off direct hardcoded values
+  - kept existing HTML/JS behavior unchanged while improving maintainability and handoff consistency.
+- Updated shared system font token in `src/shared/ui.css` so UI surfaces inherit `Poppins` by default.
+
+## 1.5.2 - 2026-03-05
+
+- Started UX/UI refactor rollout from the approved Figma source-of-truth with a stepwise execution plan.
+- Refactored popup styling into a clearer design-token layer:
+  - added popup-semantic tokens in `src/popup/popup.css` mapped to shared tokens from `src/shared/ui.css`
+  - replaced popup hardcoded values with semantic token references for spacing, colors, radius, timing, and layout
+  - kept popup behavior and DOM structure unchanged while improving maintainability for upcoming component refactors.
+
 ## 1.5.1 - 2026-03-05
 
 - Regenerated extension icon set in `assets/icons/` with a unified modern camera-mark style consistent with the approved 128x128 store icon.

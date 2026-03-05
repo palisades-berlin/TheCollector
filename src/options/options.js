@@ -30,7 +30,7 @@ function logNonFatal(context, err) {
   console.debug('[THE Collector][non-fatal]', context, err);
 }
 
-init().catch((err) => showStatus(`Failed to load settings: ${err.message}`));
+init().catch((err) => showStatus(`Failed to load settings: ${err.message}`, 'error'));
 
 async function init() {
   const settings = await getUserSettings();
@@ -57,10 +57,10 @@ saveBtn.addEventListener('click', async () => {
     });
     const normalized = await getUserSettings();
     downloadDirectoryEl.value = normalized.downloadDirectory;
-    showStatus('Settings saved.');
+    showStatus('Settings saved.', 'success');
     showToast('Settings saved.', 'success');
   } catch (err) {
-    showStatus(`Save failed: ${err.message}`);
+    showStatus(`Save failed: ${err.message}`, 'error');
     showToast(`Save failed: ${err.message}`, 'error', 3200);
   } finally {
     saveBtn.disabled = false;
@@ -70,14 +70,17 @@ saveBtn.addEventListener('click', async () => {
 grantDownloadsBtn.addEventListener('click', async () => {
   try {
     const granted = await chrome.permissions.request({ permissions: ['downloads'] });
-    showStatus(granted ? 'Downloads permission granted.' : 'Downloads permission was not granted.');
+    showStatus(
+      granted ? 'Downloads permission granted.' : 'Downloads permission was not granted.',
+      granted ? 'success' : 'info'
+    );
     showToast(
       granted ? 'Downloads permission granted.' : 'Downloads permission not granted.',
       granted ? 'success' : 'info'
     );
     await refreshPermissionStatus();
   } catch (err) {
-    showStatus(`Permission request failed: ${err.message}`);
+    showStatus(`Permission request failed: ${err.message}`, 'error');
     showToast(`Permission request failed: ${err.message}`, 'error', 3200);
   }
 });
@@ -86,7 +89,8 @@ revokeDownloadsBtn.addEventListener('click', async () => {
   try {
     const removed = await chrome.permissions.remove({ permissions: ['downloads'] });
     showStatus(
-      removed ? 'Downloads permission revoked.' : 'Downloads permission could not be revoked.'
+      removed ? 'Downloads permission revoked.' : 'Downloads permission could not be revoked.',
+      removed ? 'success' : 'info'
     );
     showToast(
       removed ? 'Downloads permission revoked.' : 'Downloads permission could not be revoked.',
@@ -94,7 +98,7 @@ revokeDownloadsBtn.addEventListener('click', async () => {
     );
     await refreshPermissionStatus();
   } catch (err) {
-    showStatus(`Permission removal failed: ${err.message}`);
+    showStatus(`Permission removal failed: ${err.message}`, 'error');
     showToast(`Permission removal failed: ${err.message}`, 'error', 3200);
   }
 });
@@ -149,8 +153,28 @@ async function refreshPermissionStatus() {
   await refreshCorePermissionBadges();
 }
 
-function showStatus(msg) {
+function showStatus(msg, tone = 'info') {
   statusEl.textContent = msg;
+  statusEl.classList.remove(
+    'hidden',
+    'sc-banner-info',
+    'sc-banner-success',
+    'sc-banner-error',
+    'sc-banner-warn'
+  );
+  if (tone === 'success') {
+    statusEl.classList.add('sc-banner-success');
+    return;
+  }
+  if (tone === 'error') {
+    statusEl.classList.add('sc-banner-error');
+    return;
+  }
+  if (tone === 'warn') {
+    statusEl.classList.add('sc-banner-warn');
+    return;
+  }
+  statusEl.classList.add('sc-banner-info');
 }
 
 async function hasPermission(permission) {

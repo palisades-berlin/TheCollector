@@ -11,6 +11,10 @@ body {
   color: var(--sc-color-text);
 }
 
+.hidden {
+  display: none !important;
+}
+
 @keyframes options-fade-up {
   from {
     opacity: 0;
@@ -169,7 +173,7 @@ body {
 
 .status {
   font-size: 13px;
-  color: var(--sc-color-text-muted);
+  min-width: 180px;
 }
 
 .perm-list {

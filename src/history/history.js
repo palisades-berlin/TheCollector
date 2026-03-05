@@ -290,6 +290,7 @@ compareBtn?.addEventListener('click', () => {
 });
 
 async function refreshAll() {
+  gridEl.setAttribute('aria-busy', 'true');
   captureReports = await loadCaptureReports();
   try {
     allRecords = await listScreenshotMetaRecords();
@@ -312,6 +313,7 @@ async function refreshAll() {
   renderCaptureDiagnostics();
   renderMainView();
   filesOverlay.renderFilesOverlay(true);
+  gridEl.setAttribute('aria-busy', 'false');
 }
 
 async function init() {
@@ -324,5 +326,6 @@ init().catch((err) => {
   if (historySkeletonEl) historySkeletonEl.classList.add('hidden');
   loadingEl.classList.add('hidden');
   filesStatusEl.textContent = `Failed to load history: ${err.message}`;
+  gridEl.setAttribute('aria-busy', 'false');
   showToast(`Failed to load history: ${err.message}`, 'error', 3000);
 });

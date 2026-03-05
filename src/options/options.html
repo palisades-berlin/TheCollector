@@ -23,11 +23,11 @@
     </header>
 
     <main class="main">
-      <section class="card">
+      <section class="card sc-card">
         <h2>Export Defaults</h2>
         <label class="row">
           <span>Default export format</span>
-          <select id="defaultExportFormat">
+          <select id="defaultExportFormat" class="sc-select">
             <option value="png">PNG</option>
             <option value="jpg">JPG</option>
             <option value="pdf">PDF</option>
@@ -36,7 +36,7 @@
 
         <label class="row">
           <span>Default PDF page size</span>
-          <select id="defaultPdfPageSize">
+          <select id="defaultPdfPageSize" class="sc-select">
             <option value="auto">Auto</option>
             <option value="a4">A4</option>
             <option value="letter">Letter</option>
@@ -44,11 +44,11 @@
         </label>
       </section>
 
-      <section class="card">
+      <section class="card sc-card">
         <h2>Download Behavior</h2>
         <label class="row">
           <span>Auto-download behavior</span>
-          <select id="autoDownloadMode">
+          <select id="autoDownloadMode" class="sc-select">
             <option value="off">Off</option>
             <option value="after_preview">After preview opens</option>
             <option value="skip_preview">Skip preview and download directly</option>
@@ -60,12 +60,12 @@
           <div class="dir-picker">
             <input
               id="downloadDirectory"
-              class="text-input"
+              class="text-input sc-input"
               type="text"
               placeholder="e.g. screencaptures"
               spellcheck="false"
             />
-            <button id="pickDirectoryBtn" class="btn btn-secondary" type="button">
+            <button id="pickDirectoryBtn" class="btn sc-btn sc-btn-secondary" type="button">
               Choose Folder
             </button>
             <input
@@ -85,19 +85,21 @@
         </label>
       </section>
 
-      <section class="card">
+      <section class="card sc-card">
         <h2>Optional Permissions</h2>
         <p class="muted">Downloads permission can be granted or revoked on demand.</p>
         <div class="row row-buttons">
-          <span id="downloadsStatus">Downloads permission: checking…</span>
+          <span id="downloadsStatus" role="status" aria-live="polite" aria-atomic="true">
+            Downloads permission: checking…
+          </span>
           <div class="btns">
-            <button id="grantDownloads" class="btn">Grant</button>
-            <button id="revokeDownloads" class="btn btn-secondary">Revoke</button>
+            <button id="grantDownloads" class="btn sc-btn">Grant</button>
+            <button id="revokeDownloads" class="btn sc-btn sc-btn-secondary">Revoke</button>
           </div>
         </div>
       </section>
 
-      <section class="card">
+      <section class="card sc-card">
         <h2>Permission Scope & Status</h2>
         <p class="muted">
           What each permission does for you and whether it is currently available.
@@ -110,7 +112,7 @@
                 Lets THE Collector read the page you are currently on when you start a capture.
               </div>
             </div>
-            <span id="perm-activeTab" class="perm-badge" aria-live="polite">Checking…</span>
+            <span id="perm-activeTab" class="perm-badge sc-pill" aria-live="polite">Checking…</span>
           </div>
           <div class="perm-item" role="listitem">
             <div class="perm-text">
@@ -119,7 +121,7 @@
                 Lets the extension find your active tab and open History/Preview pages when needed.
               </div>
             </div>
-            <span id="perm-tabs" class="perm-badge" aria-live="polite">Checking…</span>
+            <span id="perm-tabs" class="perm-badge sc-pill" aria-live="polite">Checking…</span>
           </div>
           <div class="perm-item" role="listitem">
             <div class="perm-text">
@@ -129,7 +131,7 @@
                 correctly.
               </div>
             </div>
-            <span id="perm-scripting" class="perm-badge" aria-live="polite">Checking…</span>
+            <span id="perm-scripting" class="perm-badge sc-pill" aria-live="polite">Checking…</span>
           </div>
           <div class="perm-item" role="listitem">
             <div class="perm-text">
@@ -138,7 +140,7 @@
                 Saves your URLs, settings, and capture data on your device.
               </div>
             </div>
-            <span id="perm-storage" class="perm-badge" aria-live="polite">Checking…</span>
+            <span id="perm-storage" class="perm-badge sc-pill" aria-live="polite">Checking…</span>
           </div>
           <div class="perm-item" role="listitem">
             <div class="perm-text">
@@ -147,7 +149,7 @@
                 Combines screenshot tiles in the background without interrupting your current tab.
               </div>
             </div>
-            <span id="perm-offscreen" class="perm-badge" aria-live="polite">Checking…</span>
+            <span id="perm-offscreen" class="perm-badge sc-pill" aria-live="polite">Checking…</span>
           </div>
           <div class="perm-item" role="listitem">
             <div class="perm-text">
@@ -156,7 +158,9 @@
                 Helps keep large or many screenshots from being dropped due to browser quota limits.
               </div>
             </div>
-            <span id="perm-unlimitedStorage" class="perm-badge" aria-live="polite">Checking…</span>
+            <span id="perm-unlimitedStorage" class="perm-badge sc-pill" aria-live="polite"
+              >Checking…</span
+            >
           </div>
           <div class="perm-item" role="listitem">
             <div class="perm-text">
@@ -166,12 +170,12 @@
                 anytime.
               </div>
             </div>
-            <span id="perm-downloads" class="perm-badge" aria-live="polite">Checking…</span>
+            <span id="perm-downloads" class="perm-badge sc-pill" aria-live="polite">Checking…</span>
           </div>
         </div>
       </section>
 
-      <section class="card">
+      <section class="card sc-card">
         <h2>Clipboard</h2>
         <label class="check-row">
           <input id="fitClipboardToDocsLimit" type="checkbox" />
@@ -179,15 +183,21 @@
         </label>
       </section>
 
-      <section class="card">
+      <section class="card sc-card">
         <h2>Host Access</h2>
         <p class="muted">This build uses active-tab capture scope by default.</p>
         <p class="muted">For restricted pages, browser-level site access controls still apply.</p>
       </section>
 
       <div class="actions">
-        <button id="saveBtn" class="btn btn-primary">Save Settings</button>
-        <span id="status" class="status" aria-live="polite"></span>
+        <button id="saveBtn" class="btn sc-btn sc-btn-primary">Save Settings</button>
+        <span
+          id="status"
+          class="status sc-banner hidden"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        ></span>
       </div>
     </main>
 
