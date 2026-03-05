@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.35 - 2026-03-05
+- Added URL Collection History in popup `URLs` tab:
+  - new `History` view with timestamped snapshots of URL list states
+  - snapshot actions: `Restore`, `Copy`, `TXT`, `CSV`
+  - history management actions: `Back`, `Clear History`
+- Persisted URL history snapshots in `chrome.storage.local` under `urlHistorySnapshots` with bounded retention.
+- Added automatic snapshot capture on URL list mutations (add current tab, add all tabs, remove item), clear-all pre-state, and restore actions.
+- Refactored URL export logic to reuse shared download helper (`anchorDownloadBlob`).
+
 ## 1.3.34 - 2026-03-05
 - Fixed the Options `Choose Folder` action to use a real folder-picker flow (`showDirectoryPicker`) where supported, instead of always invoking upload-style folder selection.
 - Kept existing fallback behavior via hidden `webkitdirectory` input for environments without `showDirectoryPicker`.

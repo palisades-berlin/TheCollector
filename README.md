@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.3.34`.
+Current extension version: `1.3.35`.
 
 ## Overview
 THE Collector includes two modes:
@@ -52,6 +52,7 @@ The capture pipeline is split across extension contexts:
 - Send URL list via email draft
 - Clear list with confirmation
 - Restore last cleared URL list (single-step undo snapshot)
+- URL Collection History with snapshot restore/copy/TXT/CSV actions
 
 ### Preview & Editing
 - Click-to-zoom preview

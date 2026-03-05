@@ -62,7 +62,8 @@
   </section>
 
   <section id="urlsPanel" class="panel hidden" role="tabpanel" aria-labelledby="urlsTabBtn">
-    <div class="add-section">
+    <div id="urlsMainView">
+      <div class="add-section">
       <button class="btn-add" id="btn-add" aria-label="Add current tab URL">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
@@ -75,25 +76,42 @@
         </svg>
         Add All Tabs in Window
       </button>
-    </div>
+      </div>
 
-    <div class="list-wrapper">
-      <div id="url-list"></div>
-      <div id="empty-state" class="empty">
-        <span class="empty-title">No URLs collected yet</span>
+      <div class="list-wrapper">
+        <div id="url-list"></div>
+        <div id="empty-state" class="empty">
+          <span class="empty-title">No URLs collected yet</span>
+        </div>
+      </div>
+
+      <div class="footer url-footer">
+        <div class="footer-row">
+          <button class="btn-footer" id="btn-copy" aria-label="Copy all URLs">Copy</button>
+          <button class="btn-footer" id="btn-export" aria-label="Save URLs as text file">TXT</button>
+          <button class="btn-footer" id="btn-export-csv" aria-label="Save URLs as CSV file">CSV</button>
+        </div>
+        <div class="footer-row">
+          <button class="btn-footer" id="btn-restore" aria-label="Restore last cleared URLs">Restore Last Clear</button>
+          <button class="btn-footer" id="btn-email" aria-label="Email URLs">Email</button>
+          <button class="btn-footer danger" id="btn-clear" aria-label="Clear all URLs">Clear All</button>
+        </div>
+        <div class="footer-row">
+          <button class="btn-footer" id="btn-url-history" aria-label="Open URL history">History</button>
+        </div>
       </div>
     </div>
 
-    <div class="footer url-footer">
-      <div class="footer-row">
-        <button class="btn-footer" id="btn-copy" aria-label="Copy all URLs">Copy</button>
-        <button class="btn-footer" id="btn-export" aria-label="Save URLs as text file">TXT</button>
-        <button class="btn-footer" id="btn-export-csv" aria-label="Save URLs as CSV file">CSV</button>
+    <div id="urlsHistoryView" class="hidden">
+      <div class="history-topbar">
+        <button class="btn-footer" id="btn-url-history-back" aria-label="Back to URL list">Back</button>
+        <button class="btn-footer danger" id="btn-url-history-clear" aria-label="Clear URL history">Clear History</button>
       </div>
-      <div class="footer-row">
-        <button class="btn-footer" id="btn-restore" aria-label="Restore last cleared URLs">Restore Last Clear</button>
-        <button class="btn-footer" id="btn-email" aria-label="Email URLs">Email</button>
-        <button class="btn-footer danger" id="btn-clear" aria-label="Clear all URLs">Clear All</button>
+      <div class="list-wrapper">
+        <div id="url-history-list"></div>
+        <div id="url-history-empty" class="empty">
+          <span class="empty-title">No URL history yet</span>
+        </div>
       </div>
     </div>
   </section>
