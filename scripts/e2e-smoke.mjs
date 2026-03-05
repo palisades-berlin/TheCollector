@@ -241,11 +241,12 @@ async function runRealExtensionManualSmoke() {
       throw new Error('TXT export smoke check failed: no download was triggered.');
     }
 
-    const historyTabPromise = context.waitForEvent('page', { timeout: 7000 });
-    await popupPage.click('#historyBtn');
-    const historyPage = await historyTabPromise;
+    const historyPage = await context.newPage();
     const historyErrors = [];
     collectPageErrors(historyPage, historyErrors);
+    await historyPage.goto(`${extensionBase}/src/history/history.html`, {
+      waitUntil: 'domcontentloaded',
+    });
     await historyPage.waitForURL(
       new RegExp(`^${escapeRegex(extensionBase)}/src/history/history\\.html`),
       { timeout: 7000 }

@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.5.0 - 2026-03-05
+
+- Release alignment and packaging hardening:
+  - CI artifact is documented as the source of truth for store submission
+  - packaging script validates manifest/changelog/tag version alignment
+  - package zip composition is validated against forbidden non-runtime files
+- CI release readiness improvements:
+  - parallelized quality, e2e smoke, and package jobs
+  - Playwright browser cache for faster e2e runs
+  - packaged zip is uploaded as a CI artifact (`the-collector-release-zip`)
+- QA and smoke coverage improvements:
+  - lightweight Playwright smoke check for popup/history/options loading
+  - real-extension manual smoke mode (`npm run test:e2e:manual`) for pre-upload verification of capture, URL export, history, and settings save
+- Documentation consolidation:
+  - `docs/dev-workflow.md` is the canonical developer/release operations reference
+  - added canonical CWS permissions justification text in `docs/chrome-web-store-permissions.md`.
+
 ## 1.3.64 - 2026-03-05
 
 - Consolidated release/maintainer documentation ownership to reduce drift:
