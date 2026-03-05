@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.3.42 - 2026-03-05
+- Added focused unit coverage for settings and history utilities:
+  - `tests/settings.test.mjs`
+  - `tests/history-utils.test.mjs`
+- Expanded local/CI unit test execution to include the new test files.
+
+## 1.3.41 - 2026-03-05
+- Added GitHub Actions CI workflow (`.github/workflows/ci.yml`) for push/PR test runs.
+- Added developer tooling scaffold:
+  - `package.json` scripts (`test:unit`, `lint`, `format:check`, `check`)
+  - ESLint and Prettier configuration files
+  - `.editorconfig`
+- Added README developer-checks guidance for local quality checks.
+
 ## 1.3.40 - 2026-03-05
 - Updated Visual Diff rendering to use translucent bounding boxes around detected change regions.
 - Box semantics:
