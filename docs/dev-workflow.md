@@ -33,6 +33,11 @@ npm run check
 ./scripts/package-release.sh
 ```
 
+Packaging script guardrails:
+
+- top `CHANGELOG.md` version must match `manifest.json` version
+- if `HEAD` is exactly tagged, tag version must match manifest/changelog version
+
 ## Release Artifact Source of Truth
 
 - Use the CI-uploaded artifact (`the-collector-release-zip`) from GitHub Actions for Chrome Web Store submission.

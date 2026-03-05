@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.62 - 2026-03-05
+
+- Hardened release-version alignment checks in `scripts/package-release.sh`:
+  - fail if top `CHANGELOG.md` version differs from `manifest.json` version
+  - fail on exact-tag builds when git tag version differs from manifest/changelog version
+- Documented these release guardrails in workflow/readme docs.
+
 ## 1.3.61 - 2026-03-05
 
 - Added canonical Chrome Web Store permission-justification text in `docs/chrome-web-store-permissions.md`.
