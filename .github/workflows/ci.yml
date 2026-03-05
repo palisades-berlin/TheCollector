@@ -21,3 +21,13 @@ jobs:
 
       - name: Run quality checks
         run: npm run check
+
+      - name: Package extension smoke test
+        run: |
+          ./scripts/package-release.sh
+          ZIP_PATH="dist/the-collector-v$(node -p "require('./manifest.json').version").zip"
+          test -f "$ZIP_PATH"
+          if unzip -l "$ZIP_PATH" | grep -E "(tests/|node_modules/|\\.git/)"; then
+            echo "Unexpected development artifacts found in release zip."
+            exit 1
+          fi

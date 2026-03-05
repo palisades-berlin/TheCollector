@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.54 - 2026-03-05
+
+- Added CI packaging smoke coverage in `.github/workflows/ci.yml`:
+  - runs `./scripts/package-release.sh` after quality checks
+  - asserts the expected release zip exists in `dist/`
+  - fails CI if zip contents include development artifacts (`tests/`, `node_modules/`, `.git/`)
+- Keeps release validation aligned with local packaging workflow.
+
 ## 1.3.53 - 2026-03-05
 
 - Updated CI workflow to run the full quality gate on push/PR:
