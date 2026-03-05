@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.55 - 2026-03-05
+
+- Hardened release packaging script (`scripts/package-release.sh`):
+  - added explicit excludes for non-runtime content (`docs/`, `tests/`, `*.md`, and local config files)
+  - added post-zip validation to fail if forbidden non-runtime files are present in the archive
+- Keeps release zip composition stricter and self-validating before publish.
+
 ## 1.3.54 - 2026-03-05
 
 - Added CI packaging smoke coverage in `.github/workflows/ci.yml`:
