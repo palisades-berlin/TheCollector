@@ -7,11 +7,17 @@ import {
   escapeCsvCell,
 } from '../shared/url-utils.js';
 import { canRestoreUrls } from '../shared/url-list-state.js';
+import {
+  URL_HISTORY_ACTION,
+  normalizeUrlArray,
+  loadUrlHistory,
+  saveUrlHistory,
+  appendUrlHistorySnapshot,
+} from '../shared/url-history.js';
 
 const URL_LIMIT = 500;
 const URL_UNDO_KEY = 'urlsUndoSnapshot';
-const URL_HISTORY_KEY = 'urlHistorySnapshots';
-const URL_HISTORY_LIMIT = 100;
+const URL_HISTORY_PAGE_SIZE = 20;
 const POPUP_DEBUG =
   new URLSearchParams(location.search).get('debugPopupPerf') === '1' ||
   window.localStorage.getItem('sc_debug_popup_perf') === '1';
@@ -23,6 +29,7 @@ let currentUrlCount = 0;
 let undoUrlCount = 0;
 let initStartedAt = 0;
 let historyEntries = [];
+let historyPage = 0;
 
 const urlCount = document.getElementById('urlCount');
 const urlListEl = document.getElementById('url-list');
@@ -42,6 +49,7 @@ const urlHistoryBackBtn = document.getElementById('btn-url-history-back');
 const urlHistoryClearBtn = document.getElementById('btn-url-history-clear');
 const urlHistoryListEl = document.getElementById('url-history-list');
 const urlHistoryEmptyEl = document.getElementById('url-history-empty');
+const urlHistoryMoreBtn = document.getElementById('btn-url-history-more');
 
 function perfLog(label, extra = {}) {
   if (!POPUP_DEBUG) return;
@@ -68,21 +76,16 @@ function reportError(err, userMessage) {
   showToast(userMessage);
 }
 
-function normalizeUrlArray(value) {
-  if (!Array.isArray(value)) return [];
-  return value.filter((u) => typeof u === 'string');
+function formatUrlCount(count) {
+  return `${count} URL${count === 1 ? '' : 's'}`;
 }
 
-function urlsEqual(a, b) {
+function arraysEqual(a, b) {
   if (a.length !== b.length) return false;
   for (let i = 0; i < a.length; i++) {
     if (a[i] !== b[i]) return false;
   }
   return true;
-}
-
-function formatUrlCount(count) {
-  return `${count} URL${count === 1 ? '' : 's'}`;
 }
 
 function loadUrls() {
@@ -107,65 +110,29 @@ function saveUrls(urls) {
   return chromeCall((done) => chrome.storage.local.set({ urls }, done));
 }
 
-function buildHistoryEntry(actionType, urls) {
-  return {
-    id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-    createdAt: Date.now(),
-    actionType,
-    urls: [...urls],
-    count: urls.length,
-  };
-}
-
-function normalizeHistoryEntries(value) {
-  if (!Array.isArray(value)) return [];
-  return value
-    .map((entry) => ({
-      id: typeof entry?.id === 'string' ? entry.id : `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-      createdAt: Number(entry?.createdAt) || Date.now(),
-      actionType: typeof entry?.actionType === 'string' ? entry.actionType : 'unknown',
-      urls: normalizeUrlArray(entry?.urls),
-      count: Number(entry?.count) || normalizeUrlArray(entry?.urls).length,
-    }))
-    .filter((entry) => entry.urls.length > 0)
-    .sort((a, b) => b.createdAt - a.createdAt)
-    .slice(0, URL_HISTORY_LIMIT);
-}
-
-async function loadUrlHistory() {
-  const state = await chromeCall((done) =>
-    chrome.storage.local.get({ [URL_HISTORY_KEY]: [] }, done)
-  );
-  historyEntries = normalizeHistoryEntries(state[URL_HISTORY_KEY]);
+async function refreshHistoryEntries() {
+  historyEntries = await loadUrlHistory();
   return historyEntries;
 }
 
-async function saveUrlHistory(nextEntries) {
-  const normalized = normalizeHistoryEntries(nextEntries);
-  historyEntries = normalized;
-  await chromeCall((done) => chrome.storage.local.set({ [URL_HISTORY_KEY]: normalized }, done));
-  return normalized;
+function isHistoryViewOpen() {
+  return !urlsHistoryViewEl.classList.contains('hidden');
 }
 
-async function appendHistorySnapshot(actionType, urls) {
-  const normalizedUrls = normalizeUrlArray(urls);
-  if (normalizedUrls.length === 0) return;
-
-  const currentHistory = await loadUrlHistory();
-  const latest = currentHistory[0];
-  if (latest && urlsEqual(latest.urls, normalizedUrls)) return;
-
-  const entry = buildHistoryEntry(actionType, normalizedUrls);
-  await saveUrlHistory([entry, ...currentHistory]);
+async function refreshHistoryViewIfOpen() {
+  if (!isHistoryViewOpen()) return;
+  await refreshHistoryEntries();
+  renderHistoryList(historyEntries);
 }
 
-function mutateUrls(mutator, actionType = 'mutation') {
+function mutateUrls(mutator, actionType = URL_HISTORY_ACTION.UNKNOWN, meta = {}) {
   const run = urlMutationQueue.then(async () => {
     const urls = await loadUrls();
     const nextUrls = normalizeUrlArray(await mutator([...urls]));
-    if (!urlsEqual(urls, nextUrls)) {
+    if (!arraysEqual(urls, nextUrls)) {
       await saveUrls(nextUrls);
-      await appendHistorySnapshot(actionType, nextUrls);
+      await appendUrlHistorySnapshot({ actionType, urls: nextUrls, meta });
+      await refreshHistoryViewIfOpen();
       return nextUrls;
     }
     return urls;
@@ -285,17 +252,17 @@ async function refreshUndoState() {
 
 function getActionLabel(actionType) {
   switch (actionType) {
-    case 'add_current':
+    case URL_HISTORY_ACTION.ADD_CURRENT:
       return 'Added current tab';
-    case 'add_all_tabs':
+    case URL_HISTORY_ACTION.ADD_ALL_TABS:
       return 'Added all tabs';
-    case 'remove_one':
+    case URL_HISTORY_ACTION.REMOVE_ONE:
       return 'Removed one URL';
-    case 'clear_before':
+    case URL_HISTORY_ACTION.CLEAR_BEFORE:
       return 'Before clear all';
-    case 'restore_last_clear':
+    case URL_HISTORY_ACTION.RESTORE_LAST_CLEAR:
       return 'Restored last clear';
-    case 'restore_history':
+    case URL_HISTORY_ACTION.RESTORE_HISTORY:
       return 'Restored from history';
     default:
       return 'Updated list';
@@ -317,7 +284,10 @@ function createHistoryItemEl(entry) {
 
   const title = document.createElement('div');
   title.className = 'history-item-title';
-  title.textContent = `${formatUrlCount(entry.count)}`;
+  const firstUrl = entry.urls[0] || '(no URL)';
+  title.textContent =
+    entry.urls.length > 1 ? `${firstUrl} (+${entry.urls.length - 1} more)` : firstUrl;
+  title.title = firstUrl;
 
   const meta = document.createElement('div');
   meta.className = 'history-item-meta';
@@ -343,16 +313,20 @@ function renderHistoryList(entries) {
   if (!entries.length) {
     urlHistoryListEl.style.display = 'none';
     urlHistoryEmptyEl.style.display = 'flex';
+    urlHistoryMoreBtn.classList.add('hidden');
     return;
   }
 
+  const visibleCount = Math.min(entries.length, (historyPage + 1) * URL_HISTORY_PAGE_SIZE);
+  const visibleEntries = entries.slice(0, visibleCount);
   urlHistoryListEl.style.display = 'block';
   urlHistoryEmptyEl.style.display = 'none';
   const fragment = document.createDocumentFragment();
-  entries.forEach((entry) => {
+  visibleEntries.forEach((entry) => {
     fragment.appendChild(createHistoryItemEl(entry));
   });
   urlHistoryListEl.appendChild(fragment);
+  urlHistoryMoreBtn.classList.toggle('hidden', visibleCount >= entries.length);
 }
 
 function showHistoryView(show) {
@@ -361,7 +335,8 @@ function showHistoryView(show) {
 }
 
 async function openHistoryView() {
-  const entries = await loadUrlHistory();
+  historyPage = 0;
+  const entries = await refreshHistoryEntries();
   renderHistoryList(entries);
   showHistoryView(true);
 }
@@ -377,6 +352,10 @@ async function exportUrlsAsCsv(urls, filename = 'urls.csv') {
   await anchorDownloadBlob({ blob, filename });
 }
 
+async function copyUrlsToClipboard(urls) {
+  await navigator.clipboard.writeText(urls.join('\n'));
+}
+
 function clearUrlsWithUndoSnapshot() {
   const run = urlMutationQueue.then(async () => {
     const state = await chromeCall((done) =>
@@ -385,7 +364,11 @@ function clearUrlsWithUndoSnapshot() {
     const current = normalizeUrlArray(state.urls);
 
     if (current.length > 0) {
-      await appendHistorySnapshot('clear_before', current);
+      await appendUrlHistorySnapshot({
+        actionType: URL_HISTORY_ACTION.CLEAR_BEFORE,
+        urls: current,
+        meta: { source: 'popup', operation: 'clear_all' },
+      });
     }
 
     const payload = { urls: [] };
@@ -418,7 +401,12 @@ function restoreUrlsFromSnapshot() {
     await chromeCall((done) =>
       chrome.storage.local.set({ urls: restoredUrls, [URL_UNDO_KEY]: null }, done)
     );
-    await appendHistorySnapshot('restore_last_clear', restoredUrls);
+    await appendUrlHistorySnapshot({
+      actionType: URL_HISTORY_ACTION.RESTORE_LAST_CLEAR,
+      urls: restoredUrls,
+      meta: { source: 'popup', operation: 'undo_clear' },
+    });
+    await refreshHistoryViewIfOpen();
     return { restored: true, urls: restoredUrls, restoredCount: restoredUrls.length };
   });
   urlMutationQueue = run.catch(() => {});
@@ -427,14 +415,19 @@ function restoreUrlsFromSnapshot() {
 
 function restoreUrlsFromHistory(historyId) {
   const run = urlMutationQueue.then(async () => {
-    const entries = await loadUrlHistory();
+    const entries = await refreshHistoryEntries();
     const target = entries.find((entry) => entry.id === historyId);
     if (!target) return { restored: false, urls: await loadUrls() };
     const urls = normalizeUrlArray(target.urls);
     if (urls.length === 0) return { restored: false, urls: await loadUrls() };
 
     await saveUrls(urls);
-    await appendHistorySnapshot('restore_history', urls);
+    await appendUrlHistorySnapshot({
+      actionType: URL_HISTORY_ACTION.RESTORE_HISTORY,
+      urls,
+      meta: { source: 'popup', fromHistoryId: historyId },
+    });
+    await refreshHistoryViewIfOpen();
     return { restored: true, urls, restoredCount: urls.length };
   });
   urlMutationQueue = run.catch(() => {});
@@ -462,7 +455,7 @@ function wireEvents() {
           const idx = current.indexOf(url);
           if (idx !== -1) current.splice(idx, 1);
           return current;
-        }, 'remove_one');
+        }, URL_HISTORY_ACTION.REMOVE_ONE, { source: 'popup', operation: 'remove', removedUrl: url });
         renderList(urls);
         showToast('URL removed');
       } catch (err) {
@@ -489,7 +482,7 @@ function wireEvents() {
         current.push(clean);
         added = true;
         return current;
-      }, 'add_current');
+      }, URL_HISTORY_ACTION.ADD_CURRENT, { source: 'popup', mode: 'current_tab' });
 
       if (!added) {
         showToast(urls.length >= URL_LIMIT ? `List full (max ${URL_LIMIT} URLs)` : 'Already in list');
@@ -526,7 +519,11 @@ function wireEvents() {
           }
         }
         return current;
-      }, 'add_all_tabs');
+      }, URL_HISTORY_ACTION.ADD_ALL_TABS, {
+        source: 'popup',
+        mode: 'window_tabs',
+        requestedCount: validUrls.length,
+      });
 
       renderList(urls);
       showToast(added === 0 ? 'All tabs already in list' : `Added ${formatUrlCount(added)}`);
@@ -542,7 +539,7 @@ function wireEvents() {
         showToast('Nothing to copy');
         return;
       }
-      await navigator.clipboard.writeText(urls.join('\n'));
+      await copyUrlsToClipboard(urls);
       showToast('Copied');
     } catch (err) {
       reportError(err, 'Clipboard access denied');
@@ -661,6 +658,8 @@ function wireEvents() {
   urlHistoryClearBtn.addEventListener('click', async () => {
     try {
       await saveUrlHistory([]);
+      historyEntries = [];
+      historyPage = 0;
       renderHistoryList([]);
       showToast('URL history cleared');
     } catch (err) {
@@ -686,7 +685,7 @@ function wireEvents() {
 
     try {
       if (actionEl.dataset.historyAction === 'copy') {
-        await navigator.clipboard.writeText(entry.urls.join('\n'));
+        await copyUrlsToClipboard(entry.urls);
         showToast(`Copied ${formatUrlCount(entry.urls.length)}`);
         return;
       }
@@ -718,6 +717,11 @@ function wireEvents() {
     } catch (err) {
       reportError(err, 'Could not run history action');
     }
+  });
+
+  urlHistoryMoreBtn.addEventListener('click', () => {
+    historyPage += 1;
+    renderHistoryList(historyEntries);
   });
 }
 

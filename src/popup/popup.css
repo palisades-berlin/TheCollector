@@ -211,6 +211,10 @@ body {
   display: flex;
   gap: 6px;
 }
+.history-footer {
+  padding: 10px 14px;
+  border-top: 1px solid var(--sc-color-border);
+}
 
 .shortcut {
   font-size: 11px;
@@ -294,6 +298,10 @@ kbd {
   font-size: 11px;
   color: var(--sc-color-text);
   font-weight: 600;
+  font-family: var(--sc-font-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .history-item-meta {

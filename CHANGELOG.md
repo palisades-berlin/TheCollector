@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.3.38 - 2026-03-05
+- Improved URL History performance and consistency in popup:
+  - history is loaded lazily only when `History` is opened
+  - added history pagination (`Load More`) for larger snapshot sets
+  - reused shared copy/export helpers across current list and history actions
+- Kept URL collection behavior and snapshot semantics unchanged.
+
+## 1.3.37 - 2026-03-05
+- Updated popup URL History item titles to show the snapshot URL instead of only URL count.
+- Added truncation with ellipsis for long snapshot URLs in history list rows to keep popup layout stable.
+- Kept snapshot actions and storage behavior unchanged.
+
+## 1.3.36 - 2026-03-05
+- Implemented the URL Collection History storage model as a shared data layer in `src/shared/url-history.js`.
+- Standardized snapshot schema with explicit fields:
+  - `id`, `createdAt`, `actionType`, `urls`, `count`, `meta`
+- Added snapshot normalization/validation and bounded retention handling in one place.
+- Updated popup URL history integration to use the shared model for load/save/append flows.
+- Added focused tests for URL history model normalization and retention in `tests/url-history.test.mjs`.
+
 ## 1.3.35 - 2026-03-05
 - Added URL Collection History in popup `URLs` tab:
   - new `History` view with timestamped snapshots of URL list states
