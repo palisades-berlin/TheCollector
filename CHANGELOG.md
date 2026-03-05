@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.60 - 2026-03-05
+
+- Finalized release-process rule: Chrome Web Store submissions must use the CI-uploaded package artifact (`the-collector-release-zip`) as source of truth.
+- Updated maintainer/user docs to clarify that locally generated zips are validation-only.
+- Synced workflow documentation to current CI job model (quality + e2e smoke + package).
+
 ## 1.3.59 - 2026-03-05
 
 - Refactored CI into parallel jobs for clearer failure surface and faster feedback:

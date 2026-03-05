@@ -33,6 +33,11 @@ npm run check
 ./scripts/package-release.sh
 ```
 
+## Release Artifact Source of Truth
+
+- Use the CI-uploaded artifact (`the-collector-release-zip`) from GitHub Actions for Chrome Web Store submission.
+- Treat locally generated zips as local validation only.
+
 ## Versioning Rule
 
 - Bump semantic version (`x.y.z`) on every code change.
@@ -46,4 +51,4 @@ npm run check
 ## CI
 
 - GitHub Actions workflow: `.github/workflows/ci.yml`
-- CI currently runs unit tests on push and pull request.
+- CI runs parallel quality, e2e smoke, and packaging jobs on push and pull request.
