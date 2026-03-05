@@ -5,6 +5,7 @@ const SETTINGS_DEFAULTS = {
   downloadDirectory: '',
   saveAs: false,
   fitClipboardToDocsLimit: true,
+  theme: 'system', // system | light | dark
 };
 
 export async function getSettings() {
@@ -17,6 +18,7 @@ export async function getSettings() {
     downloadDirectory: normalizeDownloadDirectory(stored.downloadDirectory),
     saveAs: Boolean(stored.saveAs),
     fitClipboardToDocsLimit: normalizeFitClipboardToDocsLimit(stored.fitClipboardToDocsLimit),
+    theme: normalizeTheme(stored.theme),
   };
 }
 
@@ -32,6 +34,7 @@ export async function setSettings(partial) {
   next.downloadDirectory = normalizeDownloadDirectory(next.downloadDirectory);
   next.saveAs = Boolean(next.saveAs);
   next.fitClipboardToDocsLimit = normalizeFitClipboardToDocsLimit(next.fitClipboardToDocsLimit);
+  next.theme = normalizeTheme(next.theme);
   delete next.autoDownload;
 
   await chrome.storage.sync.set(next);
@@ -66,4 +69,9 @@ function normalizeDownloadDirectory(v) {
 function normalizeFitClipboardToDocsLimit(v) {
   if (v === false) return false;
   return true;
+}
+
+function normalizeTheme(v) {
+  if (v === 'light' || v === 'dark') return v;
+  return 'system';
 }

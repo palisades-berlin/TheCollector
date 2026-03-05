@@ -16,6 +16,7 @@ import { createHistoryFilters, filterRecords } from './history-filters.js';
 import { createThumbLoader } from './history-thumbs.js';
 import { createHistoryCards } from './history-cards.js';
 import { createHistoryFilesOverlay } from './history-files-overlay.js';
+import { applySavedTheme } from '../shared/theme.js';
 
 const gridEl = document.getElementById('grid');
 const emptyEl = document.getElementById('empty');
@@ -317,6 +318,7 @@ async function refreshAll() {
 }
 
 async function init() {
+  await applySavedTheme();
   filters.wireFilters();
   filesOverlay.wireEvents();
   await refreshAll();

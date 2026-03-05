@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.9.0 - 2026-03-05
+
+- Implemented premium UX remediation wave across extension surfaces and integration points while preserving core capture/export logic.
+- Theme system foundations:
+  - added `theme` setting (`system | light | dark`) in shared settings normalization
+  - added shared theme runtime utility (`src/shared/theme.js`) and applied it across popup/history/options/preview
+  - added dark theme token overrides in `src/shared/ui.css`.
+- First-run and permission UX:
+  - added onboarding surface (`src/onboarding/onboarding.html`, `src/onboarding/onboarding.css`, `src/onboarding/onboarding.js`)
+  - install flow now opens onboarding on first install via service worker
+  - added onboarding + permission rationale messaging on options page.
+- Extension-native entry surface improvements:
+  - added context menu integration (capture page, collect page URL, collect link URL)
+  - added omnibox keyword routing (`tc`) for quick capture/collect actions
+  - added manifest entries/permissions for `contextMenus` and `omnibox`.
+- UX calibration updates:
+  - improved popup footer action target sizing for constrained popup ergonomics
+  - maintained preview grouped export bar improvements and responsive toolbar behavior.
+- Visual QA expansion:
+  - added visual baselines for onboarding and dark-theme shared matrix
+  - updated impacted popup/options/preview snapshot baselines.
+
+## 1.8.1 - 2026-03-05
+
+- Preview header UX/UI calibration pass (PDF controls and export usability):
+  - restructured preview toolbar into explicit groups (navigation, PDF options, primary exports, presets, zoom hint)
+  - aligned PDF size select with Save PDF workflow for better context and scanability
+  - added responsive wrap rules for grouped toolbar behavior at narrower widths
+  - preserved all preview/export logic and button wiring (presentation-only changes).
+- Expanded visual regression coverage with `preview-toolbar-wrap` snapshot.
+
 ## 1.8.0 - 2026-03-05
 
 - Implemented a full multi-pass UX/UI QA calibration wave across shared primitives and all extension surfaces (popup, history, options, preview) while preserving runtime behavior.

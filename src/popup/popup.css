@@ -281,6 +281,14 @@ body {
   align-items: center;
 }
 
+.footer-actions .sc-btn {
+  min-height: var(--sc-ctl-md);
+}
+
+.footer-row .sc-btn {
+  min-height: var(--sc-ctl-md);
+}
+
 .url-footer {
   flex-direction: column;
   align-items: stretch;

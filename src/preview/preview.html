@@ -25,36 +25,44 @@
         </div>
       </div>
       <div class="toolbar-actions">
-        <nav class="sc-header-nav" aria-label="Primary">
-          <a class="sc-header-link" href="../history/history.html">History</a>
-          <a class="sc-header-link" href="../options/options.html">Options</a>
-        </nav>
-        <label class="pdf-size-wrap" for="pdfPageSize">PDF size</label>
-        <select id="pdfPageSize" class="pdf-size sc-select" aria-label="PDF page size">
-          <option value="auto">Auto</option>
-          <option value="a4">A4</option>
-          <option value="letter">Letter</option>
-        </select>
-        <button id="downloadPng" class="btn-dl sc-btn sc-btn-primary">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-          </svg>
-          Save PNG
-        </button>
-        <button id="downloadJpg" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-          </svg>
-          Save JPG
-        </button>
-        <button id="downloadPdf" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-          </svg>
-          Save PDF
-        </button>
-        <button id="copyImage" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">Copy</button>
-        <div class="preset-group" role="group" aria-label="Export presets">
+        <div class="toolbar-nav-group">
+          <nav class="sc-header-nav" aria-label="Primary">
+            <a class="sc-header-link" href="../history/history.html">History</a>
+            <a class="sc-header-link" href="../options/options.html">Options</a>
+          </nav>
+        </div>
+        <div class="toolbar-pdf-group">
+          <label class="pdf-size-wrap" for="pdfPageSize">PDF size</label>
+          <select id="pdfPageSize" class="pdf-size sc-select" aria-label="PDF page size">
+            <option value="auto">Auto</option>
+            <option value="a4">A4</option>
+            <option value="letter">Letter</option>
+          </select>
+        </div>
+        <div class="toolbar-export-group">
+          <button id="downloadPng" class="btn-dl sc-btn sc-btn-primary">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+            </svg>
+            Save PNG
+          </button>
+          <button id="downloadJpg" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+            </svg>
+            Save JPG
+          </button>
+          <button id="downloadPdf" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+            </svg>
+            Save PDF
+          </button>
+          <button id="copyImage" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">
+            Copy
+          </button>
+        </div>
+        <div class="toolbar-preset-group preset-group" role="group" aria-label="Export presets">
           <button
             id="presetEmail"
             class="btn-dl btn-dl-preset sc-btn sc-btn-ghost"
@@ -77,7 +85,9 @@
             Preset: PDF Auto
           </button>
         </div>
-        <span class="zoom-hint">Click image to zoom</span>
+        <div class="toolbar-hint-group">
+          <span class="zoom-hint">Click image to zoom</span>
+        </div>
       </div>
     </div>
 

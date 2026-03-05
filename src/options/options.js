@@ -1,5 +1,6 @@
 import { getUserSettings, setUserSettings } from '../shared/repos/settings-repo.js';
 import { showToast } from '../shared/toast.js';
+import { applySavedTheme, applyThemeToDocument } from '../shared/theme.js';
 
 const defaultExportFormatEl = document.getElementById('defaultExportFormat');
 const defaultPdfPageSizeEl = document.getElementById('defaultPdfPageSize');
@@ -9,8 +10,10 @@ const pickDirectoryBtn = document.getElementById('pickDirectoryBtn');
 const pickDirectoryInput = document.getElementById('pickDirectoryInput');
 const saveAsEl = document.getElementById('saveAs');
 const fitClipboardToDocsLimitEl = document.getElementById('fitClipboardToDocsLimit');
+const themeEl = document.getElementById('theme');
 const saveBtn = document.getElementById('saveBtn');
 const statusEl = document.getElementById('status');
+const onboardingBannerEl = document.getElementById('onboardingBanner');
 const downloadsStatusEl = document.getElementById('downloadsStatus');
 const grantDownloadsBtn = document.getElementById('grantDownloads');
 const revokeDownloadsBtn = document.getElementById('revokeDownloads');
@@ -33,6 +36,8 @@ function logNonFatal(context, err) {
 init().catch((err) => showStatus(`Failed to load settings: ${err.message}`, 'error'));
 
 async function init() {
+  await applySavedTheme();
+  renderOnboardingState();
   const settings = await getUserSettings();
   defaultExportFormatEl.value = settings.defaultExportFormat;
   defaultPdfPageSizeEl.value = settings.defaultPdfPageSize;
@@ -40,6 +45,10 @@ async function init() {
   downloadDirectoryEl.value = settings.downloadDirectory;
   saveAsEl.checked = settings.saveAs;
   fitClipboardToDocsLimitEl.checked = settings.fitClipboardToDocsLimit;
+  if (themeEl) {
+    themeEl.value = settings.theme || 'system';
+    applyThemeToDocument(themeEl.value);
+  }
   await refreshPermissionStatus();
   setupPermissionStatusRefresh();
 }
@@ -54,6 +63,7 @@ saveBtn.addEventListener('click', async () => {
       downloadDirectory: downloadDirectoryEl.value,
       saveAs: saveAsEl.checked,
       fitClipboardToDocsLimit: fitClipboardToDocsLimitEl.checked,
+      theme: themeEl ? themeEl.value : 'system',
     });
     const normalized = await getUserSettings();
     downloadDirectoryEl.value = normalized.downloadDirectory;
@@ -65,6 +75,10 @@ saveBtn.addEventListener('click', async () => {
   } finally {
     saveBtn.disabled = false;
   }
+});
+
+themeEl?.addEventListener('change', () => {
+  applyThemeToDocument(themeEl.value);
 });
 
 grantDownloadsBtn.addEventListener('click', async () => {
@@ -249,4 +263,11 @@ function applySelectedFolder(folder) {
     return;
   }
   downloadDirectoryEl.value = folder;
+}
+
+function renderOnboardingState() {
+  if (!onboardingBannerEl) return;
+  const params = new URLSearchParams(window.location.search);
+  const shouldShow = params.get('onboarding') === '1';
+  onboardingBannerEl.classList.toggle('hidden', !shouldShow);
 }

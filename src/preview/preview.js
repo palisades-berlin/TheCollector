@@ -13,6 +13,7 @@ import {
   setSourceUrlTextForDiff,
   loadBlobIntoPreview,
 } from './preview-init.js';
+import { applySavedTheme } from '../shared/theme.js';
 
 const params = new URLSearchParams(location.search);
 const id = params.get('id');
@@ -118,6 +119,7 @@ function showError(msg) {
 }
 
 async function init() {
+  await applySavedTheme();
   imageContainer.setAttribute('aria-busy', 'true');
   if (!id) {
     showError('No screenshot ID in URL.');

@@ -45,6 +45,7 @@ await runTest('getSettings normalizes invalid values and legacy autoDownload fla
     downloadDirectory: 'UnsafeFolder/nested',
     saveAs: true,
     fitClipboardToDocsLimit: true,
+    theme: 'system',
   });
 });
 
@@ -56,6 +57,7 @@ await runTest('setSettings merges and persists normalized values', async () => {
     downloadDirectory: '',
     saveAs: false,
     fitClipboardToDocsLimit: true,
+    theme: 'system',
   });
   globalThis.chrome = { storage: { sync: mockSync } };
 
@@ -65,6 +67,7 @@ await runTest('setSettings merges and persists normalized values', async () => {
     autoDownload: true,
     downloadDirectory: '/Top Level/../Shots',
     fitClipboardToDocsLimit: false,
+    theme: 'dark',
   });
 
   assert.deepEqual(next, {
@@ -74,6 +77,7 @@ await runTest('setSettings merges and persists normalized values', async () => {
     downloadDirectory: 'TopLevel/Shots',
     saveAs: false,
     fitClipboardToDocsLimit: false,
+    theme: 'dark',
   });
 
   const persisted = mockSync.getState();
@@ -81,4 +85,5 @@ await runTest('setSettings merges and persists normalized values', async () => {
   assert.equal(persisted.defaultExportFormat, 'jpg');
   assert.equal(persisted.autoDownloadMode, 'after_preview');
   assert.equal(persisted.downloadDirectory, 'TopLevel/Shots');
+  assert.equal(persisted.theme, 'dark');
 });

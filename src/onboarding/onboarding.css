@@ -1,0 +1,58 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--sc-font-sans);
+  background: var(--sc-color-bg);
+  color: var(--sc-color-text);
+}
+
+.shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: var(--sc-sp-6);
+}
+
+.card {
+  width: min(760px, 100%);
+  padding: var(--sc-sp-6);
+  display: grid;
+  gap: var(--sc-sp-4);
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+p {
+  margin: 0;
+  color: var(--sc-color-text-secondary);
+}
+
+.steps {
+  margin: 0;
+  padding-left: var(--sc-sp-5);
+  display: grid;
+  gap: var(--sc-sp-2);
+  color: var(--sc-color-text-secondary);
+}
+
+.callout {
+  margin-top: var(--sc-sp-1);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sc-sp-2);
+}
+
+.actions .sc-btn {
+  min-height: var(--sc-ctl-md);
+}

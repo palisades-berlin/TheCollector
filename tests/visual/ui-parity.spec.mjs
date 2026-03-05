@@ -229,6 +229,74 @@ test.describe('Figma parity snapshots', () => {
     await expect(page).toHaveScreenshot('shared-primitives-matrix.png');
   });
 
+  test('shared primitives / dark theme matrix', async ({ page }) => {
+    await page.setViewportSize({ width: 1200, height: 900 });
+    await page.setContent(
+      `<!doctype html>
+      <html lang="en" data-theme="dark">
+        <head>
+          <meta charset="utf-8" />
+          <link rel="stylesheet" href="${baseUrl}/src/shared/ui.css" />
+          <style>
+            body {
+              margin: 0;
+              padding: 24px;
+              font-family: var(--sc-font-sans);
+              background: var(--sc-color-bg);
+              color: var(--sc-color-text);
+            }
+            .matrix {
+              display: grid;
+              gap: 16px;
+            }
+            .card {
+              display: grid;
+              gap: 12px;
+              padding: 16px;
+            }
+            .row {
+              display: flex;
+              align-items: center;
+              flex-wrap: wrap;
+              gap: 8px;
+            }
+          </style>
+        </head>
+        <body>
+          <main class="matrix">
+            <section class="sc-card card">
+              <strong>Dark Buttons + Inputs</strong>
+              <div class="row">
+                <button class="sc-btn">Default</button>
+                <button class="sc-btn sc-btn-primary">Primary</button>
+                <button class="sc-btn sc-btn-secondary">Secondary</button>
+                <button class="sc-btn sc-btn-ghost">Ghost</button>
+                <button class="sc-btn sc-btn-danger">Danger</button>
+              </div>
+              <div class="row">
+                <input class="sc-input" placeholder="Text input" style="max-width: 280px" />
+                <select class="sc-select" style="max-width: 220px">
+                  <option>All</option>
+                  <option>Today</option>
+                </select>
+              </div>
+            </section>
+          </main>
+        </body>
+      </html>`,
+      { waitUntil: 'domcontentloaded' }
+    );
+    await page.waitForTimeout(120);
+    await expect(page).toHaveScreenshot('shared-primitives-matrix-dark.png');
+  });
+
+  test('onboarding / default', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(`${baseUrl}/src/onboarding/onboarding.html`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(200);
+    await expect(page).toHaveScreenshot('onboarding-default.png', { fullPage: true });
+  });
+
   test('popup / capture + urls + states', async ({ page }) => {
     await page.setViewportSize({ width: 400, height: 640 });
     await page.goto(`${baseUrl}/src/popup/popup.html`, { waitUntil: 'domcontentloaded' });
@@ -335,5 +403,9 @@ test.describe('Figma parity snapshots', () => {
     });
 
     await expect(page).toHaveScreenshot('preview-edit-mode.png', { fullPage: true });
+
+    await page.setViewportSize({ width: 1024, height: 920 });
+    await page.waitForTimeout(120);
+    await expect(page).toHaveScreenshot('preview-toolbar-wrap.png', { fullPage: true });
   });
 });

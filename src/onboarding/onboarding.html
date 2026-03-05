@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>THE Collector - Welcome</title>
+    <link rel="stylesheet" href="../shared/ui.css" />
+    <link rel="stylesheet" href="onboarding.css" />
+  </head>
+  <body>
+    <main class="shell sc-page-enter">
+      <section class="card sc-card">
+        <h1>Welcome to THE Collector</h1>
+        <p>
+          Save full-page screenshots and clean URLs quickly. Your data stays local in your browser.
+        </p>
+
+        <ol class="steps">
+          <li>
+            <strong>Capture anything</strong>: use the popup button or <code>Alt+Shift+P</code>.
+          </li>
+          <li>
+            <strong>Organize instantly</strong>: keep screenshots in history and URLs in collector
+            lists.
+          </li>
+          <li>
+            <strong>Export with confidence</strong>: PNG, JPG, PDF, and copy-ready clipboard
+            options.
+          </li>
+        </ol>
+
+        <section class="callout sc-banner sc-banner-info" aria-live="polite">
+          Permission tip: if a page is restricted by Chrome, switch to a regular website tab and try
+          again.
+        </section>
+
+        <div class="actions">
+          <button id="openOptions" class="sc-btn sc-btn-secondary">Open Settings</button>
+          <button id="openHistory" class="sc-btn sc-btn-secondary">Open History</button>
+          <button id="done" class="sc-btn sc-btn-primary">Start Collecting</button>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="onboarding.js"></script>
+  </body>
+</html>

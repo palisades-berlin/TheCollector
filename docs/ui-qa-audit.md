@@ -88,6 +88,17 @@ State coverage target:
 | Accessibility automation depth   | High                | semantic ARIA exists, but limited automated a11y assertions | keyboard/focus/contrast/state checks in CI                    | `tests/visual/*` + follow-up tooling                                                                   |
 | Figma node/frame validation      | Critical dependency | Figma mapped by docs but no direct node-mapped harness      | node-level parity checks + <=2px signoff                      | needs Figma frame/node IDs                                                                             |
 
+## Remediation Tracking Board
+
+| Finding                                       | Phase   | Owner Files                                                                           | Risk   | Test Gate                                    |
+| --------------------------------------------- | ------- | ------------------------------------------------------------------------------------- | ------ | -------------------------------------------- |
+| Control/tap target ergonomics in popup        | Phase 2 | `src/popup/popup.css`, `src/shared/ui.css`                                            | Medium | visual + keyboard spot checks                |
+| Preview toolbar cognitive load                | Phase 2 | `src/preview/preview.css`, `src/preview/preview.html`                                 | Medium | visual snapshots (`preview-edit-mode`, wrap) |
+| Theme system support                          | Phase 4 | `src/shared/settings.js`, `src/shared/ui.css`, `src/shared/theme.js`, `src/options/*` | Medium | unit(settings) + visual(light/dark)          |
+| First-run onboarding and permission education | Phase 3 | `src/background/service-worker.js`, `src/onboarding/*`, `src/options/*`               | Low    | manual install/onboarding checklist          |
+| Extension-native entry points                 | Phase 5 | `manifest.json`, `src/background/service-worker.js`                                   | Medium | manual context menu + omnibox smoke          |
+| Accessibility automation depth                | Phase 6 | `tests/visual/ui-parity.spec.mjs` (+ a11y checks)                                     | Medium | CI checks pass                               |
+
 ## Implementation Strategy (Logic-Safe)
 
 1. CSS-only + token-first
@@ -159,3 +170,9 @@ Visual snapshots must be updated only for intentionally changed surfaces/states.
 ## Known Dependency
 
 Final pixel-perfect certification is blocked until direct Figma frame/node URLs are supplied and mapped to this audit manifest.
+
+## Recent Calibration Note (2026-03-05)
+
+- Preview header PDF UX was recalibrated to a grouped export bar:
+  - navigation, PDF settings, primary exports, presets, and hint now use explicit grouped layout
+  - PDF size control is visually coupled with export actions and responsive wrap behavior is locked by snapshot coverage.

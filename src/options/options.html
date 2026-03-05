@@ -23,6 +23,29 @@
     </header>
 
     <main class="main">
+      <section id="onboardingBanner" class="card sc-card onboarding-banner hidden">
+        <h2>Welcome to THE Collector</h2>
+        <p class="muted">
+          Capture full pages and collect links quickly. Start in the popup, and use this page to
+          tune downloads, theme, and permission access.
+        </p>
+        <p class="muted">
+          If capture fails on restricted pages, switch to a regular website tab and try again.
+        </p>
+      </section>
+
+      <section class="card sc-card">
+        <h2>Appearance</h2>
+        <label class="row">
+          <span>Theme</span>
+          <select id="theme" class="sc-select">
+            <option value="system">System</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+      </section>
+
       <section class="card sc-card">
         <h2>Export Defaults</h2>
         <label class="row">
@@ -88,6 +111,10 @@
       <section class="card sc-card">
         <h2>Optional Permissions</h2>
         <p class="muted">Downloads permission can be granted or revoked on demand.</p>
+        <p class="muted">
+          Why this permission: enables one-click file saving directly from preview exports. Without
+          it, browser fallback downloads are used.
+        </p>
         <div class="row row-buttons">
           <span id="downloadsStatus" role="status" aria-live="polite" aria-atomic="true">
             Downloads permission: checking…

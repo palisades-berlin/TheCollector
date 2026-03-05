@@ -1,9 +1,17 @@
 {
   "manifest_version": 3,
   "name": "THE Collector",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Capture full-page screenshots and collect clean URLs from tabs. Data stays local.",
-  "permissions": ["activeTab", "scripting", "storage", "tabs", "offscreen", "unlimitedStorage"],
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs",
+    "offscreen",
+    "unlimitedStorage",
+    "contextMenus"
+  ],
   "optional_permissions": ["downloads"],
   "background": {
     "service_worker": "src/background/service-worker.js",
@@ -28,6 +36,9 @@
   "options_ui": {
     "page": "src/options/options.html",
     "open_in_tab": true
+  },
+  "omnibox": {
+    "keyword": "tc"
   },
   "commands": {
     "capture-fullpage": {

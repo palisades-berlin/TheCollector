@@ -71,6 +71,10 @@ Use these shared classes before creating surface-specific variants:
   - structure: `src/preview/preview.html`
   - styles: `src/preview/preview.css`
   - behavior: `src/preview/preview.js`
+- Onboarding surface:
+  - structure: `src/onboarding/onboarding.html`
+  - styles: `src/onboarding/onboarding.css`
+  - behavior: `src/onboarding/onboarding.js`
 
 ## Figma Mapping Table
 
@@ -86,6 +90,7 @@ Use these shared classes before creating surface-specific variants:
 | Sidebar / History            | default/filter/empty/loading/overlay      | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-modal`, `sc-state-*` + `--history-*` aliases                                              | `src/history/history.html`, `src/history/history.css`                                                   |
 | Settings / Account           | default/status/permission badges          | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-pill*`, `sc-banner*`                                                                      | `src/options/options.html`, `src/options/options.css`                                                   |
 | Preview / Inspector          | toolbar/editing/loading/error             | `sc-btn*`, `sc-select`, `sc-banner*`, `sc-state-loading` + `--preview-*` aliases                                                            | `src/preview/preview.html`, `src/preview/preview.css`                                                   |
+| Onboarding / First run       | install guidance + quick entry actions    | `sc-card`, `sc-btn*`, `sc-banner*`                                                                                                          | `src/onboarding/onboarding.html`, `src/onboarding/onboarding.css`                                       |
 
 ## Change Policy
 

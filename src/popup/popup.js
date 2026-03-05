@@ -1,6 +1,7 @@
 import { MSG } from '../shared/messages.js';
 import { showToast } from '../shared/toast.js';
 import { loadUrlList } from '../shared/repos/url-repo.js';
+import { applySavedTheme } from '../shared/theme.js';
 
 const POPUP_DEBUG =
   new URLSearchParams(location.search).get('debugPopupPerf') === '1' ||
@@ -251,6 +252,7 @@ async function preloadUrlCount() {
 }
 
 (async function init() {
+  await applySavedTheme();
   perfLog('init.start');
   setActiveTab('capture');
   await preloadUrlCount();

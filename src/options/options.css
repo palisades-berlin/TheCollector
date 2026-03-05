@@ -81,6 +81,11 @@ body {
   border-color: var(--sc-color-border-panel);
 }
 
+.onboarding-banner {
+  border-color: var(--sc-color-primary-border);
+  background: linear-gradient(180deg, rgba(227, 242, 253, 0.72) 0%, rgba(255, 255, 255, 1) 62%);
+}
+
 .card h2 {
   margin: 0 0 var(--sc-sp-3);
   font-size: var(--sc-font-h2-size);
