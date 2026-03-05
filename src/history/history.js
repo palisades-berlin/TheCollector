@@ -4,10 +4,19 @@ import {
   getScreenshot,
   deleteScreenshots,
 } from '../shared/db.js';
-import { buildDownloadFilename } from '../shared/filename.js';
-import { chromeDownloadBlob, anchorDownloadBlob } from '../shared/download.js';
 import { getSettings } from '../shared/settings.js';
 import { showToast } from '../shared/toast.js';
+import { downloadRecord } from './history-downloads.js';
+import {
+  getRecordDomain,
+  getRecordExportType,
+  buildGroups,
+  buildRecordHints,
+  formatDuration,
+  buildCardDiagnosticText,
+  formatBytes,
+  runWithConcurrency,
+} from './history-utils.js';
 
 const gridEl = document.getElementById('grid');
 const emptyEl = document.getElementById('empty');
@@ -166,21 +175,6 @@ function applyFilters() {
   selectedBaseIds.clear();
 }
 
-function getRecordDomain(record) {
-  try {
-    return new URL(record.url).hostname.toLowerCase();
-  } catch {
-    return String(record.url || '').toLowerCase();
-  }
-}
-
-function getRecordExportType(record) {
-  const type = String(record.blobType || '').toLowerCase();
-  if (type.includes('pdf')) return 'pdf';
-  if (type.includes('jpeg') || type.includes('jpg')) return 'jpg';
-  return 'png';
-}
-
 function renderMainView() {
   thumbLoadQueue.length = 0;
   debugThumbQueue('reset');
@@ -293,34 +287,6 @@ function renderCaptureDiagnostics() {
   }
   captureDiagnosticsDismissEl?.setAttribute('data-key', diagnosticKey);
   captureDiagnosticsEl.classList.remove('hidden');
-}
-
-function buildCardDiagnosticText(record) {
-  const durationMs = Number(record.captureDurationMs || 0);
-  const totalTiles = Number(record.captureTotalTiles || 0);
-  const retries = Number(record.captureRetries || 0);
-  const quotaBackoffs = Number(record.captureQuotaBackoffs || 0);
-  const fallbackUsed = String(record.captureFallbackUsed || 'none');
-  const notes = [];
-
-  if (fallbackUsed === 'oversized_autoscale') {
-    notes.push('Auto-scaled oversized page');
-  }
-  if (durationMs >= 12000) {
-    const tileText = totalTiles > 0 ? `, ${totalTiles} tiles` : '';
-    notes.push(`Slow capture (${formatDuration(durationMs)}${tileText})`);
-  }
-  if (retries > 0 || quotaBackoffs > 0) {
-    notes.push(`Capture retries: ${retries} (quota backoffs: ${quotaBackoffs})`);
-  }
-
-  return notes.join(' · ');
-}
-
-function formatDuration(ms) {
-  const seconds = Math.max(0, Number(ms || 0)) / 1000;
-  if (seconds < 10) return `${seconds.toFixed(1)}s`;
-  return `${Math.round(seconds)}s`;
 }
 
 captureDiagnosticsDismissEl?.addEventListener('click', () => {
@@ -439,28 +405,6 @@ function drawThumbBitmapCover(canvas, bitmap) {
 
 // ─── Files overlay ───────────────────────────────────────────────────────────
 
-function buildGroups(allRecords) {
-  return allRecords
-    .map((record) => ({
-      baseId: record.id,
-      records: [record],
-      timestamp: record.timestamp,
-      previewId: record.id,
-      url: record.url || '',
-      totalBytes: record.byteSize || 0,
-    }))
-    .sort((a, b) => b.timestamp - a.timestamp);
-}
-
-function buildRecordHints(record) {
-  const hints = [];
-  if (record.splitCount > 1 && record.splitPart > 0) {
-    hints.push(`Part ${record.splitPart}/${record.splitCount}`);
-  }
-  if (record.stitchedFrom) hints.push('Stitched');
-  return hints;
-}
-
 function renderFilesOverlay(resetSelection = false) {
   filesListEl.innerHTML = '';
   if (resetSelection) selectedBaseIds.clear();
@@ -507,47 +451,6 @@ function updateSelectionUi() {
   deleteSelectedBtn.disabled = selected === 0;
   selectAllEl.checked = groups.length > 0 && selected === groups.length;
   selectAllEl.indeterminate = selected > 0 && selected < groups.length;
-}
-
-function formatBytes(bytes) {
-  if (bytes < 1024) return `${bytes} B`;
-  const kb = bytes / 1024;
-  if (kb < 1024) return `${kb.toFixed(2)} KB`;
-  const mb = kb / 1024;
-  if (mb < 1024) return `${mb.toFixed(2)} MB`;
-  return `${(mb / 1024).toFixed(2)} GB`;
-}
-
-function blobExt(blob) {
-  const type = blob?.type || '';
-  if (type.includes('jpeg')) return 'jpg';
-  if (type.includes('pdf')) return 'pdf';
-  return 'png';
-}
-
-async function downloadRecord(record, settings, partIndex, partTotal, titleHint, allowSaveAs) {
-  const ext = blobExt(record.blob);
-  const hasDownloads = await chrome.permissions.contains({ permissions: ['downloads'] });
-  if (!hasDownloads) {
-    await anchorDownloadBlob({
-      blob: record.blob,
-      filename: `screenshot-${Date.now()}.${ext}`,
-    });
-    return;
-  }
-
-  const filename = buildDownloadFilename({
-    title: titleHint || record.url || record.title || 'screenshot',
-    index: partIndex,
-    total: partTotal,
-    ext,
-    directory: settings.downloadDirectory,
-  });
-  await chromeDownloadBlob({
-    blob: record.blob,
-    filename,
-    saveAs: partTotal > 1 ? false : Boolean(allowSaveAs && settings.saveAs),
-  });
 }
 
 openFilesBtn.addEventListener('click', () => {
@@ -621,14 +524,14 @@ downloadSelectedBtn.addEventListener('click', async () => {
     await runWithConcurrency(jobs, 2, async (job) => {
       const fullRecord = await getScreenshot(job.id);
       if (!fullRecord?.blob) throw new Error(`Missing screenshot data: ${job.id}`);
-      await downloadRecord(
-        fullRecord,
+      await downloadRecord({
+        record: fullRecord,
         settings,
-        job.partIndex,
-        job.partTotal,
-        job.titleHint,
-        allowSaveAs
-      );
+        partIndex: job.partIndex,
+        partTotal: job.partTotal,
+        titleHint: job.titleHint,
+        allowSaveAs,
+      });
     });
     filesStatusEl.textContent = 'Download completed.';
     showToast('Download completed.', 'success');
@@ -667,14 +570,3 @@ clearAllBtn.addEventListener('click', async () => {
   showToast('All screenshots deleted.', 'success');
   await refreshAll();
 });
-
-async function runWithConcurrency(items, limit, worker) {
-  let index = 0;
-  const runners = Array.from({ length: Math.max(1, limit) }, async () => {
-    while (index < items.length) {
-      const current = items[index++];
-      await worker(current);
-    }
-  });
-  await Promise.all(runners);
-}

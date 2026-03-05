@@ -13,6 +13,12 @@
   const IFRAME_MIN_SCROLL_DELTA = 32;
   const ELEMENT_MIN_AREA_RATIO = 0.16;
   const ELEMENT_MIN_SCROLL_DELTA = 32;
+  const FALLBACK_PROTOCOL = {
+    CS_GET_METRICS: 'CS_GET_METRICS',
+    CS_PREPARE: 'CS_PREPARE',
+    CS_SCROLL_TO: 'CS_SCROLL_TO',
+    CS_RESTORE: 'CS_RESTORE',
+  };
 
   // Saved state for restore
   let savedFixed = [];
@@ -23,6 +29,24 @@
   let activeTargetId = null;
   let targetSeq = 0;
   const targetRegistry = new Map(); // targetId -> target descriptor
+
+  function getProtocol() {
+    const injected = window.__THE_COLLECTOR_PROTOCOL;
+    if (!injected || typeof injected !== 'object') return FALLBACK_PROTOCOL;
+
+    const required = [
+      'CS_GET_METRICS',
+      'CS_PREPARE',
+      'CS_SCROLL_TO',
+      'CS_RESTORE',
+    ];
+    for (const key of required) {
+      if (typeof injected[key] !== 'string' || injected[key].length === 0) {
+        return FALLBACK_PROTOCOL;
+      }
+    }
+    return injected;
+  }
 
   // ─── Metrics ────────────────────────────────────────────────────────────────
 
@@ -344,18 +368,19 @@
 
   chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     const { type, payload } = msg;
+    const protocol = getProtocol();
 
     switch (type) {
-      case 'CS_GET_METRICS':
+      case protocol.CS_GET_METRICS:
         sendResponse(getMetrics());
         break;
 
-      case 'CS_PREPARE':
+      case protocol.CS_PREPARE:
         suppressFixed(payload?.targetId);
         sendResponse({ ok: true, targetId: payload?.targetId || null });
         break;
 
-      case 'CS_SCROLL_TO':
+      case protocol.CS_SCROLL_TO:
         if (
           payload?.targetId &&
           activeTargetId &&
@@ -369,7 +394,7 @@
         );
         return true; // async — keep channel open
 
-      case 'CS_RESTORE':
+      case protocol.CS_RESTORE:
         restoreFixed();
         sendResponse({ ok: true });
         break;

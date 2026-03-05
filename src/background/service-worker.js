@@ -7,78 +7,41 @@ import {
 } from '../shared/constants.js';
 import { saveTile, deleteTiles, getScreenshot, saveScreenshot } from '../shared/db.js';
 import { buildDownloadFilename } from '../shared/filename.js';
-import { chromeDownloadBlob } from '../shared/download.js';
 import { getSettings } from '../shared/settings.js';
 import { toPositiveInt } from '../shared/validation.js';
+import { createEnsureOffscreen } from './offscreen-manager.js';
+import {
+  hasDownloadsPermission,
+  downloadBlob,
+  downloadCaptureParts,
+} from './downloads.js';
 
 // ─── Offscreen document management ───────────────────────────────────────────
 
-let offscreenReady = false;
-let offscreenInitPromise = null;
+const ensureOffscreen = createEnsureOffscreen();
 const activeCaptures = new Set(); // tabId set
 const CAPTURE_REPORTS_KEY = 'captureReports';
 const CAPTURE_REPORTS_LIMIT = 30;
-
-async function hasOffscreenDocument() {
-  try {
-    const contexts = await chrome.offscreen.getContexts({
-      contextTypes: ['OFFSCREEN_DOCUMENT'],
-    });
-    return contexts.length > 0;
-  } catch (_) {
-    return false;
-  }
-}
-
-async function ensureOffscreen() {
-  if (offscreenReady) return;
-  if (offscreenInitPromise) {
-    await offscreenInitPromise;
-    return;
-  }
-
-  offscreenInitPromise = (async () => {
-    if (await hasOffscreenDocument()) {
-      offscreenReady = true;
-      return;
-    }
-
-    try {
-      await chrome.offscreen.createDocument({
-        url: chrome.runtime.getURL('src/offscreen/offscreen.html'),
-        reasons: ['BLOBS'],
-        justification: 'Stitch captured screenshot tiles into a full-page image',
-      });
-      offscreenReady = true;
-    } catch (err) {
-      // Race-safe fallback: if an offscreen doc exists now, treat create as success.
-      if (await hasOffscreenDocument()) {
-        offscreenReady = true;
-        return;
-      }
-      // Some environments may fail `getContexts()` checks while still enforcing
-      // singleton offscreen creation. If singleton violation is reported,
-      // assume an offscreen doc already exists and proceed.
-      const msg = err?.message || String(err || '');
-      if (msg.includes('Only a single offscreen document may be created')) {
-        offscreenReady = true;
-        return;
-      }
-      throw err;
-    }
-  })();
-
-  try {
-    await offscreenInitPromise;
-  } finally {
-    offscreenInitPromise = null;
-  }
-}
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function sendToTab(tabId, type, payload = {}) {
   return chrome.tabs.sendMessage(tabId, { type, payload });
+}
+
+async function syncContentProtocol(tabId) {
+  await chrome.scripting.executeScript({
+    target: { tabId },
+    func: (protocol) => {
+      window.__THE_COLLECTOR_PROTOCOL = protocol;
+    },
+    args: [{
+      CS_GET_METRICS: MSG.CS_GET_METRICS,
+      CS_PREPARE: MSG.CS_PREPARE,
+      CS_SCROLL_TO: MSG.CS_SCROLL_TO,
+      CS_RESTORE: MSG.CS_RESTORE,
+    }],
+  });
 }
 
 function sleep(ms) {
@@ -100,56 +63,6 @@ function broadcast(type, payload) {
 function isCaptureQuotaError(err) {
   const msg = (err?.message || String(err || '')).toUpperCase();
   return msg.includes('MAX_CAPTURE_VISIBLE_TAB_CALLS_PER_SECOND');
-}
-
-async function hasDownloadsPermission() {
-  return chrome.permissions.contains({ permissions: ['downloads'] });
-}
-
-async function convertPngBlobToJpeg(blob) {
-  const bitmap = await createImageBitmap(blob);
-  try {
-    const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
-    const ctx = canvas.getContext('2d');
-    if (!ctx) throw new Error('Failed to create OffscreenCanvas context');
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(bitmap, 0, 0);
-    return await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.92 });
-  } finally {
-    if (typeof bitmap.close === 'function') bitmap.close();
-  }
-}
-
-async function downloadBlob({ blob, filename, saveAs }) {
-  await chromeDownloadBlob({ blob, filename, saveAs });
-}
-
-async function downloadCaptureParts({
-  ids,
-  format,
-  directory,
-  saveAs,
-  titleHint,
-}) {
-  const total = ids.length;
-  const ext = format === 'jpg' ? 'jpg' : 'png';
-  const effectiveSaveAs = total > 1 ? false : Boolean(saveAs);
-
-  for (let i = 0; i < ids.length; i++) {
-    const record = await getScreenshot(ids[i]);
-    if (!record?.blob) throw new Error(`Missing screenshot part: ${ids[i]}`);
-    const blob =
-      format === 'jpg' ? await convertPngBlobToJpeg(record.blob) : record.blob;
-    const filename = buildDownloadFilename({
-      title: titleHint || record.title || record.url || 'screenshot',
-      index: i,
-      total,
-      ext,
-      directory,
-    });
-    await downloadBlob({ blob, filename, saveAs: effectiveSaveAs });
-  }
 }
 
 async function captureVisibleTabWithRetry(windowId, captureState) {
@@ -211,6 +124,7 @@ async function captureTab(tabId) {
   const captureState = { lastCaptureAt: 0, retryCount: 0, quotaBackoffCount: 0 };
 
   try {
+  await syncContentProtocol(tabId);
   // Inject content script (guard in agent prevents double-injection issues)
   await chrome.scripting.executeScript({
     target: { tabId },

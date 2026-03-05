@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.3.26 - 2026-03-05
+- Introduced a shared protocol constants strategy for content-script messaging to prevent string drift:
+  - service worker now syncs protocol IDs from `MSG` into `window.__THE_COLLECTOR_PROTOCOL` before capture-agent execution
+  - capture-agent now resolves message IDs from injected protocol with safe fallback constants
+- No business logic changes; message semantics remain unchanged.
+
+## 1.3.25 - 2026-03-05
+- Decomposed large runtime modules into smaller files without changing business logic:
+  - `src/background/service-worker.js` now uses:
+    - `src/background/offscreen-manager.js`
+    - `src/background/downloads.js`
+  - `src/history/history.js` now uses:
+    - `src/history/history-utils.js`
+    - `src/history/history-downloads.js`
+  - `src/preview/preview.js` now uses:
+    - `src/preview/pdf-export.js`
+- Kept existing behavior and message flow intact; this is structure/readability refactoring only.
+
 ## 1.3.24 - 2026-03-05
 - Removed `CHROME_WEB_STORE_RELEASE_NOTES_1.1.3.md` from the repository.
 - Added `.gitignore` rule to prevent tracking `CHROME_WEB_STORE_RELEASE_NOTES_*.md` files.
