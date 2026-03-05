@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.1 - 2026-03-05
+
+- Figma sync pass only (no UI behavior or business-logic changes):
+  - synced canonical Figma URL and file key into handoff/audit workflow docs
+  - documented active handoff authority node (`19:2`) and core UI-kit section node mapping
+  - added explicit Figma mapping contract constants to visual parity suite (`tests/visual/ui-parity.spec.mjs`) to keep snapshots tied to the same design source.
+- Updated developer workflow docs with direct Figma source reference for implementation parity.
+
 ## 1.9.0 - 2026-03-05
 
 - Implemented premium UX remediation wave across extension surfaces and integration points while preserving core capture/export logic.

@@ -5,6 +5,21 @@ import { test, expect } from '@playwright/test';
 
 const ROOT = process.cwd();
 const HOST = '127.0.0.1';
+const FIGMA_FILE_URL =
+  'https://www.figma.com/design/sECUN6qSqUygWoG7PhC548/THECollector---UI-Kit---Screens?t=UVQ55HTnnPvLrqyo-0';
+const FIGMA_FILE_KEY = 'sECUN6qSqUygWoG7PhC548';
+const FIGMA_ACTIVE_HANDOFF_NODE = '19:2';
+
+// Snapshot-to-Figma mapping contract for parity work.
+// Use this mapping as the first reference point when updating or reviewing visual baselines.
+const FIGMA_NODE_MAP = {
+  sharedPrimitives: '1:4',
+  onboardingDefault: '1:830',
+  popupStates: '1:4',
+  historyStates: '1:4',
+  optionsStates: '1:753',
+  previewStates: '1:4',
+};
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -127,6 +142,12 @@ test.describe('Figma parity snapshots', () => {
   let baseUrl;
 
   test.beforeAll(async () => {
+    // Ensure the Figma sync contract constants are referenced by this suite.
+    void FIGMA_FILE_URL;
+    void FIGMA_FILE_KEY;
+    void FIGMA_ACTIVE_HANDOFF_NODE;
+    void FIGMA_NODE_MAP;
+
     const started = await startStaticServer();
     server = started.server;
     port = started.port;

@@ -63,6 +63,8 @@ Packaging script guardrails:
 ## UI/UX Handoff Rule
 
 - Figma file `THECollector - UI Kit & Screens` is the project UI single source of truth.
+- Canonical URL: `https://www.figma.com/design/sECUN6qSqUygWoG7PhC548/THECollector---UI-Kit---Screens?t=UVQ55HTnnPvLrqyo-0`
+- Active handoff authority node: `19:2` (`THECollector - Final Handoff Ops`)
 - Before introducing new screen-level styles, implement or update shared primitives/tokens in `src/shared/ui.css`.
 - Keep surface-level CSS tokenized (`--popup-*`, `--history-*`) and avoid new hardcoded visual values when an existing token exists.
 - Reference `docs/ui-handoff.md` for component/state/accessibility contracts used for engineering handoff.

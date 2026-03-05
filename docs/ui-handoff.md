@@ -5,8 +5,23 @@ This document defines the implementation contract between design and code for TH
 ## Source of Truth
 
 - Figma file: `THECollector - UI Kit & Screens`
+- Figma URL: `https://www.figma.com/design/sECUN6qSqUygWoG7PhC548/THECollector---UI-Kit---Screens?t=UVQ55HTnnPvLrqyo-0`
+- Figma file key: `sECUN6qSqUygWoG7PhC548`
 - Rule: this Figma file is the single source of truth for all UX/UI and components.
 - Implementation policy: code should map to Figma tokens, component states, and naming before introducing new visual patterns.
+- Active handoff node (authoritative): `19:2` (`THECollector - Final Handoff Ops`)
+- Canonical UI kit + screens node: `1:2` (`THECollector - UI Kit & Screens`)
+
+## Figma Node Index (Synced 2026-03-05)
+
+- `19:2` - FINAL handoff ops page (active handoff marker and final declaration)
+- `1:2` - UI kit + screens page root
+- `1:4` - Main components/screens section on UI kit page
+- `1:305` - Layout Components heading block
+- `1:753` - Settings frame cluster
+- `1:830` - Onboarding frame cluster
+- `1:885` - System states frame cluster
+- `1:930` - Dark mode feasibility section
 
 ## Token Architecture
 
@@ -78,19 +93,20 @@ Use these shared classes before creating surface-specific variants:
 
 ## Figma Mapping Table
 
-| Figma Section/Component      | State/Variant                             | Code Class Contract                                                                                                                         | Primary Files                                                                                           |
-| ---------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Components / Button          | primary, secondary, ghost, danger; sm, md | `sc-btn` + variant + size (`sc-btn-primary`, `sc-btn-secondary`, `sc-btn-ghost`, `sc-btn-danger`, `sc-btn-sm`, `sc-btn-md`, `sc-btn-block`) | `src/shared/ui.css`, consumed in popup/history/options/preview HTML                                     |
-| Components / Input           | text/search/dropdown                      | `sc-input`, `sc-select`                                                                                                                     | `src/shared/ui.css`, `src/history/history.html`, `src/options/options.html`, `src/preview/preview.html` |
-| Components / Tabs            | horizontal tabs                           | `sc-tablist`, `sc-tab`                                                                                                                      | `src/shared/ui.css`, `src/popup/popup.html`                                                             |
-| Components / Pills/Tags      | status/info labels                        | `sc-pill` + `sc-pill-ok/warn/off`                                                                                                           | `src/shared/ui.css`, `src/history/history.html`, `src/options/options.html`                             |
-| Components / Toast + Banners | info/success/warn/error                   | `sc-banner` + variant classes; toast via `.sc-toast.*`                                                                                      | `src/shared/ui.css`, popup/history/options/preview HTML                                                 |
-| Components / Modal shell     | overlay dialog                            | `sc-modal`                                                                                                                                  | `src/shared/ui.css`, `src/history/history.html`                                                         |
-| Popup / Capture              | default/progress/success/error            | `sc-btn*`, `sc-banner*`, `sc-kbd` + `--popup-*` aliases                                                                                     | `src/popup/popup.html`, `src/popup/popup.css`                                                           |
-| Sidebar / History            | default/filter/empty/loading/overlay      | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-modal`, `sc-state-*` + `--history-*` aliases                                              | `src/history/history.html`, `src/history/history.css`                                                   |
-| Settings / Account           | default/status/permission badges          | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-pill*`, `sc-banner*`                                                                      | `src/options/options.html`, `src/options/options.css`                                                   |
-| Preview / Inspector          | toolbar/editing/loading/error             | `sc-btn*`, `sc-select`, `sc-banner*`, `sc-state-loading` + `--preview-*` aliases                                                            | `src/preview/preview.html`, `src/preview/preview.css`                                                   |
-| Onboarding / First run       | install guidance + quick entry actions    | `sc-card`, `sc-btn*`, `sc-banner*`                                                                                                          | `src/onboarding/onboarding.html`, `src/onboarding/onboarding.css`                                       |
+| Figma Section/Component      | Figma Node | State/Variant                             | Code Class Contract                                                                                                                           | Primary Files                                                                                           |
+| ---------------------------- | ---------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Components / Button          | `1:4`      | primary, secondary, ghost, danger; sm, md | `sc-btn` + variant + size (`sc-btn-primary`, `sc-btn-secondary`, `sc-btn-ghost`, `sc-btn-danger`, `sc-btn-sm`, `sc-btn-md`, `sc-btn-block`) | `src/shared/ui.css`, consumed in popup/history/options/preview HTML                                     |
+| Components / Input           | `1:4`      | text/search/dropdown                      | `sc-input`, `sc-select`                                                                                                                       | `src/shared/ui.css`, `src/history/history.html`, `src/options/options.html`, `src/preview/preview.html` |
+| Components / Tabs            | `1:4`      | horizontal tabs                           | `sc-tablist`, `sc-tab`                                                                                                                        | `src/shared/ui.css`, `src/popup/popup.html`                                                             |
+| Components / Pills/Tags      | `1:4`      | status/info labels                        | `sc-pill` + `sc-pill-ok/warn/off`                                                                                                             | `src/shared/ui.css`, `src/history/history.html`, `src/options/options.html`                             |
+| Components / Toast + Banners | `1:4`      | info/success/warn/error                   | `sc-banner` + variant classes; toast via `.sc-toast.*`                                                                                        | `src/shared/ui.css`, popup/history/options/preview HTML                                                 |
+| Components / Modal shell     | `1:4`      | overlay dialog                            | `sc-modal`                                                                                                                                    | `src/shared/ui.css`, `src/history/history.html`                                                         |
+| Popup / Capture              | `1:4`      | default/progress/success/error            | `sc-btn*`, `sc-banner*`, `sc-kbd` + `--popup-*` aliases                                                                                       | `src/popup/popup.html`, `src/popup/popup.css`                                                           |
+| Sidebar / History            | `1:4`      | default/filter/empty/loading/overlay      | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-modal`, `sc-state-*` + `--history-*` aliases                                              | `src/history/history.html`, `src/history/history.css`                                                   |
+| Settings / Account           | `1:753`    | default/status/permission badges          | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-pill*`, `sc-banner*`                                                                        | `src/options/options.html`, `src/options/options.css`                                                   |
+| Preview / Inspector          | `1:4`      | toolbar/editing/loading/error             | `sc-btn*`, `sc-select`, `sc-banner*`, `sc-state-loading` + `--preview-*` aliases                                                              | `src/preview/preview.html`, `src/preview/preview.css`                                                   |
+| Onboarding / First run       | `1:830`    | install guidance + quick entry actions    | `sc-card`, `sc-btn*`, `sc-banner*`                                                                                                            | `src/onboarding/onboarding.html`, `src/onboarding/onboarding.css`                                       |
+| System States                | `1:885`    | permission/offline/storage/confirmation   | `sc-banner*`, `sc-btn*`, `sc-modal`                                                                                                           | `src/popup/popup.html`, `src/options/options.html`, `src/history/history.html`                         |
 
 ## Change Policy
 

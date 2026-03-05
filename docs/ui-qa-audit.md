@@ -5,6 +5,9 @@
 This document is the implementation QA contract for exhaustive UX/UI verification across all extension surfaces while preserving business logic and API behavior.
 
 - Source of truth: Figma `THECollector - UI Kit & Screens`
+- Figma URL: `https://www.figma.com/design/sECUN6qSqUygWoG7PhC548/THECollector---UI-Kit---Screens?t=UVQ55HTnnPvLrqyo-0`
+- Figma file key: `sECUN6qSqUygWoG7PhC548`
+- Active handoff node: `19:2` (`THECollector - Final Handoff Ops`)
 - Code contract source: `src/shared/ui.css` + `docs/ui-handoff.md`
 - Theme scope: Light mode
 
@@ -86,7 +89,7 @@ State coverage target:
 | Toolbar action grouping          | Medium              | Preview/action groups can shift hierarchy when wrapping     | deterministic group spacing/wrap behavior                     | `src/preview/preview.css`                                                                              |
 | Component-state snapshot breadth | Medium              | page-level snapshots exist but not full primitive matrix    | broaden screenshot matrix to state variants                   | `tests/visual/ui-parity.spec.mjs`                                                                      |
 | Accessibility automation depth   | High                | semantic ARIA exists, but limited automated a11y assertions | keyboard/focus/contrast/state checks in CI                    | `tests/visual/*` + follow-up tooling                                                                   |
-| Figma node/frame validation      | Critical dependency | Figma mapped by docs but no direct node-mapped harness      | node-level parity checks + <=2px signoff                      | needs Figma frame/node IDs                                                                             |
+| Figma node/frame validation      | Medium              | Direct file key + core node mapping now documented           | wire per-state snapshots to explicit frame/node references     | `docs/ui-handoff.md`, `tests/visual/ui-parity.spec.mjs`                                               |
 
 ## Remediation Tracking Board
 
@@ -142,7 +145,7 @@ State coverage target:
 
 ### Pass 5 - Figma Pixel Validation
 
-- [ ] Map each audited state to Figma frame/node IDs
+- [x] Map each audited state family to Figma file key + frame/node IDs
 - [ ] Record deltas in geometry/tokens/state visuals
 - [ ] certify <=2px diff or document approved exception
 
@@ -169,7 +172,14 @@ Visual snapshots must be updated only for intentionally changed surfaces/states.
 
 ## Known Dependency
 
-Final pixel-perfect certification is blocked until direct Figma frame/node URLs are supplied and mapped to this audit manifest.
+Final pixel-perfect certification still requires a full per-state node matrix and explicit Figma-vs-snapshot delta logs, but file-level/node-level source mapping is now present in the repo handoff contract.
+
+## Figma Sync Status (2026-03-05)
+
+- Synced canonical Figma URL and file key into repo docs.
+- Synced active handoff authority node (`19:2`) into repo docs.
+- Synced core section nodes for settings/onboarding/system states and UI kit roots into repo docs.
+- Next parity increment: add per-snapshot node annotations for each visual test state.
 
 ## Recent Calibration Note (2026-03-05)
 
