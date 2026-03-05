@@ -299,11 +299,46 @@ function renderCaptureDiagnostics() {
       ? ` (${Number(lastFailed.capturedTiles || 0)}/${Number(lastFailed.totalTiles || 0)} tiles captured)`
       : '';
   if (captureDiagnosticsTextEl) {
-    captureDiagnosticsTextEl.textContent =
-      `Last capture failed${durationPart}${tilePart}: ${lastFailed.error}`;
+    captureDiagnosticsTextEl.textContent = buildFriendlyCaptureFailureText({
+      error: lastFailed.error,
+      durationPart,
+      tilePart,
+    });
   }
   captureDiagnosticsDismissEl?.setAttribute('data-key', diagnosticKey);
   captureDiagnosticsEl.classList.remove('hidden');
+}
+
+function buildFriendlyCaptureFailureText({ error, durationPart, tilePart }) {
+  const message = String(error || '').trim();
+  const lower = message.toLowerCase();
+  const details = `Latest capture didn’t complete${durationPart}${tilePart}.`;
+
+  if (
+    lower.includes('chrome://') ||
+    lower.includes('edge://') ||
+    lower.includes('cannot access') && lower.includes('url')
+  ) {
+    return `${details} This page is restricted by the browser. Open a regular website tab and try again.`;
+  }
+
+  if (lower.includes('already running')) {
+    return `${details} Another capture is already in progress for this tab. Wait a moment, then retry.`;
+  }
+
+  if (lower.includes('target') && (lower.includes('changed') || lower.includes('mismatch'))) {
+    return `${details} The page layout changed during capture. Let the page settle, then try again.`;
+  }
+
+  if (lower.includes('quota') || lower.includes('max_capture_visible_tab_calls_per_second')) {
+    return `${details} The browser temporarily rate-limited capture requests. Please retry in a few seconds.`;
+  }
+
+  if (!message) {
+    return `${details} Please try again on the same tab.`;
+  }
+
+  return `${details} ${message}`;
 }
 
 captureDiagnosticsDismissEl?.addEventListener('click', () => {

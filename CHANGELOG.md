@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.46 - 2026-03-05
+- Improved History diagnostics banner wording to be more user-friendly and action-oriented.
+- Added clearer guidance for common failure causes (restricted pages, concurrent capture, target changes, and rate limits).
+- Kept diagnostics behavior and dismissal flow unchanged.
+
 ## 1.3.45 - 2026-03-05
 - Refactored popup URL panel into focused modules while preserving behavior:
   - `src/popup/urls/urls-state.js`
