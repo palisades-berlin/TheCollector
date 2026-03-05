@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.44 - 2026-03-05
+- Refactored Preview into focused modules while preserving behavior:
+  - `src/preview/preview-init.js`
+  - `src/preview/preview-diff.js`
+  - `src/preview/preview-annotations.js`
+  - `src/preview/preview-export.js`
+- Converted `src/preview/preview.js` into an orchestration layer that wires module responsibilities together.
+- Kept existing capture preview, diff rendering, editing, copy/export, and preset flows functionally unchanged.
+
 ## 1.3.43 - 2026-03-05
 - Added shared protocol payload validation in `src/shared/protocol-validate.js` for:
   - `CAPTURE_START`

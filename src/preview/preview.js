@@ -4,6 +4,15 @@ import { MSG } from '../shared/messages.js';
 import { showToast } from '../shared/toast.js';
 import { anchorDownloadBlob } from '../shared/download.js';
 import { buildPdfFromCanvas } from './pdf-export.js';
+import { buildDiffBlob } from './preview-diff.js';
+import { createAnnotationsController } from './preview-annotations.js';
+import { createPreviewExportController } from './preview-export.js';
+import {
+  sanitizeHttpUrl,
+  setSourceUrlLink,
+  setSourceUrlTextForDiff,
+  loadBlobIntoPreview,
+} from './preview-init.js';
 
 const params = new URLSearchParams(location.search);
 const id = params.get('id');
@@ -43,7 +52,6 @@ const toolButtons = {
   emoji: document.getElementById('toolEmoji'),
 };
 
-const GOOGLE_DOCS_PIXEL_LIMIT = 25_000_000;
 const UI_CANVAS_FONT_FAMILY =
   '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
 const EMOJI_FONT_FAMILY =
@@ -52,15 +60,6 @@ const EMOJI_FONT_FAMILY =
 let currentBlob = null;
 let sourceUrl = '';
 let captureTimestamp = Date.now();
-let naturalW = 0;
-let naturalH = 0;
-let zoomed = false;
-let activeTool = null;
-let pointerStart = null;
-let draftRect = null;
-let cropRect = null;
-let annotations = [];
-let lastTapAt = 0;
 let settings = {
   defaultExportFormat: 'png',
   defaultPdfPageSize: 'auto',
@@ -69,29 +68,54 @@ let settings = {
   downloadDirectory: '',
   fitClipboardToDocsLimit: true,
 };
-let hasAutoDownloaded = false;
-let presetRunning = false;
-let editedCanvasRevision = 0;
-const editedCanvasMemo = new Map();
 
-function markEditedCanvasDirty() {
-  editedCanvasRevision++;
-  editedCanvasMemo.clear();
-}
+const annotations = createAnnotationsController({
+  annotationLayer,
+  screenshotImg,
+  imageContainer,
+  toolButtons,
+  clearEditsBtn,
+  uiFontFamily: UI_CANVAS_FONT_FAMILY,
+  emojiFontFamily: EMOJI_FONT_FAMILY,
+  decodeImageToCanvas,
+});
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
+const exportController = createPreviewExportController({
+  MSG,
+  showToast,
+  anchorDownloadBlob,
+  buildPdfFromCanvas,
+  sanitizeHttpUrl,
+  buttons: {
+    downloadPngBtn,
+    downloadJpgBtn,
+    downloadPdfBtn,
+    copyImageBtn,
+    presetEmailBtn,
+    presetDocsBtn,
+    presetPdfAutoBtn,
+  },
+  pdfPageSizeEl,
+  canvasToBlob,
+  buildEditedCanvas: () =>
+    annotations.buildEditedCanvas({
+      currentBlob,
+      stampEnabled: stampOverlayEl.checked,
+      sourceUrl,
+      captureTimestamp,
+    }),
+  getCurrentBlob: () => currentBlob,
+  getSettings: () => settings,
+  getSourceUrl: () => sourceUrl,
+  getCaptureTimestamp: () => captureTimestamp,
+  showError,
+});
 
-function sanitizeHttpUrl(url) {
-  if (!url) return '';
-  try {
-    const parsed = new URL(url);
-    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
-      return parsed.href;
-    }
-  } catch (_) {
-    return '';
-  }
-  return '';
+function showError(msg) {
+  loadingEl.classList.add('hidden');
+  imageSkeletonEl.classList.add('hidden');
+  errorMsgEl.textContent = msg;
+  errorMsgEl.classList.remove('hidden');
 }
 
 async function init() {
@@ -122,7 +146,8 @@ async function init() {
     }
 
     if (modeFromQuery === 'diff' || isDiffMode) {
-      modeNoticeEl.textContent = 'Visual Diff Mode: translucent boxes (green = added/brighter, red = removed/darker).';
+      modeNoticeEl.textContent =
+        'Visual Diff Mode: translucent boxes (green = added/brighter, red = removed/darker).';
       modeNoticeEl.classList.remove('hidden');
     } else if (modeFromQuery === 'iframe') {
       modeNoticeEl.textContent = 'Captured using same-origin iframe mode.';
@@ -132,7 +157,7 @@ async function init() {
       modeNoticeEl.classList.remove('hidden');
     }
 
-    if (!isDiffMode) maybeAutoDownload();
+    if (!isDiffMode) await exportController.maybeAutoDownload();
   } catch (err) {
     showError(`Failed to load screenshot: ${err.message}`);
   }
@@ -141,25 +166,29 @@ async function init() {
 async function setupSinglePreview(record) {
   sourceUrl = record.url || '';
   captureTimestamp = record.timestamp || Date.now();
-  setSourceUrlLink(record.url || '');
+  setSourceUrlLink(sourceUrlEl, record.url || '');
   document.title = `THE Collector · ${record.title || record.url}`;
   captureTimeEl.textContent = new Date(record.timestamp).toLocaleString();
   dimensionsEl.textContent = `${record.width} × ${record.height} px`;
-  await loadBlobIntoPreview(record.blob);
+  await setCurrentBlob(record.blob);
 }
 
 async function setupDiffPreview(baseRecord, compareRecord) {
   disableEditingForDiff();
-  const { blob, width, height } = await buildDiffBlob(baseRecord.blob, compareRecord.blob);
-  currentBlob = blob;
+  const { blob, width, height } = await buildDiffBlob({
+    baseBlob: baseRecord.blob,
+    compareBlob: compareRecord.blob,
+    decodeImageToCanvas,
+    canvasToBlob,
+    legendFontFamily: UI_CANVAS_FONT_FAMILY,
+  });
   sourceUrl = '';
   captureTimestamp = Number(compareRecord.timestamp || Date.now());
-  setSourceUrlTextForDiff(baseRecord.url || '', compareRecord.url || '');
+  setSourceUrlTextForDiff(sourceUrlEl, baseRecord.url || '', compareRecord.url || '');
   document.title = `THE Collector · Diff ${baseRecord.title || baseRecord.url} vs ${compareRecord.title || compareRecord.url}`;
-  captureTimeEl.textContent =
-    `${new Date(baseRecord.timestamp).toLocaleString()} -> ${new Date(compareRecord.timestamp).toLocaleString()}`;
+  captureTimeEl.textContent = `${new Date(baseRecord.timestamp).toLocaleString()} -> ${new Date(compareRecord.timestamp).toLocaleString()}`;
   dimensionsEl.textContent = `${width} × ${height} px (diff)`;
-  await loadBlobIntoPreview(blob);
+  await setCurrentBlob(blob);
 }
 
 function disableEditingForDiff() {
@@ -167,868 +196,23 @@ function disableEditingForDiff() {
   stampOverlayEl.checked = false;
   stampOverlayEl.disabled = true;
   clearEditsBtn.disabled = true;
-  setTool(null);
+  annotations.setTool(null);
 }
 
-function setSourceUrlTextForDiff(baseUrl, compareUrl) {
-  const base = safeText(baseUrl) || '(unknown)';
-  const next = safeText(compareUrl) || '(unknown)';
-  sourceUrlEl.textContent = `Diff: ${base} vs ${next}`;
-  sourceUrlEl.removeAttribute('href');
-  sourceUrlEl.removeAttribute('target');
-  sourceUrlEl.removeAttribute('rel');
-  sourceUrlEl.setAttribute('aria-disabled', 'true');
-  sourceUrlEl.style.pointerEvents = 'none';
-}
-
-function setSourceUrlLink(url) {
-  const safeUrl = sanitizeHttpUrl(url);
-  sourceUrlEl.textContent = url || '';
-  if (safeUrl) {
-    sourceUrlEl.href = safeUrl;
-    sourceUrlEl.target = '_blank';
-    sourceUrlEl.rel = 'noopener noreferrer';
-    sourceUrlEl.removeAttribute('aria-disabled');
-    sourceUrlEl.style.pointerEvents = '';
-    return;
-  }
-  sourceUrlEl.removeAttribute('href');
-  sourceUrlEl.removeAttribute('target');
-  sourceUrlEl.removeAttribute('rel');
-  sourceUrlEl.setAttribute('aria-disabled', 'true');
-  sourceUrlEl.style.pointerEvents = 'none';
-}
-
-async function loadBlobIntoPreview(blob) {
+async function setCurrentBlob(blob) {
   currentBlob = blob;
-  markEditedCanvasDirty();
-  const objectUrl = URL.createObjectURL(blob);
-  return new Promise((resolve, reject) => {
-    const cleanup = () => {
-      screenshotImg.onload = null;
-      screenshotImg.onerror = null;
-      URL.revokeObjectURL(objectUrl);
-    };
-
-    screenshotImg.onload = () => {
-      naturalW = screenshotImg.naturalWidth;
-      naturalH = screenshotImg.naturalHeight;
-      loadingEl.classList.add('hidden');
-      imageSkeletonEl.classList.add('hidden');
-      stageEl.classList.remove('hidden');
-      screenshotImg.classList.remove('hidden');
-      refreshOverlayCanvas();
-      cleanup();
-      resolve();
-    };
-
-    screenshotImg.onerror = () => {
-      cleanup();
-      reject(new Error('Failed to render screenshot image.'));
-    };
-
-    screenshotImg.src = objectUrl;
+  annotations.markEditedCanvasDirty();
+  await loadBlobIntoPreview({
+    blob,
+    screenshotImg,
+    loadingEl,
+    imageSkeletonEl,
+    stageEl,
+    onImageReady: ({ naturalW, naturalH }) => {
+      annotations.setNaturalSize(naturalW, naturalH);
+      annotations.refreshOverlayCanvas();
+    },
   });
-}
-
-async function buildDiffBlob(baseBlob, compareBlob) {
-  const baseCanvas = await decodeImageToCanvas(baseBlob);
-  const compareCanvas = await decodeImageToCanvas(compareBlob);
-  const width = Math.min(baseCanvas.width, compareCanvas.width);
-  const height = Math.min(baseCanvas.height, compareCanvas.height);
-  const baseCtx = baseCanvas.getContext('2d', { willReadFrequently: true });
-  const compareCtx = compareCanvas.getContext('2d', { willReadFrequently: true });
-  const outCanvas = document.createElement('canvas');
-  outCanvas.width = width;
-  outCanvas.height = height;
-  const outCtx = outCanvas.getContext('2d');
-
-  const a = baseCtx.getImageData(0, 0, width, height);
-  const b = compareCtx.getImageData(0, 0, width, height);
-  const ad = a.data;
-  const bd = b.data;
-  const boxes = detectDiffBoxes(ad, bd, width, height);
-
-  outCtx.drawImage(compareCanvas, 0, 0, width, height);
-  outCtx.save();
-  outCtx.fillStyle = 'rgba(0, 0, 0, 0.08)';
-  outCtx.fillRect(0, 0, width, height);
-  outCtx.restore();
-  drawDiffBoxes(outCtx, boxes);
-  drawDiffLegend(outCtx, width, height, boxes);
-  const blob = await canvasToBlob(outCanvas, 'image/png');
-  return { blob, width, height };
-}
-
-function detectDiffBoxes(ad, bd, width, height) {
-  const pixelThreshold = 30;
-  const blockSize = 8;
-  const cols = Math.ceil(width / blockSize);
-  const rows = Math.ceil(height / blockSize);
-  const total = new Uint16Array(cols * rows);
-  const changed = new Uint16Array(cols * rows);
-  const added = new Uint16Array(cols * rows);
-  const removed = new Uint16Array(cols * rows);
-
-  for (let y = 0; y < height; y++) {
-    const gy = Math.floor(y / blockSize);
-    for (let x = 0; x < width; x++) {
-      const gx = Math.floor(x / blockSize);
-      const gIdx = gy * cols + gx;
-      total[gIdx]++;
-
-      const i = (y * width + x) * 4;
-      const aAlpha = ad[i + 3];
-      const bAlpha = bd[i + 3];
-      if (aAlpha === 0 && bAlpha === 0) continue;
-
-      const dr = Math.abs(bd[i] - ad[i]);
-      const dg = Math.abs(bd[i + 1] - ad[i + 1]);
-      const db = Math.abs(bd[i + 2] - ad[i + 2]);
-      const da = Math.abs(bAlpha - aAlpha);
-      const delta = Math.max(dr, dg, db, da);
-      if (delta < pixelThreshold) continue;
-
-      changed[gIdx]++;
-      const lumA = ad[i] * 0.2126 + ad[i + 1] * 0.7152 + ad[i + 2] * 0.0722;
-      const lumB = bd[i] * 0.2126 + bd[i + 1] * 0.7152 + bd[i + 2] * 0.0722;
-      if (lumB >= lumA) added[gIdx]++;
-      else removed[gIdx]++;
-    }
-  }
-
-  const active = new Uint8Array(cols * rows);
-  for (let i = 0; i < active.length; i++) {
-    const density = total[i] > 0 ? changed[i] / total[i] : 0;
-    if (changed[i] >= 6 && density >= 0.08) active[i] = 1;
-  }
-
-  const visited = new Uint8Array(cols * rows);
-  const boxes = [];
-  const qx = [];
-  const qy = [];
-  const neighborDx = [-1, 1, 0, 0];
-  const neighborDy = [0, 0, -1, 1];
-
-  for (let gy = 0; gy < rows; gy++) {
-    for (let gx = 0; gx < cols; gx++) {
-      const startIdx = gy * cols + gx;
-      if (!active[startIdx] || visited[startIdx]) continue;
-      qx.length = 0;
-      qy.length = 0;
-      qx.push(gx);
-      qy.push(gy);
-      visited[startIdx] = 1;
-
-      let minX = gx;
-      let maxX = gx;
-      let minY = gy;
-      let maxY = gy;
-      let changedSum = 0;
-      let addedSum = 0;
-      let removedSum = 0;
-
-      while (qx.length) {
-        const cx = qx.pop();
-        const cy = qy.pop();
-        const idx = cy * cols + cx;
-        minX = Math.min(minX, cx);
-        maxX = Math.max(maxX, cx);
-        minY = Math.min(minY, cy);
-        maxY = Math.max(maxY, cy);
-        changedSum += changed[idx];
-        addedSum += added[idx];
-        removedSum += removed[idx];
-
-        for (let n = 0; n < 4; n++) {
-          const nx = cx + neighborDx[n];
-          const ny = cy + neighborDy[n];
-          if (nx < 0 || ny < 0 || nx >= cols || ny >= rows) continue;
-          const nIdx = ny * cols + nx;
-          if (!active[nIdx] || visited[nIdx]) continue;
-          visited[nIdx] = 1;
-          qx.push(nx);
-          qy.push(ny);
-        }
-      }
-
-      if (changedSum < 20) continue;
-      const px = minX * blockSize;
-      const py = minY * blockSize;
-      const pw = Math.min(width - px, (maxX - minX + 1) * blockSize);
-      const ph = Math.min(height - py, (maxY - minY + 1) * blockSize);
-      const margin = 4;
-      boxes.push({
-        x: Math.max(0, px - margin),
-        y: Math.max(0, py - margin),
-        w: Math.min(width - Math.max(0, px - margin), pw + margin * 2),
-        h: Math.min(height - Math.max(0, py - margin), ph + margin * 2),
-        kind: addedSum >= removedSum ? 'added' : 'removed',
-      });
-    }
-  }
-
-  return mergeNearbyDiffBoxes(boxes);
-}
-
-function mergeNearbyDiffBoxes(input) {
-  const boxes = [...input];
-  if (boxes.length <= 1) return boxes;
-  const gap = 10;
-  let mergedAny = true;
-  while (mergedAny) {
-    mergedAny = false;
-    for (let i = 0; i < boxes.length; i++) {
-      for (let j = i + 1; j < boxes.length; j++) {
-        const a = boxes[i];
-        const b = boxes[j];
-        const overlapX = a.x <= b.x + b.w + gap && b.x <= a.x + a.w + gap;
-        const overlapY = a.y <= b.y + b.h + gap && b.y <= a.y + a.h + gap;
-        if (!overlapX || !overlapY || a.kind !== b.kind) continue;
-        const x = Math.min(a.x, b.x);
-        const y = Math.min(a.y, b.y);
-        const w = Math.max(a.x + a.w, b.x + b.w) - x;
-        const h = Math.max(a.y + a.h, b.y + b.h) - y;
-        boxes[i] = { x, y, w, h, kind: a.kind };
-        boxes.splice(j, 1);
-        mergedAny = true;
-        break;
-      }
-      if (mergedAny) break;
-    }
-  }
-  return boxes;
-}
-
-function drawDiffBoxes(ctx, boxes) {
-  for (const box of boxes) {
-    const isAdded = box.kind === 'added';
-    ctx.save();
-    ctx.fillStyle = isAdded ? 'rgba(46, 204, 113, 0.22)' : 'rgba(231, 76, 60, 0.22)';
-    ctx.strokeStyle = isAdded ? 'rgba(46, 204, 113, 0.95)' : 'rgba(231, 76, 60, 0.95)';
-    ctx.lineWidth = 2;
-    ctx.fillRect(box.x, box.y, box.w, box.h);
-    ctx.strokeRect(box.x, box.y, box.w, box.h);
-    ctx.restore();
-  }
-}
-
-function drawDiffLegend(ctx, width, height, boxes) {
-  const pad = Math.max(10, Math.round(width / 180));
-  const boxW = Math.max(240, Math.round(width * 0.28));
-  const boxH = 68;
-  const x = Math.max(0, width - boxW - pad);
-  const y = Math.max(0, height - boxH - pad);
-  ctx.save();
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.58)';
-  ctx.fillRect(x, y, boxW, boxH);
-  ctx.font = `600 12px ${UI_CANVAS_FONT_FAMILY}`;
-  ctx.fillStyle = '#b0bec5';
-  ctx.fillText('Visual Diff', x + 10, y + 16);
-  ctx.fillStyle = '#2ecc71';
-  ctx.fillText('Added / brighter', x + 10, y + 35);
-  ctx.fillStyle = '#e74c3c';
-  ctx.fillText('Removed / darker', x + 130, y + 35);
-  ctx.fillStyle = '#cfd8dc';
-  ctx.fillText(`Detected regions: ${boxes.length}`, x + 10, y + 54);
-  ctx.restore();
-}
-
-function showError(msg) {
-  loadingEl.classList.add('hidden');
-  imageSkeletonEl.classList.add('hidden');
-  errorMsgEl.textContent = msg;
-  errorMsgEl.classList.remove('hidden');
-}
-
-function maybeAutoDownload() {
-  if (settings.autoDownloadMode !== 'after_preview' || hasAutoDownloaded) return;
-  hasAutoDownloaded = true;
-  setTimeout(() => {
-    runExport(settings.defaultExportFormat).catch((err) => {
-      showError(`Auto-download failed: ${err.message}`);
-    });
-  }, 250);
-}
-
-// ─── Zoom toggle ──────────────────────────────────────────────────────────────
-
-imageContainer.addEventListener('click', (e) => {
-  if (activeTool) return; // editing mode disables zoom toggle
-  if (e.target !== screenshotImg) return;
-  const now = Date.now();
-  if (now - lastTapAt < 250) return;
-  lastTapAt = now;
-  zoomed = !zoomed;
-  screenshotImg.classList.toggle('fit', !zoomed);
-  screenshotImg.classList.toggle('full', zoomed);
-  imageContainer.classList.toggle('zoomed', zoomed);
-  refreshOverlayCanvas();
-});
-
-window.addEventListener('resize', () => refreshOverlayCanvas());
-screenshotImg.addEventListener('load', () => refreshOverlayCanvas());
-
-// ─── Editing tools ────────────────────────────────────────────────────────────
-
-for (const [tool, btn] of Object.entries(toolButtons)) {
-  btn.addEventListener('click', () => setTool(activeTool === tool ? null : tool));
-}
-
-clearEditsBtn.addEventListener('click', () => {
-  cropRect = null;
-  draftRect = null;
-  annotations = [];
-  markEditedCanvasDirty();
-  refreshOverlayCanvas();
-});
-
-function setTool(tool) {
-  activeTool = tool;
-  pointerStart = null;
-  draftRect = null;
-
-  for (const [name, btn] of Object.entries(toolButtons)) {
-    btn.classList.toggle('active', name === activeTool);
-  }
-
-  annotationLayer.classList.toggle('editable', !!activeTool);
-  annotationLayer.style.cursor = activeTool ? 'crosshair' : 'default';
-  if (activeTool && zoomed) {
-    zoomed = false;
-    screenshotImg.classList.add('fit');
-    screenshotImg.classList.remove('full');
-    imageContainer.classList.remove('zoomed');
-  }
-  refreshOverlayCanvas();
-}
-
-annotationLayer.addEventListener('pointerdown', (e) => {
-  if (!activeTool) return;
-  const pt = eventToImagePoint(e);
-  if (!pt) return;
-
-  annotationLayer.setPointerCapture(e.pointerId);
-  pointerStart = pt;
-  draftRect = { x: pt.x, y: pt.y, w: 1, h: 1 };
-
-  if (activeTool === 'text') {
-    const text = prompt('Enter label text:');
-    if (text) {
-      annotations.push({ type: 'text', x: pt.x, y: pt.y, text });
-      markEditedCanvasDirty();
-    }
-    pointerStart = null;
-    draftRect = null;
-    refreshOverlayCanvas();
-  }
-
-  if (activeTool === 'emoji') {
-    const emoji = prompt('Enter emoji:', '🔒') || '🔒';
-    annotations.push({ type: 'emoji', x: pt.x, y: pt.y, emoji });
-    markEditedCanvasDirty();
-    pointerStart = null;
-    draftRect = null;
-    refreshOverlayCanvas();
-  }
-});
-
-annotationLayer.addEventListener('pointermove', (e) => {
-  if (!activeTool || !pointerStart || !draftRect) return;
-  const pt = eventToImagePoint(e);
-  if (!pt) return;
-  draftRect = normalizeRect(pointerStart.x, pointerStart.y, pt.x, pt.y);
-  refreshOverlayCanvas();
-});
-
-annotationLayer.addEventListener('pointerup', () => {
-  if (!activeTool || !draftRect) return;
-  const minSize = 8;
-  if (draftRect.w < minSize || draftRect.h < minSize) {
-    pointerStart = null;
-    draftRect = null;
-    refreshOverlayCanvas();
-    return;
-  }
-
-  let mutated = false;
-  if (activeTool === 'crop') {
-    cropRect = { ...draftRect };
-    mutated = true;
-  }
-  if (activeTool === 'blur') {
-    annotations.push({ type: 'blur', rect: { ...draftRect } });
-    mutated = true;
-  }
-  if (activeTool === 'highlight') {
-    annotations.push({ type: 'highlight', rect: { ...draftRect } });
-    mutated = true;
-  }
-  if (activeTool === 'shape') {
-    annotations.push({ type: 'shape', rect: { ...draftRect } });
-    mutated = true;
-  }
-  if (mutated) markEditedCanvasDirty();
-
-  pointerStart = null;
-  draftRect = null;
-  refreshOverlayCanvas();
-});
-
-function eventToImagePoint(e) {
-  const rect = screenshotImg.getBoundingClientRect();
-  if (!rect.width || !rect.height) return null;
-  const x = (e.clientX - rect.left) * (naturalW / rect.width);
-  const y = (e.clientY - rect.top) * (naturalH / rect.height);
-  return {
-    x: clamp(x, 0, naturalW),
-    y: clamp(y, 0, naturalH),
-  };
-}
-
-function normalizeRect(x1, y1, x2, y2) {
-  const x = Math.min(x1, x2);
-  const y = Math.min(y1, y2);
-  return {
-    x,
-    y,
-    w: Math.abs(x2 - x1),
-    h: Math.abs(y2 - y1),
-  };
-}
-
-function clamp(v, lo, hi) {
-  return Math.max(lo, Math.min(hi, v));
-}
-
-function refreshOverlayCanvas() {
-  if (!naturalW || !naturalH) return;
-  const rect = screenshotImg.getBoundingClientRect();
-  if (!rect.width || !rect.height) return;
-
-  const dpr = window.devicePixelRatio || 1;
-  annotationLayer.width = Math.round(rect.width * dpr);
-  annotationLayer.height = Math.round(rect.height * dpr);
-  annotationLayer.style.width = `${rect.width}px`;
-  annotationLayer.style.height = `${rect.height}px`;
-
-  const ctx = annotationLayer.getContext('2d');
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, rect.width, rect.height);
-
-  const sx = rect.width / naturalW;
-  const sy = rect.height / naturalH;
-  const toView = (r) => ({ x: r.x * sx, y: r.y * sy, w: r.w * sx, h: r.h * sy });
-
-  for (const ann of annotations) {
-    drawAnnotationPreview(ctx, ann, sx, sy, toView);
-  }
-  if (cropRect) drawCropPreview(ctx, toView(cropRect), rect.width, rect.height);
-  if (draftRect) {
-    const vr = toView(draftRect);
-    ctx.save();
-    ctx.strokeStyle = activeTool === 'crop' ? '#ffee58' : '#4fc3f7';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([7, 6]);
-    ctx.strokeRect(vr.x, vr.y, vr.w, vr.h);
-    ctx.restore();
-  }
-}
-
-function drawAnnotationPreview(ctx, ann, sx, sy, toView) {
-  if (ann.type === 'text') {
-    ctx.save();
-    ctx.font = `600 14px ${UI_CANVAS_FONT_FAMILY}`;
-    ctx.fillStyle = '#ffecb3';
-    ctx.strokeStyle = '#263238';
-    ctx.lineWidth = 3;
-    const x = ann.x * sx;
-    const y = ann.y * sy;
-    ctx.strokeText(ann.text, x, y);
-    ctx.fillText(ann.text, x, y);
-    ctx.restore();
-    return;
-  }
-
-  if (ann.type === 'emoji') {
-    ctx.save();
-    ctx.font = `24px ${EMOJI_FONT_FAMILY}`;
-    ctx.fillText(ann.emoji, ann.x * sx, ann.y * sy);
-    ctx.restore();
-    return;
-  }
-
-  const vr = toView(ann.rect);
-  if (ann.type === 'blur') {
-    ctx.save();
-    ctx.fillStyle = 'rgba(120, 120, 120, 0.45)';
-    ctx.fillRect(vr.x, vr.y, vr.w, vr.h);
-    ctx.strokeStyle = 'rgba(255,255,255,0.9)';
-    ctx.setLineDash([5, 4]);
-    ctx.strokeRect(vr.x, vr.y, vr.w, vr.h);
-    ctx.fillStyle = '#fff';
-    ctx.font = `600 11px ${UI_CANVAS_FONT_FAMILY}`;
-    ctx.fillText('BLUR', vr.x + 6, vr.y + 14);
-    ctx.restore();
-  } else if (ann.type === 'highlight') {
-    ctx.save();
-    ctx.fillStyle = 'rgba(255, 235, 59, 0.28)';
-    ctx.fillRect(vr.x, vr.y, vr.w, vr.h);
-    ctx.strokeStyle = 'rgba(255, 213, 79, 0.85)';
-    ctx.strokeRect(vr.x, vr.y, vr.w, vr.h);
-    ctx.restore();
-  } else if (ann.type === 'shape') {
-    ctx.save();
-    ctx.strokeStyle = '#ef5350';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(vr.x, vr.y, vr.w, vr.h);
-    ctx.restore();
-  }
-}
-
-function drawCropPreview(ctx, crop, fullW, fullH) {
-  ctx.save();
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.38)';
-  ctx.fillRect(0, 0, fullW, fullH);
-  ctx.clearRect(crop.x, crop.y, crop.w, crop.h);
-  ctx.strokeStyle = '#ffee58';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([10, 6]);
-  ctx.strokeRect(crop.x, crop.y, crop.w, crop.h);
-  ctx.restore();
-}
-
-// ─── Downloads ────────────────────────────────────────────────────────────────
-
-downloadPngBtn.addEventListener('click', async () => {
-  await runExport('png').catch((err) => showError(`PNG export failed: ${err.message}`));
-});
-
-downloadJpgBtn.addEventListener('click', async () => {
-  await runExport('jpg').catch((err) => showError(`JPG export failed: ${err.message}`));
-});
-
-downloadPdfBtn.addEventListener('click', async () => {
-  await runExport('pdf').catch((err) => showError(`PDF export failed: ${err.message}`));
-});
-
-copyImageBtn.addEventListener('click', async () => {
-  await copyToClipboard().catch((err) => showError(`Copy failed: ${err.message}`));
-});
-
-if (presetEmailBtn) {
-  presetEmailBtn.addEventListener('click', async () => {
-    await runPreset('email').catch((err) => showError(`Email preset failed: ${err.message}`));
-  });
-}
-if (presetDocsBtn) {
-  presetDocsBtn.addEventListener('click', async () => {
-    await runPreset('docs').catch((err) => showError(`Docs preset failed: ${err.message}`));
-  });
-}
-if (presetPdfAutoBtn) {
-  presetPdfAutoBtn.addEventListener('click', async () => {
-    await runPreset('pdf_auto').catch((err) => showError(`PDF Auto preset failed: ${err.message}`));
-  });
-}
-
-async function runPreset(kind) {
-  if (presetRunning) return;
-  presetRunning = true;
-  setPresetButtonsDisabled(true);
-  try {
-    if (kind === 'email') {
-      await runExport('jpg');
-      openEmailDraft();
-      showToast('Email preset ready: JPG exported + draft opened.', 'success');
-      return;
-    }
-    if (kind === 'docs') {
-      await copyToClipboard({ forceDocsFit: true });
-      showToast('Docs preset ready: image copied with Docs-safe sizing.', 'success');
-      return;
-    }
-    if (kind === 'pdf_auto') {
-      const previousSize = pdfPageSizeEl.value;
-      pdfPageSizeEl.value = 'auto';
-      try {
-        await runExport('pdf');
-      } finally {
-        pdfPageSizeEl.value = previousSize;
-      }
-      showToast('PDF Auto preset ready.', 'success');
-      return;
-    }
-    throw new Error(`Unknown preset: ${kind}`);
-  } finally {
-    setPresetButtonsDisabled(false);
-    presetRunning = false;
-  }
-}
-
-function setPresetButtonsDisabled(disabled) {
-  if (presetEmailBtn) presetEmailBtn.disabled = disabled;
-  if (presetDocsBtn) presetDocsBtn.disabled = disabled;
-  if (presetPdfAutoBtn) presetPdfAutoBtn.disabled = disabled;
-}
-
-function openEmailDraft() {
-  const subject = 'Screenshot from THE Collector';
-  const source = sanitizeHttpUrl(sourceUrl);
-  const bodyLines = ['I exported a screenshot from THE Collector.'];
-  if (source) bodyLines.push(`Source: ${source}`);
-  bodyLines.push(`Captured: ${new Date(captureTimestamp).toLocaleString()}`);
-  bodyLines.push('', 'Please attach the exported JPG file.');
-  const href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
-  const a = document.createElement('a');
-  a.href = href;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
-
-async function runExport(format) {
-  if (!currentBlob) {
-    throw new Error('Export is unavailable before image load.');
-  }
-
-  if (format === 'png') {
-    const canvas = await buildEditedCanvas();
-    const blob = await canvasToBlob(canvas, 'image/png');
-    await triggerDownloadBlob(blob, 'png');
-    showToast('PNG download started.', 'success');
-    return;
-  }
-
-  if (format === 'jpg') {
-    const canvas = await buildEditedCanvas();
-    const blob = await canvasToBlob(canvas, 'image/jpeg', 0.92);
-    await triggerDownloadBlob(blob, 'jpg');
-    showToast('JPG download started.', 'success');
-    return;
-  }
-
-  if (format === 'pdf') {
-    const originalHtml = downloadPdfBtn.innerHTML;
-    downloadPdfBtn.disabled = true;
-    downloadPdfBtn.innerHTML = 'Building PDF…';
-    try {
-      const edited = await buildEditedCanvas();
-      const pageSize = pdfPageSizeEl.value;
-      const pdfBlob = await buildPdfFromCanvas(edited, pageSize, canvasToBlob);
-      await triggerDownloadBlob(pdfBlob, 'pdf');
-      showToast('PDF download started.', 'success');
-    } finally {
-      downloadPdfBtn.disabled = false;
-      downloadPdfBtn.innerHTML = originalHtml;
-    }
-    return;
-  }
-
-  throw new Error(`Unsupported export format: ${format}`);
-}
-
-async function copyToClipboard(options = {}) {
-  if (!currentBlob) {
-    throw new Error('Copy is unavailable before image load.');
-  }
-  if (!navigator.clipboard?.write || typeof ClipboardItem === 'undefined') {
-    throw new Error('Clipboard image copy is not supported in this browser context.');
-  }
-
-  const base = await buildEditedCanvas();
-  const shouldFit = Boolean(options.forceDocsFit) || Boolean(settings.fitClipboardToDocsLimit);
-  const fitted = maybeFitForDocsLimit(base, shouldFit);
-  const blob = await canvasToBlob(fitted, 'image/png');
-  const item = new ClipboardItem({ 'image/png': blob });
-  await navigator.clipboard.write([item]);
-
-  if (fitted !== base) {
-    showToast('Copied (resized to Docs-safe limit).', 'info');
-  } else {
-    showToast('Copied image to clipboard.', 'success');
-  }
-}
-
-function maybeFitForDocsLimit(canvas, shouldFit) {
-  if (!shouldFit) return canvas;
-  const pixels = canvas.width * canvas.height;
-  if (pixels <= GOOGLE_DOCS_PIXEL_LIMIT) return canvas;
-
-  const scale = Math.sqrt(GOOGLE_DOCS_PIXEL_LIMIT / pixels);
-  const out = document.createElement('canvas');
-  out.width = Math.max(1, Math.floor(canvas.width * scale));
-  out.height = Math.max(1, Math.floor(canvas.height * scale));
-  const ctx = out.getContext('2d');
-  if (!ctx) return canvas;
-  ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, out.width, out.height);
-  return out;
-}
-
-async function triggerDownloadBlob(blob, ext) {
-  const hasDownloads = await chrome.permissions.contains({
-    permissions: ['downloads'],
-  });
-  const titleText = document.title.replace(/^THE Collector\s*·\s*/i, '').trim() || 'screenshot';
-
-  if (hasDownloads) {
-    try {
-      const result = await chrome.runtime.sendMessage({
-        type: MSG.PT_DOWNLOAD,
-        payload: {
-          blob,
-          ext,
-          title: titleText,
-        },
-      });
-      if (!result?.ok) {
-        throw new Error(result?.error || 'downloads.download failed');
-      }
-      return;
-    } catch (_) {
-      // Fallback to anchor download if runtime messaging fails
-      // (for example very large payload transfer edge cases).
-    }
-  }
-
-  const fallbackName = `screenshot-${Date.now()}.${ext}`;
-  await anchorDownloadBlob({ blob, filename: fallbackName });
-}
-
-async function buildEditedCanvas() {
-  const memoKey = `${editedCanvasRevision}|stamp:${stampOverlayEl.checked ? 1 : 0}`;
-  const cached = editedCanvasMemo.get(memoKey);
-  if (cached) return cached;
-
-  const base = await decodeImageToCanvas(currentBlob);
-  const ctx = base.getContext('2d');
-
-  for (const ann of annotations) {
-    applyAnnotation(ctx, base, ann);
-  }
-
-  if (stampOverlayEl.checked) {
-    drawStampOverlay(ctx, base.width, base.height, sourceUrl, captureTimestamp);
-  }
-
-  if (cropRect) {
-    const x = clamp(Math.round(cropRect.x), 0, base.width - 1);
-    const y = clamp(Math.round(cropRect.y), 0, base.height - 1);
-    const w = clamp(Math.round(cropRect.w), 1, base.width - x);
-    const h = clamp(Math.round(cropRect.h), 1, base.height - y);
-    const out = document.createElement('canvas');
-    out.width = w;
-    out.height = h;
-    out.getContext('2d').drawImage(base, x, y, w, h, 0, 0, w, h);
-    editedCanvasMemo.set(memoKey, out);
-    return out;
-  }
-
-  editedCanvasMemo.set(memoKey, base);
-  return base;
-}
-
-function applyAnnotation(ctx, canvas, ann) {
-  if (ann.type === 'blur') {
-    const { x, y, w, h } = integerRect(ann.rect, canvas.width, canvas.height);
-    const tmp = document.createElement('canvas');
-    tmp.width = w;
-    tmp.height = h;
-    const tctx = tmp.getContext('2d');
-    tctx.drawImage(canvas, x, y, w, h, 0, 0, w, h);
-    ctx.save();
-    ctx.filter = 'blur(9px)';
-    ctx.drawImage(tmp, 0, 0, w, h, x, y, w, h);
-    ctx.restore();
-    return;
-  }
-
-  if (ann.type === 'highlight') {
-    const { x, y, w, h } = integerRect(ann.rect, canvas.width, canvas.height);
-    ctx.save();
-    ctx.fillStyle = 'rgba(255, 235, 59, 0.3)';
-    ctx.fillRect(x, y, w, h);
-    ctx.restore();
-    return;
-  }
-
-  if (ann.type === 'shape') {
-    const { x, y, w, h } = integerRect(ann.rect, canvas.width, canvas.height);
-    ctx.save();
-    ctx.strokeStyle = '#ef5350';
-    ctx.lineWidth = Math.max(2, Math.round(canvas.width / 900));
-    ctx.strokeRect(x, y, w, h);
-    ctx.restore();
-    return;
-  }
-
-  if (ann.type === 'text') {
-    ctx.save();
-    const size = Math.max(18, Math.round(canvas.width / 80));
-    ctx.font = `600 ${size}px ${UI_CANVAS_FONT_FAMILY}`;
-    ctx.lineWidth = Math.max(3, Math.round(size / 8));
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
-    ctx.fillStyle = '#fff7c2';
-    ctx.strokeText(ann.text, ann.x, ann.y);
-    ctx.fillText(ann.text, ann.x, ann.y);
-    ctx.restore();
-    return;
-  }
-
-  if (ann.type === 'emoji') {
-    ctx.save();
-    const size = Math.max(28, Math.round(canvas.width / 38));
-    ctx.font = `${size}px ${EMOJI_FONT_FAMILY}`;
-    ctx.fillText(ann.emoji, ann.x, ann.y);
-    ctx.restore();
-  }
-}
-
-function integerRect(rect, maxW, maxH) {
-  const x = clamp(Math.floor(rect.x), 0, maxW - 1);
-  const y = clamp(Math.floor(rect.y), 0, maxH - 1);
-  const w = clamp(Math.ceil(rect.w), 1, maxW - x);
-  const h = clamp(Math.ceil(rect.h), 1, maxH - y);
-  return { x, y, w, h };
-}
-
-function drawStampOverlay(ctx, width, height, url, timestamp) {
-  const line1 = safeText(url || '');
-  const line2 = new Date(timestamp).toLocaleString();
-  const fontSize = Math.max(12, Math.round(width / 95));
-  const pad = Math.max(8, Math.round(width / 160));
-  const gap = Math.round(fontSize * 0.35);
-
-  ctx.save();
-  ctx.font = `600 ${fontSize}px ${UI_CANVAS_FONT_FAMILY}`;
-  const w1 = ctx.measureText(line1).width;
-  const w2 = ctx.measureText(line2).width;
-  const boxW = Math.min(width - pad * 2, Math.max(w1, w2) + pad * 2);
-  const lineH = Math.round(fontSize * 1.25);
-  const boxH = lineH * 2 + gap + pad * 2;
-  const x = width - boxW - pad;
-  const y = height - boxH - pad;
-
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.58)';
-  ctx.fillRect(x, y, boxW, boxH);
-  ctx.fillStyle = 'rgba(255,255,255,0.92)';
-  ctx.fillText(trimToWidth(ctx, line1, boxW - pad * 2), x + pad, y + pad + lineH - 4);
-  ctx.fillStyle = 'rgba(255,255,255,0.8)';
-  ctx.fillText(trimToWidth(ctx, line2, boxW - pad * 2), x + pad, y + pad + lineH * 2 + gap - 4);
-  ctx.restore();
-}
-
-function safeText(s) {
-  return String(s).replace(/\s+/g, ' ').trim();
-}
-
-function trimToWidth(ctx, text, maxWidth) {
-  if (ctx.measureText(text).width <= maxWidth) return text;
-  let out = text;
-  while (out.length > 1 && ctx.measureText(`${out}…`).width > maxWidth) {
-    out = out.slice(0, -1);
-  }
-  return `${out}…`;
 }
 
 async function decodeImageToCanvas(blob) {
@@ -1071,4 +255,6 @@ function canvasToBlob(canvas, type, quality) {
   });
 }
 
+annotations.bindEvents();
+exportController.bindEvents();
 init();
