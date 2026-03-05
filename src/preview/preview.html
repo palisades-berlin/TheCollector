@@ -30,48 +30,48 @@
           <a class="sc-header-link" href="../options/options.html">Options</a>
         </nav>
         <label class="pdf-size-wrap" for="pdfPageSize">PDF size</label>
-        <select id="pdfPageSize" class="pdf-size" aria-label="PDF page size">
+        <select id="pdfPageSize" class="pdf-size sc-select" aria-label="PDF page size">
           <option value="auto">Auto</option>
           <option value="a4">A4</option>
           <option value="letter">Letter</option>
         </select>
-        <button id="downloadPng" class="btn-dl">
+        <button id="downloadPng" class="btn-dl sc-btn sc-btn-primary">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
           </svg>
           Save PNG
         </button>
-        <button id="downloadJpg" class="btn-dl btn-dl-secondary">
+        <button id="downloadJpg" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
           </svg>
           Save JPG
         </button>
-        <button id="downloadPdf" class="btn-dl btn-dl-secondary">
+        <button id="downloadPdf" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
           </svg>
           Save PDF
         </button>
-        <button id="copyImage" class="btn-dl btn-dl-secondary">Copy</button>
+        <button id="copyImage" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">Copy</button>
         <div class="preset-group" role="group" aria-label="Export presets">
           <button
             id="presetEmail"
-            class="btn-dl btn-dl-preset"
+            class="btn-dl btn-dl-preset sc-btn sc-btn-ghost"
             title="Export JPG and open email draft"
           >
             Preset: Email
           </button>
           <button
             id="presetDocs"
-            class="btn-dl btn-dl-preset"
+            class="btn-dl btn-dl-preset sc-btn sc-btn-ghost"
             title="Copy image resized for Google Docs limits"
           >
             Preset: Docs
           </button>
           <button
             id="presetPdfAuto"
-            class="btn-dl btn-dl-preset"
+            class="btn-dl btn-dl-preset sc-btn sc-btn-ghost"
             title="Export PDF using Auto page size"
           >
             Preset: PDF Auto
@@ -81,17 +81,19 @@
       </div>
     </div>
 
-    <div id="modeNotice" class="mode-notice hidden" role="status"></div>
+    <div id="modeNotice" class="mode-notice sc-banner sc-banner-warn hidden" role="status"></div>
 
     <div class="editbar">
       <span class="edit-label">Edit:</span>
-      <button id="toolCrop" class="btn-edit">Crop</button>
-      <button id="toolBlur" class="btn-edit">Blur</button>
-      <button id="toolHighlight" class="btn-edit">Highlight</button>
-      <button id="toolText" class="btn-edit">Text</button>
-      <button id="toolShape" class="btn-edit">Shape</button>
-      <button id="toolEmoji" class="btn-edit">Emoji</button>
-      <button id="clearEdits" class="btn-edit btn-edit-secondary">Clear edits</button>
+      <button id="toolCrop" class="btn-edit sc-btn sc-btn-sm">Crop</button>
+      <button id="toolBlur" class="btn-edit sc-btn sc-btn-sm">Blur</button>
+      <button id="toolHighlight" class="btn-edit sc-btn sc-btn-sm">Highlight</button>
+      <button id="toolText" class="btn-edit sc-btn sc-btn-sm">Text</button>
+      <button id="toolShape" class="btn-edit sc-btn sc-btn-sm">Shape</button>
+      <button id="toolEmoji" class="btn-edit sc-btn sc-btn-sm">Emoji</button>
+      <button id="clearEdits" class="btn-edit btn-edit-secondary sc-btn sc-btn-sm sc-btn-secondary">
+        Clear edits
+      </button>
       <label class="overlay-toggle">
         <input id="stampOverlay" type="checkbox" checked />
         Stamp URL + timestamp
@@ -99,7 +101,7 @@
     </div>
 
     <!-- Image area -->
-    <div id="imageContainer" class="image-container">
+    <div id="imageContainer" class="image-container" aria-busy="true">
       <div id="imageSkeleton" class="preview-skeleton sc-skeleton"></div>
       <div id="stage" class="stage hidden">
         <img id="screenshot" class="screenshot fit" alt="Full-page screenshot" />
@@ -107,8 +109,16 @@
       </div>
     </div>
 
-    <div id="loading" class="status-msg">Loading screenshot…</div>
-    <div id="errorMsg" class="status-msg error hidden"></div>
+    <div id="loading" class="status-msg sc-state-loading" role="status" aria-live="polite">
+      Loading screenshot…
+    </div>
+    <div
+      id="errorMsg"
+      class="status-msg error sc-banner sc-banner-error hidden"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    ></div>
 
     <script type="module" src="preview.js"></script>
   </body>

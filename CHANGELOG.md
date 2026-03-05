@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.6.0 - 2026-03-05
+
+- Implemented full Figma-exact UI parity pass (light mode) across popup, history/sidebar, options, and preview.
+- Design system and component ownership hardening:
+  - normalized shared design primitives in `src/shared/ui.css` (typography tiers, radius scale, control sizing)
+  - enforced `sc-*` shared primitives as baseline visual contract across surfaces
+  - reduced local per-surface component restyling to layout/context exceptions only.
+- Preview surface refactor:
+  - migrated preview controls/states to shared classes in `src/preview/preview.html`
+  - rebuilt `src/preview/preview.css` with `--preview-*` semantic tokens mapped to shared primitives
+  - aligned preview canvas text rendering baseline to Poppins and added busy-state signaling.
+- Visual parity gate added:
+  - added Playwright visual regression config and tests:
+    - `playwright.visual.config.mjs`
+    - `tests/visual/ui-parity.spec.mjs`
+    - baseline snapshots under `tests/visual/ui-parity.spec.mjs-snapshots/`
+  - added npm script `test:e2e:visual`
+  - wired CI to run visual parity checks (`maxDiffPixels <= 2`).
+- Documentation hardening:
+  - expanded `docs/ui-handoff.md` with a Figma mapping table (component/state -> class contract -> file mapping)
+  - updated `docs/dev-workflow.md` and `docs/architecture.md` with mandatory visual parity gate requirements.
+
 ## 1.5.6 - 2026-03-05
 
 - Completed handoff hardening pass (step 6) for design-system-driven implementation:

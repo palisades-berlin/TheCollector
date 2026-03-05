@@ -73,7 +73,9 @@ body {
 
 .card h2 {
   margin: 0 0 12px;
-  font-size: 15px;
+  font-size: var(--sc-font-h2-size);
+  font-weight: var(--sc-font-h2-weight);
+  line-height: var(--sc-lh-tight);
 }
 
 .row {
@@ -84,18 +86,14 @@ body {
   margin-bottom: 10px;
 }
 
+/* Exception: this is layout width control only; visual styling comes from `.sc-select`. */
 .row select {
   min-width: 170px;
-  padding: 6px 8px;
-  border-radius: var(--sc-r-sm);
-  border: 1.5px solid var(--sc-color-border-strong);
 }
 
+/* Exception: this is layout width control only; visual styling comes from `.sc-input`. */
 .text-input {
   min-width: 220px;
-  padding: 6px 8px;
-  border-radius: var(--sc-r-sm);
-  border: 1.5px solid var(--sc-color-border-strong);
 }
 
 .dir-picker {
@@ -133,36 +131,6 @@ body {
 .btns {
   display: flex;
   gap: 8px;
-}
-
-.btn {
-  border: 1.5px solid var(--sc-color-border-strong);
-  border-radius: var(--sc-r-sm);
-  background: var(--sc-color-surface);
-  color: var(--sc-color-text-strong);
-  padding: 7px 11px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background: var(--sc-color-surface-alt);
-  transform: translateY(-1px);
-}
-
-.btn-secondary {
-  color: var(--sc-color-text-muted);
-}
-
-.btn-primary {
-  background: var(--sc-color-primary);
-  color: var(--sc-color-surface);
-  border-color: var(--sc-color-primary);
-}
-
-.btn-primary:hover {
-  background: var(--sc-color-primary-strong);
 }
 
 .actions {
@@ -209,31 +177,7 @@ body {
   line-height: 1.35;
 }
 
+/* Badge visuals are provided by `.sc-pill*`; this keeps only shrink behavior in row layout. */
 .perm-badge {
   flex-shrink: 0;
-  padding: 3px 8px;
-  border-radius: var(--sc-r-pill);
-  font-size: 11px;
-  font-weight: 700;
-  border: 1px solid var(--sc-color-border-strong);
-  color: var(--sc-color-text-ui);
-  background: var(--sc-color-surface-soft);
-}
-
-.perm-badge.ok {
-  border-color: var(--sc-color-success-border);
-  color: var(--sc-color-success);
-  background: var(--sc-color-success-bg);
-}
-
-.perm-badge.off {
-  border-color: var(--sc-color-error-border);
-  color: var(--sc-color-danger);
-  background: var(--sc-color-error-bg);
-}
-
-.perm-badge.warn {
-  border-color: var(--sc-color-warning-border);
-  color: var(--sc-color-warning-strong);
-  background: var(--sc-color-warning-bg);
 }

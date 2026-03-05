@@ -1,17 +1,19 @@
 {
   "name": "the-collector",
-  "version": "1.5.6",
+  "version": "1.6.0",
   "private": true,
   "type": "module",
   "scripts": {
     "test:unit": "node tests/url-utils.test.mjs && node tests/url-history.test.mjs && node tests/filename.test.mjs && node tests/ui-state-validation.test.mjs && node tests/settings.test.mjs && node tests/history-utils.test.mjs && node tests/protocol-validate.test.mjs && node tests/history-filters.test.mjs && node tests/url-repo.test.mjs",
     "test:e2e:smoke": "node scripts/e2e-smoke.mjs",
+    "test:e2e:visual": "playwright test --config=playwright.visual.config.mjs",
     "test:e2e:manual": "node scripts/e2e-smoke.mjs --real-extension-manual",
     "lint": "eslint src tests",
     "format:check": "prettier --check .",
     "check": "npm run lint && npm run test:unit && npm run format:check"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "eslint": "^8.57.1",
     "playwright": "^1.53.2",
     "prettier": "^3.6.2"

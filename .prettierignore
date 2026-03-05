@@ -1,0 +1,4 @@
+.playwright-cli/
+test-results/
+output/
+tmp/

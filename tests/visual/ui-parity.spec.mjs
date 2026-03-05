@@ -1,0 +1,251 @@
+import fs from 'node:fs/promises';
+import http from 'node:http';
+import path from 'node:path';
+import { test, expect } from '@playwright/test';
+
+const ROOT = process.cwd();
+const HOST = '127.0.0.1';
+
+const MIME = {
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+};
+
+function createChromeStubInitScript() {
+  return () => {
+    const createEvent = () => ({
+      addListener: () => {},
+      removeListener: () => {},
+      hasListener: () => false,
+    });
+
+    const resolveStorageGet = (keys) => {
+      if (keys == null) return {};
+      if (Array.isArray(keys)) return Object.fromEntries(keys.map((k) => [k, undefined]));
+      if (typeof keys === 'string') return { [keys]: undefined };
+      if (typeof keys === 'object') return keys;
+      return {};
+    };
+
+    const storageArea = {
+      get: (keys, cb) => {
+        const value = resolveStorageGet(keys);
+        if (typeof cb === 'function') cb(value);
+        return Promise.resolve(value);
+      },
+      set: (_value, cb) => {
+        if (typeof cb === 'function') cb();
+        return Promise.resolve();
+      },
+      remove: (_keys, cb) => {
+        if (typeof cb === 'function') cb();
+        return Promise.resolve();
+      },
+      clear: (cb) => {
+        if (typeof cb === 'function') cb();
+        return Promise.resolve();
+      },
+    };
+
+    globalThis.chrome = {
+      runtime: {
+        sendMessage: async () => ({ ok: true }),
+        onMessage: createEvent(),
+        getURL: (p) => p,
+        openOptionsPage: async () => {},
+        lastError: null,
+      },
+      tabs: {
+        query: async () => [{ id: 1, url: 'https://example.com', active: true }],
+        create: async () => ({ id: 2 }),
+        sendMessage: async () => ({ ok: true }),
+      },
+      storage: {
+        local: storageArea,
+        sync: storageArea,
+      },
+      permissions: {
+        contains: async () => true,
+        request: async () => true,
+        remove: async () => true,
+      },
+      downloads: {
+        download: async () => 1,
+      },
+      commands: {
+        onCommand: createEvent(),
+      },
+      offscreen: {
+        hasDocument: async () => true,
+        createDocument: async () => {},
+        closeDocument: async () => {},
+      },
+      scripting: {
+        executeScript: async () => [],
+      },
+    };
+  };
+}
+
+function startStaticServer() {
+  const server = http.createServer(async (req, res) => {
+    try {
+      const reqPath = new URL(req.url || '/', `http://${HOST}`).pathname;
+      const cleanPath = reqPath === '/' ? '/README.md' : reqPath;
+      const fullPath = path.resolve(ROOT, `.${cleanPath}`);
+      if (!fullPath.startsWith(ROOT)) {
+        res.writeHead(403);
+        res.end('Forbidden');
+        return;
+      }
+
+      const content = await fs.readFile(fullPath);
+      const ext = path.extname(fullPath);
+      res.writeHead(200, { 'content-type': MIME[ext] || 'application/octet-stream' });
+      res.end(content);
+    } catch {
+      res.writeHead(404);
+      res.end('Not found');
+    }
+  });
+
+  return new Promise((resolve) => {
+    server.listen(0, HOST, () => {
+      const address = server.address();
+      resolve({ server, port: address.port });
+    });
+  });
+}
+
+test.describe('Figma parity snapshots', () => {
+  let server;
+  let port;
+  let baseUrl;
+
+  test.beforeAll(async () => {
+    const started = await startStaticServer();
+    server = started.server;
+    port = started.port;
+    baseUrl = `http://${HOST}:${port}`;
+  });
+
+  test.afterAll(async () => {
+    await new Promise((resolve) => server.close(resolve));
+  });
+
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(createChromeStubInitScript());
+  });
+
+  test('popup / capture + urls + states', async ({ page }) => {
+    await page.setViewportSize({ width: 400, height: 640 });
+    await page.goto(`${baseUrl}/src/popup/popup.html`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(200);
+
+    await expect(page).toHaveScreenshot('popup-capture-default.png');
+
+    await page.click('#urlsTabBtn');
+    await page.waitForTimeout(200);
+    await expect(page).toHaveScreenshot('popup-urls-default.png');
+
+    await page.evaluate(() => {
+      globalThis.document.getElementById('errorMsg').classList.remove('hidden');
+      globalThis.document.getElementById('errorMsg').textContent =
+        'Sync failed. Please sign in to continue.';
+      globalThis.document.getElementById('doneMsg').classList.add('hidden');
+      globalThis.document.getElementById('progress').classList.add('hidden');
+    });
+    await expect(page).toHaveScreenshot('popup-error-state.png');
+
+    await page.evaluate(() => {
+      globalThis.document.getElementById('errorMsg').classList.add('hidden');
+      const done = globalThis.document.getElementById('doneMsg');
+      done.classList.remove('hidden');
+      globalThis.document.getElementById('doneMsgText').textContent = 'Saved. Open in Sidebar.';
+    });
+    await expect(page).toHaveScreenshot('popup-success-state.png');
+  });
+
+  test('history / list + empty + loading + modal', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(`${baseUrl}/src/history/history.html`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(200);
+
+    await expect(page).toHaveScreenshot('history-default.png', { fullPage: true });
+
+    await page.evaluate(() => {
+      globalThis.document.getElementById('grid').classList.add('hidden');
+      globalThis.document.getElementById('empty').classList.remove('hidden');
+      globalThis.document.getElementById('loading').classList.add('hidden');
+      globalThis.document.getElementById('historySkeleton').classList.add('hidden');
+    });
+    await expect(page).toHaveScreenshot('history-empty.png', { fullPage: true });
+
+    await page.evaluate(() => {
+      globalThis.document.getElementById('empty').classList.add('hidden');
+      globalThis.document.getElementById('loading').classList.remove('hidden');
+    });
+    await expect(page).toHaveScreenshot('history-loading.png', { fullPage: true });
+
+    await page.evaluate(() => {
+      globalThis.document.getElementById('loading').classList.add('hidden');
+      globalThis.document.getElementById('filesOverlay').classList.remove('hidden');
+    });
+    await expect(page).toHaveScreenshot('history-modal-open.png', { fullPage: true });
+  });
+
+  test('options / default + save feedback + badge variants', async ({ page }) => {
+    await page.setViewportSize({ width: 1200, height: 900 });
+    await page.goto(`${baseUrl}/src/options/options.html`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(200);
+
+    await expect(page).toHaveScreenshot('options-default.png', { fullPage: true });
+
+    await page.evaluate(() => {
+      const status = globalThis.document.getElementById('status');
+      status.classList.remove('hidden');
+      status.classList.add('sc-banner-success');
+      status.textContent = 'Settings saved.';
+      globalThis.document.getElementById('perm-activeTab').classList.add('sc-pill-ok');
+      globalThis.document.getElementById('perm-tabs').classList.add('sc-pill-warn');
+      globalThis.document.getElementById('perm-downloads').classList.add('sc-pill-off');
+    });
+    await expect(page).toHaveScreenshot('options-feedback-state.png', { fullPage: true });
+  });
+
+  test('preview / default + edit mode + error', async ({ page }) => {
+    await page.setViewportSize({ width: 1360, height: 920 });
+    await page.goto(`${baseUrl}/src/preview/preview.html?id=missing`, {
+      waitUntil: 'domcontentloaded',
+    });
+    await page.waitForTimeout(200);
+
+    await expect(page).toHaveScreenshot('preview-error.png', { fullPage: true });
+
+    await page.evaluate(() => {
+      globalThis.document.getElementById('errorMsg').classList.add('hidden');
+      globalThis.document.getElementById('loading').classList.add('hidden');
+      globalThis.document.getElementById('stage').classList.remove('hidden');
+      const img = globalThis.document.getElementById('screenshot');
+      img.classList.remove('hidden');
+      img.src =
+        'data:image/svg+xml;utf8,' +
+        encodeURIComponent(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560"><rect width="100%" height="100%" fill="#f7fbff"/><rect x="64" y="64" width="832" height="432" rx="8" fill="#e3f2fd" stroke="#90caf9"/><text x="96" y="120" font-size="26" fill="#1565c0">Preview Canvas Placeholder</text></svg>'
+        );
+      globalThis.document.getElementById('dimensions').textContent = '960 × 560 px';
+      globalThis.document.getElementById('captureTime').textContent = '2026-03-05 14:00';
+      globalThis.document.getElementById('sourceUrl').textContent = 'https://example.com/article';
+      globalThis.document.getElementById('toolHighlight').classList.add('active');
+      globalThis.document.getElementById('modeNotice').classList.remove('hidden');
+      globalThis.document.getElementById('modeNotice').textContent =
+        'Captured using inner scroll-container mode.';
+    });
+
+    await expect(page).toHaveScreenshot('preview-edit-mode.png', { fullPage: true });
+  });
+});

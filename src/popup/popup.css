@@ -151,43 +151,19 @@ body {
 
 .btn-capture,
 .btn-add {
-  width: 100%;
-  padding: 10px 16px;
-  background: var(--popup-primary);
-  color: var(--popup-surface);
-  border: none;
-  border-radius: var(--popup-r-md);
-  font-size: 13px;
-  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
-  transition:
-    background 0.18s,
-    transform 0.1s,
-    box-shadow 0.18s;
 }
 
 .btn-add-all {
-  width: 100%;
-  padding: 8px 16px;
-  background: transparent;
-  color: var(--popup-primary);
-  border: 1.5px solid var(--popup-primary-soft-2);
-  border-radius: var(--popup-r-md);
-  font-size: 12px;
-  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition:
-    background 0.18s,
-    border-color 0.18s,
-    transform 0.1s;
 }
 
 .btn-capture:disabled {
@@ -195,22 +171,11 @@ body {
   cursor: not-allowed;
 }
 
-.btn-capture:hover:not(:disabled),
-.btn-add:hover {
-  background: var(--popup-primary-strong);
-  box-shadow: var(--sc-sh-card);
-}
-
 .btn-capture:active:not(:disabled),
 .btn-add:active,
 .btn-add-all:active {
   transform: scale(0.98);
   box-shadow: none;
-}
-
-.btn-add-all:hover {
-  background: var(--popup-primary-soft);
-  border-color: var(--popup-primary-border);
 }
 
 .progress,
@@ -295,30 +260,10 @@ body {
   gap: 4px;
 }
 
-kbd {
-  background: var(--popup-surface-alt);
-  color: var(--sc-color-info);
-  padding: 2px 6px;
-  border-radius: var(--sc-r-xs);
-  font-family: var(--sc-font-mono);
-  font-size: 10px;
-  border: 1px solid var(--popup-border-strong);
-}
-
 .btn-history,
 .btn-footer {
-  padding: var(--popup-control-padding);
-  border: 1.5px solid var(--popup-border-ui);
-  border-radius: var(--popup-r-sm);
-  background: var(--popup-surface);
-  color: var(--popup-text-secondary);
-  font-size: 11px;
-  font-weight: 600;
+  /* Exception: keep cursor for compatibility with dynamic URL rows created in JS. */
   cursor: pointer;
-  transition:
-    background 0.18s,
-    border-color 0.18s,
-    color 0.18s;
 }
 
 .btn-footer {
@@ -328,23 +273,6 @@ kbd {
 .btn-footer:disabled {
   cursor: not-allowed;
   opacity: 0.5;
-}
-
-.btn-footer.danger {
-  color: var(--sc-color-danger);
-  border-color: var(--popup-border-danger-soft);
-}
-
-.btn-history:hover,
-.btn-footer:hover:not(:disabled) {
-  background: var(--popup-surface-muted);
-  border-color: var(--popup-border-ui-strong);
-  transform: translateY(-1px);
-}
-
-.btn-footer.danger:hover {
-  background: var(--sc-color-error-bg);
-  border-color: var(--popup-border-danger);
 }
 
 .list-wrapper {

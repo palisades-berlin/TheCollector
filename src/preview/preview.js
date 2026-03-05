@@ -52,8 +52,7 @@ const toolButtons = {
   emoji: document.getElementById('toolEmoji'),
 };
 
-const UI_CANVAS_FONT_FAMILY =
-  '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+const UI_CANVAS_FONT_FAMILY = '"Poppins", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
 const EMOJI_FONT_FAMILY = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
 
 let currentBlob = null;
@@ -113,11 +112,13 @@ const exportController = createPreviewExportController({
 function showError(msg) {
   loadingEl.classList.add('hidden');
   imageSkeletonEl.classList.add('hidden');
+  imageContainer.setAttribute('aria-busy', 'false');
   errorMsgEl.textContent = msg;
   errorMsgEl.classList.remove('hidden');
 }
 
 async function init() {
+  imageContainer.setAttribute('aria-busy', 'true');
   if (!id) {
     showError('No screenshot ID in URL.');
     return;
@@ -210,6 +211,7 @@ async function setCurrentBlob(blob) {
     onImageReady: ({ naturalW, naturalH }) => {
       annotations.setNaturalSize(naturalW, naturalH);
       annotations.refreshOverlayCanvas();
+      imageContainer.setAttribute('aria-busy', 'false');
     },
   });
 }

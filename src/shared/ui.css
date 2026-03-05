@@ -71,8 +71,8 @@
   --sc-r-xs: 4px;
   --sc-r-sm-2: 6px;
   --sc-r-sm-3: 7px;
-  --sc-r-sm: 8px;
-  --sc-r-md: 12px;
+  --sc-r-sm: 4px;
+  --sc-r-md: 8px;
   --sc-r-lg: 16px;
   --sc-r-pill: 999px;
 
@@ -90,6 +90,18 @@
   --sc-focus-glow: 0 0 0 3px rgba(100, 181, 246, 0.22);
 
   --sc-focus: #64b5f6;
+  --sc-font-h1-size: 18px;
+  --sc-font-h1-weight: 700;
+  --sc-font-h2-size: 15px;
+  --sc-font-h2-weight: 700;
+  --sc-font-body-size: 13px;
+  --sc-font-body-weight: 400;
+  --sc-font-body-medium-weight: 500;
+  --sc-font-caption-size: 11px;
+  --sc-font-caption-weight: 500;
+  --sc-lh-tight: 1.2;
+  --sc-lh-body: 1.45;
+  --sc-lh-caption: 1.35;
 }
 
 :focus-visible {
@@ -188,12 +200,14 @@ button:hover,
 .sc-select {
   width: 100%;
   min-height: 32px;
-  padding: 7px 10px;
+  padding: 6px 10px;
   border: 1.5px solid var(--sc-color-border-strong);
   border-radius: var(--sc-r-sm);
   background: var(--sc-color-surface);
   color: var(--sc-color-text-strong);
-  font: inherit;
+  font-family: var(--sc-font-sans);
+  font-size: var(--sc-font-body-size);
+  line-height: var(--sc-lh-body);
 }
 
 .sc-input::placeholder {
@@ -216,9 +230,9 @@ button:hover,
   border-radius: var(--sc-r-sm);
   background: var(--sc-color-surface);
   color: var(--sc-color-text-strong);
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.2;
+  font-size: var(--sc-font-body-size);
+  font-weight: var(--sc-font-body-medium-weight);
+  line-height: var(--sc-lh-tight);
   min-height: 30px;
   padding: 7px 11px;
   cursor: pointer;
@@ -277,14 +291,14 @@ button:hover,
 
 .sc-btn-sm {
   min-height: 28px;
-  padding: 6px 10px;
-  font-size: 11px;
+  padding: 5px 9px;
+  font-size: var(--sc-font-caption-size);
 }
 
 .sc-btn-md {
   min-height: 34px;
-  padding: 9px 14px;
-  font-size: 13px;
+  padding: 8px 12px;
+  font-size: var(--sc-font-body-size);
 }
 
 .sc-btn-block {
@@ -303,8 +317,8 @@ button:hover,
   border-bottom: 2px solid transparent;
   background: transparent;
   color: var(--sc-color-text-subtle);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--sc-font-body-size);
+  font-weight: var(--sc-font-body-medium-weight);
   padding: 10px;
   cursor: pointer;
 }
@@ -324,7 +338,7 @@ button:hover,
   border: 1px solid var(--sc-color-border-strong);
   background: var(--sc-color-surface-soft);
   color: var(--sc-color-text-ui);
-  font-size: 11px;
+  font-size: var(--sc-font-caption-size);
   font-weight: 700;
   padding: 3px 8px;
 }
@@ -353,8 +367,8 @@ button:hover,
   border-radius: var(--sc-r-sm);
   background: var(--sc-color-surface-soft);
   color: var(--sc-color-text-secondary);
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: var(--sc-font-body-size);
+  line-height: var(--sc-lh-body);
   padding: 8px 10px;
 }
 

@@ -20,6 +20,7 @@ npm run lint
 npm run test:unit
 npx playwright install chromium
 npm run test:e2e:smoke
+npm run test:e2e:visual
 npm run test:e2e:manual
 npm run format:check
 npm run check
@@ -65,6 +66,9 @@ Packaging script guardrails:
 - Before introducing new screen-level styles, implement or update shared primitives/tokens in `src/shared/ui.css`.
 - Keep surface-level CSS tokenized (`--popup-*`, `--history-*`) and avoid new hardcoded visual values when an existing token exists.
 - Reference `docs/ui-handoff.md` for component/state/accessibility contracts used for engineering handoff.
+- Visual parity gate is mandatory for release candidates:
+  - run `npm run test:e2e:visual`
+  - screenshot diff threshold is `maxDiffPixels <= 2`.
 
 ## CI
 

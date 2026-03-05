@@ -67,6 +67,25 @@ Use these shared classes before creating surface-specific variants:
   - structure: `src/options/options.html`
   - styles: `src/options/options.css`
   - behavior: `src/options/options.js`
+- Preview surface:
+  - structure: `src/preview/preview.html`
+  - styles: `src/preview/preview.css`
+  - behavior: `src/preview/preview.js`
+
+## Figma Mapping Table
+
+| Figma Section/Component      | State/Variant                             | Code Class Contract                                                                                                                         | Primary Files                                                                                           |
+| ---------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Components / Button          | primary, secondary, ghost, danger; sm, md | `sc-btn` + variant + size (`sc-btn-primary`, `sc-btn-secondary`, `sc-btn-ghost`, `sc-btn-danger`, `sc-btn-sm`, `sc-btn-md`, `sc-btn-block`) | `src/shared/ui.css`, consumed in popup/history/options/preview HTML                                     |
+| Components / Input           | text/search/dropdown                      | `sc-input`, `sc-select`                                                                                                                     | `src/shared/ui.css`, `src/history/history.html`, `src/options/options.html`, `src/preview/preview.html` |
+| Components / Tabs            | horizontal tabs                           | `sc-tablist`, `sc-tab`                                                                                                                      | `src/shared/ui.css`, `src/popup/popup.html`                                                             |
+| Components / Pills/Tags      | status/info labels                        | `sc-pill` + `sc-pill-ok/warn/off`                                                                                                           | `src/shared/ui.css`, `src/history/history.html`, `src/options/options.html`                             |
+| Components / Toast + Banners | info/success/warn/error                   | `sc-banner` + variant classes; toast via `.sc-toast.*`                                                                                      | `src/shared/ui.css`, popup/history/options/preview HTML                                                 |
+| Components / Modal shell     | overlay dialog                            | `sc-modal`                                                                                                                                  | `src/shared/ui.css`, `src/history/history.html`                                                         |
+| Popup / Capture              | default/progress/success/error            | `sc-btn*`, `sc-banner*`, `sc-kbd` + `--popup-*` aliases                                                                                     | `src/popup/popup.html`, `src/popup/popup.css`                                                           |
+| Sidebar / History            | default/filter/empty/loading/overlay      | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-modal`, `sc-state-*` + `--history-*` aliases                                              | `src/history/history.html`, `src/history/history.css`                                                   |
+| Settings / Account           | default/status/permission badges          | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-pill*`, `sc-banner*`                                                                      | `src/options/options.html`, `src/options/options.css`                                                   |
+| Preview / Inspector          | toolbar/editing/loading/error             | `sc-btn*`, `sc-select`, `sc-banner*`, `sc-state-loading` + `--preview-*` aliases                                                            | `src/preview/preview.html`, `src/preview/preview.css`                                                   |
 
 ## Change Policy
 

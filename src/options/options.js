@@ -206,8 +206,14 @@ function setBadge(permission, text, variant) {
   const el = permBadgeEls[permission];
   if (!el) return;
   el.textContent = text;
+  el.classList.remove('sc-pill-ok', 'sc-pill-off', 'sc-pill-warn');
   el.classList.remove('ok', 'off', 'warn');
-  if (variant) el.classList.add(variant);
+  if (variant) {
+    el.classList.add(variant);
+    if (variant === 'ok') el.classList.add('sc-pill-ok');
+    if (variant === 'off') el.classList.add('sc-pill-off');
+    if (variant === 'warn') el.classList.add('sc-pill-warn');
+  }
 }
 
 function setupPermissionStatusRefresh() {

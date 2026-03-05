@@ -21,6 +21,10 @@ dist/
 
 # Build artifacts
 *.zip
+test-results/
+.playwright-cli/
+output/
+tmp/
 
 # Do not track per-release GitHub note files
 GITHUB_RELEASE_*.md

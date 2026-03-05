@@ -60,3 +60,4 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
 - Monolithic extension codebase with context-specific modules.
 - Orchestrator modules in each context wire focused helpers.
 - Repository abstraction centralizes storage access and lowers coupling to raw storage APIs.
+- UI parity is validated by Playwright visual regression tests (`npm run test:e2e:visual`) with `maxDiffPixels <= 2`.

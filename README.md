@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.5.6`.
+Current extension version: `1.6.0`.
 
 ## Overview
 
@@ -151,6 +151,7 @@ Canonical developer and release operations live in `docs/dev-workflow.md` to avo
 
 - install/setup
 - local quality checks
+- visual parity gate (`npm run test:e2e:visual`)
 - manual extension smoke (`npm run test:e2e:manual`)
 - release packaging + artifact rules
 

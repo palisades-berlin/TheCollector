@@ -205,19 +205,7 @@ body {
 .filter-item input,
 .filter-item select {
   width: 100%;
-  border: 1.5px solid var(--history-border-strong);
-  border-radius: var(--history-r-sm);
-  background: var(--history-surface);
-  color: var(--history-text-strong);
-  font-size: 12px;
-  padding: var(--history-control-padding);
-}
-
-.filter-item input:focus,
-.filter-item select:focus {
-  outline: none;
-  border-color: var(--history-primary-border);
-  box-shadow: var(--history-focus-ring);
+  /* Exception: only width/layout; visual style comes from `.sc-input` / `.sc-select`. */
 }
 
 .filter-actions {
@@ -382,28 +370,10 @@ body {
 /* ── Card action buttons ── */
 .btn-action {
   flex: 1;
-  padding: var(--history-control-padding-sm);
-  border: 1.5px solid var(--history-border-ui);
-  border-radius: var(--history-r-sm);
-  background: var(--history-surface);
-  color: var(--history-text-secondary);
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  transition:
-    background var(--history-t-mid) var(--history-ease),
-    border-color var(--history-t-mid) var(--history-ease),
-    color var(--history-t-mid) var(--history-ease);
-}
-
-.btn-action:hover {
-  background: var(--history-surface-muted);
-  border-color: var(--history-border-ui-strong);
-  transform: translateY(-1px);
 }
 
 .btn-open:hover {
@@ -598,24 +568,12 @@ body {
 }
 
 .btn-file {
-  padding: 8px 16px;
-  border: 1px solid var(--history-border-strong);
-  border-radius: var(--sc-r-sm-3);
-  background: var(--history-surface);
-  color: var(--history-text-secondary);
   font-size: 14px;
-  cursor: pointer;
 }
 
 .btn-file:disabled {
   opacity: 0.5;
   cursor: default;
-}
-
-.btn-file:not(:disabled):hover {
-  border-color: var(--history-primary-border);
-  background: var(--history-surface-alt);
-  transform: translateY(-1px);
 }
 
 .files-list {
