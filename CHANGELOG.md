@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.3.59 - 2026-03-05
+
+- Refactored CI into parallel jobs for clearer failure surface and faster feedback:
+  - `quality` job: `npm ci` + `npm run check`
+  - `e2e_smoke` job: Playwright smoke test flow
+  - `package` job depends on both and runs release packaging + artifact upload
+- Added Playwright browser caching in the e2e job (`actions/cache@v4`) for `~/.cache/ms-playwright`.
+- Updated CI browser install flow for fast-path behavior:
+  - cache miss: `npx playwright install --with-deps chromium`
+  - cache hit: `npx playwright install chromium` (lightweight validation/no-op path)
+
 ## 1.3.57 - 2026-03-05
 
 - Added lightweight Playwright e2e smoke coverage:
