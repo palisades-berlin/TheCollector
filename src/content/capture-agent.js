@@ -386,6 +386,24 @@
     return { ok: true };
   }
 
+  function validateScrollPayload(payload) {
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+      return { ok: false, error: 'Invalid scroll payload' };
+    }
+    const x = Number(payload.x);
+    const y = Number(payload.y);
+    if (!Number.isFinite(x) || !Number.isFinite(y)) {
+      return { ok: false, error: 'Invalid scroll coordinates' };
+    }
+    if (
+      payload.targetId != null &&
+      typeof payload.targetId !== 'string'
+    ) {
+      return { ok: false, error: 'Invalid target id' };
+    }
+    return { ok: true, value: { x, y, targetId: payload.targetId || null } };
+  }
+
   // ─── Message listener ───────────────────────────────────────────────────────
 
   chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
@@ -403,18 +421,26 @@
         break;
 
       case protocol.CS_SCROLL_TO:
+        {
+          const parsed = validateScrollPayload(payload);
+          if (!parsed.ok) {
+            sendResponse({ done: false, error: parsed.error });
+            break;
+          }
+          const { x, y, targetId } = parsed.value;
         if (
-          payload?.targetId &&
+          targetId &&
           activeTargetId &&
-          payload.targetId !== activeTargetId
+          targetId !== activeTargetId
         ) {
           sendResponse({ done: false, error: 'Capture target mismatch' });
           break;
         }
-        scrollAndSettle(payload.x, payload.y, (error) =>
+        scrollAndSettle(x, y, (error) =>
           sendResponse(error ? { done: false, error } : { done: true })
         );
         return true; // async — keep channel open
+        }
 
       case protocol.CS_RESTORE:
         restoreFixed();

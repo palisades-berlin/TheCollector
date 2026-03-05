@@ -7,11 +7,17 @@
 import { MSG } from '../shared/messages.js';
 import { MAX_CANVAS_SIDE } from '../shared/constants.js';
 import { getTiles, deleteTiles, saveScreenshot } from '../shared/db.js';
+import { validateOffscreenStitchPayload } from '../shared/protocol-validate.js';
 
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg.type !== MSG.OS_STITCH) return;
 
-  const { id, totalW, totalH, sourceUrl, title } = msg.payload;
+  const parsed = validateOffscreenStitchPayload(msg?.payload);
+  if (!parsed.ok) {
+    sendResponse({ ok: false, error: parsed.error });
+    return false;
+  }
+  const { id, totalW, totalH, sourceUrl, title } = parsed.value;
 
   stitch(id, totalW, totalH, sourceUrl, title)
     .then((result) => sendResponse({ ok: true, ...result }))

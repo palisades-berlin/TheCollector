@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.43 - 2026-03-05
+- Added shared protocol payload validation in `src/shared/protocol-validate.js` for:
+  - `CAPTURE_START`
+  - `PT_DOWNLOAD`
+  - `OS_STITCH`
+  - `CS_SCROLL_TO`
+- Integrated validation at runtime boundaries:
+  - service worker message handling
+  - offscreen stitch message handling
+  - content-script scroll message handling
+- Added focused unit tests in `tests/protocol-validate.test.mjs`.
+- Expanded local/CI unit test execution to include protocol validation tests.
+
 ## 1.3.42 - 2026-03-05
 - Added focused unit coverage for settings and history utilities:
   - `tests/settings.test.mjs`

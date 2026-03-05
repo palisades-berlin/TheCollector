@@ -24,3 +24,4 @@ jobs:
           node tests/ui-state-validation.test.mjs
           node tests/settings.test.mjs
           node tests/history-utils.test.mjs
+          node tests/protocol-validate.test.mjs

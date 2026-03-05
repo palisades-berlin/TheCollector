@@ -8,7 +8,10 @@ import {
 import { saveTile, deleteTiles, getScreenshot, saveScreenshot } from '../shared/db.js';
 import { buildDownloadFilename } from '../shared/filename.js';
 import { getSettings } from '../shared/settings.js';
-import { toPositiveInt } from '../shared/validation.js';
+import {
+  validateCaptureStartPayload,
+  validatePreviewDownloadPayload,
+} from '../shared/protocol-validate.js';
 import { createEnsureOffscreen } from './offscreen-manager.js';
 import {
   hasDownloadsPermission,
@@ -346,11 +349,12 @@ async function captureTab(tabId) {
 
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg.type === MSG.CAPTURE_START) {
-    const tabId = toPositiveInt(msg?.payload?.tabId);
-    if (!tabId) {
-      sendResponse({ ok: false, error: 'Invalid tab id' });
+    const parsed = validateCaptureStartPayload(msg?.payload);
+    if (!parsed.ok) {
+      sendResponse({ ok: false, error: parsed.error });
       return false;
     }
+    const tabId = parsed.value.tabId;
     captureTab(tabId)
       .then((id) => sendResponse({ ok: true, id }))
       .catch((err) => {
@@ -362,26 +366,27 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
 
   if (msg.type === MSG.PT_DOWNLOAD) {
     (async () => {
+      const parsed = validatePreviewDownloadPayload(msg?.payload);
+      if (!parsed.ok) {
+        throw new Error(parsed.error);
+      }
+
       const settings = await getSettings();
       if (!(await hasDownloadsPermission())) {
         throw new Error('Downloads permission not granted');
       }
-      const blob = msg.payload?.blob;
-      const ext = msg.payload?.ext === 'jpg' ? 'jpg' : msg.payload?.ext === 'pdf' ? 'pdf' : 'png';
-      if (!(blob instanceof Blob)) {
-        throw new Error('Download payload is missing blob data');
-      }
+      const { blob, ext, title, partIndex, partTotal } = parsed.value;
       const filename = buildDownloadFilename({
-        title: msg.payload?.title || 'screenshot',
-        index: Number(msg.payload?.partIndex || 0),
-        total: Math.max(1, Number(msg.payload?.partTotal || 1)),
+        title,
+        index: partIndex,
+        total: partTotal,
         ext,
         directory: settings.downloadDirectory,
       });
       await downloadBlob({
         blob,
         filename,
-        saveAs: Math.max(1, Number(msg.payload?.partTotal || 1)) > 1 ? false : Boolean(settings.saveAs),
+        saveAs: partTotal > 1 ? false : Boolean(settings.saveAs),
       });
       sendResponse({ ok: true });
     })().catch((err) => sendResponse({ ok: false, error: err.message }));
