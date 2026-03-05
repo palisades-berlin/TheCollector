@@ -4,19 +4,17 @@ import {
   getScreenshot,
   deleteScreenshots,
 } from '../shared/db.js';
-import { getSettings } from '../shared/settings.js';
 import { showToast } from '../shared/toast.js';
-import { downloadRecord } from './history-downloads.js';
 import {
   getRecordDomain,
   getRecordExportType,
   buildGroups,
-  buildRecordHints,
   formatDuration,
-  buildCardDiagnosticText,
-  formatBytes,
-  runWithConcurrency,
 } from './history-utils.js';
+import { createHistoryFilters, filterRecords } from './history-filters.js';
+import { createThumbLoader } from './history-thumbs.js';
+import { createHistoryCards } from './history-cards.js';
+import { createHistoryFilesOverlay } from './history-files-overlay.js';
 
 const gridEl = document.getElementById('grid');
 const emptyEl = document.getElementById('empty');
@@ -50,20 +48,8 @@ const CAPTURE_REPORTS_KEY = 'captureReports';
 let allRecords = [];
 let records = [];
 let groups = [];
-const selectedBaseIds = new Set();
-let filesOverlayClosing = false;
-const THUMB_LOAD_CONCURRENCY = 4;
-const thumbLoadQueue = [];
-let thumbLoadWorkers = 0;
 let captureReports = [];
 let dismissedCaptureDiagnosticKey = '';
-let filterDomainTimer = null;
-const filters = {
-  domain: '',
-  fromDate: '',
-  toDate: '',
-  type: 'all',
-};
 const compareSelection = [];
 const DEBUG_THUMB_QUEUE =
   new URLSearchParams(window.location.search).get('debugThumbQueue') === '1' ||
@@ -74,113 +60,114 @@ function logNonFatal(context, err) {
   console.debug('[THE Collector][non-fatal]', context, err);
 }
 
-init().catch((err) => {
-  if (historySkeletonEl) historySkeletonEl.classList.add('hidden');
-  loadingEl.classList.add('hidden');
-  filesStatusEl.textContent = `Failed to load history: ${err.message}`;
-  showToast(`Failed to load history: ${err.message}`, 'error', 3000);
+function openPreview(id) {
+  const url = chrome.runtime.getURL(`src/preview/preview.html?id=${id}`);
+  chrome.tabs.create({ url });
+}
+
+function openDiffPreview(baseId, compareId) {
+  const url = chrome.runtime.getURL(
+    `src/preview/preview.html?id=${encodeURIComponent(baseId)}&compareId=${encodeURIComponent(compareId)}&mode=diff`
+  );
+  chrome.tabs.create({ url });
+}
+
+function updateCount(filtered, total) {
+  if (total === 0) {
+    countEl.textContent = '';
+    return;
+  }
+  if (total > filtered) {
+    countEl.textContent = `· ${filtered} of ${total} screenshots`;
+    return;
+  }
+  countEl.textContent = `· ${filtered} screenshot${filtered !== 1 ? 's' : ''}`;
+}
+
+function updateCompareUi() {
+  const selected = compareSelection.length;
+  if (compareBtn) {
+    compareBtn.textContent = `Compare (${selected}/2)`;
+    compareBtn.disabled = selected !== 2;
+  }
+}
+
+function toggleCompareSelection(id) {
+  const idx = compareSelection.indexOf(id);
+  if (idx !== -1) {
+    compareSelection.splice(idx, 1);
+    renderMainView();
+    updateCompareUi();
+    return;
+  }
+  compareSelection.push(id);
+  if (compareSelection.length > 2) compareSelection.shift();
+  renderMainView();
+  updateCompareUi();
+}
+
+const thumbLoader = createThumbLoader({
+  getScreenshot,
+  deleteScreenshots,
+  logNonFatal,
+  debugEnabled: DEBUG_THUMB_QUEUE,
+  concurrency: 4,
 });
 
-async function init() {
-  wireFilters();
-  await refreshAll();
-}
+const cards = createHistoryCards({
+  cardTpl,
+  enqueueThumbLoad: (id, canvasEl) => thumbLoader.enqueue(id, canvasEl),
+  openPreview,
+  deleteScreenshots,
+  refreshAll: () => refreshAll(),
+  compareSelection,
+  toggleCompareSelection,
+});
 
-async function refreshAll() {
-  captureReports = await loadCaptureReports();
-  try {
-    allRecords = await listScreenshotMeta();
-  } catch (err) {
-    // Safety net for old/partial DB schema states.
-    if (String(err?.message || '').includes('object stores was not found')) {
-      const full = await listScreenshots();
-      allRecords = full.map((r) => ({
-        ...r,
-        byteSize: r.blob?.size || 0,
-        blobType: r.blobType || r.blob?.type || 'image/png',
-      }));
-    } else {
-      throw err;
-    }
-  }
-  allRecords.sort((a, b) => b.timestamp - a.timestamp);
-  applyFilters();
-  if (historySkeletonEl) historySkeletonEl.classList.add('hidden');
-  loadingEl.classList.add('hidden');
-  renderCaptureDiagnostics();
-  renderMainView();
-  renderFilesOverlay(true);
-}
+const filesOverlay = createHistoryFilesOverlay({
+  els: {
+    filesOverlayEl,
+    openFilesBtn,
+    closeFilesBtn,
+    filesListEl,
+    filesStatusEl,
+    selectAllEl,
+    selectedCountEl,
+    downloadSelectedBtn,
+    deleteSelectedBtn,
+    fileRowTpl,
+  },
+  getGroups: () => groups,
+  getAllRecords: () => allRecords,
+  getScreenshot,
+  deleteScreenshots,
+  openPreview,
+  refreshAll: () => refreshAll(),
+});
 
-function wireFilters() {
-  filterDomainEl.addEventListener('input', () => {
-    if (filterDomainTimer) clearTimeout(filterDomainTimer);
-    filterDomainTimer = setTimeout(() => {
-      filters.domain = String(filterDomainEl.value || '').trim().toLowerCase();
-      applyFiltersAndRender();
-      filterDomainTimer = null;
-    }, 150);
-  });
-  filterFromEl.addEventListener('change', () => {
-    filters.fromDate = filterFromEl.value || '';
-    applyFiltersAndRender();
-  });
-  filterToEl.addEventListener('change', () => {
-    filters.toDate = filterToEl.value || '';
-    applyFiltersAndRender();
-  });
-  filterTypeEl.addEventListener('change', () => {
-    filters.type = filterTypeEl.value || 'all';
-    applyFiltersAndRender();
-  });
-  resetFiltersBtn.addEventListener('click', () => {
-    if (filterDomainTimer) {
-      clearTimeout(filterDomainTimer);
-      filterDomainTimer = null;
-    }
-    filterDomainEl.value = '';
-    filterFromEl.value = '';
-    filterToEl.value = '';
-    filterTypeEl.value = 'all';
-    filters.domain = '';
-    filters.fromDate = '';
-    filters.toDate = '';
-    filters.type = 'all';
-    applyFiltersAndRender(true);
-  });
+function applyFilters() {
+  records = filterRecords(allRecords, filters.getFilters(), getRecordDomain, getRecordExportType);
+  groups = buildGroups(records);
+  compareSelection.length = 0;
 }
 
 function applyFiltersAndRender(resetSelection = false) {
   applyFilters();
   renderMainView();
-  renderFilesOverlay(resetSelection);
+  filesOverlay.renderFilesOverlay(resetSelection);
 }
 
-function applyFilters() {
-  const fromTs = filters.fromDate
-    ? new Date(`${filters.fromDate}T00:00:00`).getTime()
-    : null;
-  const toTs = filters.toDate
-    ? new Date(`${filters.toDate}T23:59:59.999`).getTime()
-    : null;
-  records = allRecords.filter((record) => {
-    if (filters.domain) {
-      const domain = getRecordDomain(record);
-      if (!domain.includes(filters.domain)) return false;
-    }
-    if (fromTs !== null && Number(record.timestamp || 0) < fromTs) return false;
-    if (toTs !== null && Number(record.timestamp || 0) > toTs) return false;
-    if (filters.type !== 'all' && getRecordExportType(record) !== filters.type) return false;
-    return true;
-  });
-  groups = buildGroups(records);
-  selectedBaseIds.clear();
-  compareSelection.length = 0;
-}
+const filters = createHistoryFilters({
+  filterDomainEl,
+  filterFromEl,
+  filterToEl,
+  filterTypeEl,
+  resetFiltersBtn,
+  onChange: (resetSelection) => applyFiltersAndRender(resetSelection),
+});
 
 function renderMainView() {
-  thumbLoadQueue.length = 0;
-  debugThumbQueue('reset');
+  thumbLoader.resetQueue();
   gridEl.innerHTML = '';
   const hasAnyRecords = allRecords.length > 0;
 
@@ -204,66 +191,10 @@ function renderMainView() {
 
   const fragment = document.createDocumentFragment();
   for (const record of records) {
-    fragment.appendChild(buildCard(record));
+    fragment.appendChild(cards.buildCard(record));
   }
   gridEl.appendChild(fragment);
   updateCompareUi();
-}
-
-function buildCard(record) {
-  const node = cardTpl.content.cloneNode(true);
-  const card = node.querySelector('.card');
-  const canvas = node.querySelector('.thumb-canvas');
-  const urlEl = node.querySelector('.card-url');
-  const metaEl = node.querySelector('.card-meta');
-  const diagnosticEl = node.querySelector('.card-diagnostic');
-  const openBtn = node.querySelector('.btn-open');
-  const deleteBtn = node.querySelector('.btn-delete');
-
-  canvas.classList.remove('thumb-broken');
-  enqueueThumbLoad(record.id, canvas);
-
-  try {
-    urlEl.textContent = new URL(record.url).hostname;
-    urlEl.title = record.url;
-  } catch {
-    urlEl.textContent = record.url;
-  }
-  const hints = buildRecordHints(record);
-  const suffix = hints.length ? ` · ${hints.join(' · ')}` : '';
-  metaEl.textContent =
-    `${new Date(record.timestamp).toLocaleDateString()} · ${record.width}×${record.height}px${suffix}`;
-  const diagnosticText = buildCardDiagnosticText(record);
-  if (diagnosticText) {
-    diagnosticEl.textContent = diagnosticText;
-    diagnosticEl.classList.remove('hidden');
-  } else {
-    diagnosticEl.classList.add('hidden');
-  }
-
-  card.addEventListener('click', (e) => {
-    if (e.target.closest('button')) return;
-    openPreview(record.id);
-  });
-  const compareCardBtn = node.querySelector('.btn-compare');
-  const selectedIdx = compareSelection.indexOf(record.id);
-  const selected = selectedIdx !== -1;
-  card.classList.toggle('compare-selected', selected);
-  compareCardBtn.classList.toggle('active', selected);
-  compareCardBtn.textContent = selected ? `Selected ${selectedIdx + 1}` : 'Compare';
-  compareCardBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleCompareSelection(record.id);
-  });
-  openBtn.addEventListener('click', () => openPreview(record.id));
-  deleteBtn.addEventListener('click', async (e) => {
-    e.stopPropagation();
-    if (!confirm('Delete screenshot file? This cannot be undone.')) return;
-    await deleteScreenshots([record.id]);
-    await refreshAll();
-  });
-
-  return node;
 }
 
 async function loadCaptureReports() {
@@ -317,7 +248,7 @@ function buildFriendlyCaptureFailureText({ error, durationPart, tilePart }) {
   if (
     lower.includes('chrome://') ||
     lower.includes('edge://') ||
-    lower.includes('cannot access') && lower.includes('url')
+    (lower.includes('cannot access') && lower.includes('url'))
   ) {
     return `${details} This page is restricted by the browser. Open a regular website tab and try again.`;
   }
@@ -346,303 +277,6 @@ captureDiagnosticsDismissEl?.addEventListener('click', () => {
   captureDiagnosticsEl?.classList.add('hidden');
 });
 
-function openPreview(id) {
-  const url = chrome.runtime.getURL(`src/preview/preview.html?id=${id}`);
-  chrome.tabs.create({ url });
-}
-
-function openDiffPreview(baseId, compareId) {
-  const url = chrome.runtime.getURL(
-    `src/preview/preview.html?id=${encodeURIComponent(baseId)}&compareId=${encodeURIComponent(compareId)}&mode=diff`
-  );
-  chrome.tabs.create({ url });
-}
-
-function toggleCompareSelection(id) {
-  const idx = compareSelection.indexOf(id);
-  if (idx !== -1) {
-    compareSelection.splice(idx, 1);
-    renderMainView();
-    updateCompareUi();
-    return;
-  }
-  compareSelection.push(id);
-  if (compareSelection.length > 2) compareSelection.shift();
-  renderMainView();
-  updateCompareUi();
-}
-
-function updateCompareUi() {
-  const selected = compareSelection.length;
-  if (compareBtn) {
-    compareBtn.textContent = `Compare (${selected}/2)`;
-    compareBtn.disabled = selected !== 2;
-  }
-}
-
-function updateCount(filtered, total) {
-  if (total === 0) {
-    countEl.textContent = '';
-    return;
-  }
-  if (total > filtered) {
-    countEl.textContent = `· ${filtered} of ${total} screenshots`;
-    return;
-  }
-  countEl.textContent = `· ${filtered} screenshot${filtered !== 1 ? 's' : ''}`;
-}
-
-function enqueueThumbLoad(id, canvasEl) {
-  thumbLoadQueue.push({ id, canvasEl });
-  debugThumbQueue('enqueue', { id });
-  drainThumbLoadQueue();
-}
-
-function drainThumbLoadQueue() {
-  while (thumbLoadWorkers < THUMB_LOAD_CONCURRENCY && thumbLoadQueue.length > 0) {
-    const next = thumbLoadQueue.shift();
-    thumbLoadWorkers++;
-    debugThumbQueue('start', { id: next.id });
-    loadCardThumbWhenReady(next.id, next.canvasEl)
-      .catch(() => {
-        const canvas = next.canvasEl;
-        if (canvas?.isConnected) {
-          const ctx = canvas.getContext('2d');
-          if (ctx) ctx.clearRect(0, 0, canvas.width || 1, canvas.height || 1);
-          canvas.classList.add('thumb-broken');
-        }
-        debugThumbQueue('error', { id: next.id });
-      })
-      .finally(() => {
-        thumbLoadWorkers--;
-        debugThumbQueue('done', { id: next.id });
-        drainThumbLoadQueue();
-      });
-  }
-}
-
-function debugThumbQueue(event, extra = {}) {
-  if (!DEBUG_THUMB_QUEUE) return;
-  console.debug('[THE Collector][HistoryThumbQueue]', {
-    event,
-    queueDepth: thumbLoadQueue.length,
-    activeWorkers: thumbLoadWorkers,
-    ...extra,
-  });
-}
-
-async function loadCardThumb(id, canvasEl) {
-  if (!canvasEl?.isConnected) return;
-  const record = await getScreenshot(id);
-  if (!record?.blob) {
-    await deleteScreenshots([id]).catch((err) => logNonFatal('deleteScreenshots', err));
-    return;
-  }
-  const thumbBlob =
-    record.thumbBlob instanceof Blob && record.thumbBlob.size > 0
-      ? record.thumbBlob
-      : record.blob;
-  const bitmap = await createImageBitmap(thumbBlob);
-  try {
-    if (!canvasEl.isConnected) return;
-    drawThumbBitmapCover(canvasEl, bitmap);
-  } finally {
-    if (typeof bitmap.close === 'function') bitmap.close();
-  }
-}
-
-async function loadCardThumbWhenReady(id, canvasEl) {
-  if (!canvasEl) return;
-  // buildCard runs before insertion into the grid; wait until mounted + laid out.
-  for (let i = 0; i < 10; i++) {
-    if (canvasEl.isConnected && canvasEl.clientWidth > 0 && canvasEl.clientHeight > 0) {
-      break;
-    }
-    await nextFrame();
-  }
-  await loadCardThumb(id, canvasEl);
-}
-
-function nextFrame() {
-  return new Promise((resolve) => requestAnimationFrame(() => resolve()));
-}
-
-function drawThumbBitmapCover(canvas, bitmap) {
-  const targetW = Math.max(1, canvas.clientWidth || 320);
-  const targetH = Math.max(1, canvas.clientHeight || 240);
-  const ratio = Math.max(targetW / bitmap.width, targetH / bitmap.height);
-  const drawW = Math.max(1, Math.round(bitmap.width * ratio));
-  const drawH = Math.max(1, Math.round(bitmap.height * ratio));
-  const dx = Math.round((targetW - drawW) / 2);
-  const dy = Math.round((targetH - drawH) / 2);
-
-  canvas.width = targetW;
-  canvas.height = targetH;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-  ctx.clearRect(0, 0, targetW, targetH);
-  ctx.drawImage(bitmap, dx, dy, drawW, drawH);
-}
-
-// ─── Files overlay ───────────────────────────────────────────────────────────
-
-function renderFilesOverlay(resetSelection = false) {
-  filesListEl.innerHTML = '';
-  if (resetSelection) selectedBaseIds.clear();
-
-  const fragment = document.createDocumentFragment();
-  for (const group of groups) {
-    const node = fileRowTpl.content.cloneNode(true);
-    const row = node.querySelector('.file-row');
-    const check = node.querySelector('.file-check');
-    const link = node.querySelector('.file-link');
-    const sizeEl = node.querySelector('.file-size');
-    const dateEl = node.querySelector('.file-date');
-
-    row.dataset.baseId = group.baseId;
-    check.checked = selectedBaseIds.has(group.baseId);
-    check.addEventListener('change', () => {
-      if (check.checked) selectedBaseIds.add(group.baseId);
-      else selectedBaseIds.delete(group.baseId);
-      updateSelectionUi();
-    });
-
-    const record = group.records[0];
-    const hints = buildRecordHints(record);
-    const suffix = hints.length ? ` (${hints.join(', ')})` : '';
-    link.textContent = `${group.url || '(no source URL)'}${suffix}`;
-    link.title = group.url;
-    link.addEventListener('click', () => openPreview(group.previewId));
-
-    sizeEl.textContent = formatBytes(group.totalBytes);
-    dateEl.textContent = new Date(group.timestamp).toLocaleString();
-
-    fragment.appendChild(node);
-  }
-  filesListEl.appendChild(fragment);
-
-  filesStatusEl.textContent = '';
-  updateSelectionUi();
-}
-
-function updateSelectionUi() {
-  const selected = selectedBaseIds.size;
-  selectedCountEl.textContent = `(${selected} Selected)`;
-  downloadSelectedBtn.disabled = selected === 0;
-  deleteSelectedBtn.disabled = selected === 0;
-  selectAllEl.checked = groups.length > 0 && selected === groups.length;
-  selectAllEl.indeterminate = selected > 0 && selected < groups.length;
-}
-
-openFilesBtn.addEventListener('click', () => {
-  if (!filesOverlayEl.classList.contains('hidden')) return;
-  filesOverlayEl.classList.remove('hidden');
-  filesOverlayEl.classList.remove('leaving');
-  filesOverlayEl.classList.add('entering');
-  setTimeout(() => filesOverlayEl.classList.remove('entering'), 230);
-});
-
-closeFilesBtn.addEventListener('click', () => {
-  closeFilesOverlay();
-});
-
-filesOverlayEl.addEventListener('click', (e) => {
-  if (e.target === filesOverlayEl) closeFilesOverlay();
-});
-
-window.addEventListener('keydown', (e) => {
-  if (e.key !== 'Escape') return;
-  if (!filesOverlayEl.classList.contains('hidden')) {
-    closeFilesOverlay();
-  }
-});
-
-function closeFilesOverlay() {
-  if (filesOverlayEl.classList.contains('hidden')) return;
-  if (filesOverlayClosing) return;
-  filesOverlayClosing = true;
-  filesOverlayEl.classList.remove('entering');
-  filesOverlayEl.classList.add('leaving');
-  setTimeout(() => {
-    filesOverlayEl.classList.add('hidden');
-    filesOverlayEl.classList.remove('leaving');
-    filesOverlayClosing = false;
-  }, 190);
-}
-
-selectAllEl.addEventListener('change', () => {
-  selectedBaseIds.clear();
-  if (selectAllEl.checked) {
-    for (const g of groups) selectedBaseIds.add(g.baseId);
-  }
-  renderFilesOverlay(false);
-});
-
-downloadSelectedBtn.addEventListener('click', async () => {
-  const selectedGroups = groups.filter((g) => selectedBaseIds.has(g.baseId));
-  if (selectedGroups.length === 0) return;
-  const totalSelectedFiles = selectedGroups.reduce(
-    (sum, group) => sum + group.records.length,
-    0
-  );
-  const allowSaveAs = totalSelectedFiles === 1;
-
-  downloadSelectedBtn.disabled = true;
-  filesStatusEl.textContent = `Downloading ${selectedGroups.length} selected item(s)…`;
-  try {
-    const settings = await getSettings();
-    const jobs = [];
-    for (const group of selectedGroups) {
-      for (let idx = 0; idx < group.records.length; idx++) {
-        jobs.push({
-          id: group.records[idx].id,
-          partIndex: idx,
-          partTotal: group.records.length,
-          titleHint: group.url || group.records[idx].title || 'screenshot',
-        });
-      }
-    }
-    await runWithConcurrency(jobs, 2, async (job) => {
-      const fullRecord = await getScreenshot(job.id);
-      if (!fullRecord?.blob) throw new Error(`Missing screenshot data: ${job.id}`);
-      await downloadRecord({
-        record: fullRecord,
-        settings,
-        partIndex: job.partIndex,
-        partTotal: job.partTotal,
-        titleHint: job.titleHint,
-        allowSaveAs,
-      });
-    });
-    filesStatusEl.textContent = 'Download completed.';
-    showToast('Download completed.', 'success');
-  } catch (err) {
-    filesStatusEl.textContent = `Download failed: ${err.message}`;
-    showToast(`Download failed: ${err.message}`, 'error', 3200);
-  } finally {
-    updateSelectionUi();
-  }
-});
-
-deleteSelectedBtn.addEventListener('click', async () => {
-  const selectedGroups = groups.filter((g) => selectedBaseIds.has(g.baseId));
-  if (selectedGroups.length === 0) return;
-  const total = selectedGroups.reduce((sum, g) => sum + g.records.length, 0);
-  if (!confirm(`Delete ${total} screenshot file(s)? This cannot be undone.`)) return;
-
-  try {
-    const ids = selectedGroups.flatMap((group) => group.records.map((record) => record.id));
-    await deleteScreenshots(ids);
-    filesStatusEl.textContent = 'Selected files deleted.';
-    showToast('Selected files deleted.', 'success');
-    await refreshAll();
-  } catch (err) {
-    filesStatusEl.textContent = `Delete failed: ${err.message}`;
-    showToast(`Delete failed: ${err.message}`, 'error', 3200);
-    updateSelectionUi();
-  }
-});
-
 clearAllBtn.addEventListener('click', async () => {
   const total = allRecords.length;
   if (!confirm(`Delete all ${total} screenshot${total !== 1 ? 's' : ''}? This cannot be undone.`)) return;
@@ -656,4 +290,42 @@ compareBtn?.addEventListener('click', () => {
   if (compareSelection.length !== 2) return;
   const [first, second] = compareSelection;
   openDiffPreview(first, second);
+});
+
+async function refreshAll() {
+  captureReports = await loadCaptureReports();
+  try {
+    allRecords = await listScreenshotMeta();
+  } catch (err) {
+    if (String(err?.message || '').includes('object stores was not found')) {
+      const full = await listScreenshots();
+      allRecords = full.map((r) => ({
+        ...r,
+        byteSize: r.blob?.size || 0,
+        blobType: r.blobType || r.blob?.type || 'image/png',
+      }));
+    } else {
+      throw err;
+    }
+  }
+  allRecords.sort((a, b) => b.timestamp - a.timestamp);
+  applyFilters();
+  if (historySkeletonEl) historySkeletonEl.classList.add('hidden');
+  loadingEl.classList.add('hidden');
+  renderCaptureDiagnostics();
+  renderMainView();
+  filesOverlay.renderFilesOverlay(true);
+}
+
+async function init() {
+  filters.wireFilters();
+  filesOverlay.wireEvents();
+  await refreshAll();
+}
+
+init().catch((err) => {
+  if (historySkeletonEl) historySkeletonEl.classList.add('hidden');
+  loadingEl.classList.add('hidden');
+  filesStatusEl.textContent = `Failed to load history: ${err.message}`;
+  showToast(`Failed to load history: ${err.message}`, 'error', 3000);
 });

@@ -1,0 +1,61 @@
+import assert from 'node:assert/strict';
+import { filterRecords } from '../src/history/history-filters.js';
+
+function test(name, fn) {
+  try {
+    fn();
+    process.stdout.write(`PASS ${name}\n`);
+  } catch (err) {
+    process.stderr.write(`FAIL ${name}\n${err.stack}\n`);
+    process.exitCode = 1;
+  }
+}
+
+const sample = [
+  {
+    id: 'a',
+    url: 'https://example.com/a',
+    timestamp: new Date('2026-03-01T09:00:00Z').getTime(),
+    blobType: 'image/png',
+  },
+  {
+    id: 'b',
+    url: 'https://sub.example.com/b',
+    timestamp: new Date('2026-03-02T10:00:00Z').getTime(),
+    blobType: 'image/jpeg',
+  },
+  {
+    id: 'c',
+    url: 'https://other.com/c',
+    timestamp: new Date('2026-03-03T11:00:00Z').getTime(),
+    blobType: 'application/pdf',
+  },
+];
+
+const getDomain = (record) => new URL(record.url).hostname.toLowerCase();
+const getType = (record) => {
+  const type = String(record.blobType || '').toLowerCase();
+  if (type.includes('pdf')) return 'pdf';
+  if (type.includes('jpeg') || type.includes('jpg')) return 'jpg';
+  return 'png';
+};
+
+test('filterRecords applies domain filter', () => {
+  const out = filterRecords(
+    sample,
+    { domain: 'example.com', fromDate: '', toDate: '', type: 'all' },
+    getDomain,
+    getType
+  );
+  assert.deepEqual(out.map((r) => r.id), ['a', 'b']);
+});
+
+test('filterRecords applies date range and type filters', () => {
+  const out = filterRecords(
+    sample,
+    { domain: '', fromDate: '2026-03-02', toDate: '2026-03-03', type: 'pdf' },
+    getDomain,
+    getType
+  );
+  assert.deepEqual(out.map((r) => r.id), ['c']);
+});

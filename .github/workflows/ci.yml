@@ -25,3 +25,4 @@ jobs:
           node tests/settings.test.mjs
           node tests/history-utils.test.mjs
           node tests/protocol-validate.test.mjs
+          node tests/history-filters.test.mjs

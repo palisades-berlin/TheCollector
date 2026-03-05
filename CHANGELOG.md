@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.47 - 2026-03-05
+- Refactored History page into focused modules while preserving behavior:
+  - `src/history/history-filters.js`
+  - `src/history/history-thumbs.js`
+  - `src/history/history-cards.js`
+  - `src/history/history-files-overlay.js`
+- Converted `src/history/history.js` into an orchestration layer.
+- Added focused unit tests for extracted filter logic in `tests/history-filters.test.mjs`.
+- Expanded local/CI unit test runs to include history filter tests.
+
 ## 1.3.46 - 2026-03-05
 - Improved History diagnostics banner wording to be more user-friendly and action-oriented.
 - Added clearer guidance for common failure causes (restricted pages, concurrent capture, target changes, and rate limits).
