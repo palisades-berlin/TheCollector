@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.53 - 2026-03-05
+
+- Updated CI workflow to run the full quality gate on push/PR:
+  - install dependencies with `npm ci`
+  - run unified checks with `npm run check` (lint + unit tests + format check)
+- Replaced the previous CI-only unit-test command list with the shared project check command to keep local and CI validation aligned.
+
 ## 1.3.52 - 2026-03-05
 
 - Cleared remaining ESLint blockers so `npm run lint` passes:
