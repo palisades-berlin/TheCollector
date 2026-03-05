@@ -22,5 +22,8 @@ dist/
 # Build artifacts
 *.zip
 
+# Do not track per-release GitHub note files
+GITHUB_RELEASE_*.md
+
 # Local maintainer notes
 CLAUDE.md

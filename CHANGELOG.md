@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.23 - 2026-03-05
+- Removed all `GITHUB_RELEASE_*.md` files from the repository.
+- Added `.gitignore` rule to prevent `GITHUB_RELEASE_*.md` files from being tracked again.
+- Documented release-notes policy in `README.md` (`CHANGELOG.md` is the single source).
+
 ## 1.3.22 - 2026-03-05
 - Improved History rendering performance without behavior changes:
   - switched main screenshot grid rendering to `DocumentFragment` batching
