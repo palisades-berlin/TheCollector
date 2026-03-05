@@ -85,7 +85,9 @@ grantDownloadsBtn.addEventListener('click', async () => {
 revokeDownloadsBtn.addEventListener('click', async () => {
   try {
     const removed = await chrome.permissions.remove({ permissions: ['downloads'] });
-    showStatus(removed ? 'Downloads permission revoked.' : 'Downloads permission could not be revoked.');
+    showStatus(
+      removed ? 'Downloads permission revoked.' : 'Downloads permission could not be revoked.'
+    );
     showToast(
       removed ? 'Downloads permission revoked.' : 'Downloads permission could not be revoked.',
       removed ? 'success' : 'info'
@@ -139,7 +141,11 @@ async function refreshPermissionStatus() {
   downloadsStatusEl.textContent = `Downloads permission: ${hasDownloads ? 'granted' : 'not granted'}`;
   grantDownloadsBtn.disabled = hasDownloads;
   revokeDownloadsBtn.disabled = !hasDownloads;
-  setBadge('downloads', hasDownloads ? 'Optional: On' : 'Optional: Off', hasDownloads ? 'ok' : 'off');
+  setBadge(
+    'downloads',
+    hasDownloads ? 'Optional: On' : 'Optional: Off',
+    hasDownloads ? 'ok' : 'off'
+  );
   await refreshCorePermissionBadges();
 }
 
@@ -156,7 +162,14 @@ async function hasPermission(permission) {
 }
 
 async function refreshCorePermissionBadges() {
-  const requiredPermissions = ['activeTab', 'tabs', 'scripting', 'storage', 'offscreen', 'unlimitedStorage'];
+  const requiredPermissions = [
+    'activeTab',
+    'tabs',
+    'scripting',
+    'storage',
+    'offscreen',
+    'unlimitedStorage',
+  ];
   const checks = await Promise.all(requiredPermissions.map((perm) => hasPermission(perm)));
   for (let i = 0; i < requiredPermissions.length; i++) {
     const perm = requiredPermissions[i];
@@ -176,15 +189,11 @@ function setBadge(permission, text, variant) {
 function setupPermissionStatusRefresh() {
   if (permissionPollTimer) clearInterval(permissionPollTimer);
   permissionPollTimer = setInterval(() => {
-    refreshPermissionStatus().catch((err) =>
-      logNonFatal('refreshPermissionStatus.interval', err)
-    );
+    refreshPermissionStatus().catch((err) => logNonFatal('refreshPermissionStatus.interval', err));
   }, 8000);
 
   window.addEventListener('focus', () => {
-    refreshPermissionStatus().catch((err) =>
-      logNonFatal('refreshPermissionStatus.focus', err)
-    );
+    refreshPermissionStatus().catch((err) => logNonFatal('refreshPermissionStatus.focus', err));
   });
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {

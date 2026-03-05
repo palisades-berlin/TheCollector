@@ -40,12 +40,14 @@ export function createCaptureService() {
       func: (protocol) => {
         window.__THE_COLLECTOR_PROTOCOL = protocol;
       },
-      args: [{
-        CS_GET_METRICS: MSG.CS_GET_METRICS,
-        CS_PREPARE: MSG.CS_PREPARE,
-        CS_SCROLL_TO: MSG.CS_SCROLL_TO,
-        CS_RESTORE: MSG.CS_RESTORE,
-      }],
+      args: [
+        {
+          CS_GET_METRICS: MSG.CS_GET_METRICS,
+          CS_PREPARE: MSG.CS_PREPARE,
+          CS_SCROLL_TO: MSG.CS_SCROLL_TO,
+          CS_RESTORE: MSG.CS_RESTORE,
+        },
+      ],
     });
   }
 

@@ -1,13 +1,6 @@
 import { anchorDownloadBlob } from '../../shared/download.js';
-import {
-  normalizeUrlForCompare,
-  isCollectibleUrl,
-  escapeCsvCell,
-} from '../../shared/url-utils.js';
-import {
-  URL_HISTORY_ACTION,
-  normalizeUrlArray,
-} from '../../shared/url-history.js';
+import { normalizeUrlForCompare, isCollectibleUrl, escapeCsvCell } from '../../shared/url-utils.js';
+import { URL_HISTORY_ACTION, normalizeUrlArray } from '../../shared/url-history.js';
 import {
   loadUrlList,
   saveUrlList,

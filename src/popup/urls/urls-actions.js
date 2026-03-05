@@ -1,13 +1,6 @@
 import { showToast } from '../../shared/toast.js';
-import {
-  cleanUrl,
-  normalizeUrlForCompare,
-  isCollectibleUrl,
-} from '../../shared/url-utils.js';
-import {
-  URL_HISTORY_ACTION,
-  saveUrlHistory,
-} from '../../shared/url-history.js';
+import { cleanUrl, normalizeUrlForCompare, isCollectibleUrl } from '../../shared/url-utils.js';
+import { URL_HISTORY_ACTION, saveUrlHistory } from '../../shared/url-history.js';
 import { canRestoreUrls } from '../../shared/url-list-state.js';
 import { URL_LIMIT, formatUrlCount, buildNormalizedSet } from './urls-state.js';
 
@@ -125,7 +118,9 @@ export function wireUrlsPanelEvents({
       );
 
       if (!added) {
-        showToast(urls.length >= URL_LIMIT ? `List full (max ${URL_LIMIT} URLs)` : 'Already in list');
+        showToast(
+          urls.length >= URL_LIMIT ? `List full (max ${URL_LIMIT} URLs)` : 'Already in list'
+        );
         return;
       }
 

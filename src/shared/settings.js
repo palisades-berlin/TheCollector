@@ -9,19 +9,14 @@ const SETTINGS_DEFAULTS = {
 
 export async function getSettings() {
   const stored = await chrome.storage.sync.get(SETTINGS_DEFAULTS);
-  const autoDownloadMode = normalizeAutoDownloadMode(
-    stored.autoDownloadMode,
-    stored.autoDownload
-  );
+  const autoDownloadMode = normalizeAutoDownloadMode(stored.autoDownloadMode, stored.autoDownload);
   return {
     defaultExportFormat: normalizeExportFormat(stored.defaultExportFormat),
     defaultPdfPageSize: normalizePdfPageSize(stored.defaultPdfPageSize),
     autoDownloadMode,
     downloadDirectory: normalizeDownloadDirectory(stored.downloadDirectory),
     saveAs: Boolean(stored.saveAs),
-    fitClipboardToDocsLimit: normalizeFitClipboardToDocsLimit(
-      stored.fitClipboardToDocsLimit
-    ),
+    fitClipboardToDocsLimit: normalizeFitClipboardToDocsLimit(stored.fitClipboardToDocsLimit),
   };
 }
 
@@ -33,15 +28,10 @@ export async function setSettings(partial) {
   };
   next.defaultExportFormat = normalizeExportFormat(next.defaultExportFormat);
   next.defaultPdfPageSize = normalizePdfPageSize(next.defaultPdfPageSize);
-  next.autoDownloadMode = normalizeAutoDownloadMode(
-    next.autoDownloadMode,
-    next.autoDownload
-  );
+  next.autoDownloadMode = normalizeAutoDownloadMode(next.autoDownloadMode, next.autoDownload);
   next.downloadDirectory = normalizeDownloadDirectory(next.downloadDirectory);
   next.saveAs = Boolean(next.saveAs);
-  next.fitClipboardToDocsLimit = normalizeFitClipboardToDocsLimit(
-    next.fitClipboardToDocsLimit
-  );
+  next.fitClipboardToDocsLimit = normalizeFitClipboardToDocsLimit(next.fitClipboardToDocsLimit);
   delete next.autoDownload;
 
   await chrome.storage.sync.set(next);

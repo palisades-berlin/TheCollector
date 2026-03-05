@@ -6,7 +6,6 @@ import { downloadRecord } from './history-downloads.js';
 export function createHistoryFilesOverlay({
   els,
   getGroups,
-  getAllRecords,
   getScreenshot,
   deleteScreenshots,
   openPreview,

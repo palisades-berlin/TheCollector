@@ -30,8 +30,7 @@ export function createHistoryCards({
     }
     const hints = buildRecordHints(record);
     const suffix = hints.length ? ` · ${hints.join(' · ')}` : '';
-    metaEl.textContent =
-      `${new Date(record.timestamp).toLocaleDateString()} · ${record.width}×${record.height}px${suffix}`;
+    metaEl.textContent = `${new Date(record.timestamp).toLocaleDateString()} · ${record.width}×${record.height}px${suffix}`;
     const diagnosticText = buildCardDiagnosticText(record);
     if (diagnosticText) {
       diagnosticEl.textContent = diagnosticText;

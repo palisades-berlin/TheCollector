@@ -25,13 +25,7 @@ export async function downloadBlob({ blob, filename, saveAs }) {
   await chromeDownloadBlob({ blob, filename, saveAs });
 }
 
-export async function downloadCaptureParts({
-  ids,
-  format,
-  directory,
-  saveAs,
-  titleHint,
-}) {
+export async function downloadCaptureParts({ ids, format, directory, saveAs, titleHint }) {
   const total = ids.length;
   const ext = format === 'jpg' ? 'jpg' : 'png';
   const effectiveSaveAs = total > 1 ? false : Boolean(saveAs);
@@ -39,8 +33,7 @@ export async function downloadCaptureParts({
   for (let i = 0; i < ids.length; i++) {
     const record = await getScreenshotById(ids[i]);
     if (!record?.blob) throw new Error(`Missing screenshot part: ${ids[i]}`);
-    const blob =
-      format === 'jpg' ? await convertPngBlobToJpeg(record.blob) : record.blob;
+    const blob = format === 'jpg' ? await convertPngBlobToJpeg(record.blob) : record.blob;
     const filename = buildDownloadFilename({
       title: titleHint || record.title || record.url || 'screenshot',
       index: i,

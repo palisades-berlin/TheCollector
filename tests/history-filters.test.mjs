@@ -47,7 +47,10 @@ test('filterRecords applies domain filter', () => {
     getDomain,
     getType
   );
-  assert.deepEqual(out.map((r) => r.id), ['a', 'b']);
+  assert.deepEqual(
+    out.map((r) => r.id),
+    ['a', 'b']
+  );
 });
 
 test('filterRecords applies date range and type filters', () => {
@@ -57,5 +60,8 @@ test('filterRecords applies date range and type filters', () => {
     getDomain,
     getType
   );
-  assert.deepEqual(out.map((r) => r.id), ['c']);
+  assert.deepEqual(
+    out.map((r) => r.id),
+    ['c']
+  );
 });

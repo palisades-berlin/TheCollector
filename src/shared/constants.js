@@ -1,5 +1,5 @@
 export const DB_NAME = 'screen-collector';
-export const DB_VERSION = 4;         // bumped: repair metadata store migration path
+export const DB_VERSION = 4; // bumped: repair metadata store migration path
 export const STORE_NAME = 'screenshots';
 export const META_STORE = 'screenshot_meta';
 export const TILES_STORE = 'pending_tiles'; // temporary tile buffer during capture

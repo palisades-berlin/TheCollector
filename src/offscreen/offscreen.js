@@ -58,10 +58,12 @@ async function stitch(id, totalW, totalH, sourceUrl, title) {
     }
 
     // Oversized fallback: stitch to a single scaled image within canvas limits.
-    if (tiles.some((tile) => {
-      const { width, height } = tileDimensions(tile);
-      return width <= 0 || height <= 0;
-    })) {
+    if (
+      tiles.some((tile) => {
+        const { width, height } = tileDimensions(tile);
+        return width <= 0 || height <= 0;
+      })
+    ) {
       await hydrateTileDimensions(tiles);
     }
     const chunks = buildChunks(totalW, totalH);
@@ -173,16 +175,7 @@ async function renderChunk(
     const tileW = srcW;
     const tileH = srcH;
 
-    const overlap = getRectOverlap(
-      tile.x,
-      tile.y,
-      tileW,
-      tileH,
-      chunkX,
-      chunkY,
-      chunkW,
-      chunkH
-    );
+    const overlap = getRectOverlap(tile.x, tile.y, tileW, tileH, chunkX, chunkY, chunkW, chunkH);
 
     if (overlap) {
       const sx = srcX + (overlap.x - tile.x);
@@ -229,7 +222,17 @@ async function renderScaledFromChunks({ chunks, bucketedTiles, totalW, totalH })
       const dy = Math.round(chunk.y * scale);
       const dw = Math.max(1, Math.round(chunk.w * scale));
       const dh = Math.max(1, Math.round(chunk.h * scale));
-      outCtx.drawImage(decoded, 0, 0, decoded.width || decoded.naturalWidth, decoded.height || decoded.naturalHeight, dx, dy, dw, dh);
+      outCtx.drawImage(
+        decoded,
+        0,
+        0,
+        decoded.width || decoded.naturalWidth,
+        decoded.height || decoded.naturalHeight,
+        dx,
+        dy,
+        dw,
+        dh
+      );
       if (typeof decoded.close === 'function') decoded.close();
     }
   } finally {

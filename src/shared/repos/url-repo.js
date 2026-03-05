@@ -45,15 +45,11 @@ export async function loadUrlUndoSnapshot() {
 export async function saveUrlUndoSnapshot(urls) {
   const normalized = normalizeUrlArray(urls);
   if (normalized.length === 0) {
-    await chromeCall((done) =>
-      chrome.storage.local.set({ [URL_UNDO_KEY]: null }, done)
-    );
+    await chromeCall((done) => chrome.storage.local.set({ [URL_UNDO_KEY]: null }, done));
     return null;
   }
   const snapshot = { urls: normalized, savedAt: Date.now() };
-  await chromeCall((done) =>
-    chrome.storage.local.set({ [URL_UNDO_KEY]: snapshot }, done)
-  );
+  await chromeCall((done) => chrome.storage.local.set({ [URL_UNDO_KEY]: snapshot }, done));
   return snapshot;
 }
 

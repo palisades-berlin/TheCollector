@@ -1,180 +1,220 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>THE Collector History</title>
-  <link rel="stylesheet" href="../shared/ui.css" />
-  <link rel="stylesheet" href="history.css" />
-</head>
-<body class="sc-page-enter">
-
-  <!-- Header -->
-  <div class="header sc-header">
-    <div class="header-left">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-      </svg>
-      THE Collector History
-      <span class="badge" id="count" aria-live="polite"></span>
-    </div>
-    <div class="header-actions">
-      <nav class="sc-header-nav" aria-label="Primary">
-        <a class="sc-header-link" href="history.html" aria-current="page">History</a>
-        <a class="sc-header-link" href="../options/options.html">Options</a>
-      </nav>
-      <button id="compareBtn" class="btn-clear btn-neutral hidden" aria-label="Compare two screenshots" disabled>
-        Compare (0/2)
-      </button>
-      <button id="openFilesBtn" class="btn-clear hidden" aria-label="Open files overlay">
-        Files
-      </button>
-      <button id="clearAllBtn" class="btn-clear hidden" aria-label="Delete all screenshots">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+  <head>
+    <meta charset="utf-8" />
+    <title>THE Collector History</title>
+    <link rel="stylesheet" href="../shared/ui.css" />
+    <link rel="stylesheet" href="history.css" />
+  </head>
+  <body class="sc-page-enter">
+    <!-- Header -->
+    <div class="header sc-header">
+      <div class="header-left">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path
+            d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+          />
         </svg>
-        Clear all
+        THE Collector History
+        <span class="badge" id="count" aria-live="polite"></span>
+      </div>
+      <div class="header-actions">
+        <nav class="sc-header-nav" aria-label="Primary">
+          <a class="sc-header-link" href="history.html" aria-current="page">History</a>
+          <a class="sc-header-link" href="../options/options.html">Options</a>
+        </nav>
+        <button
+          id="compareBtn"
+          class="btn-clear btn-neutral hidden"
+          aria-label="Compare two screenshots"
+          disabled
+        >
+          Compare (0/2)
+        </button>
+        <button id="openFilesBtn" class="btn-clear hidden" aria-label="Open files overlay">
+          Files
+        </button>
+        <button id="clearAllBtn" class="btn-clear hidden" aria-label="Delete all screenshots">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+            />
+          </svg>
+          Clear all
+        </button>
+      </div>
+    </div>
+
+    <section class="filters" aria-label="History filters">
+      <label class="filter-item">
+        <span>Domain</span>
+        <input id="filterDomain" type="text" placeholder="e.g. example.com" />
+      </label>
+      <label class="filter-item">
+        <span>From</span>
+        <input id="filterFrom" type="date" />
+      </label>
+      <label class="filter-item">
+        <span>To</span>
+        <input id="filterTo" type="date" />
+      </label>
+      <label class="filter-item">
+        <span>Export Type</span>
+        <select id="filterType">
+          <option value="all">All</option>
+          <option value="png">PNG</option>
+          <option value="jpg">JPG</option>
+          <option value="pdf">PDF</option>
+        </select>
+      </label>
+      <div class="filter-item filter-actions">
+        <button id="resetFiltersBtn" class="btn-clear btn-neutral" type="button">
+          Reset Filters
+        </button>
+      </div>
+    </section>
+
+    <!-- Grid -->
+    <div id="historySkeleton" class="grid grid-skeleton">
+      <div class="skeleton-card">
+        <div class="skeleton-thumb sc-skeleton"></div>
+        <div class="skeleton-line sc-skeleton"></div>
+        <div class="skeleton-line small sc-skeleton"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton-thumb sc-skeleton"></div>
+        <div class="skeleton-line sc-skeleton"></div>
+        <div class="skeleton-line small sc-skeleton"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton-thumb sc-skeleton"></div>
+        <div class="skeleton-line sc-skeleton"></div>
+        <div class="skeleton-line small sc-skeleton"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton-thumb sc-skeleton"></div>
+        <div class="skeleton-line sc-skeleton"></div>
+        <div class="skeleton-line small sc-skeleton"></div>
+      </div>
+    </div>
+    <div id="captureDiagnostics" class="capture-diagnostics hidden" aria-live="polite">
+      <span id="captureDiagnosticsText"></span>
+      <button
+        id="captureDiagnosticsDismiss"
+        class="capture-diagnostics-dismiss"
+        type="button"
+        aria-label="Dismiss capture diagnostic"
+      >
+        ×
       </button>
     </div>
-  </div>
+    <div id="grid" class="grid hidden"></div>
 
-  <section class="filters" aria-label="History filters">
-    <label class="filter-item">
-      <span>Domain</span>
-      <input id="filterDomain" type="text" placeholder="e.g. example.com" />
-    </label>
-    <label class="filter-item">
-      <span>From</span>
-      <input id="filterFrom" type="date" />
-    </label>
-    <label class="filter-item">
-      <span>To</span>
-      <input id="filterTo" type="date" />
-    </label>
-    <label class="filter-item">
-      <span>Export Type</span>
-      <select id="filterType">
-        <option value="all">All</option>
-        <option value="png">PNG</option>
-        <option value="jpg">JPG</option>
-        <option value="pdf">PDF</option>
-      </select>
-    </label>
-    <div class="filter-item filter-actions">
-      <button id="resetFiltersBtn" class="btn-clear btn-neutral" type="button">Reset Filters</button>
+    <!-- Empty state -->
+    <div id="empty" class="empty hidden">
+      <svg
+        width="52"
+        height="52"
+        viewBox="0 0 24 24"
+        fill="#b0bec5"
+        aria-hidden="true"
+        class="empty-icon"
+      >
+        <path
+          d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+        />
+      </svg>
+      <span class="empty-title">No screenshots yet</span>
+      <span class="empty-sub">Click the extension icon on any page to capture it.</span>
     </div>
-  </section>
 
-  <!-- Grid -->
-  <div id="historySkeleton" class="grid grid-skeleton">
-    <div class="skeleton-card">
-      <div class="skeleton-thumb sc-skeleton"></div>
-      <div class="skeleton-line sc-skeleton"></div>
-      <div class="skeleton-line small sc-skeleton"></div>
-    </div>
-    <div class="skeleton-card">
-      <div class="skeleton-thumb sc-skeleton"></div>
-      <div class="skeleton-line sc-skeleton"></div>
-      <div class="skeleton-line small sc-skeleton"></div>
-    </div>
-    <div class="skeleton-card">
-      <div class="skeleton-thumb sc-skeleton"></div>
-      <div class="skeleton-line sc-skeleton"></div>
-      <div class="skeleton-line small sc-skeleton"></div>
-    </div>
-    <div class="skeleton-card">
-      <div class="skeleton-thumb sc-skeleton"></div>
-      <div class="skeleton-line sc-skeleton"></div>
-      <div class="skeleton-line small sc-skeleton"></div>
-    </div>
-  </div>
-  <div id="captureDiagnostics" class="capture-diagnostics hidden" aria-live="polite">
-    <span id="captureDiagnosticsText"></span>
-    <button id="captureDiagnosticsDismiss" class="capture-diagnostics-dismiss" type="button" aria-label="Dismiss capture diagnostic">×</button>
-  </div>
-  <div id="grid" class="grid hidden"></div>
+    <!-- Loading -->
+    <div id="loading" class="loading hidden">Loading…</div>
 
-  <!-- Empty state -->
-  <div id="empty" class="empty hidden">
-    <svg width="52" height="52" viewBox="0 0 24 24" fill="#b0bec5" aria-hidden="true" class="empty-icon">
-      <path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-    </svg>
-    <span class="empty-title">No screenshots yet</span>
-    <span class="empty-sub">Click the extension icon on any page to capture it.</span>
-  </div>
-
-  <!-- Loading -->
-  <div id="loading" class="loading hidden">Loading…</div>
-
-  <!-- Files overlay -->
-  <div id="filesOverlay" class="files-overlay hidden" role="dialog" aria-modal="true" aria-label="Files">
-    <div class="files-panel">
-      <div class="files-titlebar">
-        <div class="files-title">Files</div>
-        <button id="closeFilesBtn" class="files-close" aria-label="Close files overlay">Close</button>
+    <!-- Files overlay -->
+    <div
+      id="filesOverlay"
+      class="files-overlay hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Files"
+    >
+      <div class="files-panel">
+        <div class="files-titlebar">
+          <div class="files-title">Files</div>
+          <button id="closeFilesBtn" class="files-close" aria-label="Close files overlay">
+            Close
+          </button>
+        </div>
+        <div class="files-toolbar">
+          <label class="files-select">
+            <input id="selectAll" type="checkbox" />
+            <span id="selectedCount">(0 Selected)</span>
+          </label>
+          <div class="files-actions">
+            <button id="downloadSelected" class="btn-file" disabled>Download</button>
+            <button id="deleteSelected" class="btn-file" disabled>Delete</button>
+          </div>
+        </div>
+        <div id="filesList" class="files-list"></div>
+        <div id="filesStatus" class="files-status" aria-live="polite"></div>
       </div>
-      <div class="files-toolbar">
-        <label class="files-select">
-          <input id="selectAll" type="checkbox" />
-          <span id="selectedCount">(0 Selected)</span>
-        </label>
-        <div class="files-actions">
-          <button id="downloadSelected" class="btn-file" disabled>Download</button>
-          <button id="deleteSelected" class="btn-file" disabled>Delete</button>
+    </div>
+
+    <!-- Card template -->
+    <template id="cardTpl">
+      <div class="card">
+        <div class="card-thumb">
+          <canvas class="thumb-canvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="card-body">
+          <div class="card-url"></div>
+          <div class="card-meta"></div>
+          <div class="card-diagnostic hidden"></div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-action btn-compare">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M10 3H5c-1.1 0-2 .9-2 2v5h2V5h5V3zm9 0h-5v2h5v5h2V5c0-1.1-.9-2-2-2zm0 16h-5v2h5c1.1 0 2-.9 2-2v-5h-2v5zM5 14H3v5c0 1.1.9 2 2 2h5v-2H5v-5zm1-3h12v2H6z"
+              />
+            </svg>
+            Compare
+          </button>
+          <button class="btn-action btn-open">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"
+              />
+            </svg>
+            Open
+          </button>
+          <button class="btn-action btn-delete">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+              />
+            </svg>
+            Delete
+          </button>
         </div>
       </div>
-      <div id="filesList" class="files-list"></div>
-      <div id="filesStatus" class="files-status" aria-live="polite"></div>
-    </div>
-  </div>
+    </template>
 
-  <!-- Card template -->
-  <template id="cardTpl">
-    <div class="card">
-      <div class="card-thumb">
-        <canvas class="thumb-canvas" aria-hidden="true"></canvas>
+    <!-- Files row template -->
+    <template id="fileRowTpl">
+      <div class="file-row">
+        <label class="row-check">
+          <input class="file-check" type="checkbox" />
+        </label>
+        <button class="file-link" type="button"></button>
+        <div class="row-right">
+          <span class="file-size"></span>
+          <span class="file-date"></span>
+        </div>
       </div>
-      <div class="card-body">
-        <div class="card-url"></div>
-        <div class="card-meta"></div>
-        <div class="card-diagnostic hidden"></div>
-      </div>
-      <div class="card-actions">
-        <button class="btn-action btn-compare">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M10 3H5c-1.1 0-2 .9-2 2v5h2V5h5V3zm9 0h-5v2h5v5h2V5c0-1.1-.9-2-2-2zm0 16h-5v2h5c1.1 0 2-.9 2-2v-5h-2v5zM5 14H3v5c0 1.1.9 2 2 2h5v-2H5v-5zm1-3h12v2H6z"/>
-          </svg>
-          Compare
-        </button>
-        <button class="btn-action btn-open">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-          </svg>
-          Open
-        </button>
-        <button class="btn-action btn-delete">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-          </svg>
-          Delete
-        </button>
-      </div>
-    </div>
-  </template>
+    </template>
 
-  <!-- Files row template -->
-  <template id="fileRowTpl">
-    <div class="file-row">
-      <label class="row-check">
-        <input class="file-check" type="checkbox" />
-      </label>
-      <button class="file-link" type="button"></button>
-      <div class="row-right">
-        <span class="file-size"></span>
-        <span class="file-date"></span>
-      </div>
-    </div>
-  </template>
-
-  <script type="module" src="history.js"></script>
-</body>
+    <script type="module" src="history.js"></script>
+  </body>
 </html>

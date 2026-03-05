@@ -1,10 +1,6 @@
 export function filterRecords(allRecords, filters, getRecordDomain, getRecordExportType) {
-  const fromTs = filters.fromDate
-    ? new Date(`${filters.fromDate}T00:00:00`).getTime()
-    : null;
-  const toTs = filters.toDate
-    ? new Date(`${filters.toDate}T23:59:59.999`).getTime()
-    : null;
+  const fromTs = filters.fromDate ? new Date(`${filters.fromDate}T00:00:00`).getTime() : null;
+  const toTs = filters.toDate ? new Date(`${filters.toDate}T23:59:59.999`).getTime() : null;
 
   return allRecords.filter((record) => {
     if (filters.domain) {
@@ -42,7 +38,9 @@ export function createHistoryFilters({
     filterDomainEl.addEventListener('input', () => {
       if (filterDomainTimer) clearTimeout(filterDomainTimer);
       filterDomainTimer = setTimeout(() => {
-        filters.domain = String(filterDomainEl.value || '').trim().toLowerCase();
+        filters.domain = String(filterDomainEl.value || '')
+          .trim()
+          .toLowerCase();
         onChange(false);
         filterDomainTimer = null;
       }, 150);

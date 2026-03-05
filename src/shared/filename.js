@@ -1,9 +1,15 @@
+const FORBIDDEN_FILENAME_CHARS = new Set(['<', '>', ':', '"', '/', '\\', '|', '?', '*']);
+
 export function sanitizeFilenameSegment(raw) {
-  return String(raw || '')
-    .replace(/[<>:"/\\|?*\x00-\x1f]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 90);
+  const cleaned = Array.from(String(raw || ''))
+    .filter((ch) => {
+      const code = ch.charCodeAt(0);
+      if (code <= 31) return false;
+      return !FORBIDDEN_FILENAME_CHARS.has(ch);
+    })
+    .join('');
+
+  return cleaned.replace(/\s+/g, ' ').trim().slice(0, 90);
 }
 
 export function sanitizeDirPath(raw) {

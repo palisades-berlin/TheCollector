@@ -1,14 +1,6 @@
 import { saveTile, getTiles, deleteTiles } from '../db.js';
 
-export async function savePendingTile(
-  jobId,
-  index,
-  x,
-  y,
-  blob,
-  crop = null,
-  tileSize = null
-) {
+export async function savePendingTile(jobId, index, x, y, blob, crop = null, tileSize = null) {
   return saveTile(jobId, index, x, y, blob, crop, tileSize);
 }
 

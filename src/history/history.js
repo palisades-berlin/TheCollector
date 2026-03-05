@@ -220,9 +220,7 @@ function renderCaptureDiagnostics() {
     return;
   }
   const durationPart =
-    Number(lastFailed.durationMs || 0) > 0
-      ? ` after ${formatDuration(lastFailed.durationMs)}`
-      : '';
+    Number(lastFailed.durationMs || 0) > 0 ? ` after ${formatDuration(lastFailed.durationMs)}` : '';
   const tilePart =
     Number(lastFailed.totalTiles || 0) > 0
       ? ` (${Number(lastFailed.capturedTiles || 0)}/${Number(lastFailed.totalTiles || 0)} tiles captured)`
@@ -277,7 +275,8 @@ captureDiagnosticsDismissEl?.addEventListener('click', () => {
 
 clearAllBtn.addEventListener('click', async () => {
   const total = allRecords.length;
-  if (!confirm(`Delete all ${total} screenshot${total !== 1 ? 's' : ''}? This cannot be undone.`)) return;
+  if (!confirm(`Delete all ${total} screenshot${total !== 1 ? 's' : ''}? This cannot be undone.`))
+    return;
 
   await deleteScreenshotRecords(allRecords.map((record) => record.id));
   showToast('All screenshots deleted.', 'success');

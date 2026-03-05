@@ -1,4 +1,10 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   font-family: var(--sc-font-sans);
@@ -9,20 +15,40 @@ body {
 
 /* ── Animations ── */
 @keyframes float {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-7px); }
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-7px);
+  }
 }
 @keyframes empty-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes card-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes pulse {
-  from { opacity: 1; }
-  to   { opacity: 0.75; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.75;
+  }
 }
 
 /* ── Header ── */
@@ -36,7 +62,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 4px 14px rgba(21,101,192,0.3);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 4px 14px rgba(21, 101, 192, 0.3);
 }
 
 .header-left {
@@ -55,7 +83,7 @@ body {
 }
 
 .badge {
-  background: rgba(255,255,255,0.22);
+  background: rgba(255, 255, 255, 0.22);
   font-size: 11px;
   font-weight: 600;
   padding: 2px 9px;
@@ -69,20 +97,22 @@ body {
   align-items: center;
   gap: 5px;
   padding: 7px 13px;
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.12);
   color: var(--sc-color-surface);
-  border: 1.5px solid rgba(255,255,255,0.35);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
   border-radius: var(--sc-r-sm);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.18s, border-color 0.18s;
+  transition:
+    background 0.18s,
+    border-color 0.18s;
   letter-spacing: 0.2px;
 }
 
 .btn-clear:hover {
-  background: rgba(239,154,154,0.25);
-  border-color: rgba(239,154,154,0.6);
+  background: rgba(239, 154, 154, 0.25);
+  border-color: rgba(239, 154, 154, 0.6);
 }
 
 .btn-clear.btn-neutral:hover {
@@ -91,8 +121,8 @@ body {
 }
 
 .btn-clear.confirming {
-  background: rgba(239,154,154,0.3);
-  border-color: rgba(239,154,154,0.7);
+  background: rgba(239, 154, 154, 0.3);
+  border-color: rgba(239, 154, 154, 0.7);
   animation: pulse 0.8s ease-in-out infinite alternate;
 }
 
@@ -219,19 +249,22 @@ body {
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+  transition:
+    border-color 0.18s,
+    transform 0.18s,
+    box-shadow 0.18s;
   animation: card-in 0.22s cubic-bezier(0.2, 0, 0, 1) both;
 }
 
 .card:hover {
   border-color: var(--sc-color-primary-border);
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(25,118,210,0.12);
+  box-shadow: 0 4px 16px rgba(25, 118, 210, 0.12);
 }
 
 .card.compare-selected {
   border-color: var(--sc-color-primary-active);
-  box-shadow: 0 0 0 2px rgba(25,118,210,0.25);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.25);
 }
 
 .card-thumb {
@@ -308,7 +341,10 @@ body {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  transition:
+    background 0.18s,
+    border-color 0.18s,
+    color 0.18s;
 }
 
 .btn-action:hover {
@@ -412,23 +448,43 @@ body {
 }
 
 @keyframes files-overlay-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes files-overlay-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes files-panel-in {
-  from { opacity: 0; transform: translateY(8px) scale(0.995); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes files-panel-out {
-  from { opacity: 1; transform: translateY(0) scale(1); }
-  to { opacity: 0; transform: translateY(8px) scale(0.995); }
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.995);
+  }
 }
 
 .files-panel {
@@ -577,4 +633,6 @@ body {
   }
 }
 
-.hidden { display: none !important; }
+.hidden {
+  display: none !important;
+}

@@ -5,10 +5,7 @@ import {
   validatePreviewDownloadPayload,
 } from '../shared/protocol-validate.js';
 import { getUserSettings } from '../shared/repos/settings-repo.js';
-import {
-  hasDownloadsPermission,
-  downloadBlob,
-} from './downloads.js';
+import { hasDownloadsPermission, downloadBlob } from './downloads.js';
 import { createCaptureService } from './capture-service.js';
 
 const captureService = createCaptureService();
@@ -27,7 +24,8 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
       return false;
     }
     const tabId = parsed.value.tabId;
-    captureService.captureTab(tabId)
+    captureService
+      .captureTab(tabId)
       .then((id) => sendResponse({ ok: true, id }))
       .catch((err) => {
         broadcast(MSG.SW_ERROR, { error: err.message });
@@ -72,7 +70,7 @@ chrome.commands.onCommand.addListener(async (command) => {
   if (command !== 'capture-fullpage') return;
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab?.id) return;
-  captureService.captureTab(tab.id).catch((err) =>
-    console.error('[THE Collector] Capture error:', err)
-  );
+  captureService
+    .captureTab(tab.id)
+    .catch((err) => console.error('[THE Collector] Capture error:', err));
 });

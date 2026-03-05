@@ -25,7 +25,9 @@ export async function buildPdfFromCanvas(canvas, pageSize, canvasToBlob) {
     const slice = document.createElement('canvas');
     slice.width = canvas.width;
     slice.height = sliceH;
-    slice.getContext('2d').drawImage(canvas, 0, startY, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+    slice
+      .getContext('2d')
+      .drawImage(canvas, 0, startY, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
 
     const jpeg = await canvasToBlob(slice, 'image/jpeg', 0.9);
     const bytes = new Uint8Array(await jpeg.arrayBuffer());
@@ -194,7 +196,10 @@ ${fmt(p.drawW)} 0 0 ${fmt(p.drawH)} ${fmt(p.drawX)} ${fmt(p.drawY)} cm
 /Im0 Do
 Q
 `;
-    pushObj(contentObj, `<< /Length ${text.encode(content).length} >>\nstream\n${content}endstream`);
+    pushObj(
+      contentObj,
+      `<< /Length ${text.encode(content).length} >>\nstream\n${content}endstream`
+    );
   }
 
   const xrefOffset = len;

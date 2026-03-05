@@ -2,10 +2,12 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.3.51`.
+Current extension version: `1.3.52`.
 
 ## Overview
+
 THE Collector includes two modes:
+
 - Capture: full-page screenshots with local history, editing, and export
 - URLs: collect clean tab URLs (tracking params removed), copy/export/email, and manage a saved list
 - UX is consolidated across both flows (shared toasts and unified design tokens)
@@ -13,6 +15,7 @@ THE Collector includes two modes:
 All data remains in extension-local storage; there is no backend upload pipeline.
 
 ## Core Architecture
+
 The capture pipeline is split across extension contexts:
 
 - `service worker`: capture orchestration, retries/throttling, progress/result events
@@ -25,6 +28,7 @@ The capture pipeline is split across extension contexts:
 ## Features
 
 ### Capture
+
 - One-click toolbar capture
 - Keyboard shortcut: `Alt+Shift+P`
 - Tile-by-tile full-page capture via `chrome.tabs.captureVisibleTab`
@@ -42,6 +46,7 @@ The capture pipeline is split across extension contexts:
 - Capture errors in popup are shown as toasts (same UX pattern as URL collector actions)
 
 ### URL Collection
+
 - Add current tab URL
 - Add all URLs from current window
 - Automatic tracking-parameter cleanup (UTM, gclid, fbclid, and similar)
@@ -55,6 +60,7 @@ The capture pipeline is split across extension contexts:
 - URL Collection History with snapshot restore/copy/TXT/CSV actions
 
 ### Preview & Editing
+
 - Click-to-zoom preview
 - Visual Diff mode (History compare 2 screenshots) with translucent change boxes:
   - green = added/brighter
@@ -75,6 +81,7 @@ The capture pipeline is split across extension contexts:
   - `PDF Auto` (PDF export using `Auto` page size preset)
 
 ### Export
+
 - PNG
 - JPG
 - PDF (`Auto`, `A4`, `Letter`)
@@ -82,6 +89,7 @@ The capture pipeline is split across extension contexts:
 - In split overview mode, export/edit actions are intentionally disabled
 
 ### History & Storage
+
 - Local persistence in IndexedDB
 - Open, single delete, and clear-all flows
 - Client-side History filters:
@@ -95,6 +103,7 @@ The capture pipeline is split across extension contexts:
 - No cloud sync or server upload path in current implementation
 
 ### Settings
+
 - Default export format
 - Default PDF page size
 - Auto-download behavior
@@ -105,21 +114,25 @@ The capture pipeline is split across extension contexts:
 - Real-time permission status badges in Options
 
 ## Oversized Capture Behavior
+
 When a capture exceeds safe canvas limits, THE Collector uses oversized fallback handling and split-aware preview behavior for stable rendering and review of large pages.
 
 ## Install (Unpacked)
+
 1. Open `chrome://extensions` (or `edge://extensions`).
 2. Enable **Developer mode**.
 3. Click **Load unpacked** and select this repository folder.
 4. Pin the extension if needed.
 
 ## Basic Usage
+
 1. Open the extension popup.
 2. Use the `Capture` tab for screenshots (`Alt+Shift+P` also works).
 3. Use the `URLs` tab to collect, clean, and export links.
 4. Use History/Options for screenshot management and defaults.
 
 ## Local checks
+
 ```bash
 node tests/url-utils.test.mjs
 node tests/url-history.test.mjs
@@ -133,6 +146,7 @@ node tests/url-repo.test.mjs
 ```
 
 ## Developer checks
+
 Optional local tooling for lint/format/check aggregation:
 
 ```bash
@@ -144,6 +158,7 @@ npm run check
 ```
 
 ## Release Packaging
+
 Create a release zip that excludes local/development artifacts such as `node_modules`, tests, and git metadata:
 
 ```bash
@@ -153,12 +168,14 @@ Create a release zip that excludes local/development artifacts such as `node_mod
 Release notes policy: keep notes in `CHANGELOG.md` only; do not add `GITHUB_RELEASE_*.md` files.
 
 ## Security & Privacy
+
 - Captures remain in extension-local storage unless downloaded by the user.
 - Deleting from History removes stored records from IndexedDB.
 - Uninstalling the extension clears extension storage per browser behavior.
 - No backend upload path exists in this codebase.
 
 ## Permission Scope (Phase A)
+
 Phase A focuses on dead-permission cleanup only. Current audit result: no removable runtime permission without behavior risk.
 
 - Required: `activeTab`
@@ -179,6 +196,7 @@ Phase A focuses on dead-permission cleanup only. Current audit result: no remova
 Next refinement phases should focus on architectural reductions (not blind permission removal), especially around large-capture storage strategy.
 
 ## Current Constraints
+
 - Cross-origin iframe capture is incomplete.
 - Highly custom JavaScript scroll behavior is best-effort.
 - Browser storage limits still apply.
@@ -186,6 +204,7 @@ Next refinement phases should focus on architectural reductions (not blind permi
 - Browser PDF documents are not captured by this pipeline.
 
 ## Repository Layout
+
 ```text
 THE Collector/
 ├── manifest.json
@@ -203,10 +222,12 @@ THE Collector/
 ```
 
 ## Internal Docs
+
 - [Architecture](./docs/architecture.md)
 - [Developer Workflow](./docs/dev-workflow.md)
 
 ## Near-Term Roadmap
+
 1. Unified merge/synthesis flow for oversized split captures
 2. Deeper nested iframe + nested scroll-container traversal
 3. Further permission-scope refinement where feasible

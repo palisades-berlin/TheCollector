@@ -8,9 +8,7 @@ export async function withObjectUrl(blob, worker) {
 }
 
 export async function chromeDownloadBlob({ blob, filename, saveAs }) {
-  return withObjectUrl(blob, (url) =>
-    chrome.downloads.download({ url, filename, saveAs })
-  );
+  return withObjectUrl(blob, (url) => chrome.downloads.download({ url, filename, saveAs }));
 }
 
 export async function anchorDownloadBlob({ blob, filename }) {

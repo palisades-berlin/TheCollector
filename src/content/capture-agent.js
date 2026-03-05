@@ -34,12 +34,7 @@
     const injected = window.__THE_COLLECTOR_PROTOCOL;
     if (!injected || typeof injected !== 'object') return FALLBACK_PROTOCOL;
 
-    const required = [
-      'CS_GET_METRICS',
-      'CS_PREPARE',
-      'CS_SCROLL_TO',
-      'CS_RESTORE',
-    ];
+    const required = ['CS_GET_METRICS', 'CS_PREPARE', 'CS_SCROLL_TO', 'CS_RESTORE'];
     for (const key of required) {
       if (typeof injected[key] !== 'string' || injected[key].length === 0) {
         return FALLBACK_PROTOCOL;
@@ -315,14 +310,18 @@
       }
       try {
         activeTarget.win.scrollTo(activeTarget.savedScroll.x, activeTarget.savedScroll.y);
-      } catch (_) {}
+      } catch (_) {
+        // Best effort: iframe may become unavailable during teardown.
+      }
     }
 
     if (activeTarget?.type === 'element') {
       try {
         activeTarget.el.scrollLeft = activeTarget.savedScroll.x;
         activeTarget.el.scrollTop = activeTarget.savedScroll.y;
-      } catch (_) {}
+      } catch (_) {
+        // Best effort: element target can be detached during teardown.
+      }
     }
 
     window.scrollTo(savedScroll.x, savedScroll.y);
@@ -354,6 +353,7 @@
         window.scrollTo(x, y);
       }
     } catch (_) {
+      // Fallback to page scroll if target-specific scroll is unavailable.
       window.scrollTo(x, y);
     }
 
@@ -395,10 +395,7 @@
     if (!Number.isFinite(x) || !Number.isFinite(y)) {
       return { ok: false, error: 'Invalid scroll coordinates' };
     }
-    if (
-      payload.targetId != null &&
-      typeof payload.targetId !== 'string'
-    ) {
+    if (payload.targetId != null && typeof payload.targetId !== 'string') {
       return { ok: false, error: 'Invalid target id' };
     }
     return { ok: true, value: { x, y, targetId: payload.targetId || null } };
@@ -420,19 +417,14 @@
         sendResponse({ ok: true, targetId: payload?.targetId || null });
         break;
 
-      case protocol.CS_SCROLL_TO:
-        {
-          const parsed = validateScrollPayload(payload);
-          if (!parsed.ok) {
-            sendResponse({ done: false, error: parsed.error });
-            break;
-          }
-          const { x, y, targetId } = parsed.value;
-        if (
-          targetId &&
-          activeTargetId &&
-          targetId !== activeTargetId
-        ) {
+      case protocol.CS_SCROLL_TO: {
+        const parsed = validateScrollPayload(payload);
+        if (!parsed.ok) {
+          sendResponse({ done: false, error: parsed.error });
+          break;
+        }
+        const { x, y, targetId } = parsed.value;
+        if (targetId && activeTargetId && targetId !== activeTargetId) {
           sendResponse({ done: false, error: 'Capture target mismatch' });
           break;
         }
@@ -440,7 +432,7 @@
           sendResponse(error ? { done: false, error } : { done: true })
         );
         return true; // async — keep channel open
-        }
+      }
 
       case protocol.CS_RESTORE:
         restoreFixed();

@@ -1,10 +1,4 @@
-import {
-  DB_NAME,
-  DB_VERSION,
-  STORE_NAME,
-  META_STORE,
-  TILES_STORE,
-} from './constants.js';
+import { DB_NAME, DB_VERSION, STORE_NAME, META_STORE, TILES_STORE } from './constants.js';
 
 let _db = null;
 
@@ -83,8 +77,7 @@ export async function listScreenshots() {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const req = db.transaction(STORE_NAME).objectStore(STORE_NAME).getAll();
-    req.onsuccess = () =>
-      resolve(req.result.sort((a, b) => b.timestamp - a.timestamp));
+    req.onsuccess = () => resolve(req.result.sort((a, b) => b.timestamp - a.timestamp));
     req.onerror = () => reject(req.error);
   });
 }
@@ -93,8 +86,7 @@ export async function listScreenshotMeta() {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const req = db.transaction(META_STORE).objectStore(META_STORE).getAll();
-    req.onsuccess = () =>
-      resolve(req.result.sort((a, b) => b.timestamp - a.timestamp));
+    req.onsuccess = () => resolve(req.result.sort((a, b) => b.timestamp - a.timestamp));
     req.onerror = () => reject(req.error);
   });
 }
@@ -152,9 +144,7 @@ function toMetaRecord(record) {
     timestamp: Number(record.timestamp || Date.now()),
     width: Number(record.width || 0),
     height: Number(record.height || 0),
-    byteSize:
-      Number(record.byteSize || 0) ||
-      Number(record.blob?.size || 0),
+    byteSize: Number(record.byteSize || 0) || Number(record.blob?.size || 0),
     splitBaseId: record.splitBaseId || '',
     splitPart: Number(record.splitPart || 0),
     splitCount: Number(record.splitCount || 0),
@@ -165,23 +155,13 @@ function toMetaRecord(record) {
     stitchedFrom: record.stitchedFrom || '',
     hasThumbBlob: Boolean(record.thumbBlob),
     blobType: record.blobType || record.blob?.type || 'image/png',
-    captureDurationMs: Number(
-      captureReport.durationMs || record.captureDurationMs || 0
-    ),
-    captureTotalTiles: Number(
-      captureReport.totalTiles || record.captureTotalTiles || 0
-    ),
-    captureCapturedTiles: Number(
-      captureReport.capturedTiles || record.captureCapturedTiles || 0
-    ),
+    captureDurationMs: Number(captureReport.durationMs || record.captureDurationMs || 0),
+    captureTotalTiles: Number(captureReport.totalTiles || record.captureTotalTiles || 0),
+    captureCapturedTiles: Number(captureReport.capturedTiles || record.captureCapturedTiles || 0),
     captureRetries: Number(captureReport.retries || record.captureRetries || 0),
-    captureQuotaBackoffs: Number(
-      captureReport.quotaBackoffs || record.captureQuotaBackoffs || 0
-    ),
-    captureFallbackUsed:
-      captureReport.fallbackUsed || record.captureFallbackUsed || 'none',
-    captureMode:
-      captureReport.captureMode || record.captureMode || 'page',
+    captureQuotaBackoffs: Number(captureReport.quotaBackoffs || record.captureQuotaBackoffs || 0),
+    captureFallbackUsed: captureReport.fallbackUsed || record.captureFallbackUsed || 'none',
+    captureMode: captureReport.captureMode || record.captureMode || 'page',
     captureError: captureReport.error || record.captureError || '',
   };
 }
@@ -194,8 +174,7 @@ export async function getTiles(jobId) {
       .objectStore(TILES_STORE)
       .index('jobId')
       .getAll(IDBKeyRange.only(jobId));
-    req.onsuccess = () =>
-      resolve(req.result.sort((a, b) => a.index - b.index));
+    req.onsuccess = () => resolve(req.result.sort((a, b) => a.index - b.index));
     req.onerror = () => reject(req.error);
   });
 }

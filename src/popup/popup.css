@@ -1,4 +1,10 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   font-family: var(--sc-font-sans);
@@ -7,11 +13,19 @@ body {
   color: var(--sc-color-text);
 }
 
-.hidden { display: none !important; }
+.hidden {
+  display: none !important;
+}
 
 @keyframes popup-fade-up {
-  from { opacity: 0; transform: translateY(5px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .header {
@@ -21,7 +35,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 4px 14px rgba(21,101,192,0.3);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 4px 14px rgba(21, 101, 192, 0.3);
   animation: popup-fade-up 220ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
@@ -35,7 +51,7 @@ body {
 }
 
 .badge {
-  background: rgba(255,255,255,0.22);
+  background: rgba(255, 255, 255, 0.22);
   font-size: 11px;
   font-weight: 600;
   padding: 2px 9px;
@@ -58,7 +74,11 @@ body {
   color: var(--sc-color-text-subtle);
   cursor: pointer;
   border-bottom: 2px solid transparent;
-  transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    color 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .tab-btn.active {
@@ -67,7 +87,9 @@ body {
   background: var(--sc-color-surface-alt);
 }
 
-.panel { background: var(--sc-color-surface); }
+.panel {
+  background: var(--sc-color-surface);
+}
 .panel {
   animation: popup-fade-up 220ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
@@ -99,7 +121,10 @@ body {
   align-items: center;
   justify-content: center;
   gap: 7px;
-  transition: background 0.18s, transform 0.1s, box-shadow 0.18s;
+  transition:
+    background 0.18s,
+    transform 0.1s,
+    box-shadow 0.18s;
 }
 
 .btn-add-all {
@@ -116,7 +141,10 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: background 0.18s, border-color 0.18s, transform 0.1s;
+  transition:
+    background 0.18s,
+    border-color 0.18s,
+    transform 0.1s;
 }
 
 .btn-capture:disabled {
@@ -127,7 +155,7 @@ body {
 .btn-capture:hover:not(:disabled),
 .btn-add:hover {
   background: var(--sc-color-primary-strong);
-  box-shadow: 0 4px 14px rgba(25,118,210,0.35);
+  box-shadow: 0 4px 14px rgba(25, 118, 210, 0.35);
 }
 
 .btn-capture:active:not(:disabled),
@@ -244,10 +272,15 @@ kbd {
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  transition:
+    background 0.18s,
+    border-color 0.18s,
+    color 0.18s;
 }
 
-.btn-footer { flex: 1; }
+.btn-footer {
+  flex: 1;
+}
 
 .btn-footer:disabled {
   cursor: not-allowed;
@@ -349,7 +382,10 @@ kbd {
   color: var(--sc-color-disabled);
   border-radius: var(--sc-r-xs);
   opacity: 0;
-  transition: opacity 0.15s, color 0.15s, background 0.15s;
+  transition:
+    opacity 0.15s,
+    color 0.15s,
+    background 0.15s;
 }
 
 .url-item:hover .btn-open,

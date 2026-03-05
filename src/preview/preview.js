@@ -54,8 +54,7 @@ const toolButtons = {
 
 const UI_CANVAS_FONT_FAMILY =
   '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
-const EMOJI_FONT_FAMILY =
-  '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+const EMOJI_FONT_FAMILY = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
 
 let currentBlob = null;
 let sourceUrl = '';

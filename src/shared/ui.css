@@ -186,8 +186,12 @@ button:hover,
 }
 
 @keyframes sc-shimmer {
-  0% { background-position: -240px 0; }
-  100% { background-position: 240px 0; }
+  0% {
+    background-position: -240px 0;
+  }
+  100% {
+    background-position: 240px 0;
+  }
 }
 
 @keyframes sc-fade-up-soft {
@@ -236,20 +240,38 @@ button:hover,
   animation: sc-toast-in var(--sc-t-mid) var(--sc-ease) both;
 }
 
-.sc-toast.info { background: var(--sc-color-primary); }
-.sc-toast.success { background: var(--sc-color-success); }
-.sc-toast.error { background: var(--sc-color-error); }
+.sc-toast.info {
+  background: var(--sc-color-primary);
+}
+.sc-toast.success {
+  background: var(--sc-color-success);
+}
+.sc-toast.error {
+  background: var(--sc-color-error);
+}
 
 .sc-toast.leaving {
   animation: sc-toast-out var(--sc-t-mid) var(--sc-ease) both;
 }
 
 @keyframes sc-toast-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes sc-toast-out {
-  from { opacity: 1; transform: translateY(0); }
-  to { opacity: 0; transform: translateY(8px); }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }

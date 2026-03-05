@@ -223,7 +223,9 @@ export function createPreviewExportController({
     }
     if (buttons.presetPdfAutoBtn) {
       buttons.presetPdfAutoBtn.addEventListener('click', async () => {
-        await runPreset('pdf_auto').catch((err) => showError(`PDF Auto preset failed: ${err.message}`));
+        await runPreset('pdf_auto').catch((err) =>
+          showError(`PDF Auto preset failed: ${err.message}`)
+        );
       });
     }
   }

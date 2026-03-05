@@ -1,102 +1,115 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>THE Collector: Preview</title>
-  <link rel="stylesheet" href="../shared/ui.css" />
-  <link rel="stylesheet" href="preview.css" />
-</head>
-<body class="sc-page-enter">
-
-  <!-- Toolbar -->
-  <div class="toolbar sc-header">
-    <div class="toolbar-left">
-      <div class="brand">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-        </svg>
-        THE Collector
+  <head>
+    <meta charset="utf-8" />
+    <title>THE Collector: Preview</title>
+    <link rel="stylesheet" href="../shared/ui.css" />
+    <link rel="stylesheet" href="preview.css" />
+  </head>
+  <body class="sc-page-enter">
+    <!-- Toolbar -->
+    <div class="toolbar sc-header">
+      <div class="toolbar-left">
+        <div class="brand">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+            />
+          </svg>
+          THE Collector
+        </div>
+        <div class="toolbar-meta">
+          <a id="sourceUrl" class="source-url" target="_blank" rel="noopener"></a>
+          <span id="captureTime" class="meta-item"></span>
+          <span id="dimensions" class="meta-item"></span>
+        </div>
       </div>
-      <div class="toolbar-meta">
-        <a id="sourceUrl" class="source-url" target="_blank" rel="noopener"></a>
-        <span id="captureTime" class="meta-item"></span>
-        <span id="dimensions" class="meta-item"></span>
+      <div class="toolbar-actions">
+        <nav class="sc-header-nav" aria-label="Primary">
+          <a class="sc-header-link" href="../history/history.html">History</a>
+          <a class="sc-header-link" href="../options/options.html">Options</a>
+        </nav>
+        <label class="pdf-size-wrap" for="pdfPageSize">PDF size</label>
+        <select id="pdfPageSize" class="pdf-size" aria-label="PDF page size">
+          <option value="auto">Auto</option>
+          <option value="a4">A4</option>
+          <option value="letter">Letter</option>
+        </select>
+        <button id="downloadPng" class="btn-dl">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+          </svg>
+          Save PNG
+        </button>
+        <button id="downloadJpg" class="btn-dl btn-dl-secondary">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+          </svg>
+          Save JPG
+        </button>
+        <button id="downloadPdf" class="btn-dl btn-dl-secondary">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+          </svg>
+          Save PDF
+        </button>
+        <button id="copyImage" class="btn-dl btn-dl-secondary">Copy</button>
+        <div class="preset-group" role="group" aria-label="Export presets">
+          <button
+            id="presetEmail"
+            class="btn-dl btn-dl-preset"
+            title="Export JPG and open email draft"
+          >
+            Preset: Email
+          </button>
+          <button
+            id="presetDocs"
+            class="btn-dl btn-dl-preset"
+            title="Copy image resized for Google Docs limits"
+          >
+            Preset: Docs
+          </button>
+          <button
+            id="presetPdfAuto"
+            class="btn-dl btn-dl-preset"
+            title="Export PDF using Auto page size"
+          >
+            Preset: PDF Auto
+          </button>
+        </div>
+        <span class="zoom-hint">Click image to zoom</span>
       </div>
     </div>
-    <div class="toolbar-actions">
-      <nav class="sc-header-nav" aria-label="Primary">
-        <a class="sc-header-link" href="../history/history.html">History</a>
-        <a class="sc-header-link" href="../options/options.html">Options</a>
-      </nav>
-      <label class="pdf-size-wrap" for="pdfPageSize">PDF size</label>
-      <select id="pdfPageSize" class="pdf-size" aria-label="PDF page size">
-        <option value="auto">Auto</option>
-        <option value="a4">A4</option>
-        <option value="letter">Letter</option>
-      </select>
-      <button id="downloadPng" class="btn-dl">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-        </svg>
-        Save PNG
-      </button>
-      <button id="downloadJpg" class="btn-dl btn-dl-secondary">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-        </svg>
-        Save JPG
-      </button>
-      <button id="downloadPdf" class="btn-dl btn-dl-secondary">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-        </svg>
-        Save PDF
-      </button>
-      <button id="copyImage" class="btn-dl btn-dl-secondary">Copy</button>
-      <div class="preset-group" role="group" aria-label="Export presets">
-        <button id="presetEmail" class="btn-dl btn-dl-preset" title="Export JPG and open email draft">
-          Preset: Email
-        </button>
-        <button id="presetDocs" class="btn-dl btn-dl-preset" title="Copy image resized for Google Docs limits">
-          Preset: Docs
-        </button>
-        <button id="presetPdfAuto" class="btn-dl btn-dl-preset" title="Export PDF using Auto page size">
-          Preset: PDF Auto
-        </button>
+
+    <div id="modeNotice" class="mode-notice hidden" role="status"></div>
+
+    <div class="editbar">
+      <span class="edit-label">Edit:</span>
+      <button id="toolCrop" class="btn-edit">Crop</button>
+      <button id="toolBlur" class="btn-edit">Blur</button>
+      <button id="toolHighlight" class="btn-edit">Highlight</button>
+      <button id="toolText" class="btn-edit">Text</button>
+      <button id="toolShape" class="btn-edit">Shape</button>
+      <button id="toolEmoji" class="btn-edit">Emoji</button>
+      <button id="clearEdits" class="btn-edit btn-edit-secondary">Clear edits</button>
+      <label class="overlay-toggle">
+        <input id="stampOverlay" type="checkbox" checked />
+        Stamp URL + timestamp
+      </label>
+    </div>
+
+    <!-- Image area -->
+    <div id="imageContainer" class="image-container">
+      <div id="imageSkeleton" class="preview-skeleton sc-skeleton"></div>
+      <div id="stage" class="stage hidden">
+        <img id="screenshot" class="screenshot fit" alt="Full-page screenshot" />
+        <canvas id="annotationLayer" class="annotation-layer"></canvas>
       </div>
-      <span class="zoom-hint">Click image to zoom</span>
     </div>
-  </div>
 
-  <div id="modeNotice" class="mode-notice hidden" role="status"></div>
+    <div id="loading" class="status-msg">Loading screenshot…</div>
+    <div id="errorMsg" class="status-msg error hidden"></div>
 
-  <div class="editbar">
-    <span class="edit-label">Edit:</span>
-    <button id="toolCrop" class="btn-edit">Crop</button>
-    <button id="toolBlur" class="btn-edit">Blur</button>
-    <button id="toolHighlight" class="btn-edit">Highlight</button>
-    <button id="toolText" class="btn-edit">Text</button>
-    <button id="toolShape" class="btn-edit">Shape</button>
-    <button id="toolEmoji" class="btn-edit">Emoji</button>
-    <button id="clearEdits" class="btn-edit btn-edit-secondary">Clear edits</button>
-    <label class="overlay-toggle">
-      <input id="stampOverlay" type="checkbox" checked />
-      Stamp URL + timestamp
-    </label>
-  </div>
-
-  <!-- Image area -->
-  <div id="imageContainer" class="image-container">
-    <div id="imageSkeleton" class="preview-skeleton sc-skeleton"></div>
-    <div id="stage" class="stage hidden">
-      <img id="screenshot" class="screenshot fit" alt="Full-page screenshot" />
-      <canvas id="annotationLayer" class="annotation-layer"></canvas>
-    </div>
-  </div>
-
-  <div id="loading" class="status-msg">Loading screenshot…</div>
-  <div id="errorMsg" class="status-msg error hidden"></div>
-
-  <script type="module" src="preview.js"></script>
-</body>
+    <script type="module" src="preview.js"></script>
+  </body>
 </html>

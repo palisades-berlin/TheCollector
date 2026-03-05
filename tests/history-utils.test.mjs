@@ -97,5 +97,8 @@ await testAsync('runWithConcurrency processes all items and honors limit', async
   });
 
   assert.equal(maxActive <= 2, true);
-  assert.deepEqual(seen.sort((a, b) => a - b), items);
+  assert.deepEqual(
+    seen.sort((a, b) => a - b),
+    items
+  );
 });

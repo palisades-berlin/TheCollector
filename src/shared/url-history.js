@@ -31,7 +31,13 @@ function normalizeMeta(value) {
   return out;
 }
 
-export function buildUrlHistoryEntry({ actionType, urls, meta = {}, createdAt = Date.now(), id = buildId() }) {
+export function buildUrlHistoryEntry({
+  actionType,
+  urls,
+  meta = {},
+  createdAt = Date.now(),
+  id = buildId(),
+}) {
   const safeUrls = normalizeUrlArray(urls);
   return {
     id: typeof id === 'string' ? id : buildId(),
