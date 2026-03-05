@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.64 - 2026-03-05
+
+- Consolidated release/maintainer documentation ownership to reduce drift:
+  - `docs/dev-workflow.md` is now the canonical source for developer and release operations
+  - `README.md` and `CLAUDE.md` now point to the canonical workflow doc instead of duplicating operational checklists
+- Kept behavior and release policy content unchanged; this is documentation structure cleanup only.
+
 ## 1.3.63 - 2026-03-05
 
 - Extended `scripts/e2e-smoke.mjs` with `--real-extension-manual` mode for pre-upload manual smoke in real extension context (no stubbed `chrome` API).

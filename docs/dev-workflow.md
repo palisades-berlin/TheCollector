@@ -1,5 +1,7 @@
 # Developer Workflow
 
+This file is the canonical source for developer/release operations to keep `README.md` and `CLAUDE.md` aligned.
+
 ## Prerequisites
 
 - Node.js 20+
