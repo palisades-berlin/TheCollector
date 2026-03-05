@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.57 - 2026-03-05
+
+- Added lightweight Playwright e2e smoke coverage:
+  - new script: `scripts/e2e-smoke.mjs` (loads popup/history/options pages and fails on runtime errors)
+  - new npm command: `npm run test:e2e:smoke`
+- Updated CI workflow to run smoke e2e checks:
+  - installs Chromium via `npx playwright install --with-deps chromium`
+  - runs `npm run test:e2e:smoke` before packaging
+- Updated maintainer/user docs (`README.md`, `CLAUDE.md`) with the new smoke-test command.
+
 ## 1.3.56 - 2026-03-05
 
 - Added CI artifact publishing for packaged extension zip:

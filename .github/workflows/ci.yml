@@ -22,6 +22,12 @@ jobs:
       - name: Run quality checks
         run: npm run check
 
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run e2e smoke
+        run: npm run test:e2e:smoke
+
       - name: Package extension smoke test
         run: |
           ./scripts/package-release.sh
