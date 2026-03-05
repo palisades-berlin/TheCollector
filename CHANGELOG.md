@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.1 - 2026-03-05
+
+- Regenerated extension icon set in `assets/icons/` with a unified modern camera-mark style consistent with the approved 128x128 store icon.
+- Updated runtime icon assets:
+  - `icon16.png`
+  - `icon32.png`
+  - `icon48.png`
+  - `icon128.png`
+- Kept icon filenames/paths unchanged for manifest compatibility.
+
 ## 1.5.0 - 2026-03-05
 
 - Release alignment and packaging hardening:
