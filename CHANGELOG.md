@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.24 - 2026-03-05
+- Removed `CHROME_WEB_STORE_RELEASE_NOTES_1.1.3.md` from the repository.
+- Added `.gitignore` rule to prevent tracking `CHROME_WEB_STORE_RELEASE_NOTES_*.md` files.
+
 ## 1.3.23 - 2026-03-05
 - Removed all `GITHUB_RELEASE_*.md` files from the repository.
 - Added `.gitignore` rule to prevent `GITHUB_RELEASE_*.md` files from being tracked again.
