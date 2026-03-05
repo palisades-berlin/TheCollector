@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.8.0 - 2026-03-05
+
+- Implemented a full multi-pass UX/UI QA calibration wave across shared primitives and all extension surfaces (popup, history, options, preview) while preserving runtime behavior.
+- Shared design-system calibration in `src/shared/ui.css`:
+  - introduced explicit control-size tokens (`--sc-ctl-sm`, `--sc-ctl-md`, `--sc-ctl-tab`) and icon-gap token (`--sc-icon-gap`)
+  - standardized primitive sizing/padding for buttons, inputs/selects, and tabs
+  - scoped hover/press motion to shared button primitives to reduce dense-layout baseline drift.
+- Surface-level visual calibration:
+  - `src/popup/popup.css`: tokenized segmented tab spacing, normalized compact action/button paddings, and disabled hover-lift in dense footer/tab regions
+  - `src/history/history.css`: aligned header/filter/card/files-overlay spacing and action sizing to token rhythm, plus hover-lift opt-outs in dense toolbars/actions
+  - `src/options/options.css`: normalized header/row/permission spacing rhythm and control alignment to shared metrics
+  - `src/preview/preview.css`: normalized toolbar/editbar spacing and dense action behavior.
+- Added formal audit artifact `docs/ui-qa-audit.md` and linked it from workflow docs.
+- Expanded visual QA coverage:
+  - added component-level snapshot test `shared primitives / calibration matrix` in `tests/visual/ui-parity.spec.mjs`
+  - regenerated all affected parity baselines in `tests/visual/ui-parity.spec.mjs-snapshots/`.
+
+## 1.7.1 - 2026-03-05
+
+- Popup tab calibration (Figma segmented tabs):
+  - replaced underline-style popup switcher with segmented `Capture` / `URLs` control
+  - normalized tab height, typography, spacing, active/inactive hierarchy, and focus treatment
+  - removed popup tab style collision between shared `.sc-tab` primitives and local `.tab-btn` rules by scoping popup tab overrides.
+- Updated popup visual parity baselines:
+  - `popup-capture-default-darwin.png`
+  - `popup-urls-default-darwin.png`
+  - `popup-error-state-darwin.png`
+  - `popup-success-state-darwin.png`
+
 ## 1.7.0 - 2026-03-05
 
 - Completed a full visual calibration pass across shared system + popup + history + options + preview:

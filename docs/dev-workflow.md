@@ -66,6 +66,7 @@ Packaging script guardrails:
 - Before introducing new screen-level styles, implement or update shared primitives/tokens in `src/shared/ui.css`.
 - Keep surface-level CSS tokenized (`--popup-*`, `--history-*`) and avoid new hardcoded visual values when an existing token exists.
 - Reference `docs/ui-handoff.md` for component/state/accessibility contracts used for engineering handoff.
+- Use `docs/ui-qa-audit.md` as the operational checklist for multi-pass visual calibration and QA signoff.
 - Visual parity gate is mandatory for release candidates:
   - run `npm run test:e2e:visual`
   - screenshot diff threshold is `maxDiffPixels <= 2`.

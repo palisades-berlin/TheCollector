@@ -31,7 +31,8 @@ body {
   --preview-page-padding: var(--sc-sp-5);
   --preview-editbar-padding: var(--sc-sp-2) var(--sc-sp-5);
   --preview-meta-gap: var(--sc-sp-2);
-  --preview-btn-gap: 6px;
+  --preview-btn-gap: var(--sc-icon-gap);
+  --preview-toolbar-padding-y: var(--sc-sp-3);
   --preview-image-shell-radius: var(--sc-r-md);
 }
 
@@ -61,7 +62,7 @@ body {
   z-index: 10;
   background: var(--sc-header-grad);
   color: var(--sc-color-surface);
-  padding: 10px var(--preview-page-padding);
+  padding: var(--preview-toolbar-padding-y) var(--preview-page-padding);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -82,7 +83,7 @@ body {
 .brand {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--sc-icon-gap);
   font-size: var(--sc-font-body-size);
   font-weight: var(--sc-font-body-medium-weight);
   white-space: nowrap;
@@ -155,7 +156,7 @@ body {
   gap: 6px;
   font-size: var(--sc-font-caption-size);
   color: var(--sc-color-text-strong);
-  margin-left: 8px;
+  margin-left: var(--sc-sp-2);
 }
 
 .toolbar-actions {
@@ -193,7 +194,7 @@ body {
 }
 
 .btn-dl {
-  gap: 5px;
+  gap: var(--sc-icon-gap);
   letter-spacing: 0.1px;
   min-height: 40px;
 }
@@ -309,7 +310,7 @@ body {
 
 @media (max-width: 1100px) {
   .toolbar {
-    padding: 10px var(--sc-sp-4);
+    padding: var(--preview-toolbar-padding-y) var(--sc-sp-4);
   }
 
   .editbar {
@@ -323,4 +324,9 @@ body {
   .image-container {
     padding: var(--sc-sp-5);
   }
+}
+
+.toolbar .sc-btn:hover,
+.editbar .sc-btn:hover {
+  transform: none;
 }

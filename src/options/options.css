@@ -9,8 +9,9 @@
   --options-shell-padding: 24px;
   --options-gap: 16px;
   --options-card-padding: 16px;
-  --options-control-height: 40px;
+  --options-control-height: var(--sc-ctl-md);
   --options-label-width: 280px;
+  --options-header-padding: var(--sc-sp-4) var(--sc-sp-5);
 }
 
 body {
@@ -38,18 +39,18 @@ body {
 .header {
   background: var(--sc-header-grad);
   color: var(--sc-color-surface);
-  padding: 14px 20px;
+  padding: var(--options-header-padding);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--sc-sp-3);
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 16px;
+  gap: var(--sc-sp-2);
+  font-size: var(--sc-font-h2-size);
   font-weight: 600;
 }
 
@@ -81,7 +82,7 @@ body {
 }
 
 .card h2 {
-  margin: 0 0 14px;
+  margin: 0 0 var(--sc-sp-3);
   font-size: var(--sc-font-h2-size);
   font-weight: var(--sc-font-h2-weight);
   line-height: var(--sc-lh-tight);
@@ -91,7 +92,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: var(--sc-sp-3);
   margin-bottom: 12px;
 }
 
@@ -112,7 +113,7 @@ body {
 .dir-picker {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--sc-sp-2);
   flex-wrap: nowrap;
 }
 
@@ -127,8 +128,8 @@ body {
 .check-row {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  font-size: 14px;
+  gap: var(--sc-sp-2);
+  font-size: var(--sc-font-body-size);
   line-height: 1.4;
   margin-top: 2px;
 }
@@ -146,7 +147,7 @@ body {
 
 .btns {
   display: flex;
-  gap: 10px;
+  gap: var(--sc-sp-2);
   flex-wrap: wrap;
 }
 
@@ -166,14 +167,14 @@ body {
 
 .perm-list {
   display: grid;
-  gap: 10px;
+  gap: var(--sc-sp-2);
 }
 
 .perm-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--sc-sp-3);
   padding: 12px;
   border: 1px solid var(--sc-color-border);
   border-radius: var(--sc-r-md);
@@ -226,7 +227,7 @@ body {
 
 @media (max-width: 980px) {
   .main {
-    padding: 18px;
+    padding: var(--sc-sp-5);
   }
 
   .row {
@@ -274,4 +275,10 @@ body {
   .perm-badge {
     align-self: flex-start;
   }
+}
+
+.actions .sc-btn:hover,
+.btns .sc-btn:hover,
+.dir-picker .sc-btn:hover {
+  transform: none;
 }
