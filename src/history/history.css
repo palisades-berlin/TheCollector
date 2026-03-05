@@ -8,13 +8,16 @@
 
 :root {
   --history-font-sans: 'Poppins', var(--sc-font-sans);
-  --history-header-padding: var(--sc-sp-3) var(--sc-sp-5);
+  --history-header-padding: 14px var(--sc-sp-5);
   --history-section-padding-inline: var(--sc-sp-5);
-  --history-grid-gap: var(--sc-sp-4);
+  --history-grid-gap: 16px;
   --history-card-padding: var(--sc-sp-3);
   --history-control-padding: 7px 9px;
   --history-control-padding-wide: 7px 13px;
   --history-control-padding-sm: 6px 8px;
+  --history-control-height: 40px;
+  --history-action-height: 32px;
+  --history-card-min-width: 280px;
 
   --history-r-sm: var(--sc-r-sm);
   --history-r-md: var(--sc-r-md);
@@ -161,6 +164,8 @@ body {
     background var(--history-t-mid),
     border-color var(--history-t-mid);
   letter-spacing: 0.2px;
+  min-height: 36px;
+  padding: 6px 12px;
 }
 
 .btn-clear:hover {
@@ -182,9 +187,10 @@ body {
 /* ── Filters ── */
 .filters {
   display: grid;
-  grid-template-columns: minmax(180px, 1.2fr) repeat(2, minmax(140px, 1fr)) minmax(130px, 1fr) auto;
-  gap: 10px;
-  padding: var(--sc-sp-3) var(--history-section-padding-inline) 0;
+  grid-template-columns: minmax(220px, 1.2fr) repeat(2, minmax(190px, 1fr)) minmax(180px, 1fr) auto;
+  gap: 12px;
+  align-items: end;
+  padding: 14px var(--history-section-padding-inline) 0;
 }
 
 .filter-item {
@@ -205,7 +211,11 @@ body {
 .filter-item input,
 .filter-item select {
   width: 100%;
-  /* Exception: only width/layout; visual style comes from `.sc-input` / `.sc-select`. */
+  min-height: var(--history-control-height);
+  font-size: 14px;
+  line-height: 1.3;
+  padding: 0 12px;
+  /* Exception: visual tuning for exact History filter control height/typography. */
 }
 
 .filter-actions {
@@ -213,15 +223,19 @@ body {
 }
 
 .filter-actions .btn-clear {
-  margin-top: auto;
+  margin-top: 0;
+  min-height: var(--history-control-height);
+  padding: 0 16px;
 }
 
 /* ── Grid ── */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(var(--history-card-min-width), 1fr));
   gap: var(--history-grid-gap);
-  padding: var(--history-section-padding-inline);
+  padding: var(--sc-sp-4) var(--history-section-padding-inline)
+    var(--history-section-padding-inline);
+  align-items: start;
 }
 
 .capture-diagnostics {
@@ -334,7 +348,7 @@ body {
 }
 
 .card-body {
-  padding: var(--history-card-padding) var(--history-card-padding) 6px;
+  padding: 12px 12px 8px;
   flex: 1;
 }
 
@@ -349,7 +363,7 @@ body {
 }
 
 .card-meta {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--history-text-faint);
 }
 
@@ -362,9 +376,10 @@ body {
 
 .card-actions {
   display: flex;
-  gap: 6px;
-  padding: 8px 12px 10px;
+  gap: var(--sc-sp-2);
+  padding: 10px 12px 12px;
   border-top: 1px solid var(--history-bg);
+  align-items: center;
 }
 
 /* ── Card action buttons ── */
@@ -374,6 +389,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 4px;
+  min-height: var(--history-action-height);
+  padding: 0 10px;
 }
 
 .btn-open:hover {
@@ -438,7 +455,7 @@ body {
 
 @media (max-width: 980px) {
   .filters {
-    grid-template-columns: repeat(2, minmax(160px, 1fr));
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
   }
 }
 

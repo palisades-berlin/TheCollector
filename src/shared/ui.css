@@ -66,6 +66,8 @@
   --sc-sp-4: 16px;
   --sc-sp-5: 20px;
   --sc-sp-6: 24px;
+  --sc-sp-7: 28px;
+  --sc-sp-8: 32px;
 
   --sc-r-xxs: 3px;
   --sc-r-xs: 4px;
@@ -199,8 +201,8 @@ button:hover,
 .sc-input,
 .sc-select {
   width: 100%;
-  min-height: 32px;
-  padding: 6px 10px;
+  min-height: 40px;
+  padding: 0 12px;
   border: 1.5px solid var(--sc-color-border-strong);
   border-radius: var(--sc-r-sm);
   background: var(--sc-color-surface);
@@ -233,8 +235,8 @@ button:hover,
   font-size: var(--sc-font-body-size);
   font-weight: var(--sc-font-body-medium-weight);
   line-height: var(--sc-lh-tight);
-  min-height: 30px;
-  padding: 7px 11px;
+  min-height: 32px;
+  padding: 6px 10px;
   cursor: pointer;
 }
 
@@ -290,14 +292,14 @@ button:hover,
 }
 
 .sc-btn-sm {
-  min-height: 28px;
-  padding: 5px 9px;
+  min-height: 32px;
+  padding: 6px 10px;
   font-size: var(--sc-font-caption-size);
 }
 
 .sc-btn-md {
-  min-height: 34px;
-  padding: 8px 12px;
+  min-height: 40px;
+  padding: 0 14px;
   font-size: var(--sc-font-body-size);
 }
 

@@ -65,7 +65,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--sc-sp-3);
   flex-wrap: wrap;
   box-shadow: var(--sc-sh-1), var(--sc-sh-2);
   animation: preview-fade-up var(--sc-t-slow) var(--sc-ease-spring) both;
@@ -74,7 +74,7 @@ body {
 .toolbar-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--sc-sp-3);
   overflow: hidden;
   min-width: 0;
 }
@@ -161,7 +161,7 @@ body {
 .toolbar-actions {
   display: flex;
   align-items: center;
-  gap: var(--preview-btn-gap);
+  gap: var(--sc-sp-2);
   flex-wrap: wrap;
 }
 
@@ -177,6 +177,8 @@ body {
   background: rgba(255, 255, 255, 0.14);
   color: var(--sc-color-surface);
   border-color: rgba(255, 255, 255, 0.36);
+  min-height: 40px;
+  padding: 0 12px;
 }
 
 .toolbar .sc-btn:hover,
@@ -193,6 +195,7 @@ body {
 .btn-dl {
   gap: 5px;
   letter-spacing: 0.1px;
+  min-height: 40px;
 }
 
 .btn-dl svg {
@@ -205,6 +208,7 @@ body {
 
 .btn-dl-preset {
   font-size: var(--sc-font-caption-size);
+  min-height: 40px;
 }
 
 .preset-group {
@@ -224,7 +228,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 24px;
+  padding: var(--sc-sp-6);
   cursor: zoom-in;
   overflow: auto;
 }
@@ -301,4 +305,22 @@ body {
 
 .hidden {
   display: none !important;
+}
+
+@media (max-width: 1100px) {
+  .toolbar {
+    padding: 10px var(--sc-sp-4);
+  }
+
+  .editbar {
+    padding: var(--sc-sp-2) var(--sc-sp-4);
+  }
+
+  .mode-notice {
+    margin: var(--sc-sp-2) var(--sc-sp-4) 0;
+  }
+
+  .image-container {
+    padding: var(--sc-sp-5);
+  }
 }

@@ -10,11 +10,12 @@
   --popup-font-sans: 'Poppins', var(--sc-font-sans);
 
   --popup-width: 400px;
-  --popup-header-padding: 12px 14px;
-  --popup-section-padding: 12px 14px;
-  --popup-footer-padding: 10px 14px;
-  --popup-control-padding: 7px 10px;
-  --popup-list-max-height: 220px;
+  --popup-header-padding: 12px 16px;
+  --popup-section-padding: 12px 16px;
+  --popup-footer-padding: 12px 16px;
+  --popup-control-padding: 6px 10px;
+  --popup-list-max-height: 236px;
+  --popup-row-gap: 8px;
 
   --popup-r-pill: var(--sc-r-pill);
   --popup-r-sm: var(--sc-r-sm);
@@ -113,7 +114,8 @@ body {
   flex: 1;
   border: none;
   background: transparent;
-  padding: 10px;
+  min-height: 40px;
+  padding: 0 10px;
   font-size: 12px;
   font-weight: 700;
   color: var(--popup-text-subtle);
@@ -146,7 +148,7 @@ body {
 .add-section {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--popup-row-gap);
 }
 
 .btn-capture,
@@ -155,7 +157,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 6px;
 }
 
 .btn-add-all {
@@ -164,6 +166,18 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
+}
+
+/* Exception: popup requires denser button sizing than full-page surfaces. */
+.btn-capture.sc-btn-md,
+.btn-add.sc-btn-md {
+  min-height: 40px;
+  padding: 0 14px;
+}
+
+.btn-add-all.sc-btn {
+  min-height: 32px;
+  padding: 6px 10px;
 }
 
 .btn-capture:disabled {
@@ -228,13 +242,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: var(--popup-row-gap);
 }
 
 .footer-actions,
 .footer-row {
   display: flex;
-  gap: 6px;
+  gap: var(--popup-row-gap);
+  align-items: center;
 }
 
 .url-footer {
@@ -245,7 +260,8 @@ body {
   padding: var(--popup-footer-padding);
   border-bottom: 1px solid var(--popup-border);
   display: flex;
-  gap: 6px;
+  gap: var(--popup-row-gap);
+  align-items: center;
 }
 .history-footer {
   padding: var(--popup-footer-padding);
@@ -268,6 +284,8 @@ body {
 
 .btn-footer {
   flex: 1;
+  min-height: 32px;
+  padding: var(--popup-control-padding);
 }
 
 .btn-footer:disabled {
@@ -284,18 +302,18 @@ body {
 .url-item {
   display: flex;
   align-items: flex-start;
-  padding: 8px 10px 8px 14px;
+  padding: 10px 12px 10px 14px;
   border-bottom: 1px solid var(--popup-bg);
-  gap: 6px;
+  gap: var(--popup-row-gap);
   transition: background 0.15s ease;
   animation: popup-fade-up 180ms cubic-bezier(0.2, 0, 0, 1) both;
 }
 
 .history-item {
-  padding: 9px 12px;
+  padding: 10px 12px;
   border-bottom: 1px solid var(--popup-bg);
   display: grid;
-  gap: 8px;
+  gap: var(--popup-row-gap);
 }
 
 .history-item-title {
@@ -316,7 +334,7 @@ body {
 .history-item-actions {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 6px;
+  gap: var(--popup-row-gap);
 }
 
 .history-item-actions .btn-footer {

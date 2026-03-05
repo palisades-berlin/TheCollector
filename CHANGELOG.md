@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.7.0 - 2026-03-05
+
+- Completed a full visual calibration pass across shared system + popup + history + options + preview:
+  - normalized global spacing/control metrics in `src/shared/ui.css` (4px base scale, 32px small controls, 40px standard controls)
+  - aligned popup layout rhythm, tab/control sizing, footer/action spacing, and dense-list row spacing
+  - refined history grid/filter/header/action alignment and card/action sizing consistency
+  - refined options shell/card/row rhythm and action/status alignment to shared control heights
+  - aligned preview toolbar/editbar/control baselines and responsive spacing rhythm.
+- Updated visual parity snapshots for calibrated surfaces in `tests/visual/ui-parity.spec.mjs-snapshots/`.
+
+## 1.6.2 - 2026-03-05
+
+- Options/Settings page calibration pass for layout and control parity:
+  - refined page shell grid, spacing rhythm, and card padding hierarchy
+  - standardized form control heights and row-label alignment
+  - improved action/status alignment and permission item spacing behavior across breakpoints.
+- Updated Options visual regression baselines in `tests/visual/ui-parity.spec.mjs-snapshots/`.
+
+## 1.6.1 - 2026-03-05
+
+- History page visual calibration pass for alignment/size parity:
+  - normalized header and filter-bar vertical rhythm (control heights, spacing, grid alignment)
+  - tuned card sizing/spacing and action-row alignment for closer Figma match
+  - refined History responsive breakpoints and preserved existing behavior.
+- Updated History visual regression baselines in `tests/visual/ui-parity.spec.mjs-snapshots/` for the calibrated layout.
+
 ## 1.6.0 - 2026-03-05
 
 - Implemented full Figma-exact UI parity pass (light mode) across popup, history/sidebar, options, and preview.
