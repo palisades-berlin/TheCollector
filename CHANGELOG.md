@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.40 - 2026-03-05
+- Updated Visual Diff rendering to use translucent bounding boxes around detected change regions.
+- Box semantics:
+  - green boxes = added/brighter regions
+  - red boxes = removed/darker regions
+- Added region grouping/merge pass to keep diff overlays readable on dense pages.
+- Kept diff output derived-only and export/copy behavior unchanged.
+
 ## 1.3.39 - 2026-03-05
 - Added Visual Diff Mode for screenshots:
   - History now supports selecting 2 screenshots and opening a compare view in Preview (`Compare (2/2)` flow).
