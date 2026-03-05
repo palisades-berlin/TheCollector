@@ -229,6 +229,11 @@ body {
   box-shadow: 0 4px 16px rgba(25,118,210,0.12);
 }
 
+.card.compare-selected {
+  border-color: var(--sc-color-primary-active);
+  box-shadow: 0 0 0 2px rgba(25,118,210,0.25);
+}
+
 .card-thumb {
   width: 100%;
   aspect-ratio: 4 / 3;
@@ -316,6 +321,18 @@ body {
   background: var(--sc-color-primary-soft);
   border-color: var(--sc-color-primary-border);
   color: var(--sc-color-primary-strong);
+}
+
+.btn-compare:hover {
+  background: var(--sc-color-primary-soft);
+  border-color: var(--sc-color-primary-border);
+  color: var(--sc-color-primary-strong);
+}
+
+.btn-compare.active {
+  background: var(--sc-color-primary);
+  border-color: var(--sc-color-primary);
+  color: var(--sc-color-surface);
 }
 
 .btn-delete:hover {

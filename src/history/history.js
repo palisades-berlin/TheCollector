@@ -28,6 +28,7 @@ const captureDiagnosticsDismissEl = document.getElementById('captureDiagnosticsD
 const countEl = document.getElementById('count');
 const clearAllBtn = document.getElementById('clearAllBtn');
 const openFilesBtn = document.getElementById('openFilesBtn');
+const compareBtn = document.getElementById('compareBtn');
 const cardTpl = document.getElementById('cardTpl');
 const filterDomainEl = document.getElementById('filterDomain');
 const filterFromEl = document.getElementById('filterFrom');
@@ -63,6 +64,7 @@ const filters = {
   toDate: '',
   type: 'all',
 };
+const compareSelection = [];
 const DEBUG_THUMB_QUEUE =
   new URLSearchParams(window.location.search).get('debugThumbQueue') === '1' ||
   window.localStorage.getItem('sc_debug_thumb_queue') === '1';
@@ -173,6 +175,7 @@ function applyFilters() {
   });
   groups = buildGroups(records);
   selectedBaseIds.clear();
+  compareSelection.length = 0;
 }
 
 function renderMainView() {
@@ -186,6 +189,8 @@ function renderMainView() {
     gridEl.classList.add('hidden');
     clearAllBtn.classList.toggle('hidden', !hasAnyRecords);
     openFilesBtn.classList.toggle('hidden', !hasAnyRecords);
+    compareBtn.classList.toggle('hidden', !hasAnyRecords);
+    updateCompareUi();
     updateCount(0, allRecords.length);
     return;
   }
@@ -194,6 +199,7 @@ function renderMainView() {
   gridEl.classList.remove('hidden');
   clearAllBtn.classList.remove('hidden');
   openFilesBtn.classList.remove('hidden');
+  compareBtn.classList.remove('hidden');
   updateCount(records.length, allRecords.length);
 
   const fragment = document.createDocumentFragment();
@@ -201,6 +207,7 @@ function renderMainView() {
     fragment.appendChild(buildCard(record));
   }
   gridEl.appendChild(fragment);
+  updateCompareUi();
 }
 
 function buildCard(record) {
@@ -237,6 +244,16 @@ function buildCard(record) {
   card.addEventListener('click', (e) => {
     if (e.target.closest('button')) return;
     openPreview(record.id);
+  });
+  const compareCardBtn = node.querySelector('.btn-compare');
+  const selectedIdx = compareSelection.indexOf(record.id);
+  const selected = selectedIdx !== -1;
+  card.classList.toggle('compare-selected', selected);
+  compareCardBtn.classList.toggle('active', selected);
+  compareCardBtn.textContent = selected ? `Selected ${selectedIdx + 1}` : 'Compare';
+  compareCardBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleCompareSelection(record.id);
   });
   openBtn.addEventListener('click', () => openPreview(record.id));
   deleteBtn.addEventListener('click', async (e) => {
@@ -297,6 +314,35 @@ captureDiagnosticsDismissEl?.addEventListener('click', () => {
 function openPreview(id) {
   const url = chrome.runtime.getURL(`src/preview/preview.html?id=${id}`);
   chrome.tabs.create({ url });
+}
+
+function openDiffPreview(baseId, compareId) {
+  const url = chrome.runtime.getURL(
+    `src/preview/preview.html?id=${encodeURIComponent(baseId)}&compareId=${encodeURIComponent(compareId)}&mode=diff`
+  );
+  chrome.tabs.create({ url });
+}
+
+function toggleCompareSelection(id) {
+  const idx = compareSelection.indexOf(id);
+  if (idx !== -1) {
+    compareSelection.splice(idx, 1);
+    renderMainView();
+    updateCompareUi();
+    return;
+  }
+  compareSelection.push(id);
+  if (compareSelection.length > 2) compareSelection.shift();
+  renderMainView();
+  updateCompareUi();
+}
+
+function updateCompareUi() {
+  const selected = compareSelection.length;
+  if (compareBtn) {
+    compareBtn.textContent = `Compare (${selected}/2)`;
+    compareBtn.disabled = selected !== 2;
+  }
 }
 
 function updateCount(filtered, total) {
@@ -569,4 +615,10 @@ clearAllBtn.addEventListener('click', async () => {
   await deleteScreenshots(allRecords.map((record) => record.id));
   showToast('All screenshots deleted.', 'success');
   await refreshAll();
+});
+
+compareBtn?.addEventListener('click', () => {
+  if (compareSelection.length !== 2) return;
+  const [first, second] = compareSelection;
+  openDiffPreview(first, second);
 });

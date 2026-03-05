@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.39 - 2026-03-05
+- Added Visual Diff Mode for screenshots:
+  - History now supports selecting 2 screenshots and opening a compare view in Preview (`Compare (2/2)` flow).
+  - Preview supports `mode=diff` (`id` + `compareId`) and renders a pixel-difference overlay:
+    - green highlights added/brighter regions
+    - red highlights removed/darker regions
+    - unchanged regions are dimmed for focus.
+- Diff output is derived-only (no changes to original screenshot records) and can be exported/copied with existing Preview export actions.
+- Added History compare selection UI states (`Selected 1/2`) and compare button state handling.
+
 ## 1.3.38 - 2026-03-05
 - Improved URL History performance and consistency in popup:
   - history is loaded lazily only when `History` is opened

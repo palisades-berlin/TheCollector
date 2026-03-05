@@ -7,7 +7,9 @@ import { buildPdfFromCanvas } from './pdf-export.js';
 
 const params = new URLSearchParams(location.search);
 const id = params.get('id');
+const compareId = params.get('compareId');
 const modeFromQuery = params.get('mode') || 'page';
+const isDiffMode = Boolean(compareId) || modeFromQuery === 'diff';
 
 const stageEl = document.getElementById('stage');
 const screenshotImg = document.getElementById('screenshot');
@@ -30,6 +32,7 @@ const presetPdfAutoBtn = document.getElementById('presetPdfAuto');
 const pdfPageSizeEl = document.getElementById('pdfPageSize');
 const stampOverlayEl = document.getElementById('stampOverlay');
 const clearEditsBtn = document.getElementById('clearEdits');
+const editbarEl = document.querySelector('.editbar');
 
 const toolButtons = {
   crop: document.getElementById('toolCrop'),
@@ -107,31 +110,21 @@ async function init() {
       return;
     }
 
-    sourceUrl = record.url || '';
-    captureTimestamp = record.timestamp || Date.now();
-
-    const safeUrl = sanitizeHttpUrl(record.url || '');
-    sourceUrlEl.textContent = record.url || '';
-    if (safeUrl) {
-      sourceUrlEl.href = safeUrl;
-      sourceUrlEl.target = '_blank';
-      sourceUrlEl.rel = 'noopener noreferrer';
-      sourceUrlEl.removeAttribute('aria-disabled');
-      sourceUrlEl.style.pointerEvents = '';
+    if (isDiffMode) {
+      const second = await getScreenshot(compareId || '');
+      if (!second) {
+        showError('Comparison screenshot not found. It may have been deleted.');
+        return;
+      }
+      await setupDiffPreview(record, second);
     } else {
-      sourceUrlEl.removeAttribute('href');
-      sourceUrlEl.removeAttribute('target');
-      sourceUrlEl.removeAttribute('rel');
-      sourceUrlEl.setAttribute('aria-disabled', 'true');
-      sourceUrlEl.style.pointerEvents = 'none';
+      await setupSinglePreview(record);
     }
-    document.title = `THE Collector · ${record.title || record.url}`;
-    captureTimeEl.textContent = new Date(record.timestamp).toLocaleString();
-    dimensionsEl.textContent = `${record.width} × ${record.height} px`;
 
-    await setupSinglePreview(record);
-
-    if (modeFromQuery === 'iframe') {
+    if (modeFromQuery === 'diff' || isDiffMode) {
+      modeNoticeEl.textContent = 'Visual Diff Mode: green = added/brighter, red = removed/darker.';
+      modeNoticeEl.classList.remove('hidden');
+    } else if (modeFromQuery === 'iframe') {
       modeNoticeEl.textContent = 'Captured using same-origin iframe mode.';
       modeNoticeEl.classList.remove('hidden');
     } else if (modeFromQuery === 'element') {
@@ -139,16 +132,77 @@ async function init() {
       modeNoticeEl.classList.remove('hidden');
     }
 
-    maybeAutoDownload();
+    if (!isDiffMode) maybeAutoDownload();
   } catch (err) {
     showError(`Failed to load screenshot: ${err.message}`);
   }
 }
 
 async function setupSinglePreview(record) {
-  currentBlob = record.blob;
+  sourceUrl = record.url || '';
+  captureTimestamp = record.timestamp || Date.now();
+  setSourceUrlLink(record.url || '');
+  document.title = `THE Collector · ${record.title || record.url}`;
+  captureTimeEl.textContent = new Date(record.timestamp).toLocaleString();
+  dimensionsEl.textContent = `${record.width} × ${record.height} px`;
+  await loadBlobIntoPreview(record.blob);
+}
+
+async function setupDiffPreview(baseRecord, compareRecord) {
+  disableEditingForDiff();
+  const { blob, width, height } = await buildDiffBlob(baseRecord.blob, compareRecord.blob);
+  currentBlob = blob;
+  sourceUrl = '';
+  captureTimestamp = Number(compareRecord.timestamp || Date.now());
+  setSourceUrlTextForDiff(baseRecord.url || '', compareRecord.url || '');
+  document.title = `THE Collector · Diff ${baseRecord.title || baseRecord.url} vs ${compareRecord.title || compareRecord.url}`;
+  captureTimeEl.textContent =
+    `${new Date(baseRecord.timestamp).toLocaleString()} -> ${new Date(compareRecord.timestamp).toLocaleString()}`;
+  dimensionsEl.textContent = `${width} × ${height} px (diff)`;
+  await loadBlobIntoPreview(blob);
+}
+
+function disableEditingForDiff() {
+  if (editbarEl) editbarEl.classList.add('hidden');
+  stampOverlayEl.checked = false;
+  stampOverlayEl.disabled = true;
+  clearEditsBtn.disabled = true;
+  setTool(null);
+}
+
+function setSourceUrlTextForDiff(baseUrl, compareUrl) {
+  const base = safeText(baseUrl) || '(unknown)';
+  const next = safeText(compareUrl) || '(unknown)';
+  sourceUrlEl.textContent = `Diff: ${base} vs ${next}`;
+  sourceUrlEl.removeAttribute('href');
+  sourceUrlEl.removeAttribute('target');
+  sourceUrlEl.removeAttribute('rel');
+  sourceUrlEl.setAttribute('aria-disabled', 'true');
+  sourceUrlEl.style.pointerEvents = 'none';
+}
+
+function setSourceUrlLink(url) {
+  const safeUrl = sanitizeHttpUrl(url);
+  sourceUrlEl.textContent = url || '';
+  if (safeUrl) {
+    sourceUrlEl.href = safeUrl;
+    sourceUrlEl.target = '_blank';
+    sourceUrlEl.rel = 'noopener noreferrer';
+    sourceUrlEl.removeAttribute('aria-disabled');
+    sourceUrlEl.style.pointerEvents = '';
+    return;
+  }
+  sourceUrlEl.removeAttribute('href');
+  sourceUrlEl.removeAttribute('target');
+  sourceUrlEl.removeAttribute('rel');
+  sourceUrlEl.setAttribute('aria-disabled', 'true');
+  sourceUrlEl.style.pointerEvents = 'none';
+}
+
+async function loadBlobIntoPreview(blob) {
+  currentBlob = blob;
   markEditedCanvasDirty();
-  const objectUrl = URL.createObjectURL(record.blob);
+  const objectUrl = URL.createObjectURL(blob);
   return new Promise((resolve, reject) => {
     const cleanup = () => {
       screenshotImg.onload = null;
@@ -175,6 +229,88 @@ async function setupSinglePreview(record) {
 
     screenshotImg.src = objectUrl;
   });
+}
+
+async function buildDiffBlob(baseBlob, compareBlob) {
+  const baseCanvas = await decodeImageToCanvas(baseBlob);
+  const compareCanvas = await decodeImageToCanvas(compareBlob);
+  const width = Math.min(baseCanvas.width, compareCanvas.width);
+  const height = Math.min(baseCanvas.height, compareCanvas.height);
+  const baseCtx = baseCanvas.getContext('2d', { willReadFrequently: true });
+  const compareCtx = compareCanvas.getContext('2d', { willReadFrequently: true });
+  const outCanvas = document.createElement('canvas');
+  outCanvas.width = width;
+  outCanvas.height = height;
+  const outCtx = outCanvas.getContext('2d');
+
+  const a = baseCtx.getImageData(0, 0, width, height);
+  const b = compareCtx.getImageData(0, 0, width, height);
+  const out = outCtx.createImageData(width, height);
+  const ad = a.data;
+  const bd = b.data;
+  const od = out.data;
+  const threshold = 24;
+
+  for (let i = 0; i < od.length; i += 4) {
+    const aAlpha = ad[i + 3];
+    const bAlpha = bd[i + 3];
+    if (aAlpha === 0 && bAlpha === 0) {
+      od[i] = 0;
+      od[i + 1] = 0;
+      od[i + 2] = 0;
+      od[i + 3] = 0;
+      continue;
+    }
+
+    const dr = Math.abs(bd[i] - ad[i]);
+    const dg = Math.abs(bd[i + 1] - ad[i + 1]);
+    const db = Math.abs(bd[i + 2] - ad[i + 2]);
+    const da = Math.abs(bAlpha - aAlpha);
+    const delta = Math.max(dr, dg, db, da);
+    const bg = Math.round((bd[i] + bd[i + 1] + bd[i + 2]) / 3);
+
+    if (delta < threshold) {
+      const muted = Math.round(bg * 0.5);
+      od[i] = muted;
+      od[i + 1] = muted;
+      od[i + 2] = muted;
+      od[i + 3] = 255;
+      continue;
+    }
+
+    const lumA = ad[i] * 0.2126 + ad[i + 1] * 0.7152 + ad[i + 2] * 0.0722;
+    const lumB = bd[i] * 0.2126 + bd[i + 1] * 0.7152 + bd[i + 2] * 0.0722;
+    const isAdded = lumB >= lumA;
+    const tint = isAdded ? [46, 204, 113] : [231, 76, 60];
+    od[i] = Math.round(bg * 0.35 + tint[0] * 0.65);
+    od[i + 1] = Math.round(bg * 0.35 + tint[1] * 0.65);
+    od[i + 2] = Math.round(bg * 0.35 + tint[2] * 0.65);
+    od[i + 3] = 255;
+  }
+
+  outCtx.putImageData(out, 0, 0);
+  drawDiffLegend(outCtx, width, height);
+  const blob = await canvasToBlob(outCanvas, 'image/png');
+  return { blob, width, height };
+}
+
+function drawDiffLegend(ctx, width, height) {
+  const pad = Math.max(10, Math.round(width / 180));
+  const boxW = Math.max(240, Math.round(width * 0.28));
+  const boxH = 54;
+  const x = Math.max(0, width - boxW - pad);
+  const y = Math.max(0, height - boxH - pad);
+  ctx.save();
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.58)';
+  ctx.fillRect(x, y, boxW, boxH);
+  ctx.font = `600 12px ${UI_CANVAS_FONT_FAMILY}`;
+  ctx.fillStyle = '#b0bec5';
+  ctx.fillText('Visual Diff', x + 10, y + 16);
+  ctx.fillStyle = '#2ecc71';
+  ctx.fillText('Added / brighter', x + 10, y + 35);
+  ctx.fillStyle = '#e74c3c';
+  ctx.fillText('Removed / darker', x + 130, y + 35);
+  ctx.restore();
 }
 
 function showError(msg) {
