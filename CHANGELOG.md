@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.45 - 2026-03-05
+- Refactored popup URL panel into focused modules while preserving behavior:
+  - `src/popup/urls/urls-state.js`
+  - `src/popup/urls/urls-history-view.js`
+  - `src/popup/urls/urls-actions.js`
+- Converted `src/popup/urls-panel.js` into an orchestration layer for state, history view, and event wiring.
+- Kept URL add/remove/export/restore/history workflows functionally unchanged.
+
 ## 1.3.44 - 2026-03-05
 - Refactored Preview into focused modules while preserving behavior:
   - `src/preview/preview-init.js`
