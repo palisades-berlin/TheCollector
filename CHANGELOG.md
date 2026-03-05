@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.50 - 2026-03-05
+- Extracted capture orchestration into `src/background/capture-service.js`.
+- Simplified `src/background/service-worker.js` to adapter responsibilities (message and command handling + preview-download route).
+- Kept capture behavior unchanged (retry/throttle, target protocol sync, stitching, telemetry, auto-download/preview flow).
+
 ## 1.3.49 - 2026-03-05
 - Added repository abstraction modules under `src/shared/repos/`:
   - `screenshot-repo.js`
