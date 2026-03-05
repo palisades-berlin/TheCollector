@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.48 - 2026-03-05
+- Updated the Preview Visual Diff status message to a clearer, more user-friendly sentence while keeping the same meaning and UI behavior.
+
 ## 1.3.47 - 2026-03-05
 - Refactored History page into focused modules while preserving behavior:
   - `src/history/history-filters.js`

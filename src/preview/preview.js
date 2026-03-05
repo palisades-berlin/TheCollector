@@ -147,7 +147,7 @@ async function init() {
 
     if (modeFromQuery === 'diff' || isDiffMode) {
       modeNoticeEl.textContent =
-        'Visual Diff Mode: translucent boxes (green = added/brighter, red = removed/darker).';
+        'Visual Diff active: green marks added/brighter areas, red marks removed/darker areas.';
       modeNoticeEl.classList.remove('hidden');
     } else if (modeFromQuery === 'iframe') {
       modeNoticeEl.textContent = 'Captured using same-origin iframe mode.';
