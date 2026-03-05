@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.63 - 2026-03-05
+
+- Extended `scripts/e2e-smoke.mjs` with `--real-extension-manual` mode for pre-upload manual smoke in real extension context (no stubbed `chrome` API).
+- Added `npm run test:e2e:manual` command to run the manual real-context smoke checklist:
+  - capture in toolbar popup (manual action)
+  - URL add/export smoke
+  - history page open smoke
+  - options save smoke
+- Documented the manual smoke requirement in release workflow docs.
+
 ## 1.3.62 - 2026-03-05
 
 - Hardened release-version alignment checks in `scripts/package-release.sh`:

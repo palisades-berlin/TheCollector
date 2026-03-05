@@ -1,6 +1,9 @@
 import fs from 'node:fs/promises';
 import http from 'node:http';
+import os from 'node:os';
 import path from 'node:path';
+import readline from 'node:readline/promises';
+import { stdin as input, stdout as output } from 'node:process';
 import { chromium } from 'playwright';
 
 const ROOT = process.cwd();
@@ -15,6 +18,12 @@ const MIME = {
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
 };
+
+function parseMode() {
+  const args = new Set(process.argv.slice(2));
+  if (args.has('--real-extension-manual')) return 'real-extension-manual';
+  return 'stub';
+}
 
 function createChromeStubInitScript() {
   return () => {
@@ -133,7 +142,18 @@ function assertNoRuntimeErrors(errorsByPage) {
   throw new Error(`E2E smoke failed due to runtime errors:\n${detail}`);
 }
 
-async function run() {
+function collectPageErrors(page, bucket) {
+  page.on('pageerror', (err) => bucket.push(`pageerror: ${err.message}`));
+  page.on('console', (msg) => {
+    if (msg.type() === 'error') bucket.push(`console.error: ${msg.text()}`);
+  });
+}
+
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+async function runStubSmoke() {
   const { server, port } = await startStaticServer();
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext();
@@ -145,10 +165,7 @@ async function run() {
     for (const pagePath of PAGES) {
       const page = await context.newPage();
       const errors = [];
-      page.on('pageerror', (err) => errors.push(`pageerror: ${err.message}`));
-      page.on('console', (msg) => {
-        if (msg.type() === 'error') errors.push(`console.error: ${msg.text()}`);
-      });
+      collectPageErrors(page, errors);
 
       await page.goto(`http://${HOST}:${port}${pagePath}`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(350);
@@ -167,6 +184,111 @@ async function run() {
     await browser.close();
     await new Promise((resolve) => server.close(resolve));
   }
+}
+
+async function getExtensionId(context) {
+  const existing = context.serviceWorkers()[0];
+  if (existing) return new URL(existing.url()).host;
+  const sw = await context.waitForEvent('serviceworker', { timeout: 15000 });
+  return new URL(sw.url()).host;
+}
+
+async function runRealExtensionManualSmoke() {
+  if (!input.isTTY) {
+    throw new Error('Manual mode requires a TTY. Run in an interactive terminal.');
+  }
+
+  const userDataDir = await fs.mkdtemp(path.join(os.tmpdir(), 'the-collector-smoke-'));
+  const context = await chromium.launchPersistentContext(userDataDir, {
+    headless: false,
+    args: [`--disable-extensions-except=${ROOT}`, `--load-extension=${ROOT}`],
+    acceptDownloads: true,
+  });
+
+  const rl = readline.createInterface({ input, output });
+  const allErrors = [];
+
+  try {
+    const extensionId = await getExtensionId(context);
+    const extensionBase = `chrome-extension://${extensionId}`;
+
+    const webPage = await context.newPage();
+    const webErrors = [];
+    collectPageErrors(webPage, webErrors);
+    await webPage.goto('https://example.com', { waitUntil: 'domcontentloaded' });
+
+    console.log('\nManual capture step required:');
+    console.log('1) Keep the Example tab selected.');
+    console.log('2) Click THE Collector toolbar icon.');
+    console.log('3) Click "Capture Full Page" and wait for completion.');
+    await rl.question('Press Enter after capture completes... ');
+
+    const popupPage = await context.newPage();
+    const popupErrors = [];
+    collectPageErrors(popupPage, popupErrors);
+    await popupPage.goto(`${extensionBase}/src/popup/popup.html`, {
+      waitUntil: 'domcontentloaded',
+    });
+
+    await popupPage.click('#urlsTabBtn');
+    await popupPage.click('#btn-add-all');
+    await popupPage.waitForSelector('.url-item', { timeout: 5000 });
+
+    const downloadPromise = popupPage.waitForEvent('download', { timeout: 5000 }).catch(() => null);
+    await popupPage.click('#btn-export');
+    const download = await downloadPromise;
+    if (!download) {
+      throw new Error('TXT export smoke check failed: no download was triggered.');
+    }
+
+    const historyTabPromise = context.waitForEvent('page', { timeout: 7000 });
+    await popupPage.click('#historyBtn');
+    const historyPage = await historyTabPromise;
+    const historyErrors = [];
+    collectPageErrors(historyPage, historyErrors);
+    await historyPage.waitForURL(
+      new RegExp(`^${escapeRegex(extensionBase)}/src/history/history\\.html`),
+      { timeout: 7000 }
+    );
+
+    await rl.question('Confirm history page loaded and looks healthy, then press Enter... ');
+
+    const optionsPage = await context.newPage();
+    const optionsErrors = [];
+    collectPageErrors(optionsPage, optionsErrors);
+    await optionsPage.goto(`${extensionBase}/src/options/options.html`, {
+      waitUntil: 'domcontentloaded',
+    });
+
+    await optionsPage.selectOption('#defaultExportFormat', 'png');
+    await optionsPage.click('#saveBtn');
+    await optionsPage.waitForFunction(
+      () => document.getElementById('status')?.textContent?.includes('Settings saved.'),
+      { timeout: 5000 }
+    );
+
+    allErrors.push(...webErrors, ...popupErrors, ...historyErrors, ...optionsErrors);
+    if (allErrors.length > 0) {
+      throw new Error(`Manual smoke runtime errors:\n- ${allErrors.join('\n- ')}`);
+    }
+
+    console.log(
+      'PASS manual real-extension smoke: capture, URL add/export, history open, options save.'
+    );
+  } finally {
+    rl.close();
+    await context.close();
+    await fs.rm(userDataDir, { recursive: true, force: true });
+  }
+}
+
+async function run() {
+  const mode = parseMode();
+  if (mode === 'real-extension-manual') {
+    await runRealExtensionManualSmoke();
+    return;
+  }
+  await runStubSmoke();
 }
 
 run().catch((err) => {
