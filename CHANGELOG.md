@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.51 - 2026-03-05
+- Added internal documentation for maintainers:
+  - `docs/architecture.md` (runtime components, shared layer, and main data flows)
+  - `docs/dev-workflow.md` (setup, checks, unpacked run, release packaging, versioning rules)
+- Linked internal docs from `README.md` and reflected the `docs/` folder in repository layout.
+- Standardized popup non-fatal error logging in `src/popup/popup.js` and `src/popup/urls-panel.js` to use consistent `[THE Collector][non-fatal]` diagnostics prefixes.
+
 ## 1.3.50 - 2026-03-05
 - Extracted capture orchestration into `src/background/capture-service.js`.
 - Simplified `src/background/service-worker.js` to adapter responsibilities (message and command handling + preview-download route).

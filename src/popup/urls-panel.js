@@ -54,7 +54,7 @@ function perfLog(label, extra = {}) {
 }
 
 function reportError(err, userMessage) {
-  console.error(err);
+  console.error('[THE Collector][non-fatal]', 'urls panel action', err);
   showToast(userMessage);
 }
 

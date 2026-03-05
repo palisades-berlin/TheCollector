@@ -1,0 +1,42 @@
+# Developer Workflow
+
+## Prerequisites
+- Node.js 20+
+- Chrome or Edge with extension developer mode enabled
+
+## Install
+```bash
+npm install
+```
+
+## Local Quality Checks
+```bash
+npm run lint
+npm run test:unit
+npm run format:check
+npm run check
+```
+
+## Manual Run (Unpacked Extension)
+1. Open `chrome://extensions` (or `edge://extensions`).
+2. Enable Developer mode.
+3. Click "Load unpacked" and select the repository root.
+4. Pin THE Collector and open the popup to test capture/URL workflows.
+
+## Release Packaging
+```bash
+./scripts/package-release.sh
+```
+
+## Versioning Rule
+- Bump semantic version (`x.y.z`) on every code change.
+- Keep versions synchronized in:
+  - `manifest.json`
+  - `package.json`
+  - `README.md`
+  - `CLAUDE.md`
+  - `CHANGELOG.md`
+
+## CI
+- GitHub Actions workflow: `.github/workflows/ci.yml`
+- CI currently runs unit tests on push and pull request.

@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.3.50`.
+Current extension version: `1.3.51`.
 
 ## Overview
 THE Collector includes two modes:
@@ -190,6 +190,7 @@ Next refinement phases should focus on architectural reductions (not blind permi
 THE Collector/
 ├── manifest.json
 ├── assets/icons/
+├── docs/
 └── src/
    ├── background/      # service worker
    ├── content/         # injected capture agent
@@ -200,6 +201,10 @@ THE Collector/
    ├── options/         # extension settings
    └── shared/          # constants/messages/db/settings
 ```
+
+## Internal Docs
+- [Architecture](./docs/architecture.md)
+- [Developer Workflow](./docs/dev-workflow.md)
 
 ## Near-Term Roadmap
 1. Unified merge/synthesis flow for oversized split captures

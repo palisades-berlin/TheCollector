@@ -26,6 +26,10 @@ const urlCount = document.getElementById('urlCount');
 let capturing = false;
 let urlsInitPromise = null;
 
+function reportNonFatal(context, err) {
+  console.error('[THE Collector][non-fatal]', context, err);
+}
+
 function perfLog(label, extra = {}) {
   if (!POPUP_DEBUG) return;
   const sinceStartMs = Number((performance.now() - popupInitStartedAt).toFixed(1));
@@ -76,7 +80,7 @@ urlsTabBtn.addEventListener('click', () => {
   setActiveTab('urls');
   perfLog('urlsTab.click');
   ensureUrlsPanelReady().catch((err) => {
-    console.error(err);
+    reportNonFatal('load URL panel', err);
     showToast('Could not load URL panel');
   });
 });
