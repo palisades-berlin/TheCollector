@@ -26,3 +26,4 @@ jobs:
           node tests/history-utils.test.mjs
           node tests/protocol-validate.test.mjs
           node tests/history-filters.test.mjs
+          node tests/url-repo.test.mjs

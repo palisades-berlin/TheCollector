@@ -5,13 +5,18 @@ import {
   CAPTURE_RETRY_MAX_ATTEMPTS,
   CAPTURE_RETRY_BASE_DELAY_MS,
 } from '../shared/constants.js';
-import { saveTile, deleteTiles, getScreenshot, saveScreenshot } from '../shared/db.js';
 import { buildDownloadFilename } from '../shared/filename.js';
-import { getSettings } from '../shared/settings.js';
 import {
   validateCaptureStartPayload,
   validatePreviewDownloadPayload,
 } from '../shared/protocol-validate.js';
+import {
+  getScreenshotById,
+  saveScreenshotRecord,
+  prependCaptureReport,
+} from '../shared/repos/screenshot-repo.js';
+import { savePendingTile, deletePendingTiles } from '../shared/repos/tile-repo.js';
+import { getUserSettings } from '../shared/repos/settings-repo.js';
 import { createEnsureOffscreen } from './offscreen-manager.js';
 import {
   hasDownloadsPermission,
@@ -23,8 +28,6 @@ import {
 
 const ensureOffscreen = createEnsureOffscreen();
 const activeCaptures = new Set(); // tabId set
-const CAPTURE_REPORTS_KEY = 'captureReports';
-const CAPTURE_REPORTS_LIMIT = 30;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -96,12 +99,7 @@ async function captureVisibleTabWithRetry(windowId, captureState) {
 
 async function persistCaptureReport(report) {
   try {
-    const stored = await chrome.storage.local.get({ [CAPTURE_REPORTS_KEY]: [] });
-    const current = Array.isArray(stored[CAPTURE_REPORTS_KEY])
-      ? stored[CAPTURE_REPORTS_KEY]
-      : [];
-    const next = [report, ...current].slice(0, CAPTURE_REPORTS_LIMIT);
-    await chrome.storage.local.set({ [CAPTURE_REPORTS_KEY]: next });
+    await prependCaptureReport(report);
   } catch (err) {
     // Do not fail capture flows due to telemetry persistence issues.
     logNonFatal('persistCaptureReport', err);
@@ -205,7 +203,7 @@ async function captureTab(tabId) {
         if (tileIndex === 0 && !firstThumbBlob) {
           firstThumbBlob = blob;
         }
-        await saveTile(
+        await savePendingTile(
           id,
           tileIndex,
           Math.round(scrollX * dpr),
@@ -249,7 +247,7 @@ async function captureTab(tabId) {
   stitchSucceeded = true;
 
   const resultIds = Array.isArray(stitchResult?.ids) ? stitchResult.ids : [id];
-  const finalRecord = await getScreenshot(id);
+  const finalRecord = await getScreenshotById(id);
   if (finalRecord?.blob) {
     fallbackUsed = finalRecord.autoScaledFromOversized ? 'oversized_autoscale' : 'none';
     const captureReport = {
@@ -261,7 +259,7 @@ async function captureTab(tabId) {
       fallbackUsed,
       captureMode: captureModeUsed,
     };
-    await saveScreenshot({
+    await saveScreenshotRecord({
       ...finalRecord,
       ...(firstThumbBlob instanceof Blob ? { thumbBlob: firstThumbBlob } : {}),
       captureReport,
@@ -275,7 +273,7 @@ async function captureTab(tabId) {
       ...captureReport,
     });
   }
-  const settings = await getSettings();
+  const settings = await getUserSettings();
   const formatForDirectDownload =
     settings.defaultExportFormat === 'jpg' ? 'jpg' : 'png';
   const wantsSkipPreview = settings.autoDownloadMode === 'skip_preview';
@@ -338,7 +336,7 @@ async function captureTab(tabId) {
     activeCaptures.delete(tabId);
     // Offscreen stitch deletes tiles on success; cleanup leftovers on failure.
     if (captureId && !stitchSucceeded) {
-      await deleteTiles(captureId).catch((err) =>
+      await deletePendingTiles(captureId).catch((err) =>
         logNonFatal('deleteTiles', err)
       );
     }
@@ -371,7 +369,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
         throw new Error(parsed.error);
       }
 
-      const settings = await getSettings();
+      const settings = await getUserSettings();
       if (!(await hasDownloadsPermission())) {
         throw new Error('Downloads permission not granted');
       }

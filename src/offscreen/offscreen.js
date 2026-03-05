@@ -6,7 +6,8 @@
 
 import { MSG } from '../shared/messages.js';
 import { MAX_CANVAS_SIDE } from '../shared/constants.js';
-import { getTiles, deleteTiles, saveScreenshot } from '../shared/db.js';
+import { saveScreenshotRecord } from '../shared/repos/screenshot-repo.js';
+import { getPendingTiles, deletePendingTiles } from '../shared/repos/tile-repo.js';
 import { validateOffscreenStitchPayload } from '../shared/protocol-validate.js';
 
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
@@ -31,7 +32,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
 async function stitch(id, totalW, totalH, sourceUrl, title) {
   // Read tiles written to IDB by the service worker.
   // No large data crosses the message boundary — only tiny metadata did.
-  const tiles = await getTiles(id);
+  const tiles = await getPendingTiles(id);
   if (tiles.length === 0) {
     throw new Error('No tiles found in IDB for job ' + id);
   }
@@ -43,7 +44,7 @@ async function stitch(id, totalW, totalH, sourceUrl, title) {
     // Fast path: single-image stitch within canvas limits
     if (totalW <= MAX_CANVAS_SIDE && totalH <= MAX_CANVAS_SIDE) {
       const rendered = await renderChunk(tiles, 0, 0, totalW, totalH);
-      await saveScreenshot({
+      await saveScreenshotRecord({
         id,
         url: sourceUrl,
         title: baseTitle,
@@ -71,7 +72,7 @@ async function stitch(id, totalW, totalH, sourceUrl, title) {
       totalW,
       totalH,
     });
-    await saveScreenshot({
+    await saveScreenshotRecord({
       id,
       url: sourceUrl,
       title: `${baseTitle} (Auto-stitched)`,
@@ -86,7 +87,7 @@ async function stitch(id, totalW, totalH, sourceUrl, title) {
     });
     return { ids: [id], partCount: 1, split: false };
   } finally {
-    await deleteTiles(id);
+    await deletePendingTiles(id);
   }
 }
 

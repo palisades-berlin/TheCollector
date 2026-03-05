@@ -1,4 +1,4 @@
-import { getScreenshot } from '../shared/db.js';
+import { getScreenshotById } from '../shared/repos/screenshot-repo.js';
 import { buildDownloadFilename } from '../shared/filename.js';
 import { chromeDownloadBlob } from '../shared/download.js';
 
@@ -37,7 +37,7 @@ export async function downloadCaptureParts({
   const effectiveSaveAs = total > 1 ? false : Boolean(saveAs);
 
   for (let i = 0; i < ids.length; i++) {
-    const record = await getScreenshot(ids[i]);
+    const record = await getScreenshotById(ids[i]);
     if (!record?.blob) throw new Error(`Missing screenshot part: ${ids[i]}`);
     const blob =
       format === 'jpg' ? await convertPngBlobToJpeg(record.blob) : record.blob;

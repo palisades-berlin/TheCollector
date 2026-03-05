@@ -1,5 +1,5 @@
-import { getScreenshot } from '../shared/db.js';
-import { getSettings } from '../shared/settings.js';
+import { getUserSettings } from '../shared/repos/settings-repo.js';
+import { getScreenshotById } from '../shared/repos/screenshot-repo.js';
 import { MSG } from '../shared/messages.js';
 import { showToast } from '../shared/toast.js';
 import { anchorDownloadBlob } from '../shared/download.js';
@@ -125,17 +125,17 @@ async function init() {
   }
 
   try {
-    settings = await getSettings();
+    settings = await getUserSettings();
     pdfPageSizeEl.value = settings.defaultPdfPageSize;
 
-    const record = await getScreenshot(id);
+    const record = await getScreenshotById(id);
     if (!record) {
       showError('Screenshot not found. It may have been deleted.');
       return;
     }
 
     if (isDiffMode) {
-      const second = await getScreenshot(compareId || '');
+      const second = await getScreenshotById(compareId || '');
       if (!second) {
         showError('Comparison screenshot not found. It may have been deleted.');
         return;

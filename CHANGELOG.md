@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.3.49 - 2026-03-05
+- Added repository abstraction modules under `src/shared/repos/`:
+  - `screenshot-repo.js`
+  - `tile-repo.js`
+  - `url-repo.js`
+  - `settings-repo.js`
+- Migrated key consumers to repositories without changing behavior:
+  - background capture + offscreen stitching paths
+  - history page orchestration and files overlay settings access
+  - popup URL state access and popup URL-count preload
+  - options/settings and preview settings/screenshot reads
+  - background download screenshot fetches
+- Added focused unit tests for URL repository behavior in `tests/url-repo.test.mjs`.
+- Expanded local/CI unit test runs to include URL repository tests.
+
 ## 1.3.48 - 2026-03-05
 - Updated the Preview Visual Diff status message to a clearer, more user-friendly sentence while keeping the same meaning and UI behavior.
 

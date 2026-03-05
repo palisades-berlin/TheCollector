@@ -7,13 +7,18 @@ import {
 import {
   URL_HISTORY_ACTION,
   normalizeUrlArray,
-  loadUrlHistory,
-  appendUrlHistorySnapshot,
 } from '../../shared/url-history.js';
+import {
+  loadUrlList,
+  saveUrlList,
+  loadUrlUndoSnapshot,
+  writeUrlsAndUndo,
+  clearUrlUndoSnapshot,
+  loadUrlHistoryEntries,
+  appendUrlHistoryEntry,
+} from '../../shared/repos/url-repo.js';
 
 export const URL_LIMIT = 500;
-const URL_UNDO_KEY = 'urlsUndoSnapshot';
-
 function arraysEqual(a, b) {
   if (a.length !== b.length) return false;
   for (let i = 0; i < a.length; i++) {
@@ -43,23 +48,15 @@ export function buildNormalizedSet(urls) {
 }
 
 export async function loadUrls() {
-  const result = await chromeCall((done) => chrome.storage.local.get({ urls: [] }, done));
-  return normalizeUrlArray(result.urls);
+  return loadUrlList();
 }
 
 export async function loadUndoSnapshot() {
-  const result = await chromeCall((done) =>
-    chrome.storage.local.get({ [URL_UNDO_KEY]: null }, done)
-  );
-  const snapshot = result[URL_UNDO_KEY];
-  if (!snapshot || !Array.isArray(snapshot.urls)) return null;
-  const urls = normalizeUrlArray(snapshot.urls);
-  if (urls.length === 0) return null;
-  return { urls };
+  return loadUrlUndoSnapshot();
 }
 
 export async function saveUrls(urls) {
-  await chromeCall((done) => chrome.storage.local.set({ urls }, done));
+  await saveUrlList(urls);
 }
 
 export async function getCurrentTabUrl() {
@@ -102,7 +99,7 @@ export async function copyUrlsToClipboard(urls) {
 }
 
 export async function refreshHistoryEntries() {
-  return loadUrlHistory();
+  return loadUrlHistoryEntries();
 }
 
 export function createUrlMutations({ onHistoryChange, isHistoryViewOpen }) {
@@ -120,7 +117,7 @@ export function createUrlMutations({ onHistoryChange, isHistoryViewOpen }) {
       const nextUrls = normalizeUrlArray(await mutator([...urls]));
       if (!arraysEqual(urls, nextUrls)) {
         await saveUrls(nextUrls);
-        await appendUrlHistorySnapshot({ actionType, urls: nextUrls, meta });
+        await appendUrlHistoryEntry({ actionType, urls: nextUrls, meta });
         await refreshHistoryViewIfOpen();
         return nextUrls;
       }
@@ -132,23 +129,17 @@ export function createUrlMutations({ onHistoryChange, isHistoryViewOpen }) {
 
   function clearUrlsWithUndoSnapshot() {
     const run = urlMutationQueue.then(async () => {
-      const state = await chromeCall((done) => chrome.storage.local.get({ urls: [] }, done));
-      const current = normalizeUrlArray(state.urls);
+      const current = await loadUrls();
 
       if (current.length > 0) {
-        await appendUrlHistorySnapshot({
+        await appendUrlHistoryEntry({
           actionType: URL_HISTORY_ACTION.CLEAR_BEFORE,
           urls: current,
           meta: { source: 'popup', operation: 'clear_all' },
         });
       }
 
-      const payload = { urls: [] };
-      if (current.length > 0) {
-        payload[URL_UNDO_KEY] = { urls: current, savedAt: Date.now() };
-      }
-
-      await chromeCall((done) => chrome.storage.local.set(payload, done));
+      await writeUrlsAndUndo({ urls: [], undoSnapshotUrls: current });
       return { urls: [], snapshotCount: current.length };
     });
     urlMutationQueue = run.catch(() => {});
@@ -157,21 +148,16 @@ export function createUrlMutations({ onHistoryChange, isHistoryViewOpen }) {
 
   function restoreUrlsFromSnapshot() {
     const run = urlMutationQueue.then(async () => {
-      const state = await chromeCall((done) =>
-        chrome.storage.local.get({ urls: [], [URL_UNDO_KEY]: null }, done)
-      );
-      const snapshot = state[URL_UNDO_KEY];
-      const restoredUrls =
-        snapshot && Array.isArray(snapshot.urls) ? normalizeUrlArray(snapshot.urls) : [];
+      const snapshot = await loadUrlUndoSnapshot();
+      const restoredUrls = snapshot?.urls || [];
 
       if (restoredUrls.length === 0) {
-        return { restored: false, urls: normalizeUrlArray(state.urls) };
+        return { restored: false, urls: await loadUrls() };
       }
 
-      await chromeCall((done) =>
-        chrome.storage.local.set({ urls: restoredUrls, [URL_UNDO_KEY]: null }, done)
-      );
-      await appendUrlHistorySnapshot({
+      await saveUrlList(restoredUrls);
+      await clearUrlUndoSnapshot();
+      await appendUrlHistoryEntry({
         actionType: URL_HISTORY_ACTION.RESTORE_LAST_CLEAR,
         urls: restoredUrls,
         meta: { source: 'popup', operation: 'undo_clear' },
@@ -192,7 +178,7 @@ export function createUrlMutations({ onHistoryChange, isHistoryViewOpen }) {
       if (urls.length === 0) return { restored: false, urls: await loadUrls() };
 
       await saveUrls(urls);
-      await appendUrlHistorySnapshot({
+      await appendUrlHistoryEntry({
         actionType: URL_HISTORY_ACTION.RESTORE_HISTORY,
         urls,
         meta: { source: 'popup', fromHistoryId: historyId },

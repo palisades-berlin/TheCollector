@@ -1,10 +1,10 @@
 {
   "name": "the-collector",
-  "version": "1.3.48",
+  "version": "1.3.49",
   "private": true,
   "type": "module",
   "scripts": {
-    "test:unit": "node tests/url-utils.test.mjs && node tests/url-history.test.mjs && node tests/filename.test.mjs && node tests/ui-state-validation.test.mjs && node tests/settings.test.mjs && node tests/history-utils.test.mjs && node tests/protocol-validate.test.mjs && node tests/history-filters.test.mjs",
+    "test:unit": "node tests/url-utils.test.mjs && node tests/url-history.test.mjs && node tests/filename.test.mjs && node tests/ui-state-validation.test.mjs && node tests/settings.test.mjs && node tests/history-utils.test.mjs && node tests/protocol-validate.test.mjs && node tests/history-filters.test.mjs && node tests/url-repo.test.mjs",
     "lint": "eslint src tests",
     "format:check": "prettier --check .",
     "check": "npm run lint && npm run test:unit && npm run format:check"

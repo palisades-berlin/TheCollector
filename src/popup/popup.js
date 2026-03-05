@@ -1,5 +1,6 @@
 import { MSG } from '../shared/messages.js';
 import { showToast } from '../shared/toast.js';
+import { loadUrlList } from '../shared/repos/url-repo.js';
 
 const POPUP_DEBUG =
   new URLSearchParams(location.search).get('debugPopupPerf') === '1' ||
@@ -207,10 +208,7 @@ async function preloadUrlCount() {
   const startedAt = performance.now();
   perfLog('urlCount.preload.start');
   try {
-    const result = await chrome.storage.local.get({ urls: [] });
-    const urls = Array.isArray(result.urls)
-      ? result.urls.filter((u) => typeof u === 'string')
-      : [];
+    const urls = await loadUrlList();
     urlCount.textContent = `${urls.length} URL${urls.length === 1 ? '' : 's'}`;
     perfLog('urlCount.preload.done', {
       durationMs: Number((performance.now() - startedAt).toFixed(1)),

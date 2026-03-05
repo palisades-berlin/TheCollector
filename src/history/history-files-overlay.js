@@ -1,4 +1,4 @@
-import { getSettings } from '../shared/settings.js';
+import { getUserSettings } from '../shared/repos/settings-repo.js';
 import { showToast } from '../shared/toast.js';
 import { formatBytes, buildRecordHints, runWithConcurrency } from './history-utils.js';
 import { downloadRecord } from './history-downloads.js';
@@ -136,7 +136,7 @@ export function createHistoryFilesOverlay({
       downloadSelectedBtn.disabled = true;
       filesStatusEl.textContent = `Downloading ${selectedGroups.length} selected item(s)…`;
       try {
-        const settings = await getSettings();
+        const settings = await getUserSettings();
         const jobs = [];
         for (const group of selectedGroups) {
           for (let idx = 0; idx < group.records.length; idx++) {

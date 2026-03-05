@@ -1,4 +1,4 @@
-import { getSettings, setSettings } from '../shared/settings.js';
+import { getUserSettings, setUserSettings } from '../shared/repos/settings-repo.js';
 import { showToast } from '../shared/toast.js';
 
 const defaultExportFormatEl = document.getElementById('defaultExportFormat');
@@ -33,7 +33,7 @@ function logNonFatal(context, err) {
 init().catch((err) => showStatus(`Failed to load settings: ${err.message}`));
 
 async function init() {
-  const settings = await getSettings();
+  const settings = await getUserSettings();
   defaultExportFormatEl.value = settings.defaultExportFormat;
   defaultPdfPageSizeEl.value = settings.defaultPdfPageSize;
   autoDownloadModeEl.value = settings.autoDownloadMode;
@@ -47,7 +47,7 @@ async function init() {
 saveBtn.addEventListener('click', async () => {
   saveBtn.disabled = true;
   try {
-    await setSettings({
+    await setUserSettings({
       defaultExportFormat: defaultExportFormatEl.value,
       defaultPdfPageSize: defaultPdfPageSizeEl.value,
       autoDownloadMode: autoDownloadModeEl.value,
@@ -55,7 +55,7 @@ saveBtn.addEventListener('click', async () => {
       saveAs: saveAsEl.checked,
       fitClipboardToDocsLimit: fitClipboardToDocsLimitEl.checked,
     });
-    const normalized = await getSettings();
+    const normalized = await getUserSettings();
     downloadDirectoryEl.value = normalized.downloadDirectory;
     showStatus('Settings saved.');
     showToast('Settings saved.', 'success');

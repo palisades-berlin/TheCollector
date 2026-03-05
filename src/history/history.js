@@ -1,10 +1,11 @@
-import {
-  listScreenshotMeta,
-  listScreenshots,
-  getScreenshot,
-  deleteScreenshots,
-} from '../shared/db.js';
 import { showToast } from '../shared/toast.js';
+import {
+  listScreenshotMetaRecords,
+  listScreenshotRecords,
+  getScreenshotById,
+  deleteScreenshotRecords,
+  loadCaptureReports as loadCaptureReportsFromRepo,
+} from '../shared/repos/screenshot-repo.js';
 import {
   getRecordDomain,
   getRecordExportType,
@@ -43,8 +44,6 @@ const selectedCountEl = document.getElementById('selectedCount');
 const downloadSelectedBtn = document.getElementById('downloadSelected');
 const deleteSelectedBtn = document.getElementById('deleteSelected');
 const fileRowTpl = document.getElementById('fileRowTpl');
-const CAPTURE_REPORTS_KEY = 'captureReports';
-
 let allRecords = [];
 let records = [];
 let groups = [];
@@ -107,8 +106,8 @@ function toggleCompareSelection(id) {
 }
 
 const thumbLoader = createThumbLoader({
-  getScreenshot,
-  deleteScreenshots,
+  getScreenshot: getScreenshotById,
+  deleteScreenshots: deleteScreenshotRecords,
   logNonFatal,
   debugEnabled: DEBUG_THUMB_QUEUE,
   concurrency: 4,
@@ -118,7 +117,7 @@ const cards = createHistoryCards({
   cardTpl,
   enqueueThumbLoad: (id, canvasEl) => thumbLoader.enqueue(id, canvasEl),
   openPreview,
-  deleteScreenshots,
+  deleteScreenshots: deleteScreenshotRecords,
   refreshAll: () => refreshAll(),
   compareSelection,
   toggleCompareSelection,
@@ -139,8 +138,8 @@ const filesOverlay = createHistoryFilesOverlay({
   },
   getGroups: () => groups,
   getAllRecords: () => allRecords,
-  getScreenshot,
-  deleteScreenshots,
+  getScreenshot: getScreenshotById,
+  deleteScreenshots: deleteScreenshotRecords,
   openPreview,
   refreshAll: () => refreshAll(),
 });
@@ -199,8 +198,7 @@ function renderMainView() {
 
 async function loadCaptureReports() {
   try {
-    const state = await chrome.storage.local.get({ [CAPTURE_REPORTS_KEY]: [] });
-    return Array.isArray(state[CAPTURE_REPORTS_KEY]) ? state[CAPTURE_REPORTS_KEY] : [];
+    return await loadCaptureReportsFromRepo();
   } catch (err) {
     logNonFatal('loadCaptureReports', err);
     return [];
@@ -281,7 +279,7 @@ clearAllBtn.addEventListener('click', async () => {
   const total = allRecords.length;
   if (!confirm(`Delete all ${total} screenshot${total !== 1 ? 's' : ''}? This cannot be undone.`)) return;
 
-  await deleteScreenshots(allRecords.map((record) => record.id));
+  await deleteScreenshotRecords(allRecords.map((record) => record.id));
   showToast('All screenshots deleted.', 'success');
   await refreshAll();
 });
@@ -295,10 +293,10 @@ compareBtn?.addEventListener('click', () => {
 async function refreshAll() {
   captureReports = await loadCaptureReports();
   try {
-    allRecords = await listScreenshotMeta();
+    allRecords = await listScreenshotMetaRecords();
   } catch (err) {
     if (String(err?.message || '').includes('object stores was not found')) {
-      const full = await listScreenshots();
+      const full = await listScreenshotRecords();
       allRecords = full.map((r) => ({
         ...r,
         byteSize: r.blob?.size || 0,
