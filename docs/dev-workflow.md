@@ -37,6 +37,7 @@ npm run check
 
 - Use the CI-uploaded artifact (`the-collector-release-zip`) from GitHub Actions for Chrome Web Store submission.
 - Treat locally generated zips as local validation only.
+- Use `docs/chrome-web-store-permissions.md` as canonical permission justification text in the CWS listing/policy form.
 
 ## Versioning Rule
 

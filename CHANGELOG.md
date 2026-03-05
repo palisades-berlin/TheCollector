@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.61 - 2026-03-05
+
+- Added canonical Chrome Web Store permission-justification text in `docs/chrome-web-store-permissions.md`.
+- Explicitly covers `tabs`, `activeTab`, `offscreen`, `unlimitedStorage`, and optional `downloads` usage rationale.
+- Linked release workflow docs to this canonical listing/policy text source.
+
 ## 1.3.60 - 2026-03-05
 
 - Finalized release-process rule: Chrome Web Store submissions must use the CI-uploaded package artifact (`the-collector-release-zip`) as source of truth.
