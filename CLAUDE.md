@@ -2,7 +2,7 @@
 
 ## Project Summary
 `THE Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.9.1`.
+Current extension version: `1.9.7`.
 
 ## Engineering Rules
 - Keep behavior stable and avoid core logic rewrites unless required.

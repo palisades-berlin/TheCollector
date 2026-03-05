@@ -34,6 +34,8 @@ await runTest('getSettings normalizes invalid values and legacy autoDownload fla
     downloadDirectory: '../Unsafe Folder//nested',
     saveAs: 1,
     fitClipboardToDocsLimit: 'yes',
+    proEnabled: 'on',
+    ultraEnabled: null,
   });
   globalThis.chrome = { storage: { sync: mockSync } };
 
@@ -46,7 +48,39 @@ await runTest('getSettings normalizes invalid values and legacy autoDownload fla
     saveAs: true,
     fitClipboardToDocsLimit: true,
     theme: 'system',
+    capabilityTier: 'basic',
+    proEnabled: false,
+    ultraEnabled: false,
   });
+});
+
+await runTest('getSettings migrates legacy pro/ultra booleans into capabilityTier', async () => {
+  const mockSyncUltra = createMockSyncStorage({ proEnabled: true, ultraEnabled: true });
+  globalThis.chrome = { storage: { sync: mockSyncUltra } };
+  const ultra = await getSettings();
+  assert.equal(ultra.capabilityTier, 'ultra');
+  assert.equal(ultra.proEnabled, true);
+  assert.equal(ultra.ultraEnabled, true);
+
+  const mockSyncPro = createMockSyncStorage({ proEnabled: true, ultraEnabled: false });
+  globalThis.chrome = { storage: { sync: mockSyncPro } };
+  const pro = await getSettings();
+  assert.equal(pro.capabilityTier, 'pro');
+  assert.equal(pro.proEnabled, true);
+  assert.equal(pro.ultraEnabled, false);
+});
+
+await runTest('getSettings uses valid capabilityTier over legacy booleans', async () => {
+  const mockSync = createMockSyncStorage({
+    capabilityTier: 'basic',
+    proEnabled: true,
+    ultraEnabled: true,
+  });
+  globalThis.chrome = { storage: { sync: mockSync } };
+  const settings = await getSettings();
+  assert.equal(settings.capabilityTier, 'basic');
+  assert.equal(settings.proEnabled, false);
+  assert.equal(settings.ultraEnabled, false);
 });
 
 await runTest('setSettings merges and persists normalized values', async () => {
@@ -58,6 +92,7 @@ await runTest('setSettings merges and persists normalized values', async () => {
     saveAs: false,
     fitClipboardToDocsLimit: true,
     theme: 'system',
+    capabilityTier: 'basic',
   });
   globalThis.chrome = { storage: { sync: mockSync } };
 
@@ -68,6 +103,8 @@ await runTest('setSettings merges and persists normalized values', async () => {
     downloadDirectory: '/Top Level/../Shots',
     fitClipboardToDocsLimit: false,
     theme: 'dark',
+    capabilityTier: 'invalid-tier',
+    proEnabled: true,
   });
 
   assert.deepEqual(next, {
@@ -78,6 +115,9 @@ await runTest('setSettings merges and persists normalized values', async () => {
     saveAs: false,
     fitClipboardToDocsLimit: false,
     theme: 'dark',
+    capabilityTier: 'pro',
+    proEnabled: true,
+    ultraEnabled: false,
   });
 
   const persisted = mockSync.getState();
@@ -86,4 +126,7 @@ await runTest('setSettings merges and persists normalized values', async () => {
   assert.equal(persisted.autoDownloadMode, 'after_preview');
   assert.equal(persisted.downloadDirectory, 'TopLevel/Shots');
   assert.equal(persisted.theme, 'dark');
+  assert.equal(persisted.capabilityTier, 'pro');
+  assert.equal(persisted.proEnabled, undefined);
+  assert.equal(persisted.ultraEnabled, undefined);
 });

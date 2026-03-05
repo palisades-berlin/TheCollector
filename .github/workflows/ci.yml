@@ -20,7 +20,93 @@ jobs:
         run: npm ci
 
       - name: Run quality checks
-        run: npm run check
+        run: |
+          npm run lint
+          npm run test:unit
+          npm run test:coverage
+          npm run test:security-policy
+          npm run format:check
+
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run integration suite
+        run: npm run test:integration
+
+  stability:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Playwright browser (cache miss)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Validate Playwright browser (cache hit)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install chromium
+
+      - name: Run stability suite
+        run: npm run test:stability
+
+  performance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Playwright browser (cache miss)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Validate Playwright browser (cache hit)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install chromium
+
+      - name: Run performance gate
+        run: npm run test:performance
 
   e2e_smoke:
     runs-on: ubuntu-latest
@@ -71,12 +157,12 @@ jobs:
       - name: Install Playwright browser
         run: npx playwright install chromium
 
-      - name: Run e2e visual parity gate
-        run: npm run test:e2e:visual
+      - name: Run UX/UI calibration gate (Figma contract + visual parity)
+        run: npm run test:ui-calibration
 
   package:
     runs-on: ubuntu-latest
-    needs: [quality, e2e_smoke, visual_parity]
+    needs: [quality, integration, stability, performance, e2e_smoke, visual_parity]
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -6,11 +6,23 @@ const SETTINGS_DEFAULTS = {
   saveAs: false,
   fitClipboardToDocsLimit: true,
   theme: 'system', // system | light | dark
+  // Empty default allows migration from legacy booleans when no tier is stored yet.
+  capabilityTier: '', // basic | pro | ultra
+  // Legacy read-compat keys (deprecated; read-only migration input).
+  proEnabled: false,
+  ultraEnabled: false,
 };
 
 export async function getSettings() {
   const stored = await chrome.storage.sync.get(SETTINGS_DEFAULTS);
   const autoDownloadMode = normalizeAutoDownloadMode(stored.autoDownloadMode, stored.autoDownload);
+  const capabilityTier = normalizeCapabilityTier(
+    stored.capabilityTier,
+    stored.proEnabled,
+    stored.ultraEnabled
+  );
+  const proEnabled = capabilityTier === 'pro' || capabilityTier === 'ultra';
+  const ultraEnabled = capabilityTier === 'ultra';
   return {
     defaultExportFormat: normalizeExportFormat(stored.defaultExportFormat),
     defaultPdfPageSize: normalizePdfPageSize(stored.defaultPdfPageSize),
@@ -19,6 +31,10 @@ export async function getSettings() {
     saveAs: Boolean(stored.saveAs),
     fitClipboardToDocsLimit: normalizeFitClipboardToDocsLimit(stored.fitClipboardToDocsLimit),
     theme: normalizeTheme(stored.theme),
+    capabilityTier,
+    // Deprecated compatibility projection for legacy callsites.
+    proEnabled,
+    ultraEnabled,
   };
 }
 
@@ -35,9 +51,17 @@ export async function setSettings(partial) {
   next.saveAs = Boolean(next.saveAs);
   next.fitClipboardToDocsLimit = normalizeFitClipboardToDocsLimit(next.fitClipboardToDocsLimit);
   next.theme = normalizeTheme(next.theme);
+  next.capabilityTier = normalizeCapabilityTier(next.capabilityTier, next.proEnabled, next.ultraEnabled);
+  next.proEnabled = next.capabilityTier === 'pro' || next.capabilityTier === 'ultra';
+  next.ultraEnabled = next.capabilityTier === 'ultra';
   delete next.autoDownload;
 
-  await chrome.storage.sync.set(next);
+  const persisted = { ...next };
+  // Do not persist deprecated legacy booleans.
+  delete persisted.proEnabled;
+  delete persisted.ultraEnabled;
+
+  await chrome.storage.sync.set(persisted);
   return next;
 }
 
@@ -74,4 +98,11 @@ function normalizeFitClipboardToDocsLimit(v) {
 function normalizeTheme(v) {
   if (v === 'light' || v === 'dark') return v;
   return 'system';
+}
+
+function normalizeCapabilityTier(tier, legacyProEnabled, legacyUltraEnabled) {
+  if (tier === 'basic' || tier === 'pro' || tier === 'ultra') return tier;
+  if (legacyUltraEnabled === true) return 'ultra';
+  if (legacyProEnabled === true) return 'pro';
+  return 'basic';
 }

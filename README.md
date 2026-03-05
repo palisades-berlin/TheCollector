@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.1`.
+Current extension version: `1.9.7`.
 
 ## Overview
 
@@ -13,6 +13,14 @@ THE Collector includes two modes:
 - UX is consolidated across both flows (shared toasts and unified design tokens)
 
 All data remains in extension-local storage; there is no backend upload pipeline.
+
+## Top Changes
+
+- Added enterprise test hardening gates in CI: coverage, integration, security-policy, stability, and performance.
+- Added hierarchical capability tiers (`Basic`, `Pro`, `Ultra`) with migration-safe settings normalization.
+- Added local-only/no-tracking guardrails for roadmap-feature code paths with automated policy checks.
+- Added UX/UI calibration gate (`test:ui-calibration`) tied to the canonical Figma source and visual parity snapshots.
+- Expanded integration and resilience coverage for service worker/offscreen message contracts and capture concurrency behavior.
 
 ## Core Architecture
 

@@ -1,5 +1,64 @@
 # Changelog
 
+## 1.9.7 - 2026-03-05
+
+- Added a dedicated UX/UI calibration gate tied to the canonical Figma source of truth:
+  - new script `scripts/check-ui-calibration-contract.mjs` verifies the canonical Figma URL/file key are aligned in:
+    - `tests/visual/ui-parity.spec.mjs`
+    - `docs/ui-handoff.md`
+- Added `npm run test:ui-calibration`:
+  - runs Figma contract check first
+  - then runs visual parity snapshots.
+- Updated CI visual parity job to run the new calibration gate:
+  - `.github/workflows/ci.yml` now executes `npm run test:ui-calibration` for the visual stage.
+
+## 1.9.5 - 2026-03-05
+
+- Added local-only guardrails for roadmap-tier feature work:
+  - new shared module `src/shared/roadmap-guardrails.js`
+  - blocks external URLs for roadmap feature requests (`assertLocalOnlyUrl`, `roadmapFeatureFetch`)
+  - enforces no-tracking payload policy (`assertNoTrackingPayload`, `enforceRoadmapActionPolicy`).
+- Added unit coverage for guardrail behavior:
+  - new `tests/roadmap-guardrails.test.mjs`
+  - integrated in `npm run test:unit`.
+- Reinforced roadmap contract in docs:
+  - added explicit local-only guardrail requirement in `docs/thecollector-2.0-90-day-roadmap.md`.
+
+## 1.9.4 - 2026-03-05
+
+- Migrated capability gating to a single hierarchical tier model: `basic | pro | ultra`.
+  - settings schema now uses `capabilityTier` as primary field
+  - legacy `proEnabled` / `ultraEnabled` values are still read for migration, then normalized
+  - persisted settings now store `capabilityTier` and no longer persist legacy tier booleans.
+- Reworked shared capability helpers for hierarchical checks:
+  - added/standardized `getCurrentTier`, `isTierAtLeast`, `canUseFeature`
+  - `ultra` now implicitly includes `pro` and `basic` feature access.
+- Updated options UI from dual toggles to single selector:
+  - `Capability tier` select with `Basic`, `Pro`, `Ultra`.
+- Expanded unit coverage:
+  - settings migration and write-path cleanup assertions
+  - capability tier hierarchy and legacy-shape compatibility assertions.
+- Added explicit roadmap note that tier gating uses render-time exclusion (hide-only) rather than disabled UI.
+
+## 1.9.3 - 2026-03-05
+
+- Added centralized capability-gating layer for roadmap tiers:
+  - new shared module `src/shared/capabilities.js`
+  - canonical Pro (30-day) and Ultra (90-day) feature-key registry
+  - helper APIs for deterministic gating checks (`getRequiredTier`, `isFeatureEnabled`, `getCapabilitySnapshot`, `listGatedFeatures`).
+- Added unit coverage for capability gating and tier independence:
+  - new test `tests/capabilities.test.mjs`
+  - integrated into `npm run test:unit`.
+- Kept existing runtime behavior unchanged; this step introduces the reusable gating foundation only.
+
+## 1.9.2 - 2026-03-05
+
+- Step 1 roadmap foundation: added `Pro` and `Ultra` feature-access toggles to Settings schema and Options UI.
+  - schema additions in `src/shared/settings.js`: `proEnabled`, `ultraEnabled` (normalized boolean defaults: `false`)
+  - options UI additions in `src/options/options.html` and `src/options/options.js`
+  - unit test coverage expanded in `tests/settings.test.mjs` for normalization and persistence of both toggles.
+- No capture/export/history business logic changes in this step.
+
 ## 1.9.1 - 2026-03-05
 
 - Figma sync pass only (no UI behavior or business-logic changes):

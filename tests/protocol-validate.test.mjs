@@ -25,6 +25,10 @@ test('validateCaptureStartPayload accepts positive tab id only', () => {
     ok: false,
     error: 'Invalid tab id',
   });
+  assert.deepEqual(validateCaptureStartPayload(null), {
+    ok: false,
+    error: 'Invalid tab id',
+  });
 });
 
 test('validatePreviewDownloadPayload validates blob and normalizes fields', () => {
@@ -46,6 +50,24 @@ test('validatePreviewDownloadPayload validates blob and normalizes fields', () =
   assert.deepEqual(validatePreviewDownloadPayload({ ext: 'jpg' }), {
     ok: false,
     error: 'Download payload is missing blob data',
+  });
+
+  const parsedPdf = validatePreviewDownloadPayload({
+    blob,
+    ext: 'pdf',
+    partIndex: 3,
+    partTotal: 2,
+    title: 'Report',
+  });
+  assert.equal(parsedPdf.ok, true);
+  assert.equal(parsedPdf.value.ext, 'pdf');
+  assert.equal(parsedPdf.value.partIndex, 3);
+  assert.equal(parsedPdf.value.partTotal, 2);
+  assert.equal(parsedPdf.value.title, 'Report');
+
+  assert.deepEqual(validatePreviewDownloadPayload(null), {
+    ok: false,
+    error: 'Invalid download payload',
   });
 });
 
@@ -78,6 +100,30 @@ test('validateOffscreenStitchPayload enforces id and dimensions', () => {
     ok: false,
     error: 'Invalid stitch dimensions',
   });
+  assert.deepEqual(validateOffscreenStitchPayload(null), {
+    ok: false,
+    error: 'Invalid stitch payload',
+  });
+
+  assert.deepEqual(
+    validateOffscreenStitchPayload({
+      id: 'job-2',
+      totalW: 10,
+      totalH: 20,
+      sourceUrl: 'https://example.com',
+      title: 'Shot',
+    }),
+    {
+      ok: true,
+      value: {
+        id: 'job-2',
+        totalW: 10,
+        totalH: 20,
+        sourceUrl: 'https://example.com',
+        title: 'Shot',
+      },
+    }
+  );
 });
 
 test('validateCsScrollPayload enforces finite coordinates', () => {
@@ -92,5 +138,13 @@ test('validateCsScrollPayload enforces finite coordinates', () => {
   assert.deepEqual(validateCsScrollPayload({ x: 1, y: 2, targetId: 7 }), {
     ok: false,
     error: 'Invalid target id',
+  });
+  assert.deepEqual(validateCsScrollPayload({ x: 1, y: 2 }), {
+    ok: true,
+    value: { x: 1, y: 2, targetId: null },
+  });
+  assert.deepEqual(validateCsScrollPayload(null), {
+    ok: false,
+    error: 'Invalid scroll payload',
   });
 });

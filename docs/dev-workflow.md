@@ -18,6 +18,11 @@ npm install
 ```bash
 npm run lint
 npm run test:unit
+npm run test:coverage
+npm run test:integration
+npm run test:security-policy
+npm run test:stability
+npm run test:performance
 npx playwright install chromium
 npm run test:e2e:smoke
 npm run test:e2e:visual
@@ -77,4 +82,19 @@ Packaging script guardrails:
 ## CI
 
 - GitHub Actions workflow: `.github/workflows/ci.yml`
-- CI runs parallel quality, e2e smoke, and packaging jobs on push and pull request.
+- CI runs release-blocking jobs on push and pull request:
+  - quality (lint + unit + coverage thresholds + security policy + format)
+  - integration
+  - stability
+  - performance
+  - e2e smoke
+  - visual parity
+  - packaging (depends on all gates above)
+
+## Test Failure Triage Workflow
+
+1. Identify failing gate category (`quality`, `integration`, `stability`, `performance`, `visual`).
+2. Reproduce locally with the corresponding npm script.
+3. Fix root cause first; avoid weakening thresholds or bypassing gates.
+4. If a policy false-positive is unavoidable, add a narrow allowlist entry with inline rationale and changelog note.
+5. Re-run full local quality checklist before requesting review.

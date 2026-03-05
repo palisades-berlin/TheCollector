@@ -11,6 +11,7 @@ const pickDirectoryInput = document.getElementById('pickDirectoryInput');
 const saveAsEl = document.getElementById('saveAs');
 const fitClipboardToDocsLimitEl = document.getElementById('fitClipboardToDocsLimit');
 const themeEl = document.getElementById('theme');
+const capabilityTierEl = document.getElementById('capabilityTier');
 const saveBtn = document.getElementById('saveBtn');
 const statusEl = document.getElementById('status');
 const onboardingBannerEl = document.getElementById('onboardingBanner');
@@ -49,6 +50,7 @@ async function init() {
     themeEl.value = settings.theme || 'system';
     applyThemeToDocument(themeEl.value);
   }
+  if (capabilityTierEl) capabilityTierEl.value = settings.capabilityTier || 'basic';
   await refreshPermissionStatus();
   setupPermissionStatusRefresh();
 }
@@ -64,6 +66,7 @@ saveBtn.addEventListener('click', async () => {
       saveAs: saveAsEl.checked,
       fitClipboardToDocsLimit: fitClipboardToDocsLimitEl.checked,
       theme: themeEl ? themeEl.value : 'system',
+      capabilityTier: capabilityTierEl ? capabilityTierEl.value : 'basic',
     });
     const normalized = await getUserSettings();
     downloadDirectoryEl.value = normalized.downloadDirectory;
