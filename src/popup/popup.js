@@ -1,7 +1,22 @@
 import { MSG } from '../shared/messages.js';
 import { showToast } from '../shared/toast.js';
 import { loadUrlList } from '../shared/repos/url-repo.js';
+import { getUserSettings } from '../shared/repos/settings-repo.js';
+import { listScreenshotMetaRecords } from '../shared/repos/screenshot-repo.js';
+import {
+  dismissRevisitNudge,
+  loadRevisitNudgeState,
+  snoozeRevisitNudges,
+} from '../shared/repos/nudge-repo.js';
 import { applySavedTheme } from '../shared/theme.js';
+import { canUseFeature } from '../shared/capabilities.js';
+import {
+  DEFAULT_CAPTURE_PROFILE_ID,
+  listCaptureProfiles,
+  normalizeCaptureProfileId,
+} from '../shared/capture-profiles.js';
+import { evaluateRevisitNudge } from '../shared/nudges.js';
+import { addTabsToQueue, normalizeQueueEntries, removeFromQueue } from './capture-queue.js';
 
 const POPUP_DEBUG =
   new URLSearchParams(location.search).get('debugPopupPerf') === '1' ||
@@ -14,6 +29,20 @@ const capturePanel = document.getElementById('capturePanel');
 const urlsPanel = document.getElementById('urlsPanel');
 
 const captureBtn = document.getElementById('captureBtn');
+const captureProfilesRegion = document.getElementById('captureProfilesRegion');
+const captureProfilesList = document.getElementById('captureProfilesList');
+const captureQueueRegion = document.getElementById('captureQueueRegion');
+const queueCurrentBtn = document.getElementById('queueCurrentBtn');
+const queueWindowBtn = document.getElementById('queueWindowBtn');
+const runQueueBtn = document.getElementById('runQueueBtn');
+const clearQueueBtn = document.getElementById('clearQueueBtn');
+const captureQueueMeta = document.getElementById('captureQueueMeta');
+const captureQueueList = document.getElementById('captureQueueList');
+const revisitNudgeRegion = document.getElementById('revisitNudgeRegion');
+const revisitNudgeText = document.getElementById('revisitNudgeText');
+const revisitNudgeOpenBtn = document.getElementById('revisitNudgeOpenBtn');
+const revisitNudgeSnoozeBtn = document.getElementById('revisitNudgeSnoozeBtn');
+const revisitNudgeDismissBtn = document.getElementById('revisitNudgeDismissBtn');
 const progressEl = document.getElementById('progress');
 const progressFill = document.getElementById('progressFill');
 const progressText = document.getElementById('progressText');
@@ -26,6 +55,13 @@ const urlCount = document.getElementById('urlCount');
 
 let capturing = false;
 let urlsInitPromise = null;
+let smartProfilesEnabled = false;
+let defaultCaptureProfileId = DEFAULT_CAPTURE_PROFILE_ID;
+let currentRevisitNudgeId = null;
+let queueBatchEnabled = false;
+let runningQueue = false;
+let captureQueue = [];
+const CAPTURE_QUEUE_STORAGE_KEY = 'popupCaptureQueueV1';
 
 function reportNonFatal(context, err) {
   console.error('[THE Collector][non-fatal]', context, err);
@@ -49,6 +85,28 @@ function setActiveTab(mode) {
     captureTabBtn.focus();
   } else {
     urlsTabBtn.focus();
+  }
+}
+
+async function loadPersistedCaptureQueue() {
+  const store = chrome.storage?.session || chrome.storage?.local;
+  if (!store?.get) return [];
+  try {
+    const state = await store.get({ [CAPTURE_QUEUE_STORAGE_KEY]: [] });
+    return normalizeQueueEntries(state?.[CAPTURE_QUEUE_STORAGE_KEY]);
+  } catch (err) {
+    reportNonFatal('loadPersistedCaptureQueue', err);
+    return [];
+  }
+}
+
+async function persistCaptureQueue() {
+  const store = chrome.storage?.session || chrome.storage?.local;
+  if (!store?.set) return;
+  try {
+    await store.set({ [CAPTURE_QUEUE_STORAGE_KEY]: normalizeQueueEntries(captureQueue) });
+  } catch (err) {
+    reportNonFatal('persistCaptureQueue', err);
   }
 }
 
@@ -107,28 +165,51 @@ for (const tabButton of [captureTabBtn, urlsTabBtn]) {
   });
 }
 
-captureBtn.addEventListener('click', async () => {
-  if (capturing) return;
+captureBtn.addEventListener('click', () =>
+  triggerCapture(smartProfilesEnabled ? defaultCaptureProfileId : null)
+);
+
+async function triggerCapture(profileId = null) {
+  if (capturing || runningQueue) return;
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab?.id) {
     showError('No active tab found.');
     return;
   }
-  startCapture(tab.id);
-});
+  await startCapture(tab.id, profileId).catch(() => {});
+}
 
-function startCapture(tabId) {
+function setCaptureActionState() {
+  captureBtn.disabled = capturing || runningQueue;
+  if (queueCurrentBtn) queueCurrentBtn.disabled = capturing || runningQueue;
+  if (queueWindowBtn) queueWindowBtn.disabled = capturing || runningQueue;
+  if (runQueueBtn) runQueueBtn.disabled = capturing || runningQueue || captureQueue.length === 0;
+  if (clearQueueBtn)
+    clearQueueBtn.disabled = capturing || runningQueue || captureQueue.length === 0;
+}
+
+function startCapture(tabId, profileId = null, options = {}) {
   capturing = true;
-  captureBtn.disabled = true;
+  setCaptureActionState();
   capturePanel.setAttribute('aria-busy', 'true');
   errorMsgEl.classList.add('hidden');
-  doneMsgEl.classList.add('hidden');
+  if (!runningQueue) doneMsgEl.classList.add('hidden');
   progressEl.classList.remove('hidden');
   setProgress(0, 'Starting...');
 
-  chrome.runtime
-    .sendMessage({ type: MSG.CAPTURE_START, payload: { tabId } })
-    .catch((err) => showError(err.message));
+  const payload = { tabId };
+  if (profileId) payload.profileId = normalizeCaptureProfileId(profileId);
+  if (options.suppressPreviewOpen === true) payload.suppressPreviewOpen = true;
+  return chrome.runtime
+    .sendMessage({ type: MSG.CAPTURE_START, payload })
+    .then((res) => {
+      if (res?.ok === false) throw new Error(res?.error || 'Capture failed');
+      return res;
+    })
+    .catch((err) => {
+      showError(err.message);
+      throw err;
+    });
 }
 
 function setProgress(percent, text) {
@@ -171,7 +252,7 @@ function toFriendlyCaptureError(rawMessage) {
 
 function showError(msg) {
   capturing = false;
-  captureBtn.disabled = false;
+  setCaptureActionState();
   capturePanel.setAttribute('aria-busy', 'false');
   progressEl.classList.add('hidden');
   const friendly = toFriendlyCaptureError(msg);
@@ -182,7 +263,7 @@ function showError(msg) {
 
 function showDone(payload = {}) {
   capturing = false;
-  captureBtn.disabled = false;
+  setCaptureActionState();
   capturePanel.setAttribute('aria-busy', 'false');
   progressEl.classList.add('hidden');
   doneMsgEl.classList.remove('hidden');
@@ -223,10 +304,26 @@ chrome.runtime.onMessage.addListener((msg) => {
       break;
     }
     case MSG.SW_DONE:
-      showDone(msg.payload || {});
+      if (!runningQueue) showDone(msg.payload || {});
       break;
+    case MSG.SW_QUEUE_DONE: {
+      const success = Number(msg?.payload?.success || 0);
+      const failed = Number(msg?.payload?.failed || 0);
+      doneMsgEl.classList.remove('hidden');
+      doneMsgTextEl.textContent = `Queue finished: ${success} succeeded, ${failed} failed.`;
+      loadPersistedCaptureQueue()
+        .then((nextQueue) => {
+          captureQueue = nextQueue;
+          renderCaptureQueue();
+        })
+        .catch((err) => reportNonFatal('reload queue on SW_QUEUE_DONE', err));
+      if (failed > 0) {
+        showToast(`Queue finished: ${success} succeeded, ${failed} failed.`, 'info', 2600);
+      }
+      break;
+    }
     case MSG.SW_ERROR:
-      showError(msg?.payload?.error || 'Unknown error');
+      if (!runningQueue) showError(msg?.payload?.error || 'Unknown error');
       break;
     default:
       break;
@@ -251,10 +348,218 @@ async function preloadUrlCount() {
   }
 }
 
+async function initCaptureProfiles(settings) {
+  smartProfilesEnabled = canUseFeature('smart_save_profiles', settings || {});
+  defaultCaptureProfileId = normalizeCaptureProfileId(
+    settings?.defaultCaptureProfileId || DEFAULT_CAPTURE_PROFILE_ID
+  );
+
+  if (!smartProfilesEnabled || !captureProfilesRegion || !captureProfilesList) {
+    if (captureProfilesList) captureProfilesList.innerHTML = '';
+    if (captureProfilesRegion) captureProfilesRegion.classList.add('hidden');
+    return;
+  }
+
+  captureProfilesList.innerHTML = '';
+  for (const profile of listCaptureProfiles()) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'capture-profile-btn sc-btn sc-btn-secondary';
+    btn.textContent = profile.label;
+    btn.dataset.profileId = profile.id;
+    btn.setAttribute('aria-label', `Capture using ${profile.label} profile`);
+    btn.addEventListener('click', () => triggerCapture(profile.id));
+    captureProfilesList.appendChild(btn);
+  }
+  captureProfilesRegion.classList.remove('hidden');
+}
+
+function renderCaptureQueue() {
+  if (!captureQueueMeta || !captureQueueList) return;
+  captureQueueMeta.textContent =
+    captureQueue.length === 0
+      ? 'No tabs queued.'
+      : `${captureQueue.length} tab${captureQueue.length === 1 ? '' : 's'} queued.`;
+  captureQueueList.innerHTML = '';
+  for (const item of captureQueue) {
+    const row = document.createElement('div');
+    row.className = 'capture-queue-item';
+
+    const title = document.createElement('span');
+    title.className = 'capture-queue-item-title';
+    title.textContent = item.title;
+    title.title = item.title;
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'capture-queue-remove sc-btn sc-btn-ghost sc-btn-sm';
+    removeBtn.textContent = 'Remove';
+    removeBtn.addEventListener('click', async () => {
+      if (runningQueue || capturing) return;
+      captureQueue = removeFromQueue(captureQueue, item.tabId);
+      await persistCaptureQueue();
+      renderCaptureQueue();
+      setCaptureActionState();
+    });
+
+    row.appendChild(title);
+    row.appendChild(removeBtn);
+    captureQueueList.appendChild(row);
+  }
+  setCaptureActionState();
+}
+
+async function addCurrentTabToQueue() {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  captureQueue = addTabsToQueue(captureQueue, tab ? [tab] : []);
+  await persistCaptureQueue();
+  renderCaptureQueue();
+}
+
+async function addWindowTabsToQueue() {
+  const tabs = await chrome.tabs.query({ currentWindow: true });
+  captureQueue = addTabsToQueue(captureQueue, tabs || []);
+  await persistCaptureQueue();
+  renderCaptureQueue();
+}
+
+async function runCaptureQueue() {
+  if (!queueBatchEnabled || runningQueue || capturing || captureQueue.length === 0) return;
+  runningQueue = true;
+  setCaptureActionState();
+  errorMsgEl.classList.add('hidden');
+  doneMsgEl.classList.add('hidden');
+  progressEl.classList.remove('hidden');
+  setProgress(0, `Queue 0/${captureQueue.length}: starting…`);
+
+  const tabIds = captureQueue
+    .map((item) => Number(item.tabId))
+    .filter((id) => Number.isInteger(id));
+  const payload = { tabIds };
+  if (smartProfilesEnabled) payload.profileId = defaultCaptureProfileId;
+
+  try {
+    const res = await chrome.runtime.sendMessage({ type: MSG.CAPTURE_QUEUE_START, payload });
+    if (res?.ok === false) throw new Error(res.error || 'Queue capture failed');
+    captureQueue = await loadPersistedCaptureQueue();
+    renderCaptureQueue();
+  } catch (err) {
+    showError(err?.message || 'Queue capture failed');
+  } finally {
+    runningQueue = false;
+    setCaptureActionState();
+  }
+}
+
+async function initCaptureQueue(settings) {
+  queueBatchEnabled = canUseFeature('capture_queue_batch_mode', settings || {});
+  if (!captureQueueRegion) return;
+  captureQueue = queueBatchEnabled ? await loadPersistedCaptureQueue() : [];
+  renderCaptureQueue();
+  captureQueueRegion.classList.toggle('hidden', !queueBatchEnabled);
+}
+
+async function initRevisitNudge(settings) {
+  currentRevisitNudgeId = null;
+  if (!revisitNudgeRegion || !revisitNudgeText) return;
+
+  const nudgesFeatureEnabled = canUseFeature('smart_revisit_nudges', settings || {});
+  const nudgesEnabled = settings?.nudgesEnabled === true;
+  if (!nudgesFeatureEnabled || !nudgesEnabled) {
+    revisitNudgeRegion.classList.add('hidden');
+    revisitNudgeText.textContent = '';
+    return;
+  }
+
+  try {
+    const [records, state] = await Promise.all([
+      listScreenshotMetaRecords(),
+      loadRevisitNudgeState(),
+    ]);
+    const nudge = evaluateRevisitNudge(records, {
+      cadence: settings?.notificationCadence,
+      state,
+      now: Date.now(),
+    });
+    if (!nudge) {
+      revisitNudgeRegion.classList.add('hidden');
+      revisitNudgeText.textContent = '';
+      return;
+    }
+    currentRevisitNudgeId = nudge.id;
+    revisitNudgeText.textContent = nudge.message;
+    revisitNudgeRegion.classList.remove('hidden');
+  } catch (err) {
+    reportNonFatal('initRevisitNudge', err);
+    revisitNudgeRegion.classList.add('hidden');
+    revisitNudgeText.textContent = '';
+  }
+}
+
+revisitNudgeOpenBtn?.addEventListener('click', () => {
+  chrome.tabs.create({ url: chrome.runtime.getURL('src/history/history.html') });
+  window.close();
+});
+
+revisitNudgeDismissBtn?.addEventListener('click', async () => {
+  if (!currentRevisitNudgeId) return;
+  try {
+    await dismissRevisitNudge(currentRevisitNudgeId);
+    revisitNudgeRegion?.classList.add('hidden');
+    showToast('Nudge dismissed.', 'info', 1800);
+  } catch (err) {
+    reportNonFatal('revisitNudgeDismiss', err);
+  }
+});
+
+revisitNudgeSnoozeBtn?.addEventListener('click', async () => {
+  try {
+    await snoozeRevisitNudges(24 * 60 * 60 * 1000);
+    revisitNudgeRegion?.classList.add('hidden');
+    showToast('Nudges snoozed for 24 hours.', 'info', 1800);
+  } catch (err) {
+    reportNonFatal('revisitNudgeSnooze', err);
+  }
+});
+
+queueCurrentBtn?.addEventListener('click', () => {
+  addCurrentTabToQueue().catch((err) => reportNonFatal('addCurrentTabToQueue', err));
+});
+
+queueWindowBtn?.addEventListener('click', () => {
+  addWindowTabsToQueue().catch((err) => reportNonFatal('addWindowTabsToQueue', err));
+});
+
+runQueueBtn?.addEventListener('click', () => {
+  runCaptureQueue().catch((err) => reportNonFatal('runCaptureQueue', err));
+});
+
+clearQueueBtn?.addEventListener('click', async () => {
+  if (runningQueue || capturing) return;
+  captureQueue = [];
+  await persistCaptureQueue();
+  renderCaptureQueue();
+  setCaptureActionState();
+});
+
 (async function init() {
   await applySavedTheme();
   perfLog('init.start');
   setActiveTab('capture');
+  let settings = {};
+  try {
+    settings = await getUserSettings();
+  } catch (err) {
+    reportNonFatal('init.settings', err);
+  }
+  smartProfilesEnabled = canUseFeature('smart_save_profiles', settings || {});
+  defaultCaptureProfileId = normalizeCaptureProfileId(
+    settings?.defaultCaptureProfileId || DEFAULT_CAPTURE_PROFILE_ID
+  );
+  await initCaptureProfiles(settings);
+  await initCaptureQueue(settings);
+  await initRevisitNudge(settings);
   await preloadUrlCount();
+  setCaptureActionState();
   perfLog('init.done');
 })();

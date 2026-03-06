@@ -14,6 +14,12 @@ import { savePendingTile, deletePendingTiles } from '../shared/repos/tile-repo.j
 import { getUserSettings } from '../shared/repos/settings-repo.js';
 import { createEnsureOffscreen } from './offscreen-manager.js';
 import { hasDownloadsPermission, downloadCaptureParts } from './downloads.js';
+import { canUseFeature } from '../shared/capabilities.js';
+import {
+  DEFAULT_CAPTURE_PROFILE_ID,
+  normalizeCaptureProfileId,
+  resolveCaptureSettings,
+} from '../shared/capture-profiles.js';
 
 export function createCaptureService() {
   const ensureOffscreen = createEnsureOffscreen();
@@ -94,7 +100,7 @@ export function createCaptureService() {
     }
   }
 
-  async function captureTab(tabId) {
+  async function captureTab(tabId, options = {}) {
     if (activeCaptures.has(tabId)) {
       throw new Error('A capture is already running for this tab.');
     }
@@ -108,6 +114,7 @@ export function createCaptureService() {
     let capturedTiles = 0;
     let captureModeUsed = 'page';
     let fallbackUsed = 'none';
+    let effectiveProfileId = null;
     const captureState = { lastCaptureAt: 0, retryCount: 0, quotaBackoffCount: 0 };
 
     try {
@@ -218,6 +225,15 @@ export function createCaptureService() {
       stitchSucceeded = true;
 
       const resultIds = Array.isArray(stitchResult?.ids) ? stitchResult.ids : [id];
+      const settings = await getUserSettings();
+      const profilesEnabled = canUseFeature('smart_save_profiles', settings);
+      const requestedProfileId = options?.profileId ?? settings.defaultCaptureProfileId;
+      effectiveProfileId = profilesEnabled
+        ? normalizeCaptureProfileId(requestedProfileId || DEFAULT_CAPTURE_PROFILE_ID)
+        : null;
+      const effectiveSettings = profilesEnabled
+        ? resolveCaptureSettings(settings, effectiveProfileId)
+        : settings;
       const finalRecord = await getScreenshotById(id);
       if (finalRecord?.blob) {
         fallbackUsed = finalRecord.autoScaledFromOversized ? 'oversized_autoscale' : 'none';
@@ -229,9 +245,11 @@ export function createCaptureService() {
           quotaBackoffs: Number(captureState.quotaBackoffCount || 0),
           fallbackUsed,
           captureMode: captureModeUsed,
+          profileId: effectiveProfileId,
         };
         await saveScreenshotRecord({
           ...finalRecord,
+          captureProfileId: effectiveProfileId || '',
           ...(firstThumbBlob instanceof Blob ? { thumbBlob: firstThumbBlob } : {}),
           captureReport,
         });
@@ -245,21 +263,21 @@ export function createCaptureService() {
         });
       }
 
-      const settings = await getUserSettings();
-      const formatForDirectDownload = settings.defaultExportFormat === 'jpg' ? 'jpg' : 'png';
-      const wantsSkipPreview = settings.autoDownloadMode === 'skip_preview';
+      const formatForDirectDownload =
+        effectiveSettings.defaultExportFormat === 'jpg' ? 'jpg' : 'png';
+      const wantsSkipPreview = effectiveSettings.autoDownloadMode === 'skip_preview';
 
       let downloadedDirectly = false;
       let skippedPdfDirectDownload = false;
-      if (wantsSkipPreview && settings.defaultExportFormat === 'pdf') {
+      if (wantsSkipPreview && effectiveSettings.defaultExportFormat === 'pdf') {
         skippedPdfDirectDownload = true;
       } else if (wantsSkipPreview) {
         if (await hasDownloadsPermission()) {
           await downloadCaptureParts({
             ids: resultIds,
             format: formatForDirectDownload,
-            directory: settings.downloadDirectory,
-            saveAs: settings.saveAs,
+            directory: effectiveSettings.downloadDirectory,
+            saveAs: effectiveSettings.saveAs,
             titleHint: tab.title || tab.url || 'screenshot',
           });
           downloadedDirectly = true;
@@ -275,9 +293,10 @@ export function createCaptureService() {
         captureMode: captureModeUsed,
         downloadedDirectly,
         skippedPdfDirectDownload,
+        profileId: effectiveProfileId,
       });
 
-      if (!downloadedDirectly) {
+      if (!downloadedDirectly && options?.suppressPreviewOpen !== true) {
         const q = new URLSearchParams({ id });
         if (captureMode) q.set('mode', captureMode);
         const previewUrl = chrome.runtime.getURL(`src/preview/preview.html?${q.toString()}`);
@@ -297,6 +316,7 @@ export function createCaptureService() {
         quotaBackoffs: Number(captureState.quotaBackoffCount || 0),
         fallbackUsed,
         captureMode: captureModeUsed,
+        profileId: effectiveProfileId,
         error: err?.message || 'Unknown capture error',
       });
       throw err;

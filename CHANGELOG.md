@@ -1,5 +1,123 @@
 # Changelog
 
+## 1.9.33 - 2026-03-06
+
+- Strict UX/UI calibration pass for changed queue components:
+  - normalized queue section/item spacing to design-token rhythm
+  - aligned queue row action sizing to shared button controls (`sc-btn-sm`, 32px minimum)
+  - removed undersized queue-row remove action geometry drift.
+
+## 1.9.32 - 2026-03-06
+
+- Capture Queue completion lifecycle fix:
+  - queue state clear/removal is now service-worker authoritative (not popup-dependent)
+  - remaining queued tabs are removed from storage after each processed tab
+  - queue cleanup now succeeds even if popup closes during execution.
+- Queue completion UX:
+  - added `SW_QUEUE_DONE` completion event
+  - queue completion now opens History automatically with success/failure summary
+  - History shows one-time queue summary toast on open.
+
+## 1.9.31 - 2026-03-06
+
+- Capture Queue execution fix (stuck/active-tab-only):
+  - moved queue batch execution from popup-local loop into service worker orchestration
+  - added per-item queued tab activation/focus before capture to ensure each queued tab is captured
+  - introduced validated `CAPTURE_QUEUE_START` payload path with unit/integration coverage.
+
+## 1.9.30 - 2026-03-06
+
+- Capture Queue reliability hardening:
+  - fixed queued batch capture flow to suppress per-item preview opening during queue execution
+  - kept queue captures sequential and protocol-compatible through optional `suppressPreviewOpen` payload flag
+  - expanded payload validation and integration coverage for queue-mode capture starts.
+- Added project rule requiring roadmap features to be technically reliable and product-logical before being treated as done.
+
+## 1.9.29 - 2026-03-06
+
+- Capture Queue persistence fix:
+  - queued tabs now persist between popup reopen/tab switches via extension storage
+  - added queue state normalization to guard against malformed/duplicate persisted entries
+  - expanded unit tests for queue state normalization and dedupe.
+
+## 1.9.28 - 2026-03-06
+
+- Implemented Capture Queue + Batch Mode v1 delivered slice (Pro/Ultra):
+  - added popup queue UI (`Queue Current`, `Queue Window`, `Run Queue`, `Clear`) with queued tab list
+  - executes queued captures sequentially using existing `CAPTURE_START` flow
+  - no service-worker message schema changes; behavior remains protocol-compatible
+  - added ADR `0008-capture-queue-batch-v1` and synchronized architecture/UI handoff/roadmap/help docs.
+
+## 1.9.27 - 2026-03-06
+
+- Naming consistency and roadmap hardening:
+  - standardized user-facing navigation labels to `Settings` across History/Preview/Settings headers
+  - aligned key docs to use `Settings` consistently in user-facing guidance
+  - added mandatory post-30-day full assessment checkpoint to the roadmap (UX/UI, user flows, product perspective).
+
+## 1.9.26 - 2026-03-06
+
+- Options IA logical regrouping refinement:
+  - moved `Theme` into `Daily Essentials`
+  - moved `Default export format` and `Default PDF page size` into `Capture & Export`
+  - preserved existing settings IDs, save behavior, and navigation/deep-link behavior.
+
+## 1.9.25 - 2026-03-06
+
+- Options/Settings navigation redesign (structure-only, behavior-safe):
+  - introduced two-column settings shell with section navigation (`Daily Essentials`, `Capture & Export`, `Downloads`, `Feature Access`, `Privacy & Permissions`, `Advanced`)
+  - added URL deep-link support via `?section=<id>` with default fallback to `daily-essentials`
+  - prioritized first-view controls (tier/profile/export defaults + save/status feedback) in `Daily Essentials`
+  - kept existing settings IDs, save flow, permission flow, keyboard save shortcut, and tier gating behavior unchanged.
+
+## 1.9.24 - 2026-03-06
+
+- Implemented Weekly Value Report v1 delivered slice (Pro/Ultra):
+  - added Options summary card with local-only metrics (captures saved 7d, unique domains 7d, URLs collected, estimated minutes saved)
+  - added shared report builder in `src/shared/value-report.js`
+  - enforced hide-only tier visibility (hidden for Basic)
+  - added ADR `0007-weekly-value-report-v1` and unit test coverage.
+
+## 1.9.23 - 2026-03-06
+
+- Implemented Bulk Actions v1 delivered slice (Pro/Ultra):
+  - History now exposes a tier-gated `Bulk` entry action (hidden for Basic)
+  - reused overlay multi-select flow for batch download/delete operations
+  - preserved existing capture/export logic and message contracts.
+- Added ADR `0006-bulk-actions-v1` and synchronized docs (architecture, UI handoff, help guide, roadmap).
+
+## 1.9.22 - 2026-03-06
+
+- History diagnostics dismissal persistence + documentation sync:
+  - fixed History “latest capture failed” banner dismiss behavior to persist across reloads until a new failure key appears
+  - persisted dismissal key in local storage with safe fallback to in-memory behavior
+  - updated core docs to reflect Smart Save Profiles and History profile filter behavior across architecture, workflow, and UI QA contracts.
+
+## 1.9.20 - 2026-03-06
+
+- Implemented Smart Revisit Nudges v1 (Pro/Ultra gated, local-only):
+  - added local nudge evaluator (`low` / `balanced` / `high`) based on screenshot metadata age
+  - added local nudge state repo with dismiss and 24h snooze actions
+  - added popup nudge card (`Open in History`, `Dismiss`, `Snooze 24h`)
+  - added Options controls for nudge enablement and cadence (hide-only for non-entitled tiers)
+  - added ADR `0005-smart-revisit-nudges-v1` and unit coverage for nudge logic/state.
+
+## 1.9.19 - 2026-03-06
+
+- Updated fixed Smart Save Profile defaults across implementation and docs:
+  - `Research`, `Interest`, `Private` (replacing `Research`, `Competitor`, `Receipts`)
+  - synchronized options selector, shared profile catalog, and validation tests
+  - clarified roadmap text that editable profiles are planned for a later phase (not v1).
+
+## 1.9.18 - 2026-03-06
+
+- Implemented Smart Save Profiles v1 groundwork (roadmap feature #1):
+  - added fixed local profile catalog (`Research`, `Interest`, `Private`) with capture-only override resolver
+  - extended settings with `defaultCaptureProfileId` normalization and persistence
+  - extended `CAPTURE_START` payload validation/routing with optional `profileId`
+  - wired popup Pro/Ultra profile quick actions and options default profile selector (gated by capability tier)
+  - added ADR `0004-smart-save-profiles-v1` and expanded unit/integration coverage for profiles + payload validation.
+
 ## 1.9.17 - 2026-03-06
 
 - Repository structure and hygiene hardening:

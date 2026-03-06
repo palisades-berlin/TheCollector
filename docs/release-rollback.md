@@ -36,5 +36,5 @@ npm run test:e2e:visual
 
 - Popup capture and URL collection work end-to-end
 - History and preview load without runtime errors
-- Options permissions and saves behave correctly
+- Settings permissions and saves behave correctly
 - No new security-policy violations in CI

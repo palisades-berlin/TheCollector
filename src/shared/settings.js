@@ -1,3 +1,6 @@
+import { DEFAULT_CAPTURE_PROFILE_ID, normalizeCaptureProfileId } from './capture-profiles.js';
+import { normalizeNotificationCadence } from './nudges.js';
+
 const SETTINGS_DEFAULTS = {
   defaultExportFormat: 'png', // png | jpg | pdf
   defaultPdfPageSize: 'auto', // auto | a4 | letter
@@ -6,8 +9,11 @@ const SETTINGS_DEFAULTS = {
   saveAs: false,
   fitClipboardToDocsLimit: true,
   theme: 'system', // system | light | dark
+  nudgesEnabled: false,
+  notificationCadence: 'balanced', // low | balanced | high
   // Empty default allows migration from legacy booleans when no tier is stored yet.
   capabilityTier: '', // basic | pro | ultra
+  defaultCaptureProfileId: DEFAULT_CAPTURE_PROFILE_ID,
   // Legacy read-compat keys (deprecated; read-only migration input).
   proEnabled: false,
   ultraEnabled: false,
@@ -31,7 +37,10 @@ export async function getSettings() {
     saveAs: Boolean(stored.saveAs),
     fitClipboardToDocsLimit: normalizeFitClipboardToDocsLimit(stored.fitClipboardToDocsLimit),
     theme: normalizeTheme(stored.theme),
+    nudgesEnabled: normalizeNudgesEnabled(stored.nudgesEnabled),
+    notificationCadence: normalizeNotificationCadence(stored.notificationCadence),
     capabilityTier,
+    defaultCaptureProfileId: normalizeCaptureProfileId(stored.defaultCaptureProfileId),
     // Deprecated compatibility projection for legacy callsites.
     proEnabled,
     ultraEnabled,
@@ -51,6 +60,9 @@ export async function setSettings(partial) {
   next.saveAs = Boolean(next.saveAs);
   next.fitClipboardToDocsLimit = normalizeFitClipboardToDocsLimit(next.fitClipboardToDocsLimit);
   next.theme = normalizeTheme(next.theme);
+  next.nudgesEnabled = normalizeNudgesEnabled(next.nudgesEnabled);
+  next.notificationCadence = normalizeNotificationCadence(next.notificationCadence);
+  next.defaultCaptureProfileId = normalizeCaptureProfileId(next.defaultCaptureProfileId);
   next.capabilityTier = normalizeCapabilityTier(
     next.capabilityTier,
     next.proEnabled,
@@ -102,6 +114,10 @@ function normalizeFitClipboardToDocsLimit(v) {
 function normalizeTheme(v) {
   if (v === 'light' || v === 'dark') return v;
   return 'system';
+}
+
+function normalizeNudgesEnabled(v) {
+  return v === true;
 }
 
 function normalizeCapabilityTier(tier, legacyProEnabled, legacyUltraEnabled) {

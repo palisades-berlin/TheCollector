@@ -1,4 +1,5 @@
 import { toPositiveInt } from './validation.js';
+import { normalizeCaptureProfileId } from './capture-profiles.js';
 
 function asObject(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
@@ -20,7 +21,50 @@ export function validateCaptureStartPayload(payload) {
   const obj = asObject(payload);
   const tabId = toPositiveInt(obj?.tabId);
   if (!tabId) return { ok: false, error: 'Invalid tab id' };
-  return { ok: true, value: { tabId } };
+  let profileId = null;
+  if (obj && Object.hasOwn(obj, 'profileId')) {
+    if (typeof obj.profileId !== 'string') {
+      return { ok: false, error: 'Invalid profile id' };
+    }
+    profileId = normalizeCaptureProfileId(obj.profileId);
+  }
+  let suppressPreviewOpen = false;
+  if (obj && Object.hasOwn(obj, 'suppressPreviewOpen')) {
+    if (typeof obj.suppressPreviewOpen !== 'boolean') {
+      return { ok: false, error: 'Invalid suppressPreviewOpen flag' };
+    }
+    suppressPreviewOpen = obj.suppressPreviewOpen;
+  }
+  return { ok: true, value: { tabId, profileId, suppressPreviewOpen } };
+}
+
+export function validateCaptureQueueStartPayload(payload) {
+  const obj = asObject(payload);
+  if (!obj) return { ok: false, error: 'Invalid queue payload' };
+
+  const ids = Array.isArray(obj.tabIds) ? obj.tabIds : null;
+  if (!ids || ids.length === 0) return { ok: false, error: 'Invalid queue tab ids' };
+
+  const seen = new Set();
+  const tabIds = [];
+  for (const rawId of ids) {
+    const tabId = toPositiveInt(rawId);
+    if (!tabId) return { ok: false, error: 'Invalid queue tab id' };
+    if (seen.has(tabId)) continue;
+    seen.add(tabId);
+    tabIds.push(tabId);
+  }
+  if (tabIds.length === 0) return { ok: false, error: 'Invalid queue tab ids' };
+
+  let profileId = null;
+  if (Object.hasOwn(obj, 'profileId')) {
+    if (typeof obj.profileId !== 'string') {
+      return { ok: false, error: 'Invalid profile id' };
+    }
+    profileId = normalizeCaptureProfileId(obj.profileId);
+  }
+
+  return { ok: true, value: { tabIds, profileId } };
 }
 
 export function validatePreviewDownloadPayload(payload) {

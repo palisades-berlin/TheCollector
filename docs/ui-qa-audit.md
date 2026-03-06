@@ -20,6 +20,7 @@ This document is the implementation QA contract for exhaustive UX/UI verificatio
 3. History workspace (default, empty, loading, files overlay)
 4. Options/settings (default + permission feedback)
 5. Preview (edit mode + error + diff)
+6. Tier-gated overlays (Pro/Ultra): Smart Save profile row, profile filter, bulk entry, nudge card, weekly report card
 
 ### Components
 
@@ -27,7 +28,7 @@ This document is the implementation QA contract for exhaustive UX/UI verificatio
 2. Surface components:
 
 - Popup: header badge, segmented tabs, capture and URL action blocks, row actions, footer groups
-- History: header actions, filters, cards, diagnostics banner, files overlay rows
+- History: header actions, filters (including profile filter), cards, diagnostics banner, files overlay rows
 - Options: cards, labels/controls rows, status banners, permission pills
 - Preview: toolbar actions, preset group, edit toolbar, mode notice, screenshot stage
 
@@ -38,6 +39,7 @@ This document is the implementation QA contract for exhaustive UX/UI verificatio
 3. History flow: filter/reset/compare/open/delete/files
 4. Options flow: load/save/grant/revoke + feedback
 5. Preview flow: load/edit/export/preset/error/diff
+6. Tier visibility flow: Basic hides Pro/Ultra controls; Pro and Ultra render entitled controls
 
 State coverage target:
 
@@ -90,6 +92,7 @@ State coverage target:
 | Component-state snapshot breadth | Medium   | page-level snapshots exist but not full primitive matrix     | broaden screenshot matrix to state variants                   | `tests/visual/ui-parity.spec.mjs`                                                                      |
 | Accessibility automation depth   | Medium   | semantic ARIA exists and basic contract checks are automated | deepen keyboard/focus/contrast/state checks in CI             | `tests/accessibility-contract.test.mjs`, `tests/visual/*`                                              |
 | Figma node/frame validation      | Medium   | Direct file key + core node mapping now documented           | wire per-state snapshots to explicit frame/node references    | `docs/ui-handoff.md`, `tests/visual/ui-parity.spec.mjs`                                                |
+| Tier-gated visibility parity     | High     | Pro/Ultra controls are now feature-gated across surfaces     | Basic/Pro/Ultra visibility must be snapshot-validated         | `src/popup/*`, `src/history/*`, `src/options/*`, `tests/visual/ui-parity.spec.mjs`                     |
 
 ## Remediation Tracking Board
 
@@ -98,6 +101,7 @@ State coverage target:
 | Control/tap target ergonomics in popup        | Phase 2 | `src/popup/popup.css`, `src/shared/ui.css`                                            | Medium | visual + keyboard spot checks                |
 | Preview toolbar cognitive load                | Phase 2 | `src/preview/preview.css`, `src/preview/preview.html`                                 | Medium | visual snapshots (`preview-edit-mode`, wrap) |
 | Theme system support                          | Phase 4 | `src/shared/settings.js`, `src/shared/ui.css`, `src/shared/theme.js`, `src/options/*` | Medium | unit(settings) + visual(light/dark)          |
+| Smart Save profile + History filter parity    | Phase 2 | `src/popup/*`, `src/history/*`, `src/options/*`                                       | Low    | unit + visual tier-state checks              |
 | First-run onboarding and permission education | Phase 3 | `src/background/service-worker.js`, `src/onboarding/*`, `src/options/*`               | Low    | manual install/onboarding checklist          |
 | Extension-native entry points                 | Phase 5 | `manifest.json`, `src/background/service-worker.js`                                   | Medium | manual context menu + omnibox smoke          |
 | Accessibility automation depth                | Phase 6 | `tests/visual/ui-parity.spec.mjs` (+ a11y checks)                                     | Medium | CI checks pass                               |

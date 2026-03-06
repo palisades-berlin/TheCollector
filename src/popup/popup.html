@@ -56,6 +56,69 @@
         </button>
       </div>
 
+      <div id="captureProfilesRegion" class="capture-profiles-region hidden" aria-live="polite">
+        <div class="capture-profiles-label">Smart Save Profiles</div>
+        <div id="captureProfilesList" class="capture-profiles-list"></div>
+      </div>
+
+      <div id="captureQueueRegion" class="capture-queue-region hidden" aria-live="polite">
+        <div class="capture-profiles-label">Capture Queue</div>
+        <div class="capture-queue-actions">
+          <button
+            id="queueCurrentBtn"
+            class="sc-btn sc-btn-secondary sc-btn-sm"
+            type="button"
+            aria-label="Queue current tab for batch capture"
+          >
+            Queue Current
+          </button>
+          <button
+            id="queueWindowBtn"
+            class="sc-btn sc-btn-secondary sc-btn-sm"
+            type="button"
+            aria-label="Queue all tabs in current window for batch capture"
+          >
+            Queue Window
+          </button>
+          <button
+            id="runQueueBtn"
+            class="sc-btn sc-btn-primary sc-btn-sm"
+            type="button"
+            aria-label="Run queued captures"
+            disabled
+          >
+            Run Queue
+          </button>
+          <button
+            id="clearQueueBtn"
+            class="sc-btn sc-btn-ghost sc-btn-sm"
+            type="button"
+            aria-label="Clear queued captures"
+            disabled
+          >
+            Clear
+          </button>
+        </div>
+        <div id="captureQueueMeta" class="capture-queue-meta">No tabs queued.</div>
+        <div id="captureQueueList" class="capture-queue-list"></div>
+      </div>
+
+      <div id="revisitNudgeRegion" class="revisit-nudge-region hidden" aria-live="polite">
+        <div class="revisit-nudge-head">Smart Revisit Nudge</div>
+        <div id="revisitNudgeText" class="revisit-nudge-text"></div>
+        <div class="revisit-nudge-actions">
+          <button id="revisitNudgeOpenBtn" class="sc-btn sc-btn-secondary sc-btn-sm" type="button">
+            Open in History
+          </button>
+          <button id="revisitNudgeSnoozeBtn" class="sc-btn sc-btn-sm" type="button">
+            Snooze 24h
+          </button>
+          <button id="revisitNudgeDismissBtn" class="sc-btn sc-btn-ghost sc-btn-sm" type="button">
+            Dismiss
+          </button>
+        </div>
+      </div>
+
       <div
         id="progress"
         class="progress sc-banner sc-banner-info hidden"

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {
   validateCaptureStartPayload,
+  validateCaptureQueueStartPayload,
   validatePreviewDownloadPayload,
   validateOffscreenStitchPayload,
   validateCsScrollPayload,
@@ -19,7 +20,27 @@ function test(name, fn) {
 test('validateCaptureStartPayload accepts positive tab id only', () => {
   assert.deepEqual(validateCaptureStartPayload({ tabId: 5 }), {
     ok: true,
-    value: { tabId: 5 },
+    value: { tabId: 5, profileId: null, suppressPreviewOpen: false },
+  });
+  assert.deepEqual(validateCaptureStartPayload({ tabId: 5, profileId: 'private' }), {
+    ok: true,
+    value: { tabId: 5, profileId: 'private', suppressPreviewOpen: false },
+  });
+  assert.deepEqual(validateCaptureStartPayload({ tabId: 5, suppressPreviewOpen: true }), {
+    ok: true,
+    value: { tabId: 5, profileId: null, suppressPreviewOpen: true },
+  });
+  assert.deepEqual(validateCaptureStartPayload({ tabId: 5, profileId: 'invalid' }), {
+    ok: true,
+    value: { tabId: 5, profileId: 'research', suppressPreviewOpen: false },
+  });
+  assert.deepEqual(validateCaptureStartPayload({ tabId: 5, profileId: 99 }), {
+    ok: false,
+    error: 'Invalid profile id',
+  });
+  assert.deepEqual(validateCaptureStartPayload({ tabId: 5, suppressPreviewOpen: 'yes' }), {
+    ok: false,
+    error: 'Invalid suppressPreviewOpen flag',
   });
   assert.deepEqual(validateCaptureStartPayload({ tabId: 0 }), {
     ok: false,
@@ -28,6 +49,40 @@ test('validateCaptureStartPayload accepts positive tab id only', () => {
   assert.deepEqual(validateCaptureStartPayload(null), {
     ok: false,
     error: 'Invalid tab id',
+  });
+});
+
+test('validateCaptureStartPayload accepts optional suppressPreviewOpen flag', () => {
+  assert.deepEqual(validateCaptureStartPayload({ tabId: 7, suppressPreviewOpen: true }), {
+    ok: true,
+    value: { tabId: 7, profileId: null, suppressPreviewOpen: true },
+  });
+  assert.deepEqual(validateCaptureStartPayload({ tabId: 7, suppressPreviewOpen: false }), {
+    ok: true,
+    value: { tabId: 7, profileId: null, suppressPreviewOpen: false },
+  });
+});
+
+test('validateCaptureQueueStartPayload validates tab ids and optional profile id', () => {
+  assert.deepEqual(validateCaptureQueueStartPayload({ tabIds: [3, 7, 3] }), {
+    ok: true,
+    value: { tabIds: [3, 7], profileId: null },
+  });
+  assert.deepEqual(validateCaptureQueueStartPayload({ tabIds: [3], profileId: 'private' }), {
+    ok: true,
+    value: { tabIds: [3], profileId: 'private' },
+  });
+  assert.deepEqual(validateCaptureQueueStartPayload({ tabIds: [] }), {
+    ok: false,
+    error: 'Invalid queue tab ids',
+  });
+  assert.deepEqual(validateCaptureQueueStartPayload({ tabIds: [0] }), {
+    ok: false,
+    error: 'Invalid queue tab id',
+  });
+  assert.deepEqual(validateCaptureQueueStartPayload({ tabIds: [1], profileId: 9 }), {
+    ok: false,
+    error: 'Invalid profile id',
   });
 });
 
