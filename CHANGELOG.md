@@ -1,10 +1,15 @@
 # Changelog
 
+## 1.9.15 - 2026-03-06
+
+- Merged Dependabot `globals` major update (`15.15.0 -> 17.4.0`) after full protected-branch validation.
+- Synchronized release metadata and docs to `1.9.15` for post-merge consistency.
+
 ## 1.9.14 - 2026-03-06
 
 - Rebased dependency hardening on latest `main` and upgraded lint stack:
   - bumped `eslint` to `10.0.2`
-  - aligned `@eslint/js` to `10.0.2`
+  - aligned `@eslint/js` to `10.0.1` (latest compatible at time of update)
   - preserved existing protected-branch gates and visual parity behavior.
 
 ## 1.9.13 - 2026-03-06
