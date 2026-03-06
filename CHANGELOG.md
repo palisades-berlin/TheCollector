@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.9.16 - 2026-03-06
+
+- Production-readiness hardening pass:
+  - added repository governance artifacts (`LICENSE`, `CONTRIBUTING.md`, `.github/CODEOWNERS`, ADR records in `docs/adr/`)
+  - added sink-aware network policy check (`scripts/check-network-sinks.mjs`) to the blocking security gate
+  - added manifest security and accessibility/isolation contract tests
+  - added runtime-orchestrator coverage gate (`test:coverage:runtime`) and wired it into CI quality job
+  - tightened popup performance default budget from `220ms` to `150ms`
+  - added rollback runbook (`docs/release-rollback.md`) and linked it from developer workflow.
+
 ## 1.9.15 - 2026-03-06
 
 - Merged Dependabot `globals` major update (`15.15.0 -> 17.4.0`) after full protected-branch validation.
