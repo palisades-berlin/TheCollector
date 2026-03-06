@@ -65,6 +65,37 @@ Packaging script guardrails:
   - `CLAUDE.md`
   - `CHANGELOG.md`
 
+## Commit/Push -> Wiki Sync Rule (Mandatory)
+
+- Every requested commit/push cycle must include a matching update to:
+  - `https://github.com/palisades-berlin/TheCollector.wiki.git` (`Home.md`)
+- Wiki sync is part of Definition of Done for commit/push operations.
+- Keep wiki section order stable; only refresh impacted sections to avoid drift.
+
+Minimum required wiki sync payload on each commit/push:
+- `Last updated` date
+- `Version synced with manifest.json`
+- current top changes from the release/commit intent
+- any changed policy blocks:
+  - capability tiers (`Basic`, `Pro`, `Ultra`)
+  - local-only/no-tracking rules
+  - quality/CI gates
+  - UX/UI/Figma source-of-truth references
+  - roadmap deltas
+
+Source consistency rule:
+- If a commit changes any of these files, update corresponding wiki sections in the same push cycle:
+  - `README.md`
+  - `docs/dev-workflow.md`
+  - `docs/ui-handoff.md`
+  - `docs/thecollector-2.0-90-day-roadmap.md`
+
+Publish workflow:
+1. `gh repo clone palisades-berlin/TheCollector.wiki <tmp/wiki>`
+2. Update `<tmp/wiki>/Home.md`
+3. Commit and push wiki changes immediately after repo push (same working session)
+4. Use concise wiki commit messages tied to the repo change intent
+
 ## UI/UX Handoff Rule
 
 - Figma file `THECollector - UI Kit & Screens` is the project UI single source of truth.

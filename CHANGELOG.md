@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.9 - 2026-03-06
+
+- Added mandatory commit/push wiki-sync policy:
+  - every requested commit/push cycle must include a same-session update to GitHub Wiki `Home.md` in `palisades-berlin/TheCollector.wiki`
+  - defined required wiki sync payload (date, manifest version, top changes, and changed policy blocks)
+  - documented source-consistency mapping and publish workflow in `docs/dev-workflow.md`.
+
 ## 1.9.8 - 2026-03-05
 
 - Version bump release for current `main` state and synced version pointers.
