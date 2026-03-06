@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT_DIR="$ROOT_DIR/dist"
 VERSION="$(node -p "require('$ROOT_DIR/manifest.json').version")"
 ZIP_PATH="$OUT_DIR/the-collector-v${VERSION}.zip"
-FORBIDDEN_RE='(^|/)(docs/|tests/|node_modules/|\.git/)|(^|/)[^/]+\.md$|(^|/)\.(editorconfig|eslintignore|eslintrc\.cjs|gitignore|prettierrc)$'
+FORBIDDEN_RE='(^|/)(docs/|tests/|node_modules/|\.git/)|(^|/)[^/]+\.md$|(^|/)\.(editorconfig|gitignore|prettierrc)$'
 CHANGELOG_VERSION="$(sed -n 's/^## \([0-9][0-9.]*\) - .*/\1/p' "$ROOT_DIR/CHANGELOG.md" | head -n 1)"
 
 if [[ -z "$CHANGELOG_VERSION" ]]; then
@@ -36,8 +36,6 @@ zip -r "$ZIP_PATH" manifest.json assets src \
      "tests/*" \
      "*.md" \
      ".editorconfig" \
-     ".eslintignore" \
-     ".eslintrc.cjs" \
      ".gitignore" \
      ".prettierrc"
 

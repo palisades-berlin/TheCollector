@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.17 - 2026-03-06
+
+- Repository structure and hygiene hardening:
+  - added `test:repo-hygiene` guard to block tracked generated artifacts and `.DS_Store` files
+  - wired repo hygiene check into CI quality gate
+  - moved icon utility to `tools/icons/create_icons.py` and added `tools/README.md`
+  - normalized ignore policy for generated artifact directories
+  - updated docs/workflow references to reflect structure and branch-protection state.
+
 ## 1.9.16 - 2026-03-06
 
 - Production-readiness hardening pass:

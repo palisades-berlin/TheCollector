@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.16`.
+Current extension version: `1.9.17`.
 
 ## Overview
 
@@ -16,11 +16,11 @@ All data remains in extension-local storage; there is no backend upload pipeline
 
 ## Top Changes
 
-- Added production governance baseline: root `LICENSE`, `CONTRIBUTING.md`, `CODEOWNERS`, and ADR set in `docs/adr/`.
-- Hardened security checks with sink-aware static policy validation (`scripts/check-network-sinks.mjs`) in the blocking security gate.
-- Expanded automated compliance tests with manifest security assertions and accessibility/isolation contract checks.
-- Added runtime-orchestrator coverage gate (`test:coverage:runtime`) and wired it into CI quality checks.
-- Tightened popup performance budget default from `220ms` to `150ms` and added release rollback runbook (`docs/release-rollback.md`).
+- Added repository hygiene guard (`test:repo-hygiene`) and wired it into CI quality checks to prevent tracked artifacts and `.DS_Store` drift.
+- Normalized ignore policy for generated artifacts (`coverage/`, `dist/`, `output/`, `tmp/`, `test-results/`, `artifacts/`).
+- Moved local icon utility from root to `tools/icons/create_icons.py` and added `tools/README.md`.
+- Removed stale packaging exclusions for deleted ESLint legacy config files.
+- Synced docs/workflows for structure hygiene and updated root layout contract.
 
 ## Core Architecture
 
@@ -147,6 +147,7 @@ No runtime environment variables are required for the extension. See `.env.examp
 
 ```bash
 npm run lint
+npm run test:repo-hygiene
 npm run test:unit
 npm run test:coverage
 npm run test:coverage:runtime
@@ -241,6 +242,7 @@ THE Collector/
 ├── manifest.json
 ├── assets/icons/
 ├── docs/
+├── tools/            # local developer utilities
 └── src/
    ├── background/      # service worker
    ├── content/         # injected capture agent
