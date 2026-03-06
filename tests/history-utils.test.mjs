@@ -59,6 +59,7 @@ test('buildRecordHints includes split and stitched hints', () => {
     stitchedFrom: 'part-1',
   });
   assert.deepEqual(hints, ['Part 2/3', 'Stitched']);
+  assert.deepEqual(buildRecordHints({ splitCount: 1, splitPart: 0, stitchedFrom: '' }), []);
 });
 
 test('duration and byte formatters return readable units', () => {
@@ -66,6 +67,8 @@ test('duration and byte formatters return readable units', () => {
   assert.equal(formatDuration(12_100), '12s');
   assert.equal(formatBytes(1000), '1000 B');
   assert.equal(formatBytes(2048), '2.00 KB');
+  assert.equal(formatBytes(5 * 1024 * 1024), '5.00 MB');
+  assert.equal(formatBytes(3 * 1024 * 1024 * 1024), '3.00 GB');
 });
 
 test('buildCardDiagnosticText composes fallback, slow, and retry notes', () => {
@@ -80,6 +83,8 @@ test('buildCardDiagnosticText composes fallback, slow, and retry notes', () => {
     text,
     'Auto-scaled oversized page · Slow capture (15s, 9 tiles) · Capture retries: 2 (quota backoffs: 1)'
   );
+  assert.equal(buildCardDiagnosticText({}), '');
+  assert.equal(buildCardDiagnosticText({ captureDurationMs: 5_000 }), '');
 });
 
 await testAsync('runWithConcurrency processes all items and honors limit', async () => {
@@ -101,4 +106,12 @@ await testAsync('runWithConcurrency processes all items and honors limit', async
     seen.sort((a, b) => a - b),
     items
   );
+});
+
+await testAsync('runWithConcurrency handles empty items and zero limit', async () => {
+  let calls = 0;
+  await runWithConcurrency([], 0, async () => {
+    calls++;
+  });
+  assert.equal(calls, 0);
 });

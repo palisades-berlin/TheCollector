@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.10`.
+Current extension version: `1.9.11`.
 
 ## Overview
 
@@ -16,11 +16,11 @@ All data remains in extension-local storage; there is no backend upload pipeline
 
 ## Top Changes
 
+- Added gate-hardening fixes so Dependabot update PRs pass protected branch checks (ESLint 10 flat config + stable history visual snapshots).
 - Enabled GitHub security baseline for the repo: vulnerability alerts, automated security fixes, private vulnerability reporting, and Dependabot security updates.
 - Added mandatory commit/push wiki-sync policy: every repo push must update GitHub Wiki `Home.md` accordingly.
 - Added enterprise test hardening gates in CI: coverage, integration, security-policy, stability, and performance.
 - Added hierarchical capability tiers (`Basic`, `Pro`, `Ultra`) with migration-safe settings normalization.
-- Added local-only/no-tracking guardrails for roadmap-feature code paths with automated policy checks.
 
 ## Core Architecture
 

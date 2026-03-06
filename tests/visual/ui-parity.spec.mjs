@@ -351,6 +351,34 @@ test.describe('Figma parity snapshots', () => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(`${baseUrl}/src/history/history.html`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(200);
+    await page.evaluate(() => {
+      const grid = globalThis.document.getElementById('grid');
+      const cardTpl = globalThis.document.getElementById('cardTpl');
+      const count = globalThis.document.getElementById('count');
+      const empty = globalThis.document.getElementById('empty');
+      const loading = globalThis.document.getElementById('loading');
+      const skeleton = globalThis.document.getElementById('historySkeleton');
+      const diagnostics = globalThis.document.getElementById('captureDiagnostics');
+
+      globalThis.document.getElementById('clearAllBtn').classList.remove('hidden');
+      globalThis.document.getElementById('openFilesBtn').classList.remove('hidden');
+      globalThis.document.getElementById('compareBtn').classList.remove('hidden');
+      globalThis.document.getElementById('compareBtn').textContent = 'Compare (0/2)';
+      count.textContent = '· 1 screenshot';
+
+      grid.innerHTML = '';
+      const card = cardTpl.content.firstElementChild.cloneNode(true);
+      card.querySelector('.card-url').textContent = 'https://www.figma.com';
+      card.querySelector('.card-meta').textContent = '3/6/2026 · 3436×1790px';
+      card.querySelector('.card-diagnostic').classList.add('hidden');
+      grid.appendChild(card);
+
+      grid.classList.remove('hidden');
+      empty.classList.add('hidden');
+      loading.classList.add('hidden');
+      skeleton.classList.add('hidden');
+      diagnostics.classList.add('hidden');
+    });
 
     await expect(page).toHaveScreenshot('history-default.png', { fullPage: true });
 

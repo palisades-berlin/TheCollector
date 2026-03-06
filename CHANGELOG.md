@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.11 - 2026-03-06
+
+- Prepared branch-protection compatibility fixes for dependency update PRs:
+  - added flat ESLint config (`eslint.config.js`) so ESLint 10 runs without config migration failures
+  - added `globals` dev dependency for explicit browser/node global handling in flat config
+  - expanded `tests/history-utils.test.mjs` to raise branch coverage above the configured threshold
+  - stabilized history visual parity setup in `tests/visual/ui-parity.spec.mjs`
+  - refreshed impacted history visual snapshots for deterministic CI parity checks.
+
 ## 1.9.10 - 2026-03-06
 
 - Security posture hardening (GitHub Security tab):
