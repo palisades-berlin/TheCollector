@@ -2,6 +2,7 @@
 export const MSG = {
   // Popup → Service Worker
   CAPTURE_START: 'CAPTURE_START',
+  CAPTURE_QUEUE_START: 'CAPTURE_QUEUE_START',
 
   // Service Worker → Content Script
   CS_GET_METRICS: 'CS_GET_METRICS',
@@ -15,6 +16,7 @@ export const MSG = {
   // Service Worker → Popup (broadcast)
   SW_PROGRESS: 'SW_PROGRESS',
   SW_DONE: 'SW_DONE',
+  SW_QUEUE_DONE: 'SW_QUEUE_DONE',
   SW_ERROR: 'SW_ERROR',
 
   // Preview Tab → Service Worker

@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.17`.
+Current extension version: `1.9.33`.
 
 ## Overview
 
@@ -14,13 +14,17 @@ THE Collector includes two modes:
 
 All data remains in extension-local storage; there is no backend upload pipeline.
 
+Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.md).
+
 ## Top Changes
 
-- Added repository hygiene guard (`test:repo-hygiene`) and wired it into CI quality checks to prevent tracked artifacts and `.DS_Store` drift.
-- Normalized ignore policy for generated artifacts (`coverage/`, `dist/`, `output/`, `tmp/`, `test-results/`, `artifacts/`).
-- Moved local icon utility from root to `tools/icons/create_icons.py` and added `tools/README.md`.
-- Removed stale packaging exclusions for deleted ESLint legacy config files.
-- Synced docs/workflows for structure hygiene and updated root layout contract.
+- Strict UX/UI component calibration pass for changed queue components:
+  - queue spacing normalized to token scale
+  - queue item/action sizing aligned to shared control metrics (`sc-btn-sm` / 32px targets)
+- Fixed queue-completion reliability: queued tab removal/clear now runs in service worker storage lifecycle.
+- Fixed queue post-run UX: after queue completion, History opens automatically with a result summary.
+- Added `SW_QUEUE_DONE` event for queue completion status and popup/history sync.
+- Fixed queued multi-tab capture behavior: each queued tab is explicitly activated/focused before capture.
 
 ## Core Architecture
 
@@ -39,6 +43,12 @@ The capture pipeline is split across extension contexts:
 
 - One-click toolbar capture
 - Keyboard shortcut: `Alt+Shift+P`
+- Smart Save Profiles (Pro/Ultra): fixed presets `Research`, `Interest`, `Private`
+- Default Smart Save Profile can be set in Settings (Pro/Ultra)
+- Capture Queue + Batch Mode v1 (Pro/Ultra):
+  - queue current tab or current window tabs
+  - run queued captures sequentially from popup
+  - after completion, History opens automatically with queue result summary
 - Tile-by-tile full-page capture via `chrome.tabs.captureVisibleTab`
 - Fixed/sticky element suppression during capture pass
 - Capture target detection/locking:
@@ -104,10 +114,14 @@ The capture pipeline is split across extension contexts:
   - domain text filter
   - date range filter (from/to)
   - export type filter (`PNG`, `JPG`, `PDF`)
+  - profile filter (`Research`, `Interest`, `Private`) for Pro/Ultra tiers
 - History diagnostics:
   - Per-capture “why slow” hints (slow duration, retries/backoffs, oversized auto-scale fallback)
   - Latest capture failure note (if the most recent run failed)
   - Dismiss control (`×`) for the latest failure note
+- Bulk Actions v1 (Pro/Ultra):
+  - multi-select via `Bulk` overlay
+  - bulk download and bulk delete
 - No cloud sync or server upload path in current implementation
 
 ### Settings
@@ -119,7 +133,15 @@ The capture pipeline is split across extension contexts:
 - Optional `downloads` permission grant/revoke
 - Save-As behavior for downloads
 - Permission clarity panel with inline “why this permission” rationale
-- Real-time permission status badges in Options
+- Real-time permission status badges in Settings
+- Capability tier selector: `Basic`, `Pro`, `Ultra`
+- Pro/Ultra controls:
+  - Default Smart Save Profile (`Research`, `Interest`, `Private`)
+  - Smart Revisit Nudges controls (`enabled`, cadence)
+  - Weekly Value Report (local summary card in Settings)
+- Settings IA:
+  - Daily Essentials: tier, default profile, theme, save
+  - Capture & Export: export format, PDF page size, clipboard fit
 
 ## Oversized Capture Behavior
 
@@ -141,7 +163,7 @@ No runtime environment variables are required for the extension. See `.env.examp
 1. Open the extension popup.
 2. Use the `Capture` tab for screenshots (`Alt+Shift+P` also works).
 3. Use the `URLs` tab to collect, clean, and export links.
-4. Use History/Options for screenshot management and defaults.
+4. Use History and Settings for screenshot management and defaults.
 
 ## Local checks
 
@@ -199,9 +221,6 @@ Release notes policy: keep notes in `CHANGELOG.md` only; do not add `GITHUB_RELE
 - Code ownership is enforced via [CODEOWNERS](./.github/CODEOWNERS).
 - `main` branch protection requires:
   - required status checks
-  - at least one approving review
-  - code owner review
-  - stale review dismissal
   - admin enforcement.
 
 ## Permission Scope (Phase A)
@@ -221,7 +240,7 @@ Phase A focuses on dead-permission cleanup only. Current audit result: no remova
 - Required: `unlimitedStorage`
   - Retained for screenshot history reliability on larger capture datasets.
 - Optional: `downloads`
-  - Requested/revoked by user in Options; used only for explicit export/download flows.
+  - Requested/revoked by user in Settings; used only for explicit export/download flows.
 
 Next refinement phases should focus on architectural reductions (not blind permission removal), especially around large-capture storage strategy.
 
@@ -259,6 +278,8 @@ THE Collector/
 - [Architecture](./docs/architecture.md)
 - [Developer Workflow](./docs/dev-workflow.md)
 - [UI Handoff](./docs/ui-handoff.md)
+- [Roadmap](./docs/thecollector-2.0-90-day-roadmap.md)
+- [End-User Help Guide](./docs/help-user-guide.md)
 - [Contributing Guide](./CONTRIBUTING.md)
 
 ## Near-Term Roadmap

@@ -21,7 +21,7 @@
       <div class="header-actions">
         <nav class="sc-header-nav" aria-label="Primary">
           <a class="sc-header-link" href="history.html" aria-current="page">History</a>
-          <a class="sc-header-link" href="../options/options.html">Options</a>
+          <a class="sc-header-link" href="../options/options.html">Settings</a>
         </nav>
         <button
           id="compareBtn"
@@ -34,9 +34,9 @@
         <button
           id="openFilesBtn"
           class="btn-clear sc-btn sc-btn-sm hidden"
-          aria-label="Open files overlay"
+          aria-label="Open bulk actions"
         >
-          Files
+          Bulk
         </button>
         <button
           id="clearAllBtn"
@@ -73,6 +73,15 @@
           <option value="png">PNG</option>
           <option value="jpg">JPG</option>
           <option value="pdf">PDF</option>
+        </select>
+      </label>
+      <label id="filterProfileItem" class="filter-item hidden">
+        <span>Profile</span>
+        <select id="filterProfile" class="sc-select">
+          <option value="all">All</option>
+          <option value="research">Research</option>
+          <option value="interest">Interest</option>
+          <option value="private">Private</option>
         </select>
       </label>
       <div class="filter-item filter-actions">

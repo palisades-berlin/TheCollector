@@ -1,6 +1,15 @@
 import { getUserSettings, setUserSettings } from '../shared/repos/settings-repo.js';
 import { showToast } from '../shared/toast.js';
 import { applySavedTheme, applyThemeToDocument } from '../shared/theme.js';
+import { canUseFeature } from '../shared/capabilities.js';
+import {
+  DEFAULT_CAPTURE_PROFILE_ID,
+  normalizeCaptureProfileId,
+} from '../shared/capture-profiles.js';
+import { normalizeNotificationCadence } from '../shared/nudges.js';
+import { buildWeeklyValueReport } from '../shared/value-report.js';
+import { listScreenshotMetaRecords } from '../shared/repos/screenshot-repo.js';
+import { loadUrlList } from '../shared/repos/url-repo.js';
 
 const defaultExportFormatEl = document.getElementById('defaultExportFormat');
 const defaultPdfPageSizeEl = document.getElementById('defaultPdfPageSize');
@@ -12,6 +21,17 @@ const saveAsEl = document.getElementById('saveAs');
 const fitClipboardToDocsLimitEl = document.getElementById('fitClipboardToDocsLimit');
 const themeEl = document.getElementById('theme');
 const capabilityTierEl = document.getElementById('capabilityTier');
+const defaultCaptureProfileRowEl = document.getElementById('defaultCaptureProfileRow');
+const defaultCaptureProfileIdEl = document.getElementById('defaultCaptureProfileId');
+const nudgesEnabledRowEl = document.getElementById('nudgesEnabledRow');
+const nudgesEnabledEl = document.getElementById('nudgesEnabled');
+const notificationCadenceRowEl = document.getElementById('notificationCadenceRow');
+const notificationCadenceEl = document.getElementById('notificationCadence');
+const weeklyValueReportCardEl = document.getElementById('weeklyValueReportCard');
+const weeklyCapturesSavedEl = document.getElementById('weeklyCapturesSaved');
+const weeklyUniqueDomainsEl = document.getElementById('weeklyUniqueDomains');
+const weeklyUrlsCollectedEl = document.getElementById('weeklyUrlsCollected');
+const weeklyMinutesSavedEl = document.getElementById('weeklyMinutesSaved');
 const saveBtn = document.getElementById('saveBtn');
 const statusEl = document.getElementById('status');
 const onboardingBannerEl = document.getElementById('onboardingBanner');
@@ -28,6 +48,16 @@ const permBadgeEls = {
   downloads: document.getElementById('perm-downloads'),
 };
 let permissionPollTimer = null;
+const SECTION_IDS = new Set([
+  'daily-essentials',
+  'capture-export',
+  'downloads',
+  'feature-access',
+  'privacy-permissions',
+  'advanced',
+]);
+const settingsSectionEls = Array.from(document.querySelectorAll('[data-settings-section]'));
+const settingsNavBtnEls = Array.from(document.querySelectorAll('[data-settings-nav]'));
 
 function logNonFatal(context, err) {
   if (window.localStorage.getItem('sc_debug_non_fatal') !== '1') return;
@@ -38,6 +68,8 @@ init().catch((err) => showStatus(`Failed to load settings: ${err.message}`, 'err
 
 async function init() {
   await applySavedTheme();
+  wireSettingsNavigation();
+  setActiveSection(getInitialSectionId(), { syncUrl: false });
   renderOnboardingState();
   const settings = await getUserSettings();
   defaultExportFormatEl.value = settings.defaultExportFormat;
@@ -51,6 +83,19 @@ async function init() {
     applyThemeToDocument(themeEl.value);
   }
   if (capabilityTierEl) capabilityTierEl.value = settings.capabilityTier || 'basic';
+  if (defaultCaptureProfileIdEl) {
+    defaultCaptureProfileIdEl.value = normalizeCaptureProfileId(
+      settings.defaultCaptureProfileId || DEFAULT_CAPTURE_PROFILE_ID
+    );
+  }
+  if (nudgesEnabledEl) nudgesEnabledEl.checked = settings.nudgesEnabled === true;
+  if (notificationCadenceEl) {
+    notificationCadenceEl.value = normalizeNotificationCadence(settings.notificationCadence);
+    notificationCadenceEl.disabled = !(nudgesEnabledEl && nudgesEnabledEl.checked);
+  }
+  syncProfileRowVisibility(settings);
+  syncNudgesVisibility(settings);
+  await syncWeeklyValueReportVisibility(settings);
   await refreshPermissionStatus();
   setupPermissionStatusRefresh();
 }
@@ -67,6 +112,13 @@ saveBtn.addEventListener('click', async () => {
       fitClipboardToDocsLimit: fitClipboardToDocsLimitEl.checked,
       theme: themeEl ? themeEl.value : 'system',
       capabilityTier: capabilityTierEl ? capabilityTierEl.value : 'basic',
+      defaultCaptureProfileId: defaultCaptureProfileIdEl
+        ? normalizeCaptureProfileId(defaultCaptureProfileIdEl.value)
+        : DEFAULT_CAPTURE_PROFILE_ID,
+      nudgesEnabled: nudgesEnabledEl ? nudgesEnabledEl.checked : false,
+      notificationCadence: notificationCadenceEl
+        ? normalizeNotificationCadence(notificationCadenceEl.value)
+        : 'balanced',
     });
     const normalized = await getUserSettings();
     downloadDirectoryEl.value = normalized.downloadDirectory;
@@ -82,6 +134,20 @@ saveBtn.addEventListener('click', async () => {
 
 themeEl?.addEventListener('change', () => {
   applyThemeToDocument(themeEl.value);
+});
+
+capabilityTierEl?.addEventListener('change', () => {
+  const settings = { capabilityTier: capabilityTierEl.value };
+  syncProfileRowVisibility(settings);
+  syncNudgesVisibility(settings);
+  syncWeeklyValueReportVisibility(settings).catch((err) =>
+    logNonFatal('syncWeeklyValueReport', err)
+  );
+});
+
+nudgesEnabledEl?.addEventListener('change', () => {
+  if (!notificationCadenceEl) return;
+  notificationCadenceEl.disabled = !nudgesEnabledEl.checked;
 });
 
 grantDownloadsBtn.addEventListener('click', async () => {
@@ -268,9 +334,83 @@ function applySelectedFolder(folder) {
   downloadDirectoryEl.value = folder;
 }
 
+function syncProfileRowVisibility(settings) {
+  if (!defaultCaptureProfileRowEl) return;
+  const showProfiles = canUseFeature('smart_save_profiles', settings || {});
+  defaultCaptureProfileRowEl.classList.toggle('hidden', !showProfiles);
+}
+
+function syncNudgesVisibility(settings) {
+  const showNudges = canUseFeature('smart_revisit_nudges', settings || {});
+  if (nudgesEnabledRowEl) nudgesEnabledRowEl.classList.toggle('hidden', !showNudges);
+  if (notificationCadenceRowEl) notificationCadenceRowEl.classList.toggle('hidden', !showNudges);
+}
+
+async function syncWeeklyValueReportVisibility(settings) {
+  const showReport = canUseFeature('weekly_value_report', settings || {});
+  if (!weeklyValueReportCardEl) return;
+  weeklyValueReportCardEl.classList.toggle('hidden', !showReport);
+  if (!showReport) return;
+  try {
+    const [screenshots, urls] = await Promise.all([listScreenshotMetaRecords(), loadUrlList()]);
+    const report = buildWeeklyValueReport({
+      screenshotRecords: screenshots,
+      urlList: urls,
+    });
+    if (weeklyCapturesSavedEl) weeklyCapturesSavedEl.textContent = String(report.capturesSaved);
+    if (weeklyUniqueDomainsEl) weeklyUniqueDomainsEl.textContent = String(report.uniqueDomains);
+    if (weeklyUrlsCollectedEl) weeklyUrlsCollectedEl.textContent = String(report.urlsCollected);
+    if (weeklyMinutesSavedEl)
+      weeklyMinutesSavedEl.textContent = `${report.estimatedMinutesSaved} min`;
+  } catch (err) {
+    logNonFatal('loadWeeklyValueReport', err);
+    if (weeklyCapturesSavedEl) weeklyCapturesSavedEl.textContent = '0';
+    if (weeklyUniqueDomainsEl) weeklyUniqueDomainsEl.textContent = '0';
+    if (weeklyUrlsCollectedEl) weeklyUrlsCollectedEl.textContent = '0';
+    if (weeklyMinutesSavedEl) weeklyMinutesSavedEl.textContent = '0 min';
+  }
+}
+
 function renderOnboardingState() {
   if (!onboardingBannerEl) return;
   const params = new URLSearchParams(window.location.search);
   const shouldShow = params.get('onboarding') === '1';
   onboardingBannerEl.classList.toggle('hidden', !shouldShow);
+}
+
+function normalizeSectionId(raw) {
+  const next = String(raw || '')
+    .trim()
+    .toLowerCase();
+  return SECTION_IDS.has(next) ? next : 'daily-essentials';
+}
+
+function getInitialSectionId() {
+  const params = new URLSearchParams(window.location.search);
+  return normalizeSectionId(params.get('section'));
+}
+
+function wireSettingsNavigation() {
+  for (const btn of settingsNavBtnEls) {
+    btn.addEventListener('click', () => {
+      setActiveSection(normalizeSectionId(btn.dataset.settingsNav), { syncUrl: true });
+    });
+  }
+}
+
+function setActiveSection(sectionId, { syncUrl = true } = {}) {
+  const activeId = normalizeSectionId(sectionId);
+  for (const sectionEl of settingsSectionEls) {
+    const isActive = sectionEl.dataset.settingsSection === activeId;
+    sectionEl.classList.toggle('hidden', !isActive);
+  }
+  for (const btn of settingsNavBtnEls) {
+    const isActive = normalizeSectionId(btn.dataset.settingsNav) === activeId;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-current', isActive ? 'page' : 'false');
+  }
+  if (!syncUrl) return;
+  const url = new URL(window.location.href);
+  url.searchParams.set('section', activeId);
+  window.history.replaceState(null, '', url.toString());
 }

@@ -27,5 +27,6 @@ Legacy booleans are read for migration only and projected for temporary compatib
 ## Consequences
 
 - Entitlement checks are simpler and centralized.
+- Options UX uses a single capability selector (`basic` / `pro` / `ultra`) as the user-facing control.
 - UI gating uses hide-only rendering for unavailable features.
 - Legacy boolean fields are deprecated and not persisted.

@@ -28,8 +28,8 @@ Use this text as the canonical listing/policy justification for requested permis
 
 ### `downloads` (optional)
 
-- Requested only when the user enables download features in Options or explicitly exports/downloads assets.
-- Can be revoked by the user in Options; core functionality remains available without it.
+- Requested only when the user enables download features in Settings or explicitly exports/downloads assets.
+- Can be revoked by the user in Settings; core functionality remains available without it.
 
 ## Privacy statement (listing-safe)
 

@@ -162,6 +162,7 @@ function toMetaRecord(record) {
     captureQuotaBackoffs: Number(captureReport.quotaBackoffs || record.captureQuotaBackoffs || 0),
     captureFallbackUsed: captureReport.fallbackUsed || record.captureFallbackUsed || 'none',
     captureMode: captureReport.captureMode || record.captureMode || 'page',
+    captureProfileId: captureReport.profileId || record.captureProfileId || '',
     captureError: captureReport.error || record.captureError || '',
   };
 }

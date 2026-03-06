@@ -48,7 +48,10 @@ await runTest('getSettings normalizes invalid values and legacy autoDownload fla
     saveAs: true,
     fitClipboardToDocsLimit: true,
     theme: 'system',
+    nudgesEnabled: false,
+    notificationCadence: 'balanced',
     capabilityTier: 'basic',
+    defaultCaptureProfileId: 'research',
     proEnabled: false,
     ultraEnabled: false,
   });
@@ -92,7 +95,10 @@ await runTest('setSettings merges and persists normalized values', async () => {
     saveAs: false,
     fitClipboardToDocsLimit: true,
     theme: 'system',
+    nudgesEnabled: false,
+    notificationCadence: 'balanced',
     capabilityTier: 'basic',
+    defaultCaptureProfileId: 'research',
   });
   globalThis.chrome = { storage: { sync: mockSync } };
 
@@ -103,7 +109,10 @@ await runTest('setSettings merges and persists normalized values', async () => {
     downloadDirectory: '/Top Level/../Shots',
     fitClipboardToDocsLimit: false,
     theme: 'dark',
+    nudgesEnabled: 1,
+    notificationCadence: 'noisy',
     capabilityTier: 'invalid-tier',
+    defaultCaptureProfileId: 'not-a-real-profile',
     proEnabled: true,
   });
 
@@ -115,7 +124,10 @@ await runTest('setSettings merges and persists normalized values', async () => {
     saveAs: false,
     fitClipboardToDocsLimit: false,
     theme: 'dark',
+    nudgesEnabled: false,
+    notificationCadence: 'balanced',
     capabilityTier: 'pro',
+    defaultCaptureProfileId: 'research',
     proEnabled: true,
     ultraEnabled: false,
   });
@@ -126,7 +138,10 @@ await runTest('setSettings merges and persists normalized values', async () => {
   assert.equal(persisted.autoDownloadMode, 'after_preview');
   assert.equal(persisted.downloadDirectory, 'TopLevel/Shots');
   assert.equal(persisted.theme, 'dark');
+  assert.equal(persisted.nudgesEnabled, false);
+  assert.equal(persisted.notificationCadence, 'balanced');
   assert.equal(persisted.capabilityTier, 'pro');
+  assert.equal(persisted.defaultCaptureProfileId, 'research');
   assert.equal(persisted.proEnabled, undefined);
   assert.equal(persisted.ultraEnabled, undefined);
 });

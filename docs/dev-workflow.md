@@ -98,6 +98,7 @@ Source consistency rule:
   - `docs/dev-workflow.md`
   - `docs/ui-handoff.md`
   - `docs/thecollector-2.0-90-day-roadmap.md`
+  - `docs/help-user-guide.md`
 
 Publish workflow:
 
@@ -119,6 +120,10 @@ Publish workflow:
 - Visual parity gate is mandatory for release candidates:
   - run `npm run test:e2e:visual`
   - screenshot diff threshold is `maxDiffPixels <= 2`.
+- For every feature add/change that affects user behavior, UX, or tier availability, update:
+  - `docs/help-user-guide.md`
+  - `docs/thecollector-2.0-90-day-roadmap.md` (if roadmap scope/status changed)
+  - ADRs in `docs/adr/` when architecture/policy decisions changed.
 
 ## CI
 
