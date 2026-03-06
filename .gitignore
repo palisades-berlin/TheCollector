@@ -11,6 +11,8 @@ __pycache__/
 # Node
 node_modules/
 dist/
+coverage/
+artifacts/
 *.log
 
 # Editor

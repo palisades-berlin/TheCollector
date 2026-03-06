@@ -1,10 +1,11 @@
 {
   "name": "the-collector",
-  "version": "1.9.16",
+  "version": "1.9.17",
   "private": true,
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "test:repo-hygiene": "node scripts/check-repo-hygiene.mjs",
     "test:unit": "node tests/url-utils.test.mjs && node tests/url-history.test.mjs && node tests/filename.test.mjs && node tests/ui-state-validation.test.mjs && node tests/settings.test.mjs && node tests/capabilities.test.mjs && node tests/roadmap-guardrails.test.mjs && node tests/history-utils.test.mjs && node tests/protocol-validate.test.mjs && node tests/history-filters.test.mjs && node tests/url-repo.test.mjs && node tests/preview-export.test.mjs && node tests/manifest-security.test.mjs && node tests/accessibility-contract.test.mjs",
     "test:coverage": "c8 --all --include='src/shared/settings.js' --include='src/shared/capabilities.js' --include='src/shared/protocol-validate.js' --include='src/shared/filename.js' --include='src/history/history-utils.js' --reporter=text-summary --check-coverage --lines 90 --functions 90 --branches 85 --statements 90 npm run test:unit",
     "test:coverage:runtime": "c8 --all --include='src/background/service-worker.js' --include='src/offscreen/offscreen.js' --reporter=text-summary --check-coverage --lines 15 --functions 0 --branches 10 --statements 15 npm run test:integration",
@@ -19,7 +20,7 @@
     "test:e2e:manual": "node scripts/e2e-smoke.mjs --real-extension-manual",
     "lint": "eslint src tests",
     "format:check": "prettier --check .",
-    "check": "npm run lint && npm run test:unit && npm run format:check && npm run test:security-policy"
+    "check": "npm run lint && npm run test:repo-hygiene && npm run test:unit && npm run format:check && npm run test:security-policy"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

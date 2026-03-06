@@ -17,6 +17,7 @@ npm install
 
 ```bash
 npm run lint
+npm run test:repo-hygiene
 npm run test:unit
 npm run test:coverage
 npm run test:coverage:runtime
@@ -123,7 +124,7 @@ Publish workflow:
 
 - GitHub Actions workflow: `.github/workflows/ci.yml`
 - CI runs release-blocking jobs on push and pull request:
-  - quality (lint + unit + coverage thresholds + runtime coverage + preview-export coverage + security policy + format)
+  - quality (lint + repo-hygiene + unit + coverage thresholds + runtime coverage + preview-export coverage + security policy + format)
   - integration
   - stability
   - performance
@@ -135,10 +136,6 @@ Publish workflow:
 
 - `main` requires:
   - required status checks
-  - 1 approving review
-  - required code-owner review
-  - stale review dismissal
-  - last push approval
   - admin enforcement
   - conversation resolution
 
