@@ -73,6 +73,7 @@ Packaging script guardrails:
 - Keep wiki section order stable; only refresh impacted sections to avoid drift.
 
 Minimum required wiki sync payload on each commit/push:
+
 - `Last updated` date
 - `Version synced with manifest.json`
 - current top changes from the release/commit intent
@@ -84,6 +85,7 @@ Minimum required wiki sync payload on each commit/push:
   - roadmap deltas
 
 Source consistency rule:
+
 - If a commit changes any of these files, update corresponding wiki sections in the same push cycle:
   - `README.md`
   - `docs/dev-workflow.md`
@@ -91,6 +93,7 @@ Source consistency rule:
   - `docs/thecollector-2.0-90-day-roadmap.md`
 
 Publish workflow:
+
 1. `gh repo clone palisades-berlin/TheCollector.wiki <tmp/wiki>`
 2. Update `<tmp/wiki>/Home.md`
 3. Commit and push wiki changes immediately after repo push (same working session)

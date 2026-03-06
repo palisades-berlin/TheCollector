@@ -68,7 +68,8 @@ export function isFeatureEnabled(featureKey, settings = {}) {
 
 export function getCapabilitySnapshot(settings = {}) {
   const capabilityTier = getCurrentTier(settings);
-  const proEnabled = capabilityTier === CAPABILITY_TIER.PRO || capabilityTier === CAPABILITY_TIER.ULTRA;
+  const proEnabled =
+    capabilityTier === CAPABILITY_TIER.PRO || capabilityTier === CAPABILITY_TIER.ULTRA;
   const ultraEnabled = capabilityTier === CAPABILITY_TIER.ULTRA;
   return {
     capabilityTier,

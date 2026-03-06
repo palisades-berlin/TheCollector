@@ -1,11 +1,6 @@
 import { canUseFeature } from './capabilities.js';
 
-const LOCAL_SCHEMES = new Set([
-  'data:',
-  'blob:',
-  'chrome-extension:',
-  'moz-extension:',
-]);
+const LOCAL_SCHEMES = new Set(['data:', 'blob:', 'chrome-extension:', 'moz-extension:']);
 
 const TRACKING_KEY_DENYLIST = [
   'userId',

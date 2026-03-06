@@ -12,10 +12,7 @@ const DENY_PATTERNS = [
 ];
 
 const ALLOWLIST = new Map([
-  [
-    path.join(SRC_DIR, 'shared', 'roadmap-guardrails.js'),
-    new Set(['external-http']),
-  ],
+  [path.join(SRC_DIR, 'shared', 'roadmap-guardrails.js'), new Set(['external-http'])],
 ]);
 
 async function listFiles(dir) {

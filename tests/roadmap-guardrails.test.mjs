@@ -31,7 +31,10 @@ test('isLocalOnlyUrl blocks external network schemes', () => {
 });
 
 test('assertLocalOnlyUrl throws for external requests', () => {
-  assert.throws(() => assertLocalOnlyUrl('https://api.example.com', 'magic_mode'), /Blocked external/);
+  assert.throws(
+    () => assertLocalOnlyUrl('https://api.example.com', 'magic_mode'),
+    /Blocked external/
+  );
 });
 
 test('assertNoTrackingPayload blocks tracking-like keys recursively', () => {
@@ -47,14 +50,17 @@ test('assertNoTrackingPayload blocks tracking-like keys recursively', () => {
 
 test('enforceRoadmapActionPolicy checks both tier gate and payload policy', () => {
   assert.throws(
-    () =>
-      enforceRoadmapActionPolicy('magic_mode', { capabilityTier: 'pro' }, { event: 'run' }),
+    () => enforceRoadmapActionPolicy('magic_mode', { capabilityTier: 'pro' }, { event: 'run' }),
     /not available/
   );
 
   assert.throws(
     () =>
-      enforceRoadmapActionPolicy('smart_save_profiles', { capabilityTier: 'pro' }, { deviceId: 'x' }),
+      enforceRoadmapActionPolicy(
+        'smart_save_profiles',
+        { capabilityTier: 'pro' },
+        { deviceId: 'x' }
+      ),
     /Blocked tracking payload key/
   );
 

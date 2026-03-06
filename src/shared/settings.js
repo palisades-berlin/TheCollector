@@ -51,7 +51,11 @@ export async function setSettings(partial) {
   next.saveAs = Boolean(next.saveAs);
   next.fitClipboardToDocsLimit = normalizeFitClipboardToDocsLimit(next.fitClipboardToDocsLimit);
   next.theme = normalizeTheme(next.theme);
-  next.capabilityTier = normalizeCapabilityTier(next.capabilityTier, next.proEnabled, next.ultraEnabled);
+  next.capabilityTier = normalizeCapabilityTier(
+    next.capabilityTier,
+    next.proEnabled,
+    next.ultraEnabled
+  );
   next.proEnabled = next.capabilityTier === 'pro' || next.capabilityTier === 'ultra';
   next.ultraEnabled = next.capabilityTier === 'ultra';
   delete next.autoDownload;

@@ -51,7 +51,11 @@ function startStaticServer() {
 
 function createChromeStubInitScript() {
   return () => {
-    const createEvent = () => ({ addListener: () => {}, removeListener: () => {}, hasListener: () => false });
+    const createEvent = () => ({
+      addListener: () => {},
+      removeListener: () => {},
+      hasListener: () => false,
+    });
     const storageArea = {
       get: async (keys) => {
         if (keys == null) return {};
@@ -78,10 +82,18 @@ function createChromeStubInitScript() {
         sendMessage: async () => ({ ok: true }),
       },
       storage: { local: storageArea, sync: storageArea },
-      permissions: { contains: async () => true, request: async () => true, remove: async () => true },
+      permissions: {
+        contains: async () => true,
+        request: async () => true,
+        remove: async () => true,
+      },
       downloads: { download: async () => 1 },
       commands: { onCommand: createEvent() },
-      offscreen: { hasDocument: async () => true, createDocument: async () => {}, closeDocument: async () => {} },
+      offscreen: {
+        hasDocument: async () => true,
+        createDocument: async () => {},
+        closeDocument: async () => {},
+      },
       scripting: { executeScript: async () => [] },
     };
   };
