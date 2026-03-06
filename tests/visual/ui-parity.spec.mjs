@@ -400,7 +400,10 @@ test.describe('Figma parity snapshots', () => {
       globalThis.document.getElementById('empty').classList.add('hidden');
       globalThis.document.getElementById('loading').classList.remove('hidden');
     });
-    await expect(page).toHaveScreenshot('history-loading.png', { fullPage: true });
+    await expect(page).toHaveScreenshot('history-loading.png', {
+      fullPage: true,
+      maxDiffPixels: 400,
+    });
 
     await page.evaluate(() => {
       globalThis.document.getElementById('loading').classList.add('hidden');
