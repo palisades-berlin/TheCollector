@@ -1,0 +1,7 @@
+# Default ownership for all repository content.
+* @palisades-berlin
+
+# Security and release workflow ownership.
+/.github/workflows/ @palisades-berlin
+/scripts/ @palisades-berlin
+/manifest.json @palisades-berlin

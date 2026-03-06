@@ -16,8 +16,13 @@ const MENU_CAPTURE_PAGE = 'tc_capture_page';
 const MENU_COLLECT_PAGE = 'tc_collect_page_url';
 const MENU_COLLECT_LINK = 'tc_collect_link_url';
 
+function logNonFatal(context, err) {
+  if (globalThis?.THE_COLLECTOR_DEBUG_NON_FATAL !== true) return;
+  console.debug('[THE Collector][non-fatal]', context, err);
+}
+
 function broadcast(type, payload) {
-  chrome.runtime.sendMessage({ type, payload }).catch(() => {});
+  chrome.runtime.sendMessage({ type, payload }).catch((err) => logNonFatal('broadcast', err));
 }
 
 async function collectUrl(rawUrl, meta = {}) {

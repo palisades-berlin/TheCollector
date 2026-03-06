@@ -19,6 +19,8 @@ npm install
 npm run lint
 npm run test:unit
 npm run test:coverage
+npm run test:coverage:runtime
+npm run test:coverage:preview-export
 npm run test:integration
 npm run test:security-policy
 npm run test:stability
@@ -54,6 +56,10 @@ Packaging script guardrails:
 - Use the CI-uploaded artifact (`the-collector-release-zip`) from GitHub Actions for Chrome Web Store submission.
 - Treat locally generated zips as local validation only.
 - Use `docs/chrome-web-store-permissions.md` as canonical permission justification text in the CWS listing/policy form.
+
+## Rollback Procedure
+
+- Follow `docs/release-rollback.md` for emergency release rollback and post-rollback verification.
 
 ## Versioning Rule
 
@@ -117,13 +123,24 @@ Publish workflow:
 
 - GitHub Actions workflow: `.github/workflows/ci.yml`
 - CI runs release-blocking jobs on push and pull request:
-  - quality (lint + unit + coverage thresholds + security policy + format)
+  - quality (lint + unit + coverage thresholds + runtime coverage + preview-export coverage + security policy + format)
   - integration
   - stability
   - performance
   - e2e smoke
   - visual parity
   - packaging (depends on all gates above)
+
+## Branch Protection Policy (Main)
+
+- `main` requires:
+  - required status checks
+  - 1 approving review
+  - required code-owner review
+  - stale review dismissal
+  - last push approval
+  - admin enforcement
+  - conversation resolution
 
 ## Test Failure Triage Workflow
 

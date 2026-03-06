@@ -80,16 +80,16 @@ State coverage target:
 
 ## Current Findings Matrix
 
-| Area                             | Severity | Current                                                     | Expected                                                      | Target Files                                                                                           |
-| -------------------------------- | -------- | ----------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Spacing rhythm                   | High     | Multiple legacy local spacings in surface CSS               | Token-scale spacing only, exceptions documented               | `src/popup/popup.css`, `src/history/history.css`, `src/options/options.css`, `src/preview/preview.css` |
-| Control height role mapping      | High     | Small/standard control roles mixed in dense bars            | strict role mapping (`32`/`40`, popup tab `44`)               | `src/shared/ui.css` + all surfaces                                                                     |
-| Hover lift in dense bars         | High     | Global hover lift can create optical baseline jitter        | keep lift only where visually appropriate; opt out dense bars | `src/shared/ui.css` + surface override blocks                                                          |
-| Card internal rhythm             | High     | Card body and action paddings differ by surface             | compact vs standard card contract                             | `src/history/history.css`, `src/options/options.css`, `src/preview/preview.css`                        |
-| Toolbar action grouping          | Medium   | Preview/action groups can shift hierarchy when wrapping     | deterministic group spacing/wrap behavior                     | `src/preview/preview.css`                                                                              |
-| Component-state snapshot breadth | Medium   | page-level snapshots exist but not full primitive matrix    | broaden screenshot matrix to state variants                   | `tests/visual/ui-parity.spec.mjs`                                                                      |
-| Accessibility automation depth   | High     | semantic ARIA exists, but limited automated a11y assertions | keyboard/focus/contrast/state checks in CI                    | `tests/visual/*` + follow-up tooling                                                                   |
-| Figma node/frame validation      | Medium   | Direct file key + core node mapping now documented          | wire per-state snapshots to explicit frame/node references    | `docs/ui-handoff.md`, `tests/visual/ui-parity.spec.mjs`                                                |
+| Area                             | Severity | Current                                                      | Expected                                                      | Target Files                                                                                           |
+| -------------------------------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Spacing rhythm                   | High     | Multiple legacy local spacings in surface CSS                | Token-scale spacing only, exceptions documented               | `src/popup/popup.css`, `src/history/history.css`, `src/options/options.css`, `src/preview/preview.css` |
+| Control height role mapping      | High     | Small/standard control roles mixed in dense bars             | strict role mapping (`32`/`40`, popup tab `44`)               | `src/shared/ui.css` + all surfaces                                                                     |
+| Hover lift in dense bars         | High     | Global hover lift can create optical baseline jitter         | keep lift only where visually appropriate; opt out dense bars | `src/shared/ui.css` + surface override blocks                                                          |
+| Card internal rhythm             | High     | Card body and action paddings differ by surface              | compact vs standard card contract                             | `src/history/history.css`, `src/options/options.css`, `src/preview/preview.css`                        |
+| Toolbar action grouping          | Medium   | Preview/action groups can shift hierarchy when wrapping      | deterministic group spacing/wrap behavior                     | `src/preview/preview.css`                                                                              |
+| Component-state snapshot breadth | Medium   | page-level snapshots exist but not full primitive matrix     | broaden screenshot matrix to state variants                   | `tests/visual/ui-parity.spec.mjs`                                                                      |
+| Accessibility automation depth   | Medium   | semantic ARIA exists and basic contract checks are automated | deepen keyboard/focus/contrast/state checks in CI             | `tests/accessibility-contract.test.mjs`, `tests/visual/*`                                              |
+| Figma node/frame validation      | Medium   | Direct file key + core node mapping now documented           | wire per-state snapshots to explicit frame/node references    | `docs/ui-handoff.md`, `tests/visual/ui-parity.spec.mjs`                                                |
 
 ## Remediation Tracking Board
 
@@ -142,6 +142,7 @@ State coverage target:
 - [ ] keyboard tab order and activation checks
 - [ ] live region behavior for dynamic statuses
 - [ ] modal semantics and close interactions
+- [x] HTML accessibility/isolation contracts enforced (`tests/accessibility-contract.test.mjs`)
 
 ### Pass 5 - Figma Pixel Validation
 

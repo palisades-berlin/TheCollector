@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.15`.
+Current extension version: `1.9.16`.
 
 ## Overview
 
@@ -16,11 +16,11 @@ All data remains in extension-local storage; there is no backend upload pipeline
 
 ## Top Changes
 
-- Merged Dependabot `globals` major update (`15.15.0 -> 17.4.0`) after all protected-branch gates passed.
-- Rebased dependency hardening on latest `main` and upgraded lint stack to ESLint `10.0.2` with compatible `@eslint/js`.
-- Finalized protected-branch visual parity stabilization with targeted history snapshot tolerances for deterministic CI.
-- Added gate-hardening fixes so Dependabot update PRs pass required checks (`quality`, `integration`, `stability`, `performance`, `e2e_smoke`, `visual_parity`, CodeQL).
-- Enabled and kept GitHub security baseline active: vulnerability alerts, automated security fixes, private vulnerability reporting, and Dependabot security updates.
+- Added production governance baseline: root `LICENSE`, `CONTRIBUTING.md`, `CODEOWNERS`, and ADR set in `docs/adr/`.
+- Hardened security checks with sink-aware static policy validation (`scripts/check-network-sinks.mjs`) in the blocking security gate.
+- Expanded automated compliance tests with manifest security assertions and accessibility/isolation contract checks.
+- Added runtime-orchestrator coverage gate (`test:coverage:runtime`) and wired it into CI quality checks.
+- Tightened popup performance budget default from `220ms` to `150ms` and added release rollback runbook (`docs/release-rollback.md`).
 
 ## Core Architecture
 
@@ -132,6 +132,10 @@ When a capture exceeds safe canvas limits, THE Collector uses oversized fallback
 3. Click **Load unpacked** and select this repository folder.
 4. Pin the extension if needed.
 
+## Environment Variables
+
+No runtime environment variables are required for the extension. See `.env.example` for policy.
+
 ## Basic Usage
 
 1. Open the extension popup.
@@ -142,15 +146,18 @@ When a capture exceeds safe canvas limits, THE Collector uses oversized fallback
 ## Local checks
 
 ```bash
-node tests/url-utils.test.mjs
-node tests/url-history.test.mjs
-node tests/filename.test.mjs
-node tests/ui-state-validation.test.mjs
-node tests/settings.test.mjs
-node tests/history-utils.test.mjs
-node tests/protocol-validate.test.mjs
-node tests/history-filters.test.mjs
-node tests/url-repo.test.mjs
+npm run lint
+npm run test:unit
+npm run test:coverage
+npm run test:coverage:runtime
+npm run test:coverage:preview-export
+npm run test:integration
+npm run test:security-policy
+npm run test:stability
+npm run test:performance
+npm run test:e2e:smoke
+npm run test:e2e:visual
+npm run format:check
 ```
 
 ## Developer checks
@@ -183,6 +190,18 @@ Release notes policy: keep notes in `CHANGELOG.md` only; do not add `GITHUB_RELE
 - Deleting from History removes stored records from IndexedDB.
 - Uninstalling the extension clears extension storage per browser behavior.
 - No backend upload path exists in this codebase.
+
+## Governance & Compliance
+
+- Project license: [MIT](./LICENSE).
+- Contribution and review policy: [CONTRIBUTING.md](./CONTRIBUTING.md).
+- Code ownership is enforced via [CODEOWNERS](./.github/CODEOWNERS).
+- `main` branch protection requires:
+  - required status checks
+  - at least one approving review
+  - code owner review
+  - stale review dismissal
+  - admin enforcement.
 
 ## Permission Scope (Phase A)
 
@@ -238,6 +257,7 @@ THE Collector/
 - [Architecture](./docs/architecture.md)
 - [Developer Workflow](./docs/dev-workflow.md)
 - [UI Handoff](./docs/ui-handoff.md)
+- [Contributing Guide](./CONTRIBUTING.md)
 
 ## Near-Term Roadmap
 

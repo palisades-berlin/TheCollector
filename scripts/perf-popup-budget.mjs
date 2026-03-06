@@ -7,7 +7,7 @@ const ROOT = process.cwd();
 const HOST = '127.0.0.1';
 const RUNS = Number(process.env.PERF_RUNS || 7);
 const WARMUP_RUNS = Number(process.env.PERF_WARMUP_RUNS || 1);
-const P95_BUDGET_MS = Number(process.env.POPUP_P95_BUDGET_MS || 220);
+const P95_BUDGET_MS = Number(process.env.POPUP_P95_BUDGET_MS || 150);
 const PACKAGE_BUDGET_BYTES = Number(process.env.PACKAGE_BUDGET_BYTES || 400000);
 
 const MIME = {
