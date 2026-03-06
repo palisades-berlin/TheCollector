@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.14 - 2026-03-06
+
+- Rebased dependency hardening on latest `main` and upgraded lint stack:
+  - bumped `eslint` to `10.0.2`
+  - aligned `@eslint/js` to `10.0.2`
+  - preserved existing protected-branch gates and visual parity behavior.
+
 ## 1.9.13 - 2026-03-06
 
 - Stabilized protected-branch visual parity for dependency PR merge safety:
