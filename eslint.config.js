@@ -26,6 +26,16 @@ export default [
         ...extensionGlobals,
       },
     },
+    rules: {
+      'no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
+    },
   },
   {
     files: ['tests/**/*.mjs', 'scripts/**/*.mjs'],
@@ -37,6 +47,16 @@ export default [
         ...globals.browser,
         ...extensionGlobals,
       },
+    },
+    rules: {
+      'no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
     },
   },
 ];

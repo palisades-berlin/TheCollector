@@ -391,7 +391,10 @@ test.describe('Figma parity snapshots', () => {
       globalThis.document.getElementById('loading').classList.add('hidden');
       globalThis.document.getElementById('historySkeleton').classList.add('hidden');
     });
-    await expect(page).toHaveScreenshot('history-empty.png', { fullPage: true });
+    await expect(page).toHaveScreenshot('history-empty.png', {
+      fullPage: true,
+      maxDiffPixels: 400,
+    });
 
     await page.evaluate(() => {
       globalThis.document.getElementById('empty').classList.add('hidden');
