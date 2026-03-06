@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.10 - 2026-03-06
+
+- Security posture hardening (GitHub Security tab):
+  - enabled vulnerability alerts
+  - enabled automated security fixes
+  - enabled private vulnerability reporting
+  - enabled Dependabot security updates.
+- Added repository automation for ongoing security scanning and updates:
+  - new `.github/dependabot.yml` (weekly npm dependency update checks)
+  - new `.github/workflows/codeql.yml` (CodeQL analysis on push/PR and weekly schedule).
+
 ## 1.9.9 - 2026-03-06
 
 - Added mandatory commit/push wiki-sync policy:
