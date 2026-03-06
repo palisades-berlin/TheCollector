@@ -14,7 +14,12 @@ function test(name, fn) {
 
 function createEventBus() {
   const listeners = [];
-  return { addListener(fn) { listeners.push(fn); }, listeners };
+  return {
+    addListener(fn) {
+      listeners.push(fn);
+    },
+    listeners,
+  };
 }
 
 async function importFresh(modulePath) {
@@ -34,9 +39,13 @@ test('offscreen rejects invalid stitch payload before DB access', async () => {
   const listener = onMessage.listeners[0];
 
   let response = null;
-  const keepAlive = listener({ type: 'OS_STITCH', payload: { id: '', totalW: 0, totalH: 0 } }, {}, (r) => {
-    response = r;
-  });
+  const keepAlive = listener(
+    { type: 'OS_STITCH', payload: { id: '', totalW: 0, totalH: 0 } },
+    {},
+    (r) => {
+      response = r;
+    }
+  );
 
   assert.equal(keepAlive, false);
   assert.equal(response.ok, false);

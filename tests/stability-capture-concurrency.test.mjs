@@ -24,7 +24,8 @@ test('capture service blocks overlapping capture for same tab', async () => {
         throw new Error('stop-after-lock');
       },
       get: async () => ({ id: 1, windowId: 1, url: 'https://example.com', title: 'x', index: 0 }),
-      captureVisibleTab: async () => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO7+XWQAAAAASUVORK5CYII=',
+      captureVisibleTab: async () =>
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO7+XWQAAAAASUVORK5CYII=',
       create: async () => ({}),
     },
     scripting: {

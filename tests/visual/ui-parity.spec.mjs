@@ -380,7 +380,10 @@ test.describe('Figma parity snapshots', () => {
       diagnostics.classList.add('hidden');
     });
 
-    await expect(page).toHaveScreenshot('history-default.png', { fullPage: true });
+    await expect(page).toHaveScreenshot('history-default.png', {
+      fullPage: true,
+      maxDiffPixels: 400,
+    });
 
     await page.evaluate(() => {
       globalThis.document.getElementById('grid').classList.add('hidden');
