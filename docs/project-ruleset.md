@@ -69,6 +69,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 4. Every feature add/change must update end-user help page: `/Users/stefan.baumgartl/ClaudeCode/TheCollector/docs/help-user-guide.md`.
 5. Before architecture/policy changes are finalized, update ADRs when needed.
 6. Keep roadmap/help/ADR/README/wiki updates synchronized within the same feature delivery cycle.
+7. From now on, update the help guide whenever necessary to reflect UX, feature, tier, or flow changes.
 
 ## Git/Branch Policy
 
@@ -95,3 +96,4 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 - 2026-03-06: Added premium product roadmap guardrails (outcome-gated delivery, slice-to-scale, tier value integrity, phase exits, v1→v2 promotion rules).
 - 2026-03-09: Consistency pass aligned cross-doc policy references, local-only roadmap wording, and visual-threshold contract language.
 - 2026-03-09: Added release artifact rule: each GitHub release must include the generated extension ZIP.
+- 2026-03-09: Reinforced help-guide maintenance rule: update `docs/help-user-guide.md` whenever necessary for UX/feature/tier/flow changes.

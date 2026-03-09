@@ -29,11 +29,13 @@ Follow these steps for common daily tasks:
 4. **Set daily defaults:** still in **Daily Essentials**, pick your default profile and theme.
 5. **Find saved items:** open **History**, use the domain/date/type filters, and open or delete items as needed.
 6. **Filter by profile (Pro/Ultra):** in History, use the **Profile** filter (`Research`, `Interest`, `Private`) to narrow results.
-7. **Use bulk actions (Pro/Ultra):** in History, click **Bulk**, select multiple items, then download or delete them together.
-8. **Run queue capture (Pro/Ultra):** in popup **Capture**, use **Queue Current** or **Queue Window**, then click **Run Queue**.
+7. **Check profile usage (Pro/Ultra):** in History or in **Settings → Feature Access**, review read-only profile usage counts.
+8. **Use bulk actions (Pro/Ultra):** in History, click **Bulk**, select multiple items, then download or delete them together.
+9. **Run queue capture (Pro/Ultra):** in popup **Capture**, use **Queue Current** or **Queue Window**, then click **Run Queue**.
    Queue progress is handled in the background, and when it finishes you are taken to **History** automatically.
-9. **Check weekly progress (Pro/Ultra):** in **Settings**, open the **Feature Access** section, then review **Weekly Value Report**.
-10. **Handle revisit nudges (Pro/Ultra):** in the popup, use **Open in History**, **Dismiss**, or **Snooze 24h**.
+10. **Check weekly progress (Pro/Ultra):** in **Settings**, open the **Feature Access** section, then review **Weekly Value Report**.
+11. **Handle revisit nudges (Pro/Ultra):** in the popup, use **Open in History**, **Dismiss**, or **Snooze 24h**.
+12. **Need quick guidance:** in **Settings**, open the new **Help & FAQ** section for short answers and step-by-step help.
 
 - Tip: if a page cannot be captured, switch to a normal website tab and try again.
 - Tip: keep your default profile and export settings updated in **Settings**.

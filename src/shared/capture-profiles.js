@@ -49,6 +49,23 @@ export function normalizeCaptureProfileId(profileId) {
   return PROFILE_CATALOG[profileId] ? profileId : DEFAULT_CAPTURE_PROFILE_ID;
 }
 
+export function isCaptureProfileId(profileId) {
+  return Boolean(
+    PROFILE_CATALOG[
+      String(profileId || '')
+        .trim()
+        .toLowerCase()
+    ]
+  );
+}
+
+export function sanitizeCaptureProfileId(profileId) {
+  const next = String(profileId || '')
+    .trim()
+    .toLowerCase();
+  return PROFILE_CATALOG[next] ? next : '';
+}
+
 export function getCaptureProfile(profileId) {
   return PROFILE_CATALOG[normalizeCaptureProfileId(profileId)];
 }
@@ -67,4 +84,32 @@ export function resolveCaptureSettings(baseSettings, profileId) {
     ...baseSettings,
     ...profile.overrides,
   };
+}
+
+export function buildCaptureProfileUsageSummary(records = []) {
+  const summary = {
+    total: 0,
+    recognized: 0,
+    unknown: 0,
+    byProfile: {
+      [CAPTURE_PROFILE.RESEARCH]: 0,
+      [CAPTURE_PROFILE.INTEREST]: 0,
+      [CAPTURE_PROFILE.PRIVATE]: 0,
+    },
+  };
+
+  for (const record of Array.isArray(records) ? records : []) {
+    const rawProfileId = record?.captureProfileId || record?.captureReport?.profileId || '';
+    const cleaned = sanitizeCaptureProfileId(rawProfileId);
+    if (!rawProfileId) continue;
+    summary.total += 1;
+    if (!cleaned) {
+      summary.unknown += 1;
+      continue;
+    }
+    summary.recognized += 1;
+    summary.byProfile[cleaned] += 1;
+  }
+
+  return summary;
 }

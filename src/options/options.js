@@ -4,6 +4,7 @@ import { applySavedTheme, applyThemeToDocument } from '../shared/theme.js';
 import { canUseFeature } from '../shared/capabilities.js';
 import {
   DEFAULT_CAPTURE_PROFILE_ID,
+  buildCaptureProfileUsageSummary,
   normalizeCaptureProfileId,
 } from '../shared/capture-profiles.js';
 import { normalizeNotificationCadence } from '../shared/nudges.js';
@@ -27,6 +28,14 @@ const nudgesEnabledRowEl = document.getElementById('nudgesEnabledRow');
 const nudgesEnabledEl = document.getElementById('nudgesEnabled');
 const notificationCadenceRowEl = document.getElementById('notificationCadenceRow');
 const notificationCadenceEl = document.getElementById('notificationCadence');
+const profileUsageCardEl = document.getElementById('profileUsageCard');
+const profileUsageSettingsResearchEl = document.getElementById('profileUsageSettingsResearch');
+const profileUsageSettingsInterestEl = document.getElementById('profileUsageSettingsInterest');
+const profileUsageSettingsPrivateEl = document.getElementById('profileUsageSettingsPrivate');
+const profileUsageSettingsUnknownWrapEl = document.getElementById(
+  'profileUsageSettingsUnknownWrap'
+);
+const profileUsageSettingsUnknownEl = document.getElementById('profileUsageSettingsUnknown');
 const weeklyValueReportCardEl = document.getElementById('weeklyValueReportCard');
 const weeklyCapturesSavedEl = document.getElementById('weeklyCapturesSaved');
 const weeklyUniqueDomainsEl = document.getElementById('weeklyUniqueDomains');
@@ -55,6 +64,7 @@ const SECTION_IDS = new Set([
   'feature-access',
   'privacy-permissions',
   'advanced',
+  'help-faq',
 ]);
 const settingsSectionEls = Array.from(document.querySelectorAll('[data-settings-section]'));
 const settingsNavBtnEls = Array.from(document.querySelectorAll('[data-settings-nav]'));
@@ -95,6 +105,7 @@ async function init() {
   }
   syncProfileRowVisibility(settings);
   syncNudgesVisibility(settings);
+  await syncProfileUsageSummary(settings);
   await syncWeeklyValueReportVisibility(settings);
   await refreshPermissionStatus();
   setupPermissionStatusRefresh();
@@ -140,6 +151,7 @@ capabilityTierEl?.addEventListener('change', () => {
   const settings = { capabilityTier: capabilityTierEl.value };
   syncProfileRowVisibility(settings);
   syncNudgesVisibility(settings);
+  syncProfileUsageSummary(settings).catch((err) => logNonFatal('syncProfileUsageSummary', err));
   syncWeeklyValueReportVisibility(settings).catch((err) =>
     logNonFatal('syncWeeklyValueReport', err)
   );
@@ -368,6 +380,44 @@ async function syncWeeklyValueReportVisibility(settings) {
     if (weeklyUniqueDomainsEl) weeklyUniqueDomainsEl.textContent = '0';
     if (weeklyUrlsCollectedEl) weeklyUrlsCollectedEl.textContent = '0';
     if (weeklyMinutesSavedEl) weeklyMinutesSavedEl.textContent = '0 min';
+  }
+}
+
+async function syncProfileUsageSummary(settings) {
+  const showProfiles = canUseFeature('smart_save_profiles', settings || {});
+  if (!profileUsageCardEl) return;
+  profileUsageCardEl.classList.toggle('hidden', !showProfiles);
+  if (!showProfiles) return;
+
+  try {
+    const screenshotRecords = await listScreenshotMetaRecords();
+    const summary = buildCaptureProfileUsageSummary(screenshotRecords);
+    if (profileUsageSettingsResearchEl) {
+      profileUsageSettingsResearchEl.textContent = String(summary.byProfile.research || 0);
+    }
+    if (profileUsageSettingsInterestEl) {
+      profileUsageSettingsInterestEl.textContent = String(summary.byProfile.interest || 0);
+    }
+    if (profileUsageSettingsPrivateEl) {
+      profileUsageSettingsPrivateEl.textContent = String(summary.byProfile.private || 0);
+    }
+    if (profileUsageSettingsUnknownEl) {
+      profileUsageSettingsUnknownEl.textContent = String(summary.unknown || 0);
+    }
+    if (profileUsageSettingsUnknownWrapEl) {
+      profileUsageSettingsUnknownWrapEl.classList.toggle(
+        'hidden',
+        Number(summary.unknown || 0) <= 0
+      );
+    }
+  } catch (err) {
+    logNonFatal('loadProfileUsageSummary', err);
+    if (profileUsageSettingsResearchEl) profileUsageSettingsResearchEl.textContent = '0';
+    if (profileUsageSettingsInterestEl) profileUsageSettingsInterestEl.textContent = '0';
+    if (profileUsageSettingsPrivateEl) profileUsageSettingsPrivateEl.textContent = '0';
+    if (profileUsageSettingsUnknownEl) profileUsageSettingsUnknownEl.textContent = '0';
+    if (profileUsageSettingsUnknownWrapEl)
+      profileUsageSettingsUnknownWrapEl.classList.add('hidden');
   }
 }
 

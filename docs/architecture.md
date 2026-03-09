@@ -63,6 +63,7 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
 - History/preview read persisted screenshot records.
 - Preview applies non-destructive visual operations and exports PNG/JPG/PDF or clipboard output.
 - History supports profile-based filtering (Pro/Ultra) using persisted capture profile metadata.
+- History and Settings expose read-only Smart Save profile usage summaries (Pro/Ultra), including unknown/legacy profile ID counts for migration-safe visibility.
 - History supports tier-gated Bulk Actions v1 (Pro/Ultra) via multi-select overlay for batch download/delete.
 - Settings supports tier-gated Weekly Value Report v1 (Pro/Ultra) with local-only metrics.
 

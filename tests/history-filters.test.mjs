@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { filterRecords } from '../src/history/history-filters.js';
+import { sanitizeCaptureProfileId } from '../src/shared/capture-profiles.js';
 
 function test(name, fn) {
   try {
@@ -82,5 +83,23 @@ test('filterRecords applies profile filter', () => {
   assert.deepEqual(
     out.map((r) => r.id),
     ['b']
+  );
+});
+
+test('filterRecords ignores legacy/invalid profile ids when filtering', () => {
+  const sampleWithInvalid = [
+    ...sample,
+    { id: 'd', url: 'https://legacy.com', captureProfileId: 'legacy' },
+  ];
+  const out = filterRecords(
+    sampleWithInvalid,
+    { domain: '', fromDate: '', toDate: '', type: 'all', profile: 'research' },
+    getDomain,
+    getType,
+    (record) => sanitizeCaptureProfileId(record.captureProfileId || '')
+  );
+  assert.deepEqual(
+    out.map((r) => r.id),
+    ['a']
   );
 });

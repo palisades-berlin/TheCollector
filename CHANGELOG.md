@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.9.36 - 2026-03-09
+
+- Smart Save Profiles v1 hardening and UX completion:
+  - added strict profile ID validation/sanitization helpers and profile usage aggregation in `src/shared/capture-profiles.js`
+  - added Pro/Ultra read-only profile usage summaries in Settings and History (`Research`, `Interest`, `Private`, plus `Unknown` when present)
+  - hardened History profile filtering to ignore invalid/legacy profile metadata instead of misclassifying records.
+- Test + quality calibration:
+  - expanded unit coverage for profile edge cases and history profile-filter behavior
+  - refreshed affected options visual snapshots and re-ran strict validation gates (lint/unit/integration/stability/performance/smoke/visual/ui-calibration/security/format).
+- Documentation sync:
+  - updated README Top Changes and Smart Save feature notes
+  - updated user help and architecture docs for current profile usage behavior.
+
 ## 1.9.35 - 2026-03-09
 
 - Release/process hardening:
