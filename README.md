@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.34`.
+Current extension version: `1.9.35`.
 
 ## Overview
 
@@ -18,13 +18,11 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- Added premium roadmap-product guardrails to project rules and roadmap (outcome-gated delivery, phase exits, v1→v2 promotion contract).
-- Strict UX/UI component calibration pass for changed queue components:
-  - queue spacing normalized to token scale
-  - queue item/action sizing aligned to shared control metrics (`sc-btn-sm` / 32px targets)
-- Fixed queue-completion reliability: queued tab removal/clear now runs in service worker storage lifecycle.
-- Fixed queue post-run UX: after queue completion, History opens automatically with a result summary.
-- Added `SW_QUEUE_DONE` event for queue completion status and popup/history sync.
+- Added release automation workflow to attach generated extension ZIP to every published GitHub release.
+- Added docs-policy gate (`test:docs-policy`) and wired it into CI quality checks.
+- Added visual exception register and tightened History visual snapshot tolerance from `400` to `250`.
+- Raised runtime coverage gate incrementally (`lines/statements: 18`, `branches: 15`).
+- Completed terminology cleanup in docs toward canonical `Settings` naming.
 
 ## Core Architecture
 
@@ -35,7 +33,7 @@ The capture pipeline is split across extension contexts:
 - `offscreen document`: tile stitching and final image persistence
 - `preview page`: review, editing, and export
 - `history page`: stored capture browsing and deletion
-- `options page`: export defaults, auto-download behavior, optional permissions
+- `settings page`: export defaults, auto-download behavior, optional permissions
 
 ## Features
 

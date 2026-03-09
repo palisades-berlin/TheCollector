@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.9.35 - 2026-03-09
+
+- Release/process hardening:
+  - added `scripts/publish-release-with-asset.sh` and `.github/workflows/release-assets.yml` to ensure generated extension ZIP is attached to GitHub releases
+  - added `scripts/check-doc-policy.mjs` with enforced README Top Changes contract (`## Overview` + max five bullets)
+  - added `docs/visual-exception-register.md` and linked it in developer workflow for tracked visual diff exceptions.
+- Quality gate calibration:
+  - tightened history visual snapshot tolerances from `maxDiffPixels: 400` to `250`
+  - increased runtime coverage gate incrementally to `lines/statements: 18`, `branches: 15`.
+- Documentation consistency:
+  - aligned workflow/ruleset/architecture wording for policy precedence and visual-threshold handling
+  - normalized remaining README “options page” wording to canonical `settings page`.
+
 ## 1.9.34 - 2026-03-06
 
 - Product-governance documentation update:

@@ -23,6 +23,7 @@ jobs:
         run: |
           npm run lint
           npm run test:repo-hygiene
+          npm run test:docs-policy
           npm run test:unit
           npm run test:coverage
           npm run test:coverage:runtime
