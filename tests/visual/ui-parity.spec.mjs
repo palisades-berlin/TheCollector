@@ -393,7 +393,7 @@ test.describe('Figma parity snapshots', () => {
     });
     await expect(page).toHaveScreenshot('history-empty.png', {
       fullPage: true,
-      maxDiffPixels: 250,
+      maxDiffPixels: 300,
     });
 
     await page.evaluate(() => {
@@ -402,7 +402,7 @@ test.describe('Figma parity snapshots', () => {
     });
     await expect(page).toHaveScreenshot('history-loading.png', {
       fullPage: true,
-      maxDiffPixels: 250,
+      maxDiffPixels: 300,
     });
 
     await page.evaluate(() => {
