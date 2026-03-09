@@ -1,7 +1,7 @@
 # THE Collector Project Ruleset
 
 Last updated: 2026-03-09
-Source import: `/Users/stefan.baumgartl/Downloads/codex_rules.txt`
+Source import: `codex_rules.txt` (local import source)
 Precedence note: when rules overlap, the newest explicit user instruction supersedes older guidance.
 Normative source note: this file is the policy authority when other docs summarize workflow/rules.
 
@@ -28,7 +28,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 
 ## Roadmap & Product Quality
 
-1. Roadmap source of truth is: [/Users/stefan.baumgartl/ClaudeCode/TheCollector/docs/thecollector-2.0-90-day-roadmap.md](/Users/stefan.baumgartl/ClaudeCode/TheCollector/docs/thecollector-2.0-90-day-roadmap.md).
+1. Roadmap source of truth is: `docs/thecollector-2.0-90-day-roadmap.md`.
 2. Roadmap constraints are fixed: local-only, no external connections, no tracking.
 3. Tier model is hierarchical `Basic -> Pro -> Ultra`; feature visibility is hide-only by tier.
 4. 30-day features are Pro-tier; 90-day features are Ultra-tier (planned direction, not guaranteed all/ever).
@@ -52,6 +52,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 2. UX/UI must match Figma (tokens, spacing, radii, typography, controls, states).
 3. Use and maintain a design-token system with step-by-step refactors.
 4. Run and enforce UX/UI calibration for roadmap/UI changes both early during development and at final release gate.
+5. In card/grid UIs, equal-height consistency is mandatory for mixed-content rows; reserve optional content slots and clamp overflow to avoid row-height drift.
 
 ## Testing & Release Gates
 
@@ -66,7 +67,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 1. Keep documentation workflows updated and consistent.
 2. Sync GitHub Wiki with every commit/push so it remains the active knowledge surface.
 3. On every commit/push, update README after `## Overview` with max five top changes.
-4. Every feature add/change must update end-user help page: `/Users/stefan.baumgartl/ClaudeCode/TheCollector/docs/help-user-guide.md`.
+4. Every feature add/change must update end-user help page: `docs/help-user-guide.md`.
 5. Before architecture/policy changes are finalized, update ADRs when needed.
 6. Keep roadmap/help/ADR/README/wiki updates synchronized within the same feature delivery cycle.
 7. From now on, update the help guide whenever necessary to reflect UX, feature, tier, or flow changes.
@@ -100,3 +101,4 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 - 2026-03-09: Reinforced help-guide maintenance rule: update `docs/help-user-guide.md` whenever necessary for UX/feature/tier/flow changes.
 - 2026-03-09: Added roadmap/documentation alignment for URL Collector 2.0 planning track across roadmap, help, and QA audit docs.
 - 2026-03-09: Added mandatory sync rule: changes to `docs/help-user-guide.md` require corresponding Settings `Help & FAQ` updates.
+- 2026-03-09: Added explicit UX/UI calibration rule for equal-height card consistency in mixed-content grid rows.

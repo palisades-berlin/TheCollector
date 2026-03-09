@@ -74,6 +74,7 @@ Packaging script guardrails:
   - `manifest.json`
   - `package.json`
   - `README.md`
+  - `AGENTS.md`
   - `CLAUDE.md`
   - `CHANGELOG.md`
 
@@ -130,6 +131,10 @@ Publish workflow:
   - `docs/help-user-guide.md`
   - `docs/thecollector-2.0-90-day-roadmap.md` (if roadmap scope/status changed)
   - ADRs in `docs/adr/` when architecture/policy decisions changed.
+- For structural refactors, keep entrypoint files thin and aligned to visible runtime/UI boundaries:
+  - service worker as bootstrap + handlers
+  - popup by panel
+  - settings by section.
 
 ## CI
 

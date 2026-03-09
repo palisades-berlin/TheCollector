@@ -22,6 +22,63 @@ npm run test:e2e:visual
 npm run format:check
 ```
 
+## Two-Machine Workflow
+
+Use this routine when alternating between two development machines on the same repository.
+
+### Session Start (each machine)
+
+```bash
+git fetch --all --prune
+git switch main
+git pull --ff-only
+npm ci
+```
+
+Optional shell aliases/functions (zsh/bash) to speed up daily sync:
+
+```bash
+alias sync-main='git fetch --all --prune && git switch main && git pull --ff-only && npm ci'
+handoff-check() {
+  git status
+  npm run test:docs-policy
+  npm run test:repo-hygiene
+  npm run test:unit
+}
+```
+
+### Branching and Sync Rules
+
+1. Never work directly on `main`; create a short-lived branch per task using `codex/<topic>-<date>`.
+2. Rebase frequently to keep branch history linear and reduce merge conflicts:
+
+```bash
+git fetch origin
+git rebase origin/main
+```
+
+3. Keep commits small and checkpoint often so work can be resumed safely on the other machine.
+4. Prefer PR merges over direct branch merges for better CI visibility and conflict detection.
+
+### Machine Handoff Checklist
+
+Before switching machines:
+
+```bash
+git status
+npm run test:docs-policy
+npm run test:repo-hygiene
+npm run test:unit
+```
+
+Then:
+
+1. Commit and push if work is ready, or create a named stash (`git stash push -m "wip: <topic>"`).
+2. Include a short handoff marker in the latest commit message when useful (example: `[handoff-ready]`).
+3. On the next machine, start with the Session Start routine above before resuming.
+
+Tip: if you added aliases/functions above on both machines, use `sync-main` at session start and `handoff-check` before switching machines.
+
 ## Pull Requests
 
 - Use clear PR titles (`feat:`, `fix:`, `chore:` style preferred).
@@ -37,6 +94,7 @@ For code changes, keep versions synchronized:
 - `manifest.json`
 - `package.json`
 - `README.md`
+- `AGENTS.md`
 - `CLAUDE.md`
 - `CHANGELOG.md`
 

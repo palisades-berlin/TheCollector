@@ -21,7 +21,7 @@ This document is the implementation QA contract for exhaustive UX/UI verificatio
 4. Options/settings (default + permission feedback)
 5. Preview (edit mode + error + diff)
 6. Tier-gated overlays (Pro/Ultra): Smart Save profile row, profile filter, bulk entry, nudge card, weekly report card
-7. URL Collector 2.0 readiness states (planned): saved URL views, URL tags/notes, URL bulk actions, command palette URL actions
+7. URL Collector 2.0 readiness states (planned): saved URL views, URL tags/notes, URL bulk actions, Ultra commands URL actions
 
 ### Components
 
@@ -64,6 +64,7 @@ State coverage target:
 - Standard controls: `40px`
 - Popup segmented tabs: `44px` (documented surface exception)
 - Icon-to-label gap: `6px`
+- Popup height calibration: fit active-tab content up to popup max height; never let popup overflow the browser frame; never leave avoidable dead vertical space on shorter tabs; when constrained, only long content regions may scroll while fixed controls remain visible.
 
 ### Card Model
 
@@ -73,6 +74,7 @@ State coverage target:
   - compact: `12px`
   - standard: `16px`
 - Action row alignment: baseline-consistent with `8-12px` gaps
+- Card height consistency: cards in the same grid row must render equal heights even when optional metadata/diagnostic lines differ; reserve content slots and clamp overflow where needed.
 
 ### Typography and Color
 
@@ -133,6 +135,7 @@ State coverage target:
 
 - [ ] Popup spacing and segmented tabs aligned
 - [ ] History filters/grid/cards/actions aligned
+- [ ] History card rows maintain equal-height geometry for mixed content states (with/without optional diagnostics)
 - [ ] Options shell/rows/actions aligned
 - [ ] Preview toolbar/editbar/stage spacing aligned
 

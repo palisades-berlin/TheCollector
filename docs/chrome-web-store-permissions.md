@@ -9,10 +9,25 @@ Use this text as the canonical listing/policy justification for requested permis
 - Used only after explicit user action (toolbar capture button or keyboard command).
 - Grants temporary access to the active page so capture logic can run on that tab.
 
+### `scripting`
+
+- Required to inject the capture agent into the active tab during capture operations.
+- Used only for extension-owned capture logic; no remote code is executed.
+
+### `storage`
+
+- Required to persist local settings, URL collections, and screenshot metadata/history.
+- Storage remains browser-local; there is no backend synchronization path.
+
 ### `tabs`
 
 - Required to query the active tab in the current window for capture and URL collection actions.
 - Required to open extension pages (history/preview/options) in new tabs and manage capture-tab interactions.
+
+### `contextMenus`
+
+- Required to provide right-click actions for page capture and URL collection.
+- Context menu actions run locally and reuse the same capture/collection flows as popup actions.
 
 ### `offscreen`
 
