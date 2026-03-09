@@ -1,6 +1,6 @@
 # ADR 0004: Smart Save Profiles v1 (Fixed Presets, Capture-Only Override)
 
-- Status: accepted
+- Status: completed
 - Date: 2026-03-06
 
 ## Context
@@ -22,3 +22,8 @@ Implement Smart Save Profiles v1 with these constraints:
 - fast rollout with minimal behavior risk and no schema complexity for profile management
 - backward-compatible capture protocol via optional `profileId`
 - clear upgrade path to editable/custom profiles in a later ADR
+- v1 completion criteria met across Popup, Settings, and History:
+  - fixed profile presets only (`Research`, `Interest`, `Private`)
+  - default profile setting + popup quick-apply capture path
+  - history profile filter and usage summary visibility for Pro/Ultra
+  - unknown/legacy profile IDs preserved as `Unknown` usage counts without misclassification

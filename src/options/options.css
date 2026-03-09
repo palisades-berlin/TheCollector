@@ -283,6 +283,73 @@ body {
   font-weight: var(--sc-font-h2-weight);
 }
 
+.help-steps {
+  display: grid;
+  gap: var(--sc-sp-2);
+}
+
+.help-step {
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--sc-color-border);
+  border-radius: var(--sc-r-md);
+  background: var(--sc-color-surface-soft);
+  padding: var(--sc-sp-3);
+}
+
+.help-step strong {
+  font-size: var(--sc-font-body-size);
+  font-weight: var(--sc-font-body-medium-weight);
+  color: var(--sc-color-text-strong);
+}
+
+.help-step span {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--sc-color-text-secondary);
+}
+
+.faq-list {
+  display: grid;
+  gap: var(--sc-sp-2);
+}
+
+.faq-item {
+  border: 1px solid var(--sc-color-border);
+  border-radius: var(--sc-r-md);
+  background: var(--sc-color-surface-soft);
+  padding: var(--sc-sp-3);
+}
+
+.faq-item > summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: var(--sc-font-body-size);
+  font-weight: var(--sc-font-body-medium-weight);
+  color: var(--sc-color-text-strong);
+}
+
+.faq-item > summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item > summary::after {
+  content: '+';
+  float: right;
+  color: var(--sc-color-text-muted);
+}
+
+.faq-item[open] > summary::after {
+  content: '-';
+}
+
+.faq-item > p {
+  margin: var(--sc-sp-2) 0 0;
+  color: var(--sc-color-text-secondary);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .row > span:first-child {
   min-width: var(--options-label-width);
   font-size: 13px;

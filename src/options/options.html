@@ -42,6 +42,9 @@
         <button class="settings-nav-btn" type="button" data-settings-nav="advanced">
           Advanced
         </button>
+        <button class="settings-nav-btn" type="button" data-settings-nav="help-faq">
+          Help &amp; FAQ
+        </button>
       </aside>
 
       <section class="settings-content">
@@ -160,6 +163,29 @@
               Pro includes Basic features. Ultra includes Basic + Pro features. Non-entitled
               features are hidden.
             </p>
+            <div
+              id="profileUsageCard"
+              class="value-report-grid hidden"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              <div class="value-report-item">
+                <span class="value-report-label">Profile: Research</span>
+                <strong id="profileUsageSettingsResearch" class="value-report-value">0</strong>
+              </div>
+              <div class="value-report-item">
+                <span class="value-report-label">Profile: Interest</span>
+                <strong id="profileUsageSettingsInterest" class="value-report-value">0</strong>
+              </div>
+              <div class="value-report-item">
+                <span class="value-report-label">Profile: Private</span>
+                <strong id="profileUsageSettingsPrivate" class="value-report-value">0</strong>
+              </div>
+              <div id="profileUsageSettingsUnknownWrap" class="value-report-item hidden">
+                <span class="value-report-label">Profile: Unknown</span>
+                <strong id="profileUsageSettingsUnknown" class="value-report-value">0</strong>
+              </div>
+            </div>
             <label id="nudgesEnabledRow" class="check-row hidden">
               <input id="nudgesEnabled" type="checkbox" />
               <span>Enable Smart Revisit Nudges</span>
@@ -326,6 +352,87 @@
             <p class="muted">
               For restricted pages, browser-level site access controls still apply.
             </p>
+          </section>
+        </section>
+
+        <section class="settings-section hidden" data-settings-section="help-faq">
+          <section class="card sc-card">
+            <h2>Help &amp; FAQ</h2>
+            <p class="muted">
+              THE Collector helps you capture full pages, collect links, and find everything later.
+              Start in the popup, then use History to filter and manage saved items.
+            </p>
+            <div class="help-steps" role="list" aria-label="Quick start steps">
+              <div class="help-step" role="listitem">
+                <strong>1. Save content</strong>
+                <span>Open the popup and use <b>Capture</b> or <b>URLs</b> for fast saving.</span>
+              </div>
+              <div class="help-step" role="listitem">
+                <strong>2. Use Smart Save (Pro/Ultra)</strong>
+                <span
+                  >Choose <b>Research</b>, <b>Interest</b>, or <b>Private</b> to capture with that
+                  preset immediately.</span
+                >
+              </div>
+              <div class="help-step" role="listitem">
+                <strong>3. Find and manage</strong>
+                <span>
+                  Open <b>History</b> to filter by domain, date, type, or profile (Pro/Ultra).
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <section class="card sc-card">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-list">
+              <details class="faq-item">
+                <summary>Why is a feature missing?</summary>
+                <p>
+                  Features are shown by tier. <b>Basic</b> includes core tools, <b>Pro</b> includes
+                  Basic plus advanced tools, and <b>Ultra</b> includes Pro plus advanced roadmap
+                  features as they ship.
+                </p>
+              </details>
+              <details class="faq-item">
+                <summary>How do Smart Save Profiles work?</summary>
+                <p>
+                  In Pro/Ultra, choose <b>Research</b>, <b>Interest</b>, or <b>Private</b> in
+                  Capture to apply that preset and start capture immediately.
+                </p>
+                <p>
+                  In v1 these are fixed presets. Editable profiles are planned for a later phase.
+                </p>
+              </details>
+              <details class="faq-item">
+                <summary>Where do I set defaults?</summary>
+                <p>
+                  In <b>Daily Essentials</b>, set your tier, default Smart Save profile (Pro/Ultra),
+                  and theme. Export defaults are in <b>Capture &amp; Export</b>.
+                </p>
+              </details>
+              <details class="faq-item">
+                <summary>Why did a page fail to capture?</summary>
+                <p>
+                  Some browser-restricted pages cannot be captured. Switch to a regular website tab
+                  and try again.
+                </p>
+              </details>
+              <details class="faq-item">
+                <summary>How does queue capture finish?</summary>
+                <p>
+                  Queue runs in the background for Pro/Ultra. When complete, History opens
+                  automatically with a queue result summary.
+                </p>
+              </details>
+              <details class="faq-item">
+                <summary>Where can I see profile usage?</summary>
+                <p>
+                  In Pro/Ultra, you can review profile usage counts in <b>History</b> and in
+                  <b>Feature Access</b> on this Settings page.
+                </p>
+              </details>
+            </div>
           </section>
         </section>
       </section>

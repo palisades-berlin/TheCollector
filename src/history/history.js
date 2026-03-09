@@ -19,6 +19,10 @@ import { createHistoryFilesOverlay } from './history-files-overlay.js';
 import { applySavedTheme } from '../shared/theme.js';
 import { getUserSettings } from '../shared/repos/settings-repo.js';
 import { canUseFeature } from '../shared/capabilities.js';
+import {
+  buildCaptureProfileUsageSummary,
+  sanitizeCaptureProfileId,
+} from '../shared/capture-profiles.js';
 
 const gridEl = document.getElementById('grid');
 const emptyEl = document.getElementById('empty');
@@ -39,6 +43,12 @@ const filterTypeEl = document.getElementById('filterType');
 const filterProfileEl = document.getElementById('filterProfile');
 const filterProfileItemEl = document.getElementById('filterProfileItem');
 const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+const profileUsageSummaryEl = document.getElementById('profileUsageSummary');
+const profileUsageResearchEl = document.getElementById('profileUsageResearch');
+const profileUsageInterestEl = document.getElementById('profileUsageInterest');
+const profileUsagePrivateEl = document.getElementById('profileUsagePrivate');
+const profileUsageUnknownWrapEl = document.getElementById('profileUsageUnknownWrap');
+const profileUsageUnknownEl = document.getElementById('profileUsageUnknown');
 
 const filesOverlayEl = document.getElementById('filesOverlay');
 const closeFilesBtn = document.getElementById('closeFilesBtn');
@@ -221,9 +231,27 @@ const filters = createHistoryFilters({
 });
 
 function getRecordProfileId(record) {
-  if (record?.captureProfileId) return String(record.captureProfileId);
-  if (record?.captureReport?.profileId) return String(record.captureReport.profileId);
-  return '';
+  return sanitizeCaptureProfileId(
+    record?.captureProfileId || record?.captureReport?.profileId || ''
+  );
+}
+
+function renderProfileUsageSummary(showProfiles) {
+  if (!profileUsageSummaryEl) return;
+  profileUsageSummaryEl.classList.toggle('hidden', !showProfiles);
+  if (!showProfiles) return;
+
+  const summary = buildCaptureProfileUsageSummary(allRecords);
+  if (profileUsageResearchEl)
+    profileUsageResearchEl.textContent = String(summary.byProfile.research || 0);
+  if (profileUsageInterestEl)
+    profileUsageInterestEl.textContent = String(summary.byProfile.interest || 0);
+  if (profileUsagePrivateEl)
+    profileUsagePrivateEl.textContent = String(summary.byProfile.private || 0);
+  if (profileUsageUnknownEl) profileUsageUnknownEl.textContent = String(summary.unknown || 0);
+  if (profileUsageUnknownWrapEl) {
+    profileUsageUnknownWrapEl.classList.toggle('hidden', Number(summary.unknown || 0) <= 0);
+  }
 }
 
 function renderMainView() {
@@ -372,6 +400,7 @@ async function refreshAll() {
   if (historySkeletonEl) historySkeletonEl.classList.add('hidden');
   loadingEl.classList.add('hidden');
   renderCaptureDiagnostics();
+  renderProfileUsageSummary(!filterProfileItemEl?.classList.contains('hidden'));
   renderMainView();
   filesOverlay.renderFilesOverlay(true);
   gridEl.setAttribute('aria-busy', 'false');
@@ -385,11 +414,13 @@ async function init() {
     const showProfileFilter = canUseFeature('smart_save_profiles', settings || {});
     canUseBulkActions = canUseFeature('bulk_actions_v1', settings || {});
     filterProfileItemEl?.classList.toggle('hidden', !showProfileFilter);
+    renderProfileUsageSummary(showProfileFilter);
     openFilesBtn?.classList.toggle('hidden', !canUseBulkActions);
   } catch (err) {
     logNonFatal('loadHistorySettings', err);
     canUseBulkActions = false;
     filterProfileItemEl?.classList.add('hidden');
+    renderProfileUsageSummary(false);
     openFilesBtn?.classList.add('hidden');
   }
   filters.wireFilters();

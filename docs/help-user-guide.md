@@ -2,48 +2,57 @@
 
 ## Getting Started
 
-THE Collector helps you save useful web content so you can find it later. You can capture full pages, collect links, and keep everything organized in one place. It is fast, simple, and local-first, so your data stays on your device.
+THE Collector helps you save important web content and find it again quickly. You can capture full pages, collect URLs, and organize everything in one place. It is local-first, so your data stays on your device.
 
-Start with the popup in your browser toolbar. Use **Capture** when you want a full-page screenshot, and use **URLs** when you want to collect links quickly. Then open **History** to review, filter, and manage what you saved.
+You will mainly use three areas:
 
-- Open the extension popup and choose **Capture** or **URLs**.
-- Use **Settings** to set your feature tier and default behaviors.
+- **Popup:** capture pages or collect URLs in seconds.
+- **History:** search, filter, review, and manage saved items.
+- **Settings:** set your tier, defaults, and daily behavior.
 
 ## Key Features by Tier
 
-Your feature set depends on the tier selected in **Settings**. Higher tiers include everything from lower tiers. Features that are not in your current tier are hidden.
+Your tier is selected in **Settings**. Each tier includes the one below it.
 
-- **Basic:** capture full pages, collect URLs, view History, export (PNG/JPG/PDF), and manage settings.
-- **Pro:** everything in Basic, plus Smart Save Profiles (`Research`, `Interest`, `Private`), Smart Revisit Nudges, Bulk Actions in History, and a Weekly Value Report in Settings.
-- **Ultra:** everything in Pro, plus access to advanced roadmap features as they are released.
+- **Basic:** full-page capture, URL collection, History filters, and PNG/JPG/PDF export.
+- **Pro:** everything in Basic, plus Smart Save Profiles (`Research`, `Interest`, `Private`), Queue Capture, Smart Revisit Nudges, Bulk Actions, and Weekly Value Report.
+- **Ultra:** everything in Pro, plus advanced roadmap features as they are released.
 
-Some features in the roadmap are marked “coming later.” Smart Save Profiles are fixed presets in v1; editable profiles are planned for a later phase.
+Smart Save Profiles are fixed presets in v1. Editable profiles are planned for a later phase.
+URL Collector 2.0 improvements (for example saved URL views, URL tags/notes, and smarter URL workflows) are planned in phased rollout and may ship in slices.
 
-## How to Use
+## How to Use (Common Tasks)
 
-Follow these steps for common daily tasks:
+### 1) Save a page quickly
 
-1. **Save a page quickly:** open the popup, stay on **Capture**, and click **Capture Page**.
-2. **Use a profile (Pro/Ultra):** in Capture, tap `Research`, `Interest`, or `Private` to apply that preset and start capture immediately.
-3. **Check roadmap/tier status:** open **Settings**, stay in **Daily Essentials**, and set `Basic`, `Pro`, or `Ultra`.
-4. **Set daily defaults:** still in **Daily Essentials**, pick your default profile and theme.
-5. **Find saved items:** open **History**, use the domain/date/type filters, and open or delete items as needed.
-6. **Filter by profile (Pro/Ultra):** in History, use the **Profile** filter (`Research`, `Interest`, `Private`) to narrow results.
-7. **Use bulk actions (Pro/Ultra):** in History, click **Bulk**, select multiple items, then download or delete them together.
-8. **Run queue capture (Pro/Ultra):** in popup **Capture**, use **Queue Current** or **Queue Window**, then click **Run Queue**.
-   Queue progress is handled in the background, and when it finishes you are taken to **History** automatically.
-9. **Check weekly progress (Pro/Ultra):** in **Settings**, open the **Feature Access** section, then review **Weekly Value Report**.
-10. **Handle revisit nudges (Pro/Ultra):** in the popup, use **Open in History**, **Dismiss**, or **Snooze 24h**.
+1. Open the extension popup.
+2. Stay on **Capture**.
+3. Click **Capture Page**.
 
-- Tip: if a page cannot be captured, switch to a normal website tab and try again.
-- Tip: keep your default profile and export settings updated in **Settings**.
+### 2) Use Smart Save Profiles (Pro/Ultra)
 
-## Quick Example
+1. In **Capture**, click **Research**, **Interest**, or **Private**.
+2. Capture starts immediately with that profile.
+3. In **Settings -> Daily Essentials**, choose your default profile for normal capture.
 
-Example: You are researching a topic and want to review sources later.
+### 3) Find and filter saved content
 
-- Select **Pro** in Settings, then in the popup tap **Interest** to capture pages with your preferred defaults.
-- Later, open **History**, filter by domain, and continue where you left off.
-- If a nudge appears, use **Open in History** to jump back into unfinished work.
+1. Open **History**.
+2. Filter by domain, date, export type, or profile (Pro/Ultra).
+3. Open, delete, or bulk-manage items (Pro/Ultra) from the list.
 
-Screenshot placeholder: `[Popup Capture view with Smart Save Profiles and Revisit Nudge]`
+### 4) Run Queue Capture (Pro/Ultra)
+
+1. In **Capture**, click **Queue Current** or **Queue Window**.
+2. Click **Run Queue**.
+3. When complete, THE Collector opens **History** automatically with queue results.
+
+## Tips and Quick Example
+
+- If a page cannot be captured, switch to a regular website tab and try again.
+- Keep your default profile and export settings current in **Settings**.
+- Features outside your tier are hidden to keep the UI focused.
+
+**Quick example:** You are collecting references for a topic. Set tier to **Pro**, select **Interest** in the popup, capture several tabs with Queue, then open **History** and filter by profile to resume work instantly.
+
+Screenshot placeholder: `[Popup Capture with Smart Save Profiles and Queue actions]`

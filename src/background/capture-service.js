@@ -17,7 +17,7 @@ import { hasDownloadsPermission, downloadCaptureParts } from './downloads.js';
 import { canUseFeature } from '../shared/capabilities.js';
 import {
   DEFAULT_CAPTURE_PROFILE_ID,
-  normalizeCaptureProfileId,
+  canonicalizeCaptureProfileId,
   resolveCaptureSettings,
 } from '../shared/capture-profiles.js';
 
@@ -229,7 +229,7 @@ export function createCaptureService() {
       const profilesEnabled = canUseFeature('smart_save_profiles', settings);
       const requestedProfileId = options?.profileId ?? settings.defaultCaptureProfileId;
       effectiveProfileId = profilesEnabled
-        ? normalizeCaptureProfileId(requestedProfileId || DEFAULT_CAPTURE_PROFILE_ID)
+        ? canonicalizeCaptureProfileId(requestedProfileId || DEFAULT_CAPTURE_PROFILE_ID)
         : null;
       const effectiveSettings = profilesEnabled
         ? resolveCaptureSettings(settings, effectiveProfileId)

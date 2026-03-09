@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.35`.
+Current extension version: `1.9.38`.
 
 ## Overview
 
@@ -18,11 +18,11 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- Added release automation workflow to attach generated extension ZIP to every published GitHub release.
-- Added docs-policy gate (`test:docs-policy`) and wired it into CI quality checks.
-- Added visual exception register and tightened History visual snapshot tolerance from `400` to `250`.
-- Raised runtime coverage gate incrementally (`lines/statements: 18`, `branches: 15`).
-- Completed terminology cleanup in docs toward canonical `Settings` naming.
+- Completed Smart Save Profiles v1 closure hardening with canonical popup capture/queue profile payload builders.
+- Unified profile canonicalization path across protocol validation and capture runtime for consistent default/explicit profile handling.
+- Added focused unit tests for popup profile payload behavior and profile canonicalization edge cases.
+- Consolidated end-user help guide and synchronized Settings Help & FAQ content to match it.
+- Added URL Collector 2.0 planning track to the roadmap and aligned docs/QA scope accordingly.
 
 ## Core Architecture
 
@@ -43,6 +43,7 @@ The capture pipeline is split across extension contexts:
 - Keyboard shortcut: `Alt+Shift+P`
 - Smart Save Profiles (Pro/Ultra): fixed presets `Research`, `Interest`, `Private`
 - Default Smart Save Profile can be set in Settings (Pro/Ultra)
+- Read-only Smart Save usage summaries in History and Settings (Pro/Ultra)
 - Capture Queue + Batch Mode v1 (Pro/Ultra):
   - queue current tab or current window tabs
   - run queued captures sequentially from popup
@@ -140,6 +141,11 @@ The capture pipeline is split across extension contexts:
 - Settings IA:
   - Daily Essentials: tier, default profile, theme, save
   - Capture & Export: export format, PDF page size, clipboard fit
+  - Downloads: auto-download mode, download directory, save-as
+  - Feature Access: nudges + weekly value report
+  - Privacy & Permissions: optional permissions and permission status
+  - Advanced: onboarding and host-access guidance
+  - Help & FAQ: end-user guidance and quick answers
 
 ## Oversized Capture Behavior
 
@@ -284,4 +290,6 @@ THE Collector/
 
 1. Unified merge/synthesis flow for oversized split captures
 2. Deeper nested iframe + nested scroll-container traversal
-3. Further permission-scope refinement where feasible
+3. URL Collector 2.0 track (saved URL views, URL tags/notes, and URL bulk actions)
+4. Command Palette URL actions (`collect`, `copy all`, `export`)
+5. Further permission-scope refinement where feasible
