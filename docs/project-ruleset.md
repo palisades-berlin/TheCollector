@@ -1,8 +1,9 @@
 # THE Collector Project Ruleset
 
-Last updated: 2026-03-06
+Last updated: 2026-03-09
 Source import: `/Users/stefan.baumgartl/Downloads/codex_rules.txt`
 Precedence note: when rules overlap, the newest explicit user instruction supersedes older guidance.
+Normative source note: this file is the policy authority when other docs summarize workflow/rules.
 
 ## Role Objective
 
@@ -58,6 +59,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 2. Add/expand tests for gating, privacy/security, and stability as complexity grows.
 3. Add local-only guardrails in code for new roadmap features.
 4. On every code change, bump version in semantic `1.0.0` scheme and keep version files synchronized.
+5. For every GitHub release, include the generated extension ZIP artifact.
 
 ## Documentation & Wiki Workflow
 
@@ -91,3 +93,5 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 - 2026-03-06: Added execution lessons rule set: service-worker ownership for long-running flows, early visual checks, continuous docs/wiki sync, and protected-branch PR fallback.
 - 2026-03-06: Structural dedup/reorder pass completed (Minimal Dedup mode); no semantic policy changes.
 - 2026-03-06: Added premium product roadmap guardrails (outcome-gated delivery, slice-to-scale, tier value integrity, phase exits, v1→v2 promotion rules).
+- 2026-03-09: Consistency pass aligned cross-doc policy references, local-only roadmap wording, and visual-threshold contract language.
+- 2026-03-09: Added release artifact rule: each GitHub release must include the generated extension ZIP.

@@ -1,6 +1,7 @@
 # Developer Workflow
 
 This file is the canonical source for developer/release operations to keep `README.md` and `CLAUDE.md` aligned.
+Policy precedence: `docs/project-ruleset.md` is the normative rules source when guidance overlaps.
 
 ## Prerequisites
 
@@ -18,6 +19,7 @@ npm install
 ```bash
 npm run lint
 npm run test:repo-hygiene
+npm run test:docs-policy
 npm run test:unit
 npm run test:coverage
 npm run test:coverage:runtime
@@ -45,18 +47,21 @@ npm run check
 
 ```bash
 ./scripts/package-release.sh
+./scripts/publish-release-with-asset.sh
 ```
 
 Packaging script guardrails:
 
 - top `CHANGELOG.md` version must match `manifest.json` version
 - if `HEAD` is exactly tagged, tag version must match manifest/changelog version
+- release publishing script uploads generated zip to existing/new GitHub release tag
 
 ## Release Artifact Source of Truth
 
 - Use the CI-uploaded artifact (`the-collector-release-zip`) from GitHub Actions for Chrome Web Store submission.
 - Treat locally generated zips as local validation only.
 - Use `docs/chrome-web-store-permissions.md` as canonical permission justification text in the CWS listing/policy form.
+- Every GitHub release must include the generated extension ZIP artifact.
 
 ## Rollback Procedure
 
@@ -116,10 +121,11 @@ Publish workflow:
 - Keep surface-level CSS tokenized (`--popup-*`, `--history-*`) and avoid new hardcoded visual values when an existing token exists.
 - Reference `docs/ui-handoff.md` for component/state/accessibility contracts used for engineering handoff.
 - Use `docs/ui-qa-audit.md` as the operational checklist for multi-pass visual calibration and QA signoff.
+- Track temporary visual tolerance exceptions in `docs/visual-exception-register.md`.
 - Validate first-run onboarding (`src/onboarding/onboarding.html`) and theme behavior (`system/light/dark`) during manual smoke.
 - Visual parity gate is mandatory for release candidates:
   - run `npm run test:e2e:visual`
-  - screenshot diff threshold is `maxDiffPixels <= 2`.
+  - default target is `maxDiffPixels <= 2`; explicit per-snapshot exceptions in `tests/visual/ui-parity.spec.mjs` are temporary and must be tracked/reduced via `docs/visual-exception-register.md`.
 - For every feature add/change that affects user behavior, UX, or tier availability, update:
   - `docs/help-user-guide.md`
   - `docs/thecollector-2.0-90-day-roadmap.md` (if roadmap scope/status changed)
@@ -143,6 +149,7 @@ Publish workflow:
   - required status checks
   - admin enforcement
   - conversation resolution
+- GitHub branch protection settings are authoritative if this section drifts.
 
 ## Test Failure Triage Workflow
 
