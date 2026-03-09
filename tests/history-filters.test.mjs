@@ -17,18 +17,21 @@ const sample = [
     url: 'https://example.com/a',
     timestamp: new Date('2026-03-01T09:00:00Z').getTime(),
     blobType: 'image/png',
+    captureProfileId: 'research',
   },
   {
     id: 'b',
     url: 'https://sub.example.com/b',
     timestamp: new Date('2026-03-02T10:00:00Z').getTime(),
     blobType: 'image/jpeg',
+    captureProfileId: 'interest',
   },
   {
     id: 'c',
     url: 'https://other.com/c',
     timestamp: new Date('2026-03-03T11:00:00Z').getTime(),
     blobType: 'application/pdf',
+    captureProfileId: 'private',
   },
 ];
 
@@ -43,9 +46,10 @@ const getType = (record) => {
 test('filterRecords applies domain filter', () => {
   const out = filterRecords(
     sample,
-    { domain: 'example.com', fromDate: '', toDate: '', type: 'all' },
+    { domain: 'example.com', fromDate: '', toDate: '', type: 'all', profile: 'all' },
     getDomain,
-    getType
+    getType,
+    (record) => record.captureProfileId || ''
   );
   assert.deepEqual(
     out.map((r) => r.id),
@@ -56,12 +60,27 @@ test('filterRecords applies domain filter', () => {
 test('filterRecords applies date range and type filters', () => {
   const out = filterRecords(
     sample,
-    { domain: '', fromDate: '2026-03-02', toDate: '2026-03-03', type: 'pdf' },
+    { domain: '', fromDate: '2026-03-02', toDate: '2026-03-03', type: 'pdf', profile: 'all' },
     getDomain,
-    getType
+    getType,
+    (record) => record.captureProfileId || ''
   );
   assert.deepEqual(
     out.map((r) => r.id),
     ['c']
+  );
+});
+
+test('filterRecords applies profile filter', () => {
+  const out = filterRecords(
+    sample,
+    { domain: '', fromDate: '', toDate: '', type: 'all', profile: 'interest' },
+    getDomain,
+    getType,
+    (record) => record.captureProfileId || ''
+  );
+  assert.deepEqual(
+    out.map((r) => r.id),
+    ['b']
   );
 });

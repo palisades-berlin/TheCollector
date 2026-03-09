@@ -1,4 +1,10 @@
-export function filterRecords(allRecords, filters, getRecordDomain, getRecordExportType) {
+export function filterRecords(
+  allRecords,
+  filters,
+  getRecordDomain,
+  getRecordExportType,
+  getRecordProfileId
+) {
   const fromTs = filters.fromDate ? new Date(`${filters.fromDate}T00:00:00`).getTime() : null;
   const toTs = filters.toDate ? new Date(`${filters.toDate}T23:59:59.999`).getTime() : null;
 
@@ -10,6 +16,10 @@ export function filterRecords(allRecords, filters, getRecordDomain, getRecordExp
     if (fromTs !== null && Number(record.timestamp || 0) < fromTs) return false;
     if (toTs !== null && Number(record.timestamp || 0) > toTs) return false;
     if (filters.type !== 'all' && getRecordExportType(record) !== filters.type) return false;
+    if (filters.profile !== 'all') {
+      const profileId = getRecordProfileId ? getRecordProfileId(record) : '';
+      if (profileId !== filters.profile) return false;
+    }
     return true;
   });
 }
@@ -19,6 +29,7 @@ export function createHistoryFilters({
   filterFromEl,
   filterToEl,
   filterTypeEl,
+  filterProfileEl,
   resetFiltersBtn,
   onChange,
 }) {
@@ -28,6 +39,7 @@ export function createHistoryFilters({
     fromDate: '',
     toDate: '',
     type: 'all',
+    profile: 'all',
   };
 
   function getFilters() {
@@ -57,6 +69,10 @@ export function createHistoryFilters({
       filters.type = filterTypeEl.value || 'all';
       onChange(false);
     });
+    filterProfileEl?.addEventListener('change', () => {
+      filters.profile = filterProfileEl.value || 'all';
+      onChange(false);
+    });
     resetFiltersBtn.addEventListener('click', () => {
       if (filterDomainTimer) {
         clearTimeout(filterDomainTimer);
@@ -66,10 +82,12 @@ export function createHistoryFilters({
       filterFromEl.value = '';
       filterToEl.value = '';
       filterTypeEl.value = 'all';
+      if (filterProfileEl) filterProfileEl.value = 'all';
       filters.domain = '';
       filters.fromDate = '';
       filters.toDate = '';
       filters.type = 'all';
+      filters.profile = 'all';
       onChange(true);
     });
   }

@@ -18,229 +18,317 @@
       </div>
       <nav class="sc-header-nav" aria-label="Primary">
         <a class="sc-header-link" href="../history/history.html">History</a>
-        <a class="sc-header-link" href="options.html" aria-current="page">Options</a>
+        <a class="sc-header-link" href="options.html" aria-current="page">Settings</a>
       </nav>
     </header>
 
-    <main class="main">
-      <section id="onboardingBanner" class="card sc-card onboarding-banner hidden">
-        <h2>Welcome to THE Collector</h2>
-        <p class="muted">
-          Capture full pages and collect links quickly. Start in the popup, and use this page to
-          tune downloads, theme, and permission access.
-        </p>
-        <p class="muted">
-          If capture fails on restricted pages, switch to a regular website tab and try again.
-        </p>
-      </section>
+    <main class="main settings-shell">
+      <aside class="settings-nav sc-card" aria-label="Settings sections">
+        <button class="settings-nav-btn active" type="button" data-settings-nav="daily-essentials">
+          Daily Essentials
+        </button>
+        <button class="settings-nav-btn" type="button" data-settings-nav="capture-export">
+          Capture &amp; Export
+        </button>
+        <button class="settings-nav-btn" type="button" data-settings-nav="downloads">
+          Downloads
+        </button>
+        <button class="settings-nav-btn" type="button" data-settings-nav="feature-access">
+          Feature Access
+        </button>
+        <button class="settings-nav-btn" type="button" data-settings-nav="privacy-permissions">
+          Privacy &amp; Permissions
+        </button>
+        <button class="settings-nav-btn" type="button" data-settings-nav="advanced">
+          Advanced
+        </button>
+      </aside>
 
-      <section class="card sc-card">
-        <h2>Appearance</h2>
-        <label class="row">
-          <span>Theme</span>
-          <select id="theme" class="sc-select">
-            <option value="system">System</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </label>
-      </section>
+      <section class="settings-content">
+        <section class="settings-section" data-settings-section="daily-essentials">
+          <section class="card sc-card">
+            <h2>Daily Essentials</h2>
+            <p class="muted">Your most-used controls for day-to-day capture and export behavior.</p>
+            <label class="row">
+              <span>Capability tier</span>
+              <select id="capabilityTier" class="sc-select">
+                <option value="basic">Basic</option>
+                <option value="pro">Pro</option>
+                <option value="ultra">Ultra</option>
+              </select>
+            </label>
+            <label id="defaultCaptureProfileRow" class="row hidden">
+              <span>Default Smart Save Profile</span>
+              <select id="defaultCaptureProfileId" class="sc-select">
+                <option value="research">Research</option>
+                <option value="interest">Interest</option>
+                <option value="private">Private</option>
+              </select>
+            </label>
+            <label class="row">
+              <span>Theme</span>
+              <select id="theme" class="sc-select">
+                <option value="system">System</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </label>
+            <div class="actions">
+              <button id="saveBtn" class="btn sc-btn sc-btn-primary">Save Settings</button>
+              <span
+                id="status"
+                class="status sc-banner hidden"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+              ></span>
+            </div>
+          </section>
+        </section>
 
-      <section class="card sc-card">
-        <h2>Feature Access</h2>
-        <p class="muted">
-          Choose one access tier. Pro includes Basic features. Ultra includes Basic + Pro features.
-        </p>
-        <label class="row">
-          <span>Capability tier</span>
-          <select id="capabilityTier" class="sc-select">
-            <option value="basic">Basic</option>
-            <option value="pro">Pro</option>
-            <option value="ultra">Ultra</option>
-          </select>
-        </label>
-      </section>
+        <section class="settings-section hidden" data-settings-section="capture-export">
+          <section class="card sc-card">
+            <h2>Capture &amp; Export</h2>
+            <label class="row">
+              <span>Default export format</span>
+              <select id="defaultExportFormat" class="sc-select">
+                <option value="png">PNG</option>
+                <option value="jpg">JPG</option>
+                <option value="pdf">PDF</option>
+              </select>
+            </label>
+            <label class="row">
+              <span>Default PDF page size</span>
+              <select id="defaultPdfPageSize" class="sc-select">
+                <option value="auto">Auto</option>
+                <option value="a4">A4</option>
+                <option value="letter">Letter</option>
+              </select>
+            </label>
+            <label class="check-row">
+              <input id="fitClipboardToDocsLimit" type="checkbox" />
+              <span>Fit copies to Google Docs limits (applies when clipboard copy is used)</span>
+            </label>
+          </section>
+        </section>
 
-      <section class="card sc-card">
-        <h2>Export Defaults</h2>
-        <label class="row">
-          <span>Default export format</span>
-          <select id="defaultExportFormat" class="sc-select">
-            <option value="png">PNG</option>
-            <option value="jpg">JPG</option>
-            <option value="pdf">PDF</option>
-          </select>
-        </label>
+        <section class="settings-section hidden" data-settings-section="downloads">
+          <section class="card sc-card">
+            <h2>Downloads</h2>
+            <label class="row">
+              <span>Auto-download behavior</span>
+              <select id="autoDownloadMode" class="sc-select">
+                <option value="off">Off</option>
+                <option value="after_preview">After preview opens</option>
+                <option value="skip_preview">Skip preview and download directly</option>
+              </select>
+            </label>
+            <label class="row">
+              <span>Download directory</span>
+              <div class="dir-picker">
+                <input
+                  id="downloadDirectory"
+                  class="text-input sc-input"
+                  type="text"
+                  placeholder="e.g. screencaptures"
+                  spellcheck="false"
+                />
+                <button id="pickDirectoryBtn" class="btn sc-btn sc-btn-secondary" type="button">
+                  Choose Folder
+                </button>
+                <input
+                  id="pickDirectoryInput"
+                  class="hidden-file-input"
+                  type="file"
+                  webkitdirectory
+                  directory
+                  multiple
+                />
+              </div>
+            </label>
+            <label class="check-row">
+              <input id="saveAs" type="checkbox" />
+              <span>Show Save As dialog for single-file downloads</span>
+            </label>
+          </section>
+        </section>
 
-        <label class="row">
-          <span>Default PDF page size</span>
-          <select id="defaultPdfPageSize" class="sc-select">
-            <option value="auto">Auto</option>
-            <option value="a4">A4</option>
-            <option value="letter">Letter</option>
-          </select>
-        </label>
-      </section>
+        <section class="settings-section hidden" data-settings-section="feature-access">
+          <section class="card sc-card">
+            <h2>Feature Access</h2>
+            <p class="muted">
+              Pro includes Basic features. Ultra includes Basic + Pro features. Non-entitled
+              features are hidden.
+            </p>
+            <label id="nudgesEnabledRow" class="check-row hidden">
+              <input id="nudgesEnabled" type="checkbox" />
+              <span>Enable Smart Revisit Nudges</span>
+            </label>
+            <label id="notificationCadenceRow" class="row hidden">
+              <span>Nudge cadence</span>
+              <select id="notificationCadence" class="sc-select">
+                <option value="low">Low</option>
+                <option value="balanced">Balanced</option>
+                <option value="high">High</option>
+              </select>
+            </label>
+          </section>
 
-      <section class="card sc-card">
-        <h2>Download Behavior</h2>
-        <label class="row">
-          <span>Auto-download behavior</span>
-          <select id="autoDownloadMode" class="sc-select">
-            <option value="off">Off</option>
-            <option value="after_preview">After preview opens</option>
-            <option value="skip_preview">Skip preview and download directly</option>
-          </select>
-        </label>
-
-        <label class="row">
-          <span>Download directory</span>
-          <div class="dir-picker">
-            <input
-              id="downloadDirectory"
-              class="text-input sc-input"
-              type="text"
-              placeholder="e.g. screencaptures"
-              spellcheck="false"
-            />
-            <button id="pickDirectoryBtn" class="btn sc-btn sc-btn-secondary" type="button">
-              Choose Folder
-            </button>
-            <input
-              id="pickDirectoryInput"
-              class="hidden-file-input"
-              type="file"
-              webkitdirectory
-              directory
-              multiple
-            />
-          </div>
-        </label>
-
-        <label class="check-row">
-          <input id="saveAs" type="checkbox" />
-          <span>Show Save As dialog for single-file downloads</span>
-        </label>
-      </section>
-
-      <section class="card sc-card">
-        <h2>Optional Permissions</h2>
-        <p class="muted">Downloads permission can be granted or revoked on demand.</p>
-        <p class="muted">
-          Why this permission: enables one-click file saving directly from preview exports. Without
-          it, browser fallback downloads are used.
-        </p>
-        <div class="row row-buttons">
-          <span id="downloadsStatus" role="status" aria-live="polite" aria-atomic="true">
-            Downloads permission: checking…
-          </span>
-          <div class="btns">
-            <button id="grantDownloads" class="btn sc-btn">Grant</button>
-            <button id="revokeDownloads" class="btn sc-btn sc-btn-secondary">Revoke</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="card sc-card">
-        <h2>Permission Scope & Status</h2>
-        <p class="muted">
-          What each permission does for you and whether it is currently available.
-        </p>
-        <div class="perm-list" role="list" aria-label="Permission status list">
-          <div class="perm-item" role="listitem">
-            <div class="perm-text">
-              <div class="perm-title">Current tab access (`activeTab`)</div>
-              <div class="perm-desc">
-                Lets THE Collector read the page you are currently on when you start a capture.
+          <section id="weeklyValueReportCard" class="card sc-card hidden">
+            <h2>Weekly Value Report</h2>
+            <p class="muted">
+              Local-only weekly summary from your saved captures and collected URLs.
+            </p>
+            <div class="value-report-grid">
+              <div class="value-report-item">
+                <span class="value-report-label">Captures saved (7d)</span>
+                <strong id="weeklyCapturesSaved" class="value-report-value">0</strong>
+              </div>
+              <div class="value-report-item">
+                <span class="value-report-label">Unique domains (7d)</span>
+                <strong id="weeklyUniqueDomains" class="value-report-value">0</strong>
+              </div>
+              <div class="value-report-item">
+                <span class="value-report-label">URLs collected</span>
+                <strong id="weeklyUrlsCollected" class="value-report-value">0</strong>
+              </div>
+              <div class="value-report-item">
+                <span class="value-report-label">Estimated time saved</span>
+                <strong id="weeklyMinutesSaved" class="value-report-value">0 min</strong>
               </div>
             </div>
-            <span id="perm-activeTab" class="perm-badge sc-pill" aria-live="polite">Checking…</span>
-          </div>
-          <div class="perm-item" role="listitem">
-            <div class="perm-text">
-              <div class="perm-title">Tab management (`tabs`)</div>
-              <div class="perm-desc">
-                Lets the extension find your active tab and open History/Preview pages when needed.
-              </div>
-            </div>
-            <span id="perm-tabs" class="perm-badge sc-pill" aria-live="polite">Checking…</span>
-          </div>
-          <div class="perm-item" role="listitem">
-            <div class="perm-text">
-              <div class="perm-title">Page capture helper (`scripting`)</div>
-              <div class="perm-desc">
-                Lets the extension run capture code on the page so full-page screenshots work
-                correctly.
-              </div>
-            </div>
-            <span id="perm-scripting" class="perm-badge sc-pill" aria-live="polite">Checking…</span>
-          </div>
-          <div class="perm-item" role="listitem">
-            <div class="perm-text">
-              <div class="perm-title">Local storage (`storage`)</div>
-              <div class="perm-desc">
-                Saves your URLs, settings, and capture data on your device.
-              </div>
-            </div>
-            <span id="perm-storage" class="perm-badge sc-pill" aria-live="polite">Checking…</span>
-          </div>
-          <div class="perm-item" role="listitem">
-            <div class="perm-text">
-              <div class="perm-title">Background image processing (`offscreen`)</div>
-              <div class="perm-desc">
-                Combines screenshot tiles in the background without interrupting your current tab.
-              </div>
-            </div>
-            <span id="perm-offscreen" class="perm-badge sc-pill" aria-live="polite">Checking…</span>
-          </div>
-          <div class="perm-item" role="listitem">
-            <div class="perm-text">
-              <div class="perm-title">Extra local space (`unlimitedStorage`)</div>
-              <div class="perm-desc">
-                Helps keep large or many screenshots from being dropped due to browser quota limits.
-              </div>
-            </div>
-            <span id="perm-unlimitedStorage" class="perm-badge sc-pill" aria-live="polite"
-              >Checking…</span
-            >
-          </div>
-          <div class="perm-item" role="listitem">
-            <div class="perm-text">
-              <div class="perm-title">File downloads (`downloads`, optional)</div>
-              <div class="perm-desc">
-                Allows one-click downloads from the extension. You can turn this on or off above
-                anytime.
-              </div>
-            </div>
-            <span id="perm-downloads" class="perm-badge sc-pill" aria-live="polite">Checking…</span>
-          </div>
-        </div>
-      </section>
+          </section>
+        </section>
 
-      <section class="card sc-card">
-        <h2>Clipboard</h2>
-        <label class="check-row">
-          <input id="fitClipboardToDocsLimit" type="checkbox" />
-          <span>Fit copies to Google Docs limits (applies when clipboard copy is used)</span>
-        </label>
-      </section>
+        <section class="settings-section hidden" data-settings-section="privacy-permissions">
+          <section class="card sc-card">
+            <h2>Optional Permissions</h2>
+            <p class="muted">Downloads permission can be granted or revoked on demand.</p>
+            <p class="muted">
+              Why this permission: enables one-click file saving directly from preview exports.
+              Without it, browser fallback downloads are used.
+            </p>
+            <div class="row row-buttons">
+              <span id="downloadsStatus" role="status" aria-live="polite" aria-atomic="true">
+                Downloads permission: checking…
+              </span>
+              <div class="btns">
+                <button id="grantDownloads" class="btn sc-btn">Grant</button>
+                <button id="revokeDownloads" class="btn sc-btn sc-btn-secondary">Revoke</button>
+              </div>
+            </div>
+          </section>
 
-      <section class="card sc-card">
-        <h2>Host Access</h2>
-        <p class="muted">This build uses active-tab capture scope by default.</p>
-        <p class="muted">For restricted pages, browser-level site access controls still apply.</p>
-      </section>
+          <section class="card sc-card">
+            <h2>Permission Scope &amp; Status</h2>
+            <p class="muted">
+              What each permission does for you and whether it is currently available.
+            </p>
+            <div class="perm-list" role="list" aria-label="Permission status list">
+              <div class="perm-item" role="listitem">
+                <div class="perm-text">
+                  <div class="perm-title">Current tab access (`activeTab`)</div>
+                  <div class="perm-desc">
+                    Lets THE Collector read the page you are currently on when you start a capture.
+                  </div>
+                </div>
+                <span id="perm-activeTab" class="perm-badge sc-pill" aria-live="polite"
+                  >Checking…</span
+                >
+              </div>
+              <div class="perm-item" role="listitem">
+                <div class="perm-text">
+                  <div class="perm-title">Tab management (`tabs`)</div>
+                  <div class="perm-desc">
+                    Lets the extension find your active tab and open History/Preview pages when
+                    needed.
+                  </div>
+                </div>
+                <span id="perm-tabs" class="perm-badge sc-pill" aria-live="polite">Checking…</span>
+              </div>
+              <div class="perm-item" role="listitem">
+                <div class="perm-text">
+                  <div class="perm-title">Page capture helper (`scripting`)</div>
+                  <div class="perm-desc">
+                    Lets the extension run capture code on the page so full-page screenshots work
+                    correctly.
+                  </div>
+                </div>
+                <span id="perm-scripting" class="perm-badge sc-pill" aria-live="polite"
+                  >Checking…</span
+                >
+              </div>
+              <div class="perm-item" role="listitem">
+                <div class="perm-text">
+                  <div class="perm-title">Local storage (`storage`)</div>
+                  <div class="perm-desc">
+                    Saves your URLs, settings, and capture data on your device.
+                  </div>
+                </div>
+                <span id="perm-storage" class="perm-badge sc-pill" aria-live="polite"
+                  >Checking…</span
+                >
+              </div>
+              <div class="perm-item" role="listitem">
+                <div class="perm-text">
+                  <div class="perm-title">Background image processing (`offscreen`)</div>
+                  <div class="perm-desc">
+                    Combines screenshot tiles in the background without interrupting your current
+                    tab.
+                  </div>
+                </div>
+                <span id="perm-offscreen" class="perm-badge sc-pill" aria-live="polite"
+                  >Checking…</span
+                >
+              </div>
+              <div class="perm-item" role="listitem">
+                <div class="perm-text">
+                  <div class="perm-title">Extra local space (`unlimitedStorage`)</div>
+                  <div class="perm-desc">
+                    Helps keep large or many screenshots from being dropped due to browser quota
+                    limits.
+                  </div>
+                </div>
+                <span id="perm-unlimitedStorage" class="perm-badge sc-pill" aria-live="polite"
+                  >Checking…</span
+                >
+              </div>
+              <div class="perm-item" role="listitem">
+                <div class="perm-text">
+                  <div class="perm-title">File downloads (`downloads`, optional)</div>
+                  <div class="perm-desc">
+                    Allows one-click downloads from the extension. You can turn this on or off above
+                    anytime.
+                  </div>
+                </div>
+                <span id="perm-downloads" class="perm-badge sc-pill" aria-live="polite"
+                  >Checking…</span
+                >
+              </div>
+            </div>
+          </section>
+        </section>
 
-      <div class="actions">
-        <button id="saveBtn" class="btn sc-btn sc-btn-primary">Save Settings</button>
-        <span
-          id="status"
-          class="status sc-banner hidden"
-          role="status"
-          aria-live="polite"
-          aria-atomic="true"
-        ></span>
-      </div>
+        <section class="settings-section hidden" data-settings-section="advanced">
+          <section id="onboardingBanner" class="card sc-card onboarding-banner hidden">
+            <h2>Welcome to THE Collector</h2>
+            <p class="muted">
+              Capture full pages and collect links quickly. Start in the popup, and use this page to
+              tune behavior and permissions.
+            </p>
+            <p class="muted">
+              If capture fails on restricted pages, switch to a regular website tab and try again.
+            </p>
+          </section>
+          <section class="card sc-card">
+            <h2>Host Access</h2>
+            <p class="muted">This build uses active-tab capture scope by default.</p>
+            <p class="muted">
+              For restricted pages, browser-level site access controls still apply.
+            </p>
+          </section>
+        </section>
+      </section>
     </main>
 
     <script type="module" src="options.js"></script>

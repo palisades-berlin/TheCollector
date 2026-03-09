@@ -79,6 +79,48 @@ async function testInvalidCaptureStartPayload() {
   process.stdout.write('PASS service worker rejects invalid CAPTURE_START payload\n');
 }
 
+async function testInvalidCaptureStartProfilePayload() {
+  const { chrome, runtimeOnMessage } = createChromeMock();
+  globalThis.chrome = chrome;
+  await importFresh(swPath);
+
+  const listener = runtimeOnMessage.listeners[0];
+  let response = null;
+  const keepAlive = listener(
+    { type: 'CAPTURE_START', payload: { tabId: 1, profileId: 99 } },
+    {},
+    (r) => {
+      response = r;
+    }
+  );
+
+  assert.equal(keepAlive, false);
+  assert.deepEqual(response, { ok: false, error: 'Invalid profile id' });
+  process.stdout.write('PASS service worker rejects invalid CAPTURE_START profile payload\n');
+}
+
+async function testInvalidCaptureStartSuppressPreviewPayload() {
+  const { chrome, runtimeOnMessage } = createChromeMock();
+  globalThis.chrome = chrome;
+  await importFresh(swPath);
+
+  const listener = runtimeOnMessage.listeners[0];
+  let response = null;
+  const keepAlive = listener(
+    { type: 'CAPTURE_START', payload: { tabId: 1, suppressPreviewOpen: 'true' } },
+    {},
+    (r) => {
+      response = r;
+    }
+  );
+
+  assert.equal(keepAlive, false);
+  assert.deepEqual(response, { ok: false, error: 'Invalid suppressPreviewOpen flag' });
+  process.stdout.write(
+    'PASS service worker rejects invalid CAPTURE_START suppressPreviewOpen payload\n'
+  );
+}
+
 async function testInvalidPtDownloadPayload() {
   const { chrome, runtimeOnMessage } = createChromeMock();
   globalThis.chrome = chrome;
@@ -97,6 +139,22 @@ async function testInvalidPtDownloadPayload() {
   process.stdout.write('PASS service worker rejects invalid PT_DOWNLOAD payload\n');
 }
 
+async function testInvalidCaptureQueuePayload() {
+  const { chrome, runtimeOnMessage } = createChromeMock();
+  globalThis.chrome = chrome;
+  await importFresh(swPath);
+
+  const listener = runtimeOnMessage.listeners[0];
+  let response = null;
+  const keepAlive = listener({ type: 'CAPTURE_QUEUE_START', payload: { tabIds: [] } }, {}, (r) => {
+    response = r;
+  });
+
+  assert.equal(keepAlive, false);
+  assert.deepEqual(response, { ok: false, error: 'Invalid queue tab ids' });
+  process.stdout.write('PASS service worker rejects invalid CAPTURE_QUEUE_START payload\n');
+}
+
 async function testUnknownMessageType() {
   const { chrome, runtimeOnMessage } = createChromeMock();
   globalThis.chrome = chrome;
@@ -111,6 +169,9 @@ async function testUnknownMessageType() {
 async function run() {
   try {
     await testInvalidCaptureStartPayload();
+    await testInvalidCaptureStartProfilePayload();
+    await testInvalidCaptureStartSuppressPreviewPayload();
+    await testInvalidCaptureQueuePayload();
     await testInvalidPtDownloadPayload();
     await testUnknownMessageType();
   } catch (err) {

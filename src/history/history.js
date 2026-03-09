@@ -17,6 +17,8 @@ import { createThumbLoader } from './history-thumbs.js';
 import { createHistoryCards } from './history-cards.js';
 import { createHistoryFilesOverlay } from './history-files-overlay.js';
 import { applySavedTheme } from '../shared/theme.js';
+import { getUserSettings } from '../shared/repos/settings-repo.js';
+import { canUseFeature } from '../shared/capabilities.js';
 
 const gridEl = document.getElementById('grid');
 const emptyEl = document.getElementById('empty');
@@ -34,6 +36,8 @@ const filterDomainEl = document.getElementById('filterDomain');
 const filterFromEl = document.getElementById('filterFrom');
 const filterToEl = document.getElementById('filterTo');
 const filterTypeEl = document.getElementById('filterType');
+const filterProfileEl = document.getElementById('filterProfile');
+const filterProfileItemEl = document.getElementById('filterProfileItem');
 const resetFiltersBtn = document.getElementById('resetFiltersBtn');
 
 const filesOverlayEl = document.getElementById('filesOverlay');
@@ -45,11 +49,13 @@ const selectedCountEl = document.getElementById('selectedCount');
 const downloadSelectedBtn = document.getElementById('downloadSelected');
 const deleteSelectedBtn = document.getElementById('deleteSelected');
 const fileRowTpl = document.getElementById('fileRowTpl');
+const DISMISSED_DIAGNOSTIC_STORAGE_KEY = 'history.dismissedCaptureDiagnosticKey';
 let allRecords = [];
 let records = [];
 let groups = [];
 let captureReports = [];
-let dismissedCaptureDiagnosticKey = '';
+let dismissedCaptureDiagnosticKey = loadDismissedDiagnosticKey();
+let canUseBulkActions = false;
 const compareSelection = [];
 const DEBUG_THUMB_QUEUE =
   new URLSearchParams(window.location.search).get('debugThumbQueue') === '1' ||
@@ -58,6 +64,47 @@ const DEBUG_THUMB_QUEUE =
 function logNonFatal(context, err) {
   if (window.localStorage.getItem('sc_debug_non_fatal') !== '1') return;
   console.debug('[THE Collector][non-fatal]', context, err);
+}
+
+function loadDismissedDiagnosticKey() {
+  try {
+    return String(window.localStorage.getItem(DISMISSED_DIAGNOSTIC_STORAGE_KEY) || '');
+  } catch {
+    return '';
+  }
+}
+
+function persistDismissedDiagnosticKey(key) {
+  dismissedCaptureDiagnosticKey = String(key || '');
+  try {
+    if (dismissedCaptureDiagnosticKey) {
+      window.localStorage.setItem(DISMISSED_DIAGNOSTIC_STORAGE_KEY, dismissedCaptureDiagnosticKey);
+    } else {
+      window.localStorage.removeItem(DISMISSED_DIAGNOSTIC_STORAGE_KEY);
+    }
+  } catch {
+    // Non-fatal: diagnostics dismissal still works for this session via in-memory state.
+  }
+}
+
+function maybeShowQueueCompletionToast() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('queueCompleted') !== '1') return;
+  const total = Math.max(0, Number(params.get('total') || 0));
+  const success = Math.max(0, Number(params.get('success') || 0));
+  const failed = Math.max(0, Number(params.get('failed') || 0));
+  if (total <= 0) return;
+  showToast(
+    `Queue finished: ${success} succeeded, ${failed} failed.`,
+    failed > 0 ? 'info' : 'success'
+  );
+  params.delete('queueCompleted');
+  params.delete('total');
+  params.delete('success');
+  params.delete('failed');
+  const nextQuery = params.toString();
+  const nextUrl = `${window.location.pathname}${nextQuery ? `?${nextQuery}` : ''}`;
+  window.history.replaceState({}, '', nextUrl);
 }
 
 function openPreview(id) {
@@ -146,7 +193,13 @@ const filesOverlay = createHistoryFilesOverlay({
 });
 
 function applyFilters() {
-  records = filterRecords(allRecords, filters.getFilters(), getRecordDomain, getRecordExportType);
+  records = filterRecords(
+    allRecords,
+    filters.getFilters(),
+    getRecordDomain,
+    getRecordExportType,
+    getRecordProfileId
+  );
   groups = buildGroups(records);
   compareSelection.length = 0;
 }
@@ -162,9 +215,16 @@ const filters = createHistoryFilters({
   filterFromEl,
   filterToEl,
   filterTypeEl,
+  filterProfileEl,
   resetFiltersBtn,
   onChange: (resetSelection) => applyFiltersAndRender(resetSelection),
 });
+
+function getRecordProfileId(record) {
+  if (record?.captureProfileId) return String(record.captureProfileId);
+  if (record?.captureReport?.profileId) return String(record.captureReport.profileId);
+  return '';
+}
 
 function renderMainView() {
   thumbLoader.resetQueue();
@@ -175,7 +235,7 @@ function renderMainView() {
     emptyEl.classList.remove('hidden');
     gridEl.classList.add('hidden');
     clearAllBtn.classList.toggle('hidden', !hasAnyRecords);
-    openFilesBtn.classList.toggle('hidden', !hasAnyRecords);
+    openFilesBtn.classList.toggle('hidden', !hasAnyRecords || !canUseBulkActions);
     compareBtn.classList.toggle('hidden', !hasAnyRecords);
     updateCompareUi();
     updateCount(0, allRecords.length);
@@ -185,7 +245,7 @@ function renderMainView() {
   emptyEl.classList.add('hidden');
   gridEl.classList.remove('hidden');
   clearAllBtn.classList.remove('hidden');
-  openFilesBtn.classList.remove('hidden');
+  openFilesBtn.classList.toggle('hidden', !canUseBulkActions);
   compareBtn.classList.remove('hidden');
   updateCount(records.length, allRecords.length);
 
@@ -212,7 +272,7 @@ function renderCaptureDiagnostics() {
   if (!lastFailed) {
     captureDiagnosticsEl.classList.add('hidden');
     if (captureDiagnosticsTextEl) captureDiagnosticsTextEl.textContent = '';
-    dismissedCaptureDiagnosticKey = '';
+    persistDismissedDiagnosticKey('');
     return;
   }
   const diagnosticKey = `${lastFailed.timestamp || ''}|${lastFailed.error || ''}`;
@@ -270,7 +330,7 @@ function buildFriendlyCaptureFailureText({ error, durationPart, tilePart }) {
 }
 
 captureDiagnosticsDismissEl?.addEventListener('click', () => {
-  dismissedCaptureDiagnosticKey = captureDiagnosticsDismissEl.getAttribute('data-key') || '';
+  persistDismissedDiagnosticKey(captureDiagnosticsDismissEl.getAttribute('data-key') || '');
   captureDiagnosticsEl?.classList.add('hidden');
 });
 
@@ -319,6 +379,19 @@ async function refreshAll() {
 
 async function init() {
   await applySavedTheme();
+  maybeShowQueueCompletionToast();
+  try {
+    const settings = await getUserSettings();
+    const showProfileFilter = canUseFeature('smart_save_profiles', settings || {});
+    canUseBulkActions = canUseFeature('bulk_actions_v1', settings || {});
+    filterProfileItemEl?.classList.toggle('hidden', !showProfileFilter);
+    openFilesBtn?.classList.toggle('hidden', !canUseBulkActions);
+  } catch (err) {
+    logNonFatal('loadHistorySettings', err);
+    canUseBulkActions = false;
+    filterProfileItemEl?.classList.add('hidden');
+    openFilesBtn?.classList.add('hidden');
+  }
   filters.wireFilters();
   filesOverlay.wireEvents();
   await refreshAll();
