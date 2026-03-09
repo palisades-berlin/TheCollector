@@ -70,6 +70,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 5. Before architecture/policy changes are finalized, update ADRs when needed.
 6. Keep roadmap/help/ADR/README/wiki updates synchronized within the same feature delivery cycle.
 7. From now on, update the help guide whenever necessary to reflect UX, feature, tier, or flow changes.
+8. If `docs/help-user-guide.md` changes, update the Settings `Help & FAQ` content in `src/options/options.html` in the same work cycle.
 
 ## Git/Branch Policy
 
@@ -97,3 +98,5 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 - 2026-03-09: Consistency pass aligned cross-doc policy references, local-only roadmap wording, and visual-threshold contract language.
 - 2026-03-09: Added release artifact rule: each GitHub release must include the generated extension ZIP.
 - 2026-03-09: Reinforced help-guide maintenance rule: update `docs/help-user-guide.md` whenever necessary for UX/feature/tier/flow changes.
+- 2026-03-09: Added roadmap/documentation alignment for URL Collector 2.0 planning track across roadmap, help, and QA audit docs.
+- 2026-03-09: Added mandatory sync rule: changes to `docs/help-user-guide.md` require corresponding Settings `Help & FAQ` updates.

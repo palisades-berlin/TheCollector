@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {
   buildCaptureProfileUsageSummary,
   CAPTURE_PROFILE,
+  canonicalizeCaptureProfileId,
   DEFAULT_CAPTURE_PROFILE_ID,
   getCaptureProfile,
   isCaptureProfileId,
@@ -61,6 +62,8 @@ test('sanitizes and validates profile ids for legacy/invalid values', () => {
   assert.equal(sanitizeCaptureProfileId('Interest'), CAPTURE_PROFILE.INTEREST);
   assert.equal(sanitizeCaptureProfileId('not-real'), '');
   assert.equal(sanitizeCaptureProfileId(''), '');
+  assert.equal(canonicalizeCaptureProfileId(' private '), CAPTURE_PROFILE.PRIVATE);
+  assert.equal(canonicalizeCaptureProfileId('legacy-id'), DEFAULT_CAPTURE_PROFILE_ID);
 });
 
 test('builds profile usage summary from screenshot metadata', () => {

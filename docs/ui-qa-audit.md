@@ -21,6 +21,7 @@ This document is the implementation QA contract for exhaustive UX/UI verificatio
 4. Options/settings (default + permission feedback)
 5. Preview (edit mode + error + diff)
 6. Tier-gated overlays (Pro/Ultra): Smart Save profile row, profile filter, bulk entry, nudge card, weekly report card
+7. URL Collector 2.0 readiness states (planned): saved URL views, URL tags/notes, URL bulk actions, command palette URL actions
 
 ### Components
 

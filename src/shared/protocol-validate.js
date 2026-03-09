@@ -1,5 +1,5 @@
 import { toPositiveInt } from './validation.js';
-import { normalizeCaptureProfileId } from './capture-profiles.js';
+import { canonicalizeCaptureProfileId } from './capture-profiles.js';
 
 function asObject(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
@@ -26,7 +26,7 @@ export function validateCaptureStartPayload(payload) {
     if (typeof obj.profileId !== 'string') {
       return { ok: false, error: 'Invalid profile id' };
     }
-    profileId = normalizeCaptureProfileId(obj.profileId);
+    profileId = canonicalizeCaptureProfileId(obj.profileId);
   }
   let suppressPreviewOpen = false;
   if (obj && Object.hasOwn(obj, 'suppressPreviewOpen')) {
@@ -61,7 +61,7 @@ export function validateCaptureQueueStartPayload(payload) {
     if (typeof obj.profileId !== 'string') {
       return { ok: false, error: 'Invalid profile id' };
     }
-    profileId = normalizeCaptureProfileId(obj.profileId);
+    profileId = canonicalizeCaptureProfileId(obj.profileId);
   }
 
   return { ok: true, value: { tabIds, profileId } };

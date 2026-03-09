@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.9.38 - 2026-03-09
+
+- Smart Save Profiles v1 release closure:
+  - added canonical popup profile payload module and wired popup capture/queue payload generation through it
+  - unified profile canonicalization handling across protocol validation and capture runtime
+  - added unit coverage for popup payload behavior and profile canonicalization edge cases.
+- UX/help consistency updates:
+  - merged and simplified end-user help guide into a single canonical `docs/help-user-guide.md`
+  - synchronized Settings `Help & FAQ` section with the updated guide content and current feature/tier behavior.
+- Roadmap/documentation alignment:
+  - added URL Collector 2.0 planning track to the 30-day/90-day roadmap
+  - updated UI QA audit scope and project ruleset changelog to reflect URL Collector planning alignment.
+- Quality/audit gate run completed for release candidate:
+  - strict checks green (`check`, coverage, integration, stability, performance, smoke, visual, UI calibration).
+
+## 1.9.37 - 2026-03-09
+
+- Smart Save Profiles v1 completion hardening:
+  - added canonical popup payload builders for capture and queue profile behavior (`src/popup/popup-profile-payload.js`)
+  - aligned popup/start + queue payload wiring to shared canonical profile handling
+  - aligned protocol and capture runtime profile canonicalization with shared helper path.
+- Acceptance coverage expansion:
+  - added unit suite for popup capture/queue profile payload behavior (`tests/popup-profile-payload.test.mjs`)
+  - expanded profile helper tests to include canonicalization edge cases.
+- Product closure documentation:
+  - marked ADR 0004 as completed with explicit v1 boundaries
+  - updated roadmap progress baseline to Smart Save Profiles v1 completed and editable profiles deferred.
+
 ## 1.9.36 - 2026-03-09
 
 - Smart Save Profiles v1 hardening and UX completion:

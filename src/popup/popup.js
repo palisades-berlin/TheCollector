@@ -15,6 +15,7 @@ import {
   listCaptureProfiles,
   normalizeCaptureProfileId,
 } from '../shared/capture-profiles.js';
+import { buildCaptureQueuePayload, buildCaptureStartPayload } from './popup-profile-payload.js';
 import { evaluateRevisitNudge } from '../shared/nudges.js';
 import { addTabsToQueue, normalizeQueueEntries, removeFromQueue } from './capture-queue.js';
 
@@ -197,9 +198,7 @@ function startCapture(tabId, profileId = null, options = {}) {
   progressEl.classList.remove('hidden');
   setProgress(0, 'Starting...');
 
-  const payload = { tabId };
-  if (profileId) payload.profileId = normalizeCaptureProfileId(profileId);
-  if (options.suppressPreviewOpen === true) payload.suppressPreviewOpen = true;
+  const payload = buildCaptureStartPayload(tabId, profileId, options);
   return chrome.runtime
     .sendMessage({ type: MSG.CAPTURE_START, payload })
     .then((res) => {
@@ -435,8 +434,7 @@ async function runCaptureQueue() {
   const tabIds = captureQueue
     .map((item) => Number(item.tabId))
     .filter((id) => Number.isInteger(id));
-  const payload = { tabIds };
-  if (smartProfilesEnabled) payload.profileId = defaultCaptureProfileId;
+  const payload = buildCaptureQueuePayload(tabIds, smartProfilesEnabled, defaultCaptureProfileId);
 
   try {
     const res = await chrome.runtime.sendMessage({ type: MSG.CAPTURE_QUEUE_START, payload });

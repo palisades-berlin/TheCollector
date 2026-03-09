@@ -22,6 +22,7 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
 - `src/shared/constants.js`: capture/export limits and shared constants.
 - `src/shared/db.js`: IndexedDB access primitives.
 - `src/shared/capture-profiles.js`: fixed Smart Save Profiles catalog and capture override resolver.
+- `src/popup/popup-profile-payload.js`: canonical popup payload builders for Smart Save capture and queue actions.
 - `src/shared/nudges.js`: local Smart Revisit Nudge evaluator logic.
 - `src/shared/value-report.js`: local Weekly Value Report metric builder.
 - `src/popup/capture-queue.js`: queue entry helpers used by popup UI for Capture Queue + Batch Mode v1.

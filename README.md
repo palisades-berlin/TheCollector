@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.36`.
+Current extension version: `1.9.38`.
 
 ## Overview
 
@@ -18,11 +18,11 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- Added Smart Save profile usage summaries (Research/Interest/Private) to History and Settings for Pro/Ultra tiers.
-- Hardened profile handling for legacy/invalid metadata so unknown profile values are tracked safely without misclassification.
-- Added profile usage helper APIs and expanded unit coverage for profile validation, normalization, and usage aggregation.
-- Updated History filter behavior/tests to ignore invalid legacy profile IDs while preserving valid profile filtering.
-- Synced help and architecture docs to reflect current Smart Save visibility and usage-summary behavior.
+- Completed Smart Save Profiles v1 closure hardening with canonical popup capture/queue profile payload builders.
+- Unified profile canonicalization path across protocol validation and capture runtime for consistent default/explicit profile handling.
+- Added focused unit tests for popup profile payload behavior and profile canonicalization edge cases.
+- Consolidated end-user help guide and synchronized Settings Help & FAQ content to match it.
+- Added URL Collector 2.0 planning track to the roadmap and aligned docs/QA scope accordingly.
 
 ## Core Architecture
 
@@ -290,4 +290,6 @@ THE Collector/
 
 1. Unified merge/synthesis flow for oversized split captures
 2. Deeper nested iframe + nested scroll-container traversal
-3. Further permission-scope refinement where feasible
+3. URL Collector 2.0 track (saved URL views, URL tags/notes, and URL bulk actions)
+4. Command Palette URL actions (`collect`, `copy all`, `export`)
+5. Further permission-scope refinement where feasible

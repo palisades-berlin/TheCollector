@@ -66,6 +66,11 @@ export function sanitizeCaptureProfileId(profileId) {
   return PROFILE_CATALOG[next] ? next : '';
 }
 
+export function canonicalizeCaptureProfileId(profileId) {
+  const sanitized = sanitizeCaptureProfileId(profileId);
+  return normalizeCaptureProfileId(sanitized || DEFAULT_CAPTURE_PROFILE_ID);
+}
+
 export function getCaptureProfile(profileId) {
   return PROFILE_CATALOG[normalizeCaptureProfileId(profileId)];
 }
