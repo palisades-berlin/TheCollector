@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.34 - 2026-03-06
+
+- Product-governance documentation update:
+  - added premium roadmap guardrails to project ruleset (`Roadmap & Product Quality`)
+  - aligned 90-day roadmap with outcome-gated delivery, phase exits, v1→v2 promotion criteria, and post-release product review requirements.
+
 ## 1.9.33 - 2026-03-06
 
 - Strict UX/UI calibration pass for changed queue components:

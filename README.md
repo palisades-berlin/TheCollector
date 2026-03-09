@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.33`.
+Current extension version: `1.9.34`.
 
 ## Overview
 
@@ -18,13 +18,13 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
+- Added premium roadmap-product guardrails to project rules and roadmap (outcome-gated delivery, phase exits, v1→v2 promotion contract).
 - Strict UX/UI component calibration pass for changed queue components:
   - queue spacing normalized to token scale
   - queue item/action sizing aligned to shared control metrics (`sc-btn-sm` / 32px targets)
 - Fixed queue-completion reliability: queued tab removal/clear now runs in service worker storage lifecycle.
 - Fixed queue post-run UX: after queue completion, History opens automatically with a result summary.
 - Added `SW_QUEUE_DONE` event for queue completion status and popup/history sync.
-- Fixed queued multi-tab capture behavior: each queued tab is explicitly activated/focused before capture.
 
 ## Core Architecture
 
