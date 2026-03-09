@@ -28,7 +28,7 @@
     "@playwright/test": "^1.58.2",
     "c8": "^11.0.0",
     "espree": "^10.4.0",
-    "eslint": "^10.0.2",
+    "eslint": "^10.0.3",
     "globals": "^17.4.0",
     "playwright": "^1.53.2",
     "prettier": "^3.6.2"
