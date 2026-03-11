@@ -18,11 +18,9 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- Completed Smart Save Profiles v1 closure hardening with canonical popup capture/queue profile payload builders.
-- Unified profile canonicalization path across protocol validation and capture runtime for consistent default/explicit profile handling.
-- Added focused unit tests for popup profile payload behavior and profile canonicalization edge cases.
-- Consolidated end-user help guide and synchronized Settings Help & FAQ content to match it.
-- Added URL Collector 2.0 planning track to the roadmap and aligned docs/QA scope accordingly.
+- Extended multi-machine workflow to cover 2–3 machines; GitHub private repo is the single point of truth for all tracked files.
+- Removed dead `CLAUDE.md` gitignore entry (file was already tracked).
+- Version bumped to `1.9.39`.
 
 ## Core Architecture
 

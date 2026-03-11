@@ -49,7 +49,7 @@ Implemented roadmap features and current delivery level:
 
 Versioning status:
 
-1. Current release baseline: **`1.9.38`**.
+1. Current release baseline: **`1.9.39`**.
 2. No roadmap **v2** feature is fully shipped yet.
 3. Smart Save Profiles editable management remains planned for a later phase (not in v1 completion scope).
 
