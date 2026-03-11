@@ -18,7 +18,7 @@ This document is the implementation QA contract for exhaustive UX/UI verificatio
 1. Popup / capture
 2. Popup / URLs (+ URL history subview)
 3. History workspace (default, empty, loading, files overlay)
-4. Options/settings (default + permission feedback)
+4. Settings (default + permission feedback)
 5. Preview (edit mode + error + diff)
 6. Tier-gated overlays (Pro/Ultra): Smart Save profile row, profile filter, bulk entry, nudge card, weekly report card
 7. URL Collector 2.0 readiness states (planned): saved URL views, URL tags/notes, URL bulk actions, Ultra commands URL actions
@@ -30,7 +30,7 @@ This document is the implementation QA contract for exhaustive UX/UI verificatio
 
 - Popup: header badge, segmented tabs, capture and URL action blocks, row actions, footer groups
 - History: header actions, filters (including profile filter), cards, diagnostics banner, files overlay rows
-- Options: cards, labels/controls rows, status banners, permission pills
+- Settings: cards, labels/controls rows, status banners, permission pills
 - Preview: toolbar actions, preset group, edit toolbar, mode notice, screenshot stage
 
 ### Flows and States
@@ -38,7 +38,7 @@ This document is the implementation QA contract for exhaustive UX/UI verificatio
 1. Capture flow: idle -> progress -> success/error
 2. URL flow: add/add-all/copy/export/clear/restore/history
 3. History flow: filter/reset/compare/open/delete/files
-4. Options flow: load/save/grant/revoke + feedback
+4. Settings flow: load/save/grant/revoke + feedback
 5. Preview flow: load/edit/export/preset/error/diff
 6. Tier visibility flow: Basic hides Pro/Ultra controls; Pro and Ultra render entitled controls
 
@@ -56,7 +56,7 @@ State coverage target:
 - Section gaps: `16`
 - Surface shell padding:
   - Popup: 16 side rhythm
-  - History/Options/Preview: tokenized 20-24 context padding
+  - History/Settings/Preview: tokenized 20-24 context padding
 
 ### Control Geometry
 
@@ -136,7 +136,7 @@ State coverage target:
 - [ ] Popup spacing and segmented tabs aligned
 - [ ] History filters/grid/cards/actions aligned
 - [ ] History card rows maintain equal-height geometry for mixed content states (with/without optional diagnostics)
-- [ ] Options shell/rows/actions aligned
+- [ ] Settings shell/rows/actions aligned
 - [ ] Preview toolbar/editbar/stage spacing aligned
 
 ### Pass 3 - State and Flow QA

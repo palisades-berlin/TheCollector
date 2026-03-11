@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.40 - 2026-03-11
+
+- Added Help Documentation Rules to project governance (`CLAUDE.md`, `docs/dev-workflow.md`, `docs/project-ruleset.md`):
+  - Rule 1: help files must only describe implemented features.
+  - Rule 2: `npm run test:docs-policy` enforces a freshness gate — fails if unshipped feature phrases appear in help content.
+  - Rule 3: `docs/help-user-guide.md` and `src/options/options.html` Help & FAQ must always stay in sync.
+- Removed unshipped features from `docs/help-user-guide.md` and `src/options/options.html` Help & FAQ: Commands/Cmd+K, Omnibox Actions, Saved URL Views, URL Tags, URL Notes.
+- Updated `scripts/check-doc-policy.mjs` with help-doc freshness check.
+
 ## 1.9.39 - 2026-03-11
 
 - docs: extend two-machine workflow to multi-machine (3 machines), remove dead `CLAUDE.md` gitignore entry.

@@ -1,6 +1,6 @@
 # THE Collector Project Ruleset
 
-Last updated: 2026-03-09
+Last updated: 2026-03-11
 Source import: `codex_rules.txt` (local import source)
 Precedence note: when rules overlap, the newest explicit user instruction supersedes older guidance.
 Normative source note: this file is the policy authority when other docs summarize workflow/rules.
@@ -30,21 +30,22 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 
 1. Roadmap source of truth is: `docs/thecollector-2.0-90-day-roadmap.md`.
 2. Roadmap constraints are fixed: local-only, no external connections, no tracking.
-3. Tier model is hierarchical `Basic -> Pro -> Ultra`; feature visibility is hide-only by tier.
-4. 30-day features are Pro-tier; 90-day features are Ultra-tier (planned direction, not guaranteed all/ever).
-5. Roadmap features must be technically reliable and product-logical before being treated as done.
-6. Before implementing new features, run a structured pre-development review of existing code, related components, dependencies, and roadmap conflict risk; prioritize proactive design over reactive fixes.
-7. For long-running or multi-tab workflows, prefer service-worker-owned lifecycle/state over popup-owned state.
-8. Roadmap delivery is outcome-gated: a feature is done only when technical acceptance and a predefined product outcome signal are both met.
-9. Ship smallest useful slice first (v1), and promote to v2 only after v1 quality/adoption review.
-10. Tier value integrity is mandatory: Pro/Ultra features must deliver clear incremental user value over Basic.
-11. New roadmap features must not degrade core Basic flows (capture, retrieve, export, settings save).
-12. Each roadmap phase requires explicit exit gates (quality + UX + product-fit) before the next phase starts.
-13. Premium UX bar is mandatory: first-time clarity and low-friction repeat actions in each primary surface.
-14. If quality or clarity targets are missed in-cycle, reduce scope and ship a coherent slice instead of confusing partial UX.
-15. v2 work is allowed only when v1 is stable, documented, test-covered, and free of unresolved High/Critical UX defects.
-16. Before each roadmap item begins, record dependency/conflict checks against shipped features and active phases.
-17. After shipping each roadmap feature, add a short product review note (improved, regressed, next adjustment).
+3. The extension is **free forever** — no subscriptions, no payments, no paid tiers, ever. See ADR 0009.
+4. Tier model is hierarchical `Basic -> Pro -> Ultra`; it is a **UX complexity preference**, not a paywall. Feature visibility is hide-only by tier. All tiers are free. See ADR 0001.
+5. Roadmap milestones are v1.10, v2.0, v2.1, and v3.0 (planned direction, not guaranteed all/ever).
+6. Roadmap features must be technically reliable and product-logical before being treated as done.
+7. Before implementing new features, run a structured pre-development review of existing code, related components, dependencies, and roadmap conflict risk; prioritize proactive design over reactive fixes.
+8. For long-running or multi-tab workflows, prefer service-worker-owned lifecycle/state over popup-owned state.
+9. Roadmap delivery is outcome-gated: a feature is done only when technical acceptance and a predefined product outcome signal are both met.
+10. Ship smallest useful slice first (v1), and promote to v2 only after v1 quality/adoption review.
+11. Tier value integrity is mandatory: Pro/Ultra features must deliver clear incremental UX value over Basic. The complexity ladder must feel earned — not used to simulate a paywall.
+12. New roadmap features must not degrade core Basic flows (capture, retrieve, export, settings save).
+13. Each roadmap phase requires explicit exit gates (quality + UX + product-fit) before the next phase starts.
+14. Premium UX bar is mandatory: first-time clarity and low-friction repeat actions in each primary surface.
+15. If quality or clarity targets are missed in-cycle, reduce scope and ship a coherent slice instead of confusing partial UX.
+16. v2 work is allowed only when v1 is stable, documented, test-covered, and free of unresolved High/Critical UX defects.
+17. Before each roadmap item begins, record dependency/conflict checks against shipped features and active phases.
+18. After shipping each roadmap feature, add a short product review note (improved, regressed, next adjustment).
 
 ## UX/UI & Design System
 
@@ -53,6 +54,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 3. Use and maintain a design-token system with step-by-step refactors.
 4. Run and enforce UX/UI calibration for roadmap/UI changes both early during development and at final release gate.
 5. In card/grid UIs, equal-height consistency is mandatory for mixed-content rows; reserve optional content slots and clamp overflow to avoid row-height drift.
+6. Design System 2.0 is v2.0 item #1. Token migration across all surfaces (popup, history, preview, options) must complete before any v2.0 feature work begins. Visual system migration and interaction/IA redesign are separate concerns — never scoped together. See ADR 0010.
 
 ## Testing & Release Gates
 
@@ -72,6 +74,12 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 6. Keep roadmap/help/ADR/README/wiki updates synchronized within the same feature delivery cycle.
 7. From now on, update the help guide whenever necessary to reflect UX, feature, tier, or flow changes.
 8. If `docs/help-user-guide.md` changes, update the Settings `Help & FAQ` content in `src/options/options.html` in the same work cycle.
+
+## Help Documentation Rules (added 2026-03-11)
+
+1. **Implementation parity (Rule 1):** All help files, documents, and pages must only describe features that are actually implemented and available in the current release. Planned, roadmap, or future features must never appear in user-facing help content.
+2. **Pre-commit gate (Rule 2):** Before every commit/push, verify Rule 1 is fulfilled. `npm run test:docs-policy` enforces a machine-readable freshness check; do not bypass it or weaken thresholds.
+3. **Consistency (Rule 3):** `docs/help-user-guide.md` and the `Help & FAQ` section in `src/options/options.html` must always be in sync. Any change to one requires a matching update to the other in the same work cycle.
 
 ## Git/Branch Policy
 
@@ -102,3 +110,6 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 - 2026-03-09: Added roadmap/documentation alignment for URL Collector 2.0 planning track across roadmap, help, and QA audit docs.
 - 2026-03-09: Added mandatory sync rule: changes to `docs/help-user-guide.md` require corresponding Settings `Help & FAQ` updates.
 - 2026-03-09: Added explicit UX/UI calibration rule for equal-height card consistency in mixed-content grid rows.
+- 2026-03-11: Documentation consistency pass after repository sync: normalized user-facing terminology to `Settings` while preserving `src/options/*` path references.
+- 2026-03-11: Product model clarification: extension is free forever (ADR 0009). Tier model updated to UX complexity preference (ADR 0001). Roadmap restructured to v1.10/v2.0/v2.1/v3.0 milestones. Enterprise Controls v1 and URL Bundle Export Packs cut. Rule 3–4 updated to reflect always-free model.
+- 2026-03-11: Added UX/UI Design System rule 6: Design System 2.0 is v2.0 item #1; token migration is prerequisite gate for all v2.0 feature work; visual migration and interaction/IA redesign are separate concerns (ADR 0010).

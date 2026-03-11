@@ -1,17 +1,20 @@
-# ADR 0008: Capture Queue + Batch Mode v1 (Popup Queue, Pro-Gated)
+# ADR 0008: Capture Queue + Batch Mode v1 (Popup Queue, Pro/Ultra Tier)
 
 - Status: accepted
 - Date: 2026-03-06
+- Updated: 2026-03-11
 
 ## Context
 
-Roadmap quick-win `capture_queue_batch_mode` needs a low-risk first slice that improves throughput for power users without changing capture protocol contracts.
+Roadmap quick-win `capture_queue_batch_mode` needs a low-risk first slice that improves throughput
+for power users without changing capture protocol contracts. The extension is free forever;
+"Pro/Ultra" refers to UX complexity tiers, not paid access.
 
 ## Decision
 
 Implement Capture Queue + Batch Mode v1 with these constraints:
 
-- feature visibility is hidden unless capability tier is `pro` or `ultra`
+- feature is shown when capability tier is `pro` or `ultra` (UX complexity preference, not payment gate)
 - queue management is popup-local:
   - queue current tab
   - queue all tabs in current window

@@ -1,10 +1,20 @@
 # THE Collector - Maintainer Context
 
 ## Project Summary
+
 `THE Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.9.39`.
+Current extension version: `1.9.40`.
+The extension is **free forever** — no subscriptions, no payments, no paid tiers. The tier selector (Basic / Pro / Ultra) is a UX complexity preference, not a paywall. See ADR 0009.
+
+## Product Model
+
+- Always free, local-only, no external connections, no user tracking.
+- Roadmap milestones: **v1.10** (Foundation & Distribution) → **v2.0** (Design System 2.0 first, then URL Collector 2.0 + v2 Depth) → **v2.1** (Intelligence Layer) → **v3.0** (Monitoring & Share).
+- Design System 2.0 is v2.0 item #1: token migration across all surfaces must complete before any v2.0 feature work begins. See ADR 0010.
+- Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
 
 ## Engineering Rules
+
 - Keep behavior stable and avoid core logic rewrites unless required.
 - Versioning policy: use semantic `x.y.z` and bump on every code change.
 - Sync version in `manifest.json`, `package.json`, `README.md`, `CHANGELOG.md`, `AGENTS.md`, and `CLAUDE.md` together.
@@ -13,6 +23,7 @@ Current extension version: `1.9.39`.
 - Permission-scope policy (Phase A): remove only demonstrably dead permissions; do not remove permissions that are runtime-required for capture/export flows.
 
 ## Canonical Workflow Doc
+
 - Source of truth for local checks, manual smoke flow, packaging, and release policy:
   - `docs/dev-workflow.md`
 - UI handoff/source-of-truth guidance:

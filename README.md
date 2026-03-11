@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.39`.
+Current extension version: `1.9.40`.
 
 ## Overview
 
@@ -18,9 +18,9 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- Extended multi-machine workflow to cover 2–3 machines; GitHub private repo is the single point of truth for all tracked files.
-- Removed dead `CLAUDE.md` gitignore entry (file was already tracked).
-- Version bumped to `1.9.39`.
+- Added Help Documentation Rules: help files must only describe implemented features; `npm run test:docs-policy` enforces this as a pre-commit gate.
+- Removed unshipped features (Commands, Omnibox Actions, URL Views, Tags, Notes) from `docs/help-user-guide.md` and `src/options/options.html` Help & FAQ.
+- Version bumped to `1.9.40`.
 
 ## Core Architecture
 
@@ -31,7 +31,7 @@ The capture pipeline is split across extension contexts:
 - `offscreen document`: tile stitching and final image persistence
 - `preview page`: review, editing, and export
 - `history page`: stored capture browsing and deletion
-- `settings page`: export defaults, auto-download behavior, optional permissions
+- `Settings page`: export defaults, auto-download behavior, optional permissions
 
 ## Features
 
@@ -39,10 +39,10 @@ The capture pipeline is split across extension contexts:
 
 - One-click toolbar capture
 - Keyboard shortcut: `Alt+Shift+P`
-- Smart Save Profiles (Pro/Ultra): fixed presets `Research`, `Interest`, `Private`
-- Default Smart Save Profile can be set in Settings (Pro/Ultra)
-- Read-only Smart Save usage summaries in History and Settings (Pro/Ultra)
-- Capture Queue + Batch Mode v1 (Pro/Ultra):
+- Smart Save Profiles (Pro/Ultra tier): fixed presets `Research`, `Interest`, `Private`
+- Default Smart Save Profile can be set in Settings (Pro/Ultra tier)
+- Read-only Smart Save usage summaries in History and Settings (Pro/Ultra tier)
+- Capture Queue + Batch Mode v1 (Pro/Ultra tier):
   - queue current tab or current window tabs
   - run queued captures sequentially from popup
   - after completion, History opens automatically with queue result summary
@@ -111,12 +111,12 @@ The capture pipeline is split across extension contexts:
   - domain text filter
   - date range filter (from/to)
   - export type filter (`PNG`, `JPG`, `PDF`)
-  - profile filter (`Research`, `Interest`, `Private`) for Pro/Ultra tiers
+  - profile filter (`Research`, `Interest`, `Private`) for Pro/Ultra tier users
 - History diagnostics:
   - Per-capture “why slow” hints (slow duration, retries/backoffs, oversized auto-scale fallback)
   - Latest capture failure note (if the most recent run failed)
   - Dismiss control (`×`) for the latest failure note
-- Bulk Actions v1 (Pro/Ultra):
+- Bulk Actions v1 (Pro/Ultra tier):
   - multi-select via `Bulk` overlay
   - bulk download and bulk delete
 - No cloud sync or server upload path in current implementation
@@ -131,8 +131,8 @@ The capture pipeline is split across extension contexts:
 - Save-As behavior for downloads
 - Permission clarity panel with inline “why this permission” rationale
 - Real-time permission status badges in Settings
-- Capability tier selector: `Basic`, `Pro`, `Ultra`
-- Pro/Ultra controls:
+- Capability tier selector: `Basic`, `Pro`, `Ultra` (UX complexity preference — the extension is free forever; all tiers are free)
+- Pro/Ultra tier controls:
   - Default Smart Save Profile (`Research`, `Interest`, `Private`)
   - Smart Revisit Nudges controls (`enabled`, cadence)
   - Weekly Value Report (local summary card in Settings)
@@ -286,8 +286,34 @@ THE Collector/
 
 ## Near-Term Roadmap
 
-1. Unified merge/synthesis flow for oversized split captures
-2. Deeper nested iframe + nested scroll-container traversal
-3. URL Collector 2.0 track (saved URL views, URL tags/notes, and URL bulk actions)
-4. Command Palette URL actions (`collect`, `copy all`, `export`)
-5. Further permission-scope refinement where feasible
+Milestones in delivery order:
+
+**v1.10 — Foundation & Distribution**
+
+- Tier gating as UX complexity preference (no payment, free forever — see ADR 0009)
+- Featured-Ready UX Polish Pack (Chrome Web Store featuring push)
+- Weekly Value Report promoted to popup footer card
+- Microcopy pass + WCAG 2.2 AA audit
+- Edge Add-ons Store submission
+
+**v2.0 — Design System 2.0 + URL Collector 2.0 + v2 Depth**
+
+- Design System 2.0 tokens and 4 purpose-driven animations _(Sprint 1 prerequisite — ships before all features below)_
+- Saved URL Views (Starred, Today, By Domain) and URL tags/notes/bulk actions
+- Smart Save Profiles v2 (user-editable custom profiles)
+- Bulk Actions v2 (tag + move)
+
+**v2.1 — Intelligence Layer**
+
+- Magic Mode v1 (rule-based domain → profile suggestion, no ML)
+- Workflow Automations v1 (3–4 preset toggles, no rule builder)
+- Quick Note at Save, Omnibox Actions (`tc research`, `tc star`)
+- Admin Config Profile (importable JSON)
+
+**v3.0 — Monitoring & Share**
+
+- Capture Diff as Monitoring (scheduled re-capture + auto-diff + notification)
+- Team Spaces Lite MVP (self-contained ZIP + viewer.html export)
+- Firefox baseline (architecture spike first)
+
+Full roadmap: `docs/thecollector-2.0-90-day-roadmap.md`

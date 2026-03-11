@@ -43,12 +43,14 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
   - shared primitive classes (`sc-btn`, `sc-input`, `sc-select`, `sc-card`, `sc-tab*`, `sc-pill*`, `sc-banner*`, `sc-modal`).
 - Detailed handoff rules and mapping: `docs/ui-handoff.md`.
 
+**Design System 2.0 migration (v2.0 Sprint 1):** introduces a full semantic token tier (`--sc-color-surface-*`, `--sc-motion-*`, `--sc-elevation-*`, `--sc-radius-*`, `--sc-density-*`) across all four surfaces. This migration is the prerequisite gate for all v2.0 feature work — no URL Collector 2.0 or v2 Promotion feature may begin until token migration is complete and a visual regression baseline is established. Visual system migration and interaction/IA redesign are intentionally separate concerns. See ADR 0010.
+
 ## Primary Data Flows
 
 1. Capture flow
 
 - Popup sends `CAPTURE_START` to service worker.
-- Optional `profileId` is accepted for Pro/Ultra Smart Save Profiles (`Research`, `Interest`, `Private`).
+- Optional `profileId` is accepted for Pro/Ultra tier Smart Save Profiles (`Research`, `Interest`, `Private`).
 - Pro/Ultra queue mode can enqueue current/window tabs from popup while queue execution/state lifecycle is orchestrated in service worker.
 - Service worker delegates to capture service.
 - Capture service coordinates content script scrolling and `captureVisibleTab` snapshots.
@@ -67,10 +69,10 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
 
 - History/preview read persisted screenshot records.
 - Preview applies non-destructive visual operations and exports PNG/JPG/PDF or clipboard output.
-- History supports profile-based filtering (Pro/Ultra) using persisted capture profile metadata.
-- History and Settings expose read-only Smart Save profile usage summaries (Pro/Ultra), including unknown/legacy profile ID counts for migration-safe visibility.
-- History supports tier-gated Bulk Actions v1 (Pro/Ultra) via multi-select overlay for batch download/delete.
-- Settings supports tier-gated Weekly Value Report v1 (Pro/Ultra) with local-only metrics.
+- History supports profile-based filtering (Pro/Ultra tier) using persisted capture profile metadata.
+- History and Settings expose read-only Smart Save profile usage summaries (Pro/Ultra tier), including unknown/legacy profile ID counts for migration-safe visibility.
+- History supports tier-gated Bulk Actions v1 (Pro/Ultra tier) via multi-select overlay for batch download/delete.
+- Settings supports tier-gated Weekly Value Report v1 (Pro/Ultra tier) with local-only metrics.
 
 ## Architectural Style
 
@@ -83,11 +85,13 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
 
 Accepted ADRs are tracked in `docs/adr/`:
 
-- `0001`: Basic/Pro/Ultra tier-gating model
+- `0001`: Basic/Pro/Ultra tier model (UX complexity preference, always free — updated 2026-03-11)
 - `0002`: local-only + no-tracking guardrails
 - `0003`: enterprise CI gates as release blockers
 - `0004`: Smart Save Profiles v1 (fixed presets, capture-only override)
-- `0005`: Smart Revisit Nudges v1 (local evaluator, Pro-gated)
-- `0006`: Bulk Actions v1 (History overlay, Pro-gated)
-- `0007`: Weekly Value Report v1 (Settings summary card, Pro-gated)
-- `0008`: Capture Queue + Batch Mode v1 (popup queue, Pro-gated)
+- `0005`: Smart Revisit Nudges v1 (local evaluator, Pro/Ultra tier)
+- `0006`: Bulk Actions v1 (History overlay, Pro/Ultra tier)
+- `0007`: Weekly Value Report v1 (Settings summary card, Pro/Ultra tier)
+- `0008`: Capture Queue + Batch Mode v1 (popup queue, Pro/Ultra tier)
+- `0009`: always-free, local-only product model (added 2026-03-11)
+- `0010`: Design System 2.0 as v2.0 first item — token migration prerequisite gate (added 2026-03-11)

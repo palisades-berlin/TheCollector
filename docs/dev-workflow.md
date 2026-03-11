@@ -2,6 +2,7 @@
 
 This file is the canonical source for developer/release operations to keep `README.md` and `CLAUDE.md` aligned.
 Policy precedence: `docs/project-ruleset.md` is the normative rules source when guidance overlaps.
+Terminology convention: use `Settings` for user-facing text and keep `options` only for code/file paths (`src/options/*`).
 
 ## Prerequisites
 
@@ -112,6 +113,12 @@ Publish workflow:
 2. Update `<tmp/wiki>/Home.md`
 3. Commit and push wiki changes immediately after repo push (same working session)
 4. Use concise wiki commit messages tied to the repo change intent
+
+## Help Documentation Rules
+
+1. **Rule 1 — Implementation parity:** `docs/help-user-guide.md` and the `Help & FAQ` section in `src/options/options.html` must only describe features that exist in the current release. Never document planned or roadmap features in user-facing help content.
+2. **Rule 2 — Pre-commit gate:** `npm run test:docs-policy` includes a help-doc freshness check. Run it and fix any failures before committing. Do not bypass or weaken this gate.
+3. **Rule 3 — Consistency:** Both help surfaces must stay in sync. Any change to `docs/help-user-guide.md` requires a matching update to the options.html FAQ in the same work cycle, and vice versa.
 
 ## UI/UX Handoff Rule
 
