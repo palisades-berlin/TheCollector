@@ -80,6 +80,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 1. **Implementation parity (Rule 1):** All help files, documents, and pages must only describe features that are actually implemented and available in the current release. Planned, roadmap, or future features must never appear in user-facing help content.
 2. **Pre-commit gate (Rule 2):** Before every commit/push, verify Rule 1 is fulfilled. `npm run test:docs-policy` enforces a machine-readable freshness check; do not bypass it or weaken thresholds.
 3. **Consistency (Rule 3):** `docs/help-user-guide.md` and the `Help & FAQ` section in `src/options/options.html` must always be in sync. Any change to one requires a matching update to the other in the same work cycle.
+4. **Shipping a feature (Rule 4):** When a new feature ships, remove its phrase(s) from the `UNSHIPPED_PHRASES` list in `scripts/check-doc-policy.mjs` and add the feature to both `docs/help-user-guide.md` and the `src/options/options.html` Help & FAQ section in the same work cycle.
 
 ## Git/Branch Policy
 

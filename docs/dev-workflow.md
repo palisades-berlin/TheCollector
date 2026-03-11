@@ -119,6 +119,7 @@ Publish workflow:
 1. **Rule 1 — Implementation parity:** `docs/help-user-guide.md` and the `Help & FAQ` section in `src/options/options.html` must only describe features that exist in the current release. Never document planned or roadmap features in user-facing help content.
 2. **Rule 2 — Pre-commit gate:** `npm run test:docs-policy` includes a help-doc freshness check. Run it and fix any failures before committing. Do not bypass or weaken this gate.
 3. **Rule 3 — Consistency:** Both help surfaces must stay in sync. Any change to `docs/help-user-guide.md` requires a matching update to the options.html FAQ in the same work cycle, and vice versa.
+4. **Rule 4 — Shipping a feature:** When a new feature ships, remove its phrase(s) from `UNSHIPPED_PHRASES` in `scripts/check-doc-policy.mjs` and add the feature to both `docs/help-user-guide.md` and the `src/options/options.html` Help & FAQ in the same work cycle.
 
 ## UI/UX Handoff Rule
 
