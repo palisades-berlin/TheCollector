@@ -11,6 +11,10 @@ import { hasDownloadsPermission, downloadBlob } from './downloads.js';
 import { createCaptureService } from './capture-service.js';
 import { cleanUrl, isCollectibleUrl, normalizeUrlForCompare } from '../shared/url-utils.js';
 import { URL_HISTORY_ACTION } from '../shared/url-history.js';
+import { evaluateRevisitNudge } from '../shared/nudges.js';
+import { loadRevisitNudgeState } from '../shared/repos/nudge-repo.js';
+import { listScreenshotMetaRecords } from '../shared/repos/screenshot-repo.js';
+import { canUseFeature } from '../shared/capabilities.js';
 
 const captureService = createCaptureService();
 const MENU_CAPTURE_PAGE = 'tc_capture_page';
@@ -133,6 +137,50 @@ async function collectUrl(rawUrl, meta = {}) {
   return { ok: true, duplicate: false, url: cleaned };
 }
 
+// ─── Revisit Nudge badge ──────────────────────────────────────────────────────
+
+const NUDGE_ALARM_NAME = 'tc_nudge_check';
+const NUDGE_ALARM_PERIOD_MINUTES = 240; // every 4 hours
+const NUDGE_BADGE_TEXT = '!';
+const NUDGE_BADGE_COLOR = '#E53935';
+
+async function checkAndUpdateNudgeBadge() {
+  try {
+    const settings = await getUserSettings();
+    const nudgesEnabled =
+      settings?.nudgesEnabled === true && canUseFeature('smart_revisit_nudges', settings);
+    if (!nudgesEnabled) {
+      await chrome.action.setBadgeText({ text: '' });
+      return;
+    }
+    const [records, state] = await Promise.all([
+      listScreenshotMetaRecords(),
+      loadRevisitNudgeState(),
+    ]);
+    const nudge = evaluateRevisitNudge(records, {
+      cadence: settings?.notificationCadence,
+      state,
+      now: Date.now(),
+    });
+    if (nudge) {
+      await chrome.action.setBadgeBackgroundColor({ color: NUDGE_BADGE_COLOR });
+      await chrome.action.setBadgeText({ text: NUDGE_BADGE_TEXT });
+    } else {
+      await chrome.action.setBadgeText({ text: '' });
+    }
+  } catch (err) {
+    logNonFatal('checkAndUpdateNudgeBadge', err);
+  }
+}
+
+function scheduleNudgeAlarm() {
+  chrome.alarms.get(NUDGE_ALARM_NAME, (existing) => {
+    if (!existing) {
+      chrome.alarms.create(NUDGE_ALARM_NAME, { periodInMinutes: NUDGE_ALARM_PERIOD_MINUTES });
+    }
+  });
+}
+
 function createOrRefreshContextMenus() {
   if (!chrome.contextMenus?.removeAll) return;
   chrome.contextMenus.removeAll(() => {
@@ -156,6 +204,7 @@ function createOrRefreshContextMenus() {
 
 chrome.runtime.onInstalled.addListener((details) => {
   createOrRefreshContextMenus();
+  scheduleNudgeAlarm();
   if (details.reason === 'install') {
     const url = chrome.runtime.getURL('src/options/options.html?onboarding=1');
     chrome.tabs.create({ url });
@@ -164,6 +213,14 @@ chrome.runtime.onInstalled.addListener((details) => {
 
 chrome.runtime.onStartup?.addListener(() => {
   createOrRefreshContextMenus();
+  scheduleNudgeAlarm();
+  checkAndUpdateNudgeBadge();
+});
+
+chrome.alarms?.onAlarm?.addListener((alarm) => {
+  if (alarm.name === NUDGE_ALARM_NAME) {
+    checkAndUpdateNudgeBadge();
+  }
 });
 
 chrome.contextMenus?.onClicked?.addListener(async (info, tab) => {

@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 
 const APPROVED_REQUIRED = [
   'activeTab',
+  'alarms',
   'contextMenus',
   'offscreen',
   'scripting',
