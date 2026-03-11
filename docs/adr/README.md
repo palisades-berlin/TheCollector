@@ -19,3 +19,5 @@ operations, or governance.
 - [0006-bulk-actions-v1.md](./0006-bulk-actions-v1.md)
 - [0007-weekly-value-report-v1.md](./0007-weekly-value-report-v1.md)
 - [0008-capture-queue-batch-v1.md](./0008-capture-queue-batch-v1.md)
+- [0009-always-free-local-only-product-model.md](./0009-always-free-local-only-product-model.md)
+- [0010-design-system-2.0-sequencing.md](./0010-design-system-2.0-sequencing.md)
