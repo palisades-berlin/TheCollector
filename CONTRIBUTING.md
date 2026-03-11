@@ -22,9 +22,9 @@ npm run test:e2e:visual
 npm run format:check
 ```
 
-## Two-Machine Workflow
+## Multi-Machine Workflow
 
-Use this routine when alternating between two development machines on the same repository.
+Use this routine when alternating between multiple development machines (2 or 3) on the same repository. GitHub is the single point of truth — all tracked files (including `CLAUDE.md`) are pushed to the private repo and pulled on every machine.
 
 ### Session Start (each machine)
 
@@ -57,7 +57,7 @@ git fetch origin
 git rebase origin/main
 ```
 
-3. Keep commits small and checkpoint often so work can be resumed safely on the other machine.
+3. Keep commits small and checkpoint often so work can be resumed safely on any machine.
 4. Prefer PR merges over direct branch merges for better CI visibility and conflict detection.
 
 ### Machine Handoff Checklist
@@ -77,7 +77,7 @@ Then:
 2. Include a short handoff marker in the latest commit message when useful (example: `[handoff-ready]`).
 3. On the next machine, start with the Session Start routine above before resuming.
 
-Tip: if you added aliases/functions above on both machines, use `sync-main` at session start and `handoff-check` before switching machines.
+Tip: if you added aliases/functions above on all machines, use `sync-main` at session start and `handoff-check` before switching machines.
 
 ## Pull Requests
 
