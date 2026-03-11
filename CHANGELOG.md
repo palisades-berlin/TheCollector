@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.39 - 2026-03-11
+
+- docs: extend two-machine workflow to multi-machine (3 machines), remove dead `CLAUDE.md` gitignore entry.
+
 ## 1.9.38 - 2026-03-09
 
 - Smart Save Profiles v1 release closure:
