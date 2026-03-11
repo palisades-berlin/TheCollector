@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.40`.
+Current extension version: `1.9.41`.
 
 ## Overview
 
@@ -18,9 +18,11 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
+- Smart Revisit Nudges now proactive: service worker evaluates nudge every 4 hours via `chrome.alarms` and sets extension badge `"!"` when a revisit is due.
+- Added `"alarms"` permission to manifest for periodic nudge check.
 - Added Help Documentation Rules: help files must only describe implemented features; `npm run test:docs-policy` enforces this as a pre-commit gate.
-- Removed unshipped features (Commands, Omnibox Actions, URL Views, Tags, Notes) from `docs/help-user-guide.md` and `src/options/options.html` Help & FAQ.
-- Version bumped to `1.9.40`.
+- Removed unshipped features (Commands, Omnibox Actions, URL Views, Tags, Notes) from help surfaces.
+- Version bumped to `1.9.41`.
 
 ## Core Architecture
 

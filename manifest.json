@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "THE Collector",
-  "version": "1.9.40",
+  "version": "1.9.41",
   "description": "Capture full-page screenshots and collect clean URLs from tabs. Data stays local.",
   "permissions": [
     "activeTab",
@@ -10,7 +10,8 @@
     "tabs",
     "offscreen",
     "unlimitedStorage",
-    "contextMenus"
+    "contextMenus",
+    "alarms"
   ],
   "optional_permissions": ["downloads"],
   "background": {

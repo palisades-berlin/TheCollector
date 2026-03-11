@@ -557,6 +557,7 @@ clearQueueBtn?.addEventListener('click', async () => {
   await initCaptureProfiles(settings);
   await initCaptureQueue(settings);
   await initRevisitNudge(settings);
+  chrome.action?.setBadgeText?.({ text: '' });
   await preloadUrlCount();
   setCaptureActionState();
   perfLog('init.done');

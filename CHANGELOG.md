@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.41 - 2026-03-11
+
+- Smart Revisit Nudges: proactive badge signal via `chrome.alarms` (solves pull-model gap).
+  - Added `"alarms"` permission to manifest.
+  - Service worker registers a periodic alarm (every 4 hours), evaluates nudge on fire, and sets extension badge `"!"` when a revisit is due.
+  - Popup clears the badge on open after showing the nudge UI.
+
 ## 1.9.40 - 2026-03-11
 
 - Added Help Documentation Rules to project governance (`CLAUDE.md`, `docs/dev-workflow.md`, `docs/project-ruleset.md`):
