@@ -42,3 +42,8 @@ jobs:
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
+        with:
+          # Keep analysis active, but avoid hard-failing when repository-level
+          # code scanning is disabled. Set repository variable
+          # CODEQL_UPLOAD_RESULTS=true once code scanning is enabled.
+          upload: ${{ vars.CODEQL_UPLOAD_RESULTS == 'true' }}
