@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.63 - 2026-03-12
+
+- CI visual parity stabilization (URL Library desktop snapshot):
+  - added measured temporary tolerance for `urls-library-desktop.png` (`maxDiffPixels: 600`) after GitHub macOS CI drift (`212` px) caused CI failure.
+  - synchronized temporary exception tracking in `docs/visual-exception-register.md` and `docs/todo-list.md`.
+- Version sync:
+  - synchronized version to `1.9.63` across manifest/package/docs pointers.
+
 ## 1.9.62 - 2026-03-12
 
 - Sprint 2C cleanup (`2C-03`, `2C-04`, `2C-05`):

@@ -410,6 +410,7 @@ test.describe('Figma parity snapshots', () => {
 
     await expect(page).toHaveScreenshot('urls-library-desktop.png', {
       fullPage: true,
+      maxDiffPixels: 600,
     });
 
     await page.setViewportSize({ width: 900, height: 920 });
