@@ -4,7 +4,7 @@
 
 # Date: 2026-03-12
 
-# Status: ACTIVE — Sprint 2A complete, Sprint 2B-01/2B-02/2B-03/2B-04 shipped, Sprint 2C-01/2C-02/2C-03/2C-04/2C-05 shipped
+# Status: ACTIVE — Sprint 2A complete, Sprint 2B-01/2B-02/2B-03/2B-04 shipped, Sprint 2C-01/2C-02/2C-03/2C-04/2C-05 shipped, B-01/B-02/B-03 closed
 
 ## PREREQUISITE GATE
 
@@ -220,25 +220,28 @@ Execution order (critical path): 2C-03 in parallel with 2C-01 → 2C-02 → 2C-0
 - Classification: BOTH ROADMAP + TODO-LIST.
 - Dependency: requires 2C-01, 2C-03, 2C-04.
 
-## BUGS AND DATA INTEGRITY FIXES
+## BUGS AND DATA INTEGRITY FIXES (CLOSED)
 
 ### Steps
 
 Execution order (target): B-01 + B-02 + B-03 land in earliest Sprint 2A hardening slice before broad URL Library feature migration.
+Current status: B-01/B-02/B-03 completed on current URL Library architecture.
 
 1. **B-01 (Sprint 2A, urgent hardening) — Fix orphaned metadata on URL remove by invoking metadata deletion in the remove flow and validating no ghost records remain.**
 
-- Files affected: `src/popup/urls/urls-actions.js`, `src/shared/repos/url-repo.js`, `tests/url-repo.test.mjs` and/or popup URL integration test file.
+- Files affected (current paths): `src/urls/urls.js`, `src/shared/repos/url-repo.js`, `tests/url-repo.test.mjs`.
 - Findings mapping: REC-06.
 - Classification: TODO-LIST ENTRY.
 - Dependency: none.
+- Status: completed.
 
 2. **B-02 (Sprint 2A, accessibility hardening) — Add Escape keyboard dismiss for URL Change Log with deterministic focus return target.**
 
-- Files affected: `src/popup/urls/urls-actions.js`, `src/popup/urls/urls-history-view.js`, keyboard accessibility test file.
+- Files affected (current paths): `src/urls/urls.js`, `src/urls/urls.html`, `tests/url-library-change-log-accessibility.test.mjs`.
 - Findings mapping: REC-07.
 - Classification: TODO-LIST ENTRY.
 - Dependency: none.
+- Status: completed.
 
 3. **B-03 (Sprint 2A prerequisite for 2B bulk features) — Add and test `url_bulk_actions` capability gate in shared gating map before any UI render path consumes it.**
 
@@ -246,6 +249,7 @@ Execution order (target): B-01 + B-02 + B-03 land in earliest Sprint 2A hardenin
 - Findings mapping: REC-08.
 - Classification: BOTH ROADMAP + TODO-LIST.
 - Dependency: none.
+- Status: completed.
 
 ## ROADMAP UPDATE SUMMARY
 

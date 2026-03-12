@@ -8,11 +8,11 @@ THE Collector helps you save important web content and find it again quickly. Yo
 
 Nothing is uploaded anywhere by the extension. Your screenshots, URL lists, and settings stay in browser storage unless you explicitly export or download them.
 
-You will mainly use three areas:
+You will mainly use four areas:
 
 - **Popup:** capture pages or collect URLs in seconds.
 - **Screenshots:** search, filter, review, and manage saved captures.
-- **URL Library:** full-tab URL organization with views and change log.
+- **URL Library (URLs page):** full-tab URL organization with views, filters, and change log.
 - **Settings:** choose your feature surface level, defaults, and daily behavior.
 
 ## Feature Surface Levels (Tier Selector)
@@ -33,7 +33,7 @@ Smart Save Profiles are fixed presets in v1. Editable custom profiles are planne
 
 1. Open the extension popup.
 2. Stay on **Capture**.
-3. Click **Capture Current Page**.
+3. Click **Capture Full Page**.
 4. If capture is blocked, switch to a normal website tab. Browser internal pages, many PDF tabs, and extension pages cannot be captured.
 
 ### 2) Use Smart Save Profiles (Pro/Ultra tier)
@@ -64,16 +64,17 @@ Smart Save Profiles are fixed presets in v1. Editable custom profiles are planne
 
 ### 6) Use Saved URL Views (Pro/Ultra tier)
 
-1. Open **URL Library** from popup (**Library** tab or **Open URL Library** button).
+1. Open **URL Library** from popup (**Library** tab or **Open URL Library** button in the URLs tab).
 2. Use views to switch between **All**, **Starred**, **Today**, and **By Domain**.
 3. Views update the visible URL list without changing saved data.
 
 ### 7) Add Tags to a URL (Pro/Ultra tier)
 
-1. In **URL Library**, use **Tag** filter to narrow URLs by tag.
-2. Existing tags remain attached to each URL record.
-3. A URL can store up to 10 tags.
-4. URL views and tag filter can be combined with domain/date filters.
+1. In **URL Library**, click **Tags** on a URL row (or click the row) to expand tag controls.
+2. Add tags from suggestion chips or type your own tag and click **Add**.
+3. Use the **Tag** filter at the top to narrow URLs by tag.
+4. A URL can store up to 10 tags.
+5. URL views and tag filter can be combined with domain/date filters.
 
 ### 8) Add a Note to a URL (Pro/Ultra tier)
 

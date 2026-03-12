@@ -8,7 +8,9 @@ import {
   setUrlRecordStar,
   setUrlRecordTags,
   setUrlRecordNote,
+  removeUrlRecordMetadata,
 } from '../src/shared/repos/url-repo.js';
+import { normalizeUrlForCompare } from '../src/shared/url-utils.js';
 
 async function runTest(name, fn) {
   try {
@@ -165,4 +167,22 @@ await runTest('url repo enforces max 140 chars per URL note', async () => {
   const records = await loadUrlRecords();
   assert.equal(records[0].note.length, 140);
   assert.equal(records[0].note, longNote.slice(0, 140));
+});
+
+await runTest('url repo removes metadata for a deleted URL record', async () => {
+  const storageLocal = createStorageMock({ urls: ['https://remove-meta.example.com'] });
+  globalThis.indexedDB = undefined;
+  globalThis.chrome = {
+    runtime: { lastError: null },
+    storage: { local: storageLocal },
+  };
+
+  await loadUrlRecords();
+  await setUrlRecordTags('https://remove-meta.example.com', ['cleanup']);
+
+  const key = normalizeUrlForCompare('https://remove-meta.example.com');
+  assert.ok(storageLocal.state.urlMetaFallbackV1[key], 'metadata should exist before delete');
+
+  await removeUrlRecordMetadata('https://remove-meta.example.com');
+  assert.equal(storageLocal.state.urlMetaFallbackV1[key], undefined);
 });

@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.66 - 2026-03-12
+
+- Implementation-plan B-section refresh + closure:
+  - updated `docs/implementation-plan-url-library-v2.0.md` bug/hardening section to current URL Library paths and marked B-01/B-02/B-03 as closed.
+- B-gap verification hardening:
+  - added URL metadata deletion verification test in `tests/url-repo.test.mjs` for remove-flow integrity (B-01).
+  - added URL Library Change Log keyboard/focus-return contract test in `tests/url-library-change-log-accessibility.test.mjs` (B-02).
+  - wired new accessibility contract test into `npm run test:unit`.
+- Version sync:
+  - synchronized version to `1.9.66` across manifest/package/docs pointers.
+
 ## 1.9.65 - 2026-03-12
 
 - Visual parity reduction pass (URL Library exceptions):
