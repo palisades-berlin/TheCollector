@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.44`.
+Current extension version: `1.9.45`.
 
 ## Overview
 
@@ -18,11 +18,11 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- Added Design System 2.0 semantic token foundations in `src/shared/ui.css` (`--sc-color-surface-*`, `--sc-color-brand-*`, `--sc-motion-*`, `--sc-elevation-*`, `--sc-radius-*`, `--sc-density-*`).
-- Wired backward-compatible aliases from legacy `--sc-*` tokens to new semantic tiers to keep UI stable while migrating.
-- Preserved existing visual behavior while enabling incremental token migration across popup/history/preview/options.
-- Updated roadmap release baseline and changelog for the token-foundation slice.
-- Version bumped to `1.9.44`.
+- Completed Sprint 1 token-consumption pass across popup/history/preview/options by replacing remaining raw color/timing literals with shared semantic tokens.
+- Added shared semantic alias tokens for on-brand alpha states, overlay scrims, emphasis tints, skeleton stripes, and elevation variants in `src/shared/ui.css`.
+- Preserved existing interaction/IA while hardening visual-system consistency (no layout or flow redesign in this slice).
+- Kept visual parity gates green against the Figma baseline after the migration pass.
+- Version bumped to `1.9.45`.
 
 ## Core Architecture
 

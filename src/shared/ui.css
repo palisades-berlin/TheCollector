@@ -81,6 +81,30 @@
   --sc-color-info: #546e7a;
   --sc-color-info-soft: #78909c;
   --sc-color-disabled: #b0bec5;
+  --sc-color-on-brand-high: rgba(255, 255, 255, 0.9);
+  --sc-color-on-brand-mid: rgba(255, 255, 255, 0.74);
+  --sc-color-on-brand-low: rgba(255, 255, 255, 0.68);
+  --sc-color-on-brand-faint: rgba(255, 255, 255, 0.56);
+  --sc-color-on-brand-tint-1: rgba(255, 255, 255, 0.12);
+  --sc-color-on-brand-tint-2: rgba(255, 255, 255, 0.14);
+  --sc-color-on-brand-tint-3: rgba(255, 255, 255, 0.16);
+  --sc-color-on-brand-tint-4: rgba(255, 255, 255, 0.22);
+  --sc-color-on-brand-border-soft: rgba(255, 255, 255, 0.28);
+  --sc-color-on-brand-border-mid: rgba(255, 255, 255, 0.35);
+  --sc-color-on-brand-border-strong: rgba(255, 255, 255, 0.46);
+  --sc-color-on-brand-border-max: rgba(255, 255, 255, 0.68);
+  --sc-color-overlay-scrim: rgba(17, 28, 40, 0.38);
+  --sc-color-danger-tint: rgba(239, 154, 154, 0.25);
+  --sc-color-danger-tint-strong: rgba(239, 154, 154, 0.3);
+  --sc-color-danger-border-alpha: rgba(239, 154, 154, 0.6);
+  --sc-color-danger-border-alpha-strong: rgba(239, 154, 154, 0.7);
+  --sc-color-info-tint: rgba(179, 229, 252, 0.25);
+  --sc-color-info-border-alpha: rgba(179, 229, 252, 0.62);
+  --sc-color-skeleton-stripe-soft: rgba(120, 144, 156, 0.1);
+  --sc-color-skeleton-stripe-strong: rgba(120, 144, 156, 0.18);
+  --sc-shadow-card-soft: 0 4px 24px rgba(0, 0, 0, 0.1);
+  --sc-shadow-card-strong: 0 8px 28px rgba(0, 0, 0, 0.14);
+  --sc-shadow-float-soft: 0 6px 20px rgba(12, 50, 92, 0.12);
 
   --sc-header-grad: linear-gradient(
     135deg,
@@ -210,11 +234,11 @@
 }
 
 .sc-header-link {
-  color: rgba(255, 255, 255, 0.86);
+  color: var(--sc-color-on-brand-high);
   text-decoration: none;
   font-size: 12px;
   font-weight: 600;
-  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  border: 1.5px solid var(--sc-color-on-brand-border-soft);
   border-radius: var(--sc-r-sm);
   padding: 6px 10px;
   transition:
@@ -224,15 +248,15 @@
 }
 
 .sc-header-link:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: var(--sc-color-on-brand-tint-3);
   color: var(--sc-color-surface);
-  border-color: rgba(255, 255, 255, 0.46);
+  border-color: var(--sc-color-on-brand-border-strong);
 }
 
 .sc-header-link[aria-current='page'] {
   color: var(--sc-color-surface);
-  border-color: rgba(255, 255, 255, 0.68);
-  background: rgba(255, 255, 255, 0.14);
+  border-color: var(--sc-color-on-brand-border-max);
+  background: var(--sc-color-on-brand-tint-2);
 }
 
 .sc-page-enter {
@@ -499,7 +523,7 @@ select {
   align-items: flex-start;
   justify-content: center;
   padding: 28px 20px;
-  background: rgba(17, 28, 40, 0.38);
+  background: var(--sc-color-overlay-scrim);
 }
 
 kbd.sc-kbd {

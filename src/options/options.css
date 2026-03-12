@@ -65,7 +65,7 @@ body {
   display: grid;
   grid-template-columns: var(--options-nav-width) minmax(0, 1fr);
   gap: var(--options-gap);
-  animation: options-fade-up 240ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: options-fade-up var(--sc-t-slow) var(--sc-ease-spring) both;
 }
 
 .card {
@@ -73,22 +73,26 @@ body {
   border: 1px solid var(--sc-color-border-panel);
   border-radius: var(--sc-r-md);
   padding: var(--options-card-padding);
-  animation: options-fade-up 220ms cubic-bezier(0.2, 0, 0, 1) both;
+  animation: options-fade-up var(--sc-t-mid) var(--sc-ease) both;
   transition:
-    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+    transform var(--sc-t-mid) var(--sc-ease-spring),
+    box-shadow var(--sc-t-mid) var(--sc-ease),
+    border-color var(--sc-t-mid) var(--sc-ease);
 }
 
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(12, 50, 92, 0.12);
+  box-shadow: var(--sc-shadow-float-soft);
   border-color: var(--sc-color-border-panel);
 }
 
 .onboarding-banner {
   border-color: var(--sc-color-primary-border);
-  background: linear-gradient(180deg, rgba(227, 242, 253, 0.72) 0%, rgba(255, 255, 255, 1) 62%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--sc-color-primary-soft) 72%, transparent) 0%,
+    var(--sc-color-surface) 62%
+  );
 }
 
 .settings-nav {

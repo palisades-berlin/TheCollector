@@ -90,7 +90,7 @@ body {
   align-items: center;
   justify-content: space-between;
   box-shadow: var(--sc-sh-1), var(--sc-sh-2);
-  animation: popup-fade-up var(--popup-t-slow, 220ms) var(--popup-ease-spring) both;
+  animation: popup-fade-up var(--popup-t-slow) var(--popup-ease-spring) both;
 }
 
 .header-left {
@@ -103,7 +103,7 @@ body {
 }
 
 .badge {
-  background: rgba(255, 255, 255, 0.22);
+  background: var(--sc-color-on-brand-tint-4);
   font-size: 11px;
   font-weight: 600;
   padding: 2px 9px;
@@ -165,7 +165,7 @@ body {
 
 .panel {
   background: var(--popup-surface);
-  animation: popup-fade-up var(--popup-t-slow, 220ms) var(--popup-ease-spring) both;
+  animation: popup-fade-up var(--popup-t-slow) var(--popup-ease-spring) both;
 }
 
 .action-section,
@@ -456,7 +456,7 @@ body {
   border-bottom: 1px solid var(--popup-bg);
   gap: var(--popup-row-gap);
   transition: background 0.15s ease;
-  animation: popup-fade-up 180ms cubic-bezier(0.2, 0, 0, 1) both;
+  animation: popup-fade-up var(--popup-t-mid) var(--popup-ease) both;
 }
 
 .history-item {

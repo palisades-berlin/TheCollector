@@ -61,6 +61,7 @@
 
   --history-t-fast: var(--sc-t-fast);
   --history-t-mid: var(--sc-t-mid);
+  --history-t-slow: var(--sc-t-slow);
   --history-ease: var(--sc-ease);
 }
 
@@ -139,7 +140,7 @@ body {
 }
 
 .badge {
-  background: rgba(255, 255, 255, 0.22);
+  background: var(--sc-color-on-brand-tint-4);
   font-size: 11px;
   font-weight: 600;
   padding: 2px 9px;
@@ -153,9 +154,9 @@ body {
   align-items: center;
   gap: var(--sc-icon-gap);
   padding: var(--history-control-padding-wide);
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--sc-color-on-brand-tint-1);
   color: var(--history-surface);
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border: 1.5px solid var(--sc-color-on-brand-border-mid);
   border-radius: var(--history-r-sm);
   font-size: 12px;
   font-weight: 600;
@@ -169,18 +170,18 @@ body {
 }
 
 .btn-clear:hover {
-  background: rgba(239, 154, 154, 0.25);
-  border-color: rgba(239, 154, 154, 0.6);
+  background: var(--sc-color-danger-tint);
+  border-color: var(--sc-color-danger-border-alpha);
 }
 
 .btn-clear.btn-neutral:hover {
-  background: rgba(179, 229, 252, 0.25);
-  border-color: rgba(179, 229, 252, 0.62);
+  background: var(--sc-color-info-tint);
+  border-color: var(--sc-color-info-border-alpha);
 }
 
 .btn-clear.confirming {
-  background: rgba(239, 154, 154, 0.3);
-  border-color: rgba(239, 154, 154, 0.7);
+  background: var(--sc-color-danger-tint-strong);
+  border-color: var(--sc-color-danger-border-alpha-strong);
   animation: pulse 0.8s ease-in-out infinite alternate;
 }
 
@@ -332,7 +333,7 @@ body {
     border-color var(--history-t-mid) var(--history-ease),
     transform var(--history-t-mid) var(--history-ease),
     box-shadow var(--history-t-mid) var(--history-ease);
-  animation: card-in 0.22s cubic-bezier(0.2, 0, 0, 1) both;
+  animation: card-in var(--history-t-mid) var(--history-ease) both;
 }
 
 .card:hover {
@@ -343,7 +344,7 @@ body {
 
 .card.compare-selected {
   border-color: var(--history-primary-active);
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.25);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--history-primary) 25%, transparent);
 }
 
 .card-thumb {
@@ -364,10 +365,10 @@ body {
     linear-gradient(135deg, var(--history-surface-muted) 0%, var(--history-border) 100%),
     repeating-linear-gradient(
       -45deg,
-      rgba(120, 144, 156, 0.1) 0px,
-      rgba(120, 144, 156, 0.1) 8px,
-      rgba(120, 144, 156, 0.18) 8px,
-      rgba(120, 144, 156, 0.18) 16px
+      var(--sc-color-skeleton-stripe-soft) 0px,
+      var(--sc-color-skeleton-stripe-soft) 8px,
+      var(--sc-color-skeleton-stripe-strong) 8px,
+      var(--sc-color-skeleton-stripe-strong) 16px
     );
 }
 
@@ -497,7 +498,7 @@ body {
 .files-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(17, 28, 40, 0.38);
+  background: var(--sc-color-overlay-scrim);
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -506,19 +507,19 @@ body {
 }
 
 .files-overlay.entering {
-  animation: files-overlay-in 220ms ease-out both;
+  animation: files-overlay-in var(--history-t-mid) ease-out both;
 }
 
 .files-overlay.leaving {
-  animation: files-overlay-out 180ms ease-in both;
+  animation: files-overlay-out var(--history-t-fast) ease-in both;
 }
 
 .files-overlay.entering .files-panel {
-  animation: files-panel-in 220ms ease-out both;
+  animation: files-panel-in var(--history-t-mid) ease-out both;
 }
 
 .files-overlay.leaving .files-panel {
-  animation: files-panel-out 180ms ease-in both;
+  animation: files-panel-out var(--history-t-fast) ease-in both;
 }
 
 @keyframes files-overlay-in {

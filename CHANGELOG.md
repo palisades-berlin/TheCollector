@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.9.45 - 2026-03-12
+
+- Design System 2.0 Sprint 1 token-consumption completion slice:
+  - replaced remaining raw color/alpha/timing literals in `src/popup/popup.css`, `src/history/history.css`, `src/preview/preview.css`, and `src/options/options.css` with shared semantic tokens.
+  - expanded shared token aliases in `src/shared/ui.css` for on-brand alpha states, overlay scrim, emphasis tints, skeleton stripe states, and elevation variants used across existing components.
+- Maintained scope boundary from ADR 0010: no interaction/IA redesign; visual-system migration only.
+- Validation:
+  - `npm run check` passed.
+  - `npm run test:ui-calibration` passed (visual parity snapshots green).
+- Version sync:
+  - synchronized version to `1.9.45` across manifest/package/docs pointers.
+
 ## 1.9.44 - 2026-03-12
 
 - Design System 2.0 token-foundation slice (v2.0 Sprint 1):

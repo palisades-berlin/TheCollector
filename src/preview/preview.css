@@ -104,7 +104,7 @@ body {
 }
 
 .source-url {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--sc-color-on-brand-high);
   font-size: var(--sc-font-caption-size);
   text-decoration: none;
   overflow: hidden;
@@ -120,7 +120,7 @@ body {
 }
 
 .meta-item {
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--sc-color-on-brand-low);
   font-size: var(--sc-font-caption-size);
   white-space: nowrap;
   flex-shrink: 0;
@@ -185,7 +185,7 @@ body {
 
 .toolbar-pdf-group {
   padding-left: var(--preview-toolbar-group-gap);
-  border-left: 1px solid rgba(255, 255, 255, 0.22);
+  border-left: 1px solid var(--sc-color-on-brand-tint-4);
 }
 
 .toolbar-export-group {
@@ -211,7 +211,7 @@ body {
 
 .pdf-size-wrap {
   font-size: var(--sc-font-caption-size);
-  color: rgba(255, 255, 255, 0.74);
+  color: var(--sc-color-on-brand-mid);
   white-space: nowrap;
 }
 
@@ -222,17 +222,17 @@ body {
 /* Exception: header controls run on dark gradient and require inverted border/background treatment. */
 .toolbar .sc-btn,
 .toolbar .sc-select {
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--sc-color-on-brand-tint-2);
   color: var(--sc-color-surface);
-  border-color: rgba(255, 255, 255, 0.36);
+  border-color: var(--sc-color-on-brand-border-mid);
   min-height: 40px;
   padding: 0 12px;
 }
 
 .toolbar .sc-btn:hover,
 .toolbar .sc-select:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.62);
+  background: color-mix(in srgb, var(--sc-color-on-brand-tint-4) 70%, transparent);
+  border-color: color-mix(in srgb, var(--sc-color-on-brand-border-max) 92%, transparent);
 }
 
 .toolbar .sc-select option {
@@ -266,7 +266,7 @@ body {
 }
 
 .zoom-hint {
-  color: rgba(255, 255, 255, 0.56);
+  color: var(--sc-color-on-brand-faint);
   font-size: var(--sc-font-caption-size);
   white-space: nowrap;
 }
@@ -298,7 +298,7 @@ body {
 .screenshot {
   border: 1px solid var(--preview-border);
   border-radius: var(--sc-r-sm);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--sc-shadow-card-soft);
   display: block;
   transition:
     transform var(--sc-t-slow) var(--sc-ease-spring),
@@ -307,7 +307,7 @@ body {
 
 .stage:hover .screenshot {
   transform: translateY(-1px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+  box-shadow: var(--sc-shadow-card-strong);
 }
 
 .annotation-layer {
