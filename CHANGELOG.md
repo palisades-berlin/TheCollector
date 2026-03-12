@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.9.64 - 2026-03-12
+
+- CI visual parity stabilization follow-up (URL Library narrow snapshot):
+  - added measured temporary tolerance for `urls-library-narrow.png` (`maxDiffPixels: 600`) after GitHub macOS CI drift (`206` px).
+  - synchronized temporary exception tracking in `docs/visual-exception-register.md` and `docs/todo-list.md`.
+- CI quality gate formatting fix:
+  - normalized `docs/visual-exception-register.md` with Prettier to satisfy `format:check`.
+- Version sync:
+  - synchronized version to `1.9.64` across manifest/package/docs pointers.
+
 ## 1.9.63 - 2026-03-12
 
 - CI visual parity stabilization (URL Library desktop snapshot):

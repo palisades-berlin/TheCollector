@@ -417,6 +417,7 @@ test.describe('Figma parity snapshots', () => {
     await page.waitForTimeout(160);
     await expect(page).toHaveScreenshot('urls-library-narrow.png', {
       fullPage: true,
+      maxDiffPixels: 600,
     });
   });
 
