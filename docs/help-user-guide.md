@@ -20,7 +20,7 @@ Your tier is selected in **Settings**. It is a **display preference** — it con
 
 - **Basic:** full-page capture, URL collection, History filters, and PNG/JPG/PDF export. The essentials, kept simple.
 - **Pro:** everything in Basic, plus Smart Save Profiles (`Research`, `Interest`, `Private`), Queue Capture, Smart Revisit Nudges, Bulk Actions, and the Weekly Value Report.
-- **Ultra:** everything in Pro. Additional Ultra-only features are planned and will appear here as they ship.
+- **Ultra:** everything in Pro, plus Omnibox actions (`tc research`, `tc star`, `tc queue`).
 
 If you want access to a feature that is not visible, switch to a higher tier in **Settings**. You can switch freely at any time — there is no cost.
 
@@ -52,6 +52,14 @@ Smart Save Profiles are fixed presets in v1. Editable custom profiles are planne
 1. In **Capture**, click **Queue Current** or **Queue Window**.
 2. Click **Run Queue**.
 3. When complete, THE Collector opens **History** automatically with queue results.
+
+### 5) Use Omnibox Actions (Ultra tier)
+
+1. Place cursor in the browser address bar and type `tc`, then one of:
+   - `research` to queue the current tab with Research profile
+   - `star` to save the current URL to your URL list
+   - `queue` to queue the current tab for batch capture
+2. Press Enter to run the action.
 
 ## Tips and Quick Examples
 

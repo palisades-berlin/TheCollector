@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.9.43 - 2026-03-12
+
+- Omnibox action delivery + gating:
+  - implemented Ultra omnibox commands in service worker: `tc research`, `tc star`, `tc queue`
+  - added tier enforcement for omnibox actions (`omnibox_actions`) with non-Ultra fallback to Settings
+  - expanded integration coverage for omnibox gating and research queue behavior.
+- Help/docs parity for shipped omnibox behavior:
+  - updated end-user help and Settings FAQ to document omnibox commands
+  - updated docs-policy unshipped phrase gate to remove omnibox command phrases now that this feature is shipped.
+- Release-process drift remediation:
+  - added release workflow attestation gate requiring `manual-smoke: pass` in release notes
+  - hardened release publish script to require `MANUAL_SMOKE_ATTEST=pass` and to validate release-note attestation.
+- Drift ops workflow hardening:
+  - introduced/relocated operational follow-up tracking to `docs/todo-list.md` and removed completed items per policy.
+- Version sync:
+  - synchronized version to `1.9.43` across manifest/package/docs pointers.
+
 ## 1.9.42 - 2026-03-12
 
 - Roadmap/capability parity hardening:

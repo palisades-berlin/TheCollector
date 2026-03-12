@@ -16,6 +16,7 @@ import { loadRevisitNudgeState } from '../shared/repos/nudge-repo.js';
 import { listScreenshotMetaRecords } from '../shared/repos/screenshot-repo.js';
 import { canUseFeature } from '../shared/capabilities.js';
 import { CAPTURE_QUEUE_SESSION_KEY, CAPTURE_QUEUE_STORAGE_KEY } from '../shared/constants.js';
+import { CAPTURE_PROFILE } from '../shared/capture-profiles.js';
 
 const captureService = createCaptureService();
 const MENU_CAPTURE_PAGE = 'tc_capture_page';
@@ -61,6 +62,7 @@ function normalizeQueueEntries(entries) {
     normalized.push({
       tabId,
       title: String(entry?.title || `Tab ${tabId}`),
+      url: String(entry?.url || ''),
     });
   }
   return normalized;
@@ -252,24 +254,61 @@ chrome.contextMenus?.onClicked?.addListener(async (info, tab) => {
 
 chrome.omnibox?.onInputChanged?.addListener((_text, suggest) => {
   suggest([
-    { content: 'capture', description: 'Capture current page screenshot' },
-    { content: 'collect', description: 'Collect current page URL' },
+    { content: 'tc research', description: 'Queue current tab with Research profile (Ultra)' },
+    { content: 'tc star', description: 'Save current page URL to URL list (Ultra)' },
+    { content: 'tc queue', description: 'Queue current tab for batch capture (Ultra)' },
   ]);
 });
 
-chrome.omnibox?.onInputEntered?.addListener(async (text) => {
-  const query = String(text || '')
+function resolveOmniboxAction(input) {
+  const query = String(input || '')
     .trim()
     .toLowerCase();
+  if (query === 'tc research' || query === 'research') return 'research';
+  if (query === 'tc star' || query === 'star') return 'star';
+  if (query === 'tc queue' || query === 'queue') return 'queue';
+  return '';
+}
+
+async function enqueueTabForCapture(tab, profileId = null) {
+  if (!tab?.id || !isCollectibleUrl(tab.url)) return { ok: false, reason: 'non_collectible' };
+  const queueState = await readQueueState();
+  const existingQueue = Array.isArray(queueState.queue) ? queueState.queue : [];
+  const tabId = Number(tab.id);
+  const title = String(tab.title || `Tab ${tabId}`);
+  const url = String(tab.url || '');
+  const alreadyQueued = existingQueue.some((item) => Number(item.tabId) === tabId);
+  const nextQueue = alreadyQueued ? existingQueue : [...existingQueue, { tabId, title, url }];
+  await writeQueueState(nextQueue, {
+    status: 'idle',
+    updatedAt: Date.now(),
+    profileId: profileId || null,
+    total: nextQueue.length,
+    remainingTabIds: nextQueue.map((item) => Number(item.tabId)),
+  });
+  return { ok: true, queued: !alreadyQueued };
+}
+
+chrome.omnibox?.onInputEntered?.addListener(async (text) => {
+  const action = resolveOmniboxAction(text);
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab?.id) return;
   try {
-    if (query.startsWith('capture')) {
-      await captureService.captureTab(tab.id);
+    const settings = await getUserSettings();
+    if (!canUseFeature('omnibox_actions', settings)) {
+      await chrome.tabs.create({ url: chrome.runtime.getURL('src/options/options.html') });
       return;
     }
-    if (query.startsWith('collect')) {
-      await collectUrl(tab.url, { via: 'omnibox' });
+    if (action === 'research') {
+      await enqueueTabForCapture(tab, CAPTURE_PROFILE.RESEARCH);
+      return;
+    }
+    if (action === 'star') {
+      await collectUrl(tab.url, { via: 'omnibox_star', intent: 'star' });
+      return;
+    }
+    if (action === 'queue') {
+      await enqueueTabForCapture(tab, null);
       return;
     }
     // Fallback: open history for unknown keyword input.

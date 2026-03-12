@@ -47,12 +47,6 @@ const UNSHIPPED_PHRASES = [
   // Command Palette — planned for v1.10
   'Cmd/Ctrl + K',
   'Cmd/Ctrl+K',
-  // Omnibox Actions — planned for v2.1
-  'tc research',
-  'tc star',
-  'tc queue',
-  'omnibox action',
-  'Omnibox action',
   // URL Collector 2.0 views — planned for v2.0
   'Saved URL Views',
   'By Domain',

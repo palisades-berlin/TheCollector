@@ -14,6 +14,8 @@ function createEventBus() {
 
 function createChromeMock() {
   const runtimeOnMessage = createEventBus();
+  const syncStore = {};
+  const sessionStore = {};
   return {
     chrome: {
       runtime: {
@@ -37,6 +39,16 @@ function createChromeMock() {
         query: async () => [],
         create: async () => ({}),
       },
+      storage: {
+        sync: {
+          get: async (defaults) => ({ ...(defaults || {}), ...syncStore }),
+          set: async (next) => Object.assign(syncStore, next || {}),
+        },
+        session: {
+          get: async (defaults) => ({ ...(defaults || {}), ...sessionStore }),
+          set: async (next) => Object.assign(sessionStore, next || {}),
+        },
+      },
       permissions: {
         contains: async () => false,
         request: async () => false,
@@ -50,6 +62,8 @@ function createChromeMock() {
       },
     },
     runtimeOnMessage,
+    syncStore,
+    sessionStore,
   };
 }
 
@@ -166,6 +180,45 @@ async function testUnknownMessageType() {
   process.stdout.write('PASS service worker ignores unknown message types\n');
 }
 
+async function testOmniboxRestrictedForNonUltra() {
+  const { chrome } = createChromeMock();
+  let openedUrl = '';
+  chrome.tabs.query = async () => [{ id: 7, url: 'https://example.com', title: 'Example' }];
+  chrome.tabs.create = async ({ url }) => {
+    openedUrl = url;
+    return { id: 9 };
+  };
+
+  globalThis.chrome = chrome;
+  await importFresh(swPath);
+  const onInputEntered = chrome.omnibox.onInputEntered.listeners[0];
+  assert.equal(typeof onInputEntered, 'function');
+
+  await onInputEntered('tc queue');
+  assert.match(openedUrl, /src\/options\/options\.html$/);
+  process.stdout.write('PASS omnibox actions are gated for non-Ultra tier\n');
+}
+
+async function testOmniboxResearchQueuesTabForUltra() {
+  const { chrome, syncStore, sessionStore } = createChromeMock();
+  syncStore.capabilityTier = 'ultra';
+  chrome.tabs.query = async () => [{ id: 11, url: 'https://example.com', title: 'Example' }];
+
+  globalThis.chrome = chrome;
+  await importFresh(swPath);
+  const onInputEntered = chrome.omnibox.onInputEntered.listeners[0];
+  assert.equal(typeof onInputEntered, 'function');
+
+  await onInputEntered('tc research');
+  const queue = sessionStore.popupCaptureQueueV1;
+  const session = sessionStore.captureQueueSessionV1;
+  assert.equal(Array.isArray(queue), true);
+  assert.equal(queue.length, 1);
+  assert.equal(queue[0].tabId, 11);
+  assert.equal(session?.profileId, 'research');
+  process.stdout.write('PASS omnibox research queues current tab for Ultra tier\n');
+}
+
 async function run() {
   try {
     await testInvalidCaptureStartPayload();
@@ -174,6 +227,8 @@ async function run() {
     await testInvalidCaptureQueuePayload();
     await testInvalidPtDownloadPayload();
     await testUnknownMessageType();
+    await testOmniboxRestrictedForNonUltra();
+    await testOmniboxResearchQueuesTabForUltra();
   } catch (err) {
     process.stderr.write(`FAIL integration service worker suite\n${err.stack}\n`);
     process.exitCode = 1;

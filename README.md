@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.42`.
+Current extension version: `1.9.43`.
 
 ## Overview
 
@@ -18,11 +18,11 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- Roadmap tier registry aligned with current roadmap terminology: added Ultra keys for `omnibox_actions`, `admin_config_profile`, `capture_diff_monitoring`, and `smart_url_collections`.
-- Removed stale Ultra capability key `cross_browser_core` from the shared tier map.
-- Expanded guardrail test coverage for `roadmapFeatureFetch` (tier denial, local-only enforcement, tracking payload rejection, and success path).
-- Corrected architecture runtime component mapping to current `src/background/*` modules.
-- Version bumped to `1.9.42`.
+- Added Ultra omnibox actions: `tc research`, `tc star`, and `tc queue` with capability-tier gating in service worker.
+- Synced shipped omnibox behavior across both help surfaces and updated docs-policy to treat omnibox commands as shipped.
+- Added release-process attestation gate: release notes must include `manual-smoke: pass` and publish script now requires `MANUAL_SMOKE_ATTEST=pass`.
+- Completed drift cleanup items and moved unresolved follow-up tracking to `docs/todo-list.md`.
+- Version bumped to `1.9.43`.
 
 ## Core Architecture
 
@@ -212,6 +212,8 @@ Create a release zip that excludes local/development artifacts such as `node_mod
 For store submission, use the zip uploaded by CI (`the-collector-release-zip`) as the source-of-truth artifact, not a local machine zip.
 `./scripts/package-release.sh` validates version alignment between `manifest.json`, top `CHANGELOG.md` entry, and exact `HEAD` tag (when present).
 Before upload, run `npm run test:e2e:manual` once to smoke test capture + URL export + history + settings in a real extension context.
+When creating/publishing a GitHub release asset with `./scripts/publish-release-with-asset.sh`, run it as `MANUAL_SMOKE_ATTEST=pass ./scripts/publish-release-with-asset.sh`.
+Release notes must include the exact line `manual-smoke: pass`.
 
 Release notes policy: keep notes in `CHANGELOG.md` only; do not add `GITHUB_RELEASE_*.md` files.
 

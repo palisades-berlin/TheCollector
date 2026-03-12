@@ -53,7 +53,7 @@ Implemented roadmap features and current delivery level:
 
 Versioning status:
 
-1. Current release baseline: **`1.9.42`**.
+1. Current release baseline: **`1.9.43`**.
 2. No roadmap **v2** feature is fully shipped yet.
 3. Smart Save Profiles editable management remains planned for v2.0.
 4. Command Palette (Cmd/Ctrl+K) remains **unshipped**; user-facing help/docs are aligned to the shipped feature set.

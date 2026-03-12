@@ -48,13 +48,15 @@ npm run check
 
 ```bash
 ./scripts/package-release.sh
-./scripts/publish-release-with-asset.sh
+MANUAL_SMOKE_ATTEST=pass ./scripts/publish-release-with-asset.sh
 ```
 
 Packaging script guardrails:
 
 - top `CHANGELOG.md` version must match `manifest.json` version
 - if `HEAD` is exactly tagged, tag version must match manifest/changelog version
+- release publishing script requires manual smoke attestation (`MANUAL_SMOKE_ATTEST=pass`)
+- GitHub release notes must include the exact line `manual-smoke: pass` (release-assets workflow enforces this)
 - release publishing script uploads generated zip to existing/new GitHub release tag
 
 ## Release Artifact Source of Truth
