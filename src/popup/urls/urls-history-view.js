@@ -15,7 +15,7 @@ function getActionLabel(actionType) {
     case URL_HISTORY_ACTION.RESTORE_LAST_CLEAR:
       return 'Restored last clear';
     case URL_HISTORY_ACTION.RESTORE_HISTORY:
-      return 'Restored from history';
+      return 'Restored from change log';
     default:
       return 'Updated list';
   }
@@ -29,29 +29,29 @@ function formatSnapshotTime(ts) {
   }
 }
 
-function createHistoryItemEl(entry) {
+function createChangeLogItemEl(entry) {
   const item = document.createElement('div');
-  item.className = 'history-item';
-  item.dataset.historyId = entry.id;
+  item.className = 'change-log-item';
+  item.dataset.changeLogId = entry.id;
 
   const title = document.createElement('div');
-  title.className = 'history-item-title';
+  title.className = 'change-log-item-title';
   const firstUrl = entry.urls[0] || '(no URL)';
   title.textContent =
     entry.urls.length > 1 ? `${firstUrl} (+${entry.urls.length - 1} more)` : firstUrl;
   title.title = firstUrl;
 
   const meta = document.createElement('div');
-  meta.className = 'history-item-meta';
+  meta.className = 'change-log-item-meta';
   meta.textContent = `${formatSnapshotTime(entry.createdAt)} - ${getActionLabel(entry.actionType)}`;
 
   const actions = document.createElement('div');
-  actions.className = 'history-item-actions';
+  actions.className = 'change-log-item-actions';
   actions.innerHTML = `
-    <button class="btn-footer" data-history-action="restore">Restore</button>
-    <button class="btn-footer" data-history-action="copy">Copy</button>
-    <button class="btn-footer" data-history-action="txt">TXT</button>
-    <button class="btn-footer" data-history-action="csv">CSV</button>
+    <button class="btn-footer" data-change-log-action="restore">Restore</button>
+    <button class="btn-footer" data-change-log-action="copy">Copy</button>
+    <button class="btn-footer" data-change-log-action="txt">TXT</button>
+    <button class="btn-footer" data-change-log-action="csv">CSV</button>
   `;
 
   item.appendChild(title);
@@ -60,15 +60,25 @@ function createHistoryItemEl(entry) {
   return item;
 }
 
-export function createUrlsHistoryView({
+export function createUrlsChangeLogView({
   urlsMainViewEl,
+  urlsChangeLogViewEl,
+  urlChangeLogListEl,
+  urlChangeLogEmptyEl,
+  urlChangeLogMoreBtn,
+  // Backward-compatible argument aliases for legacy wiring.
   urlsHistoryViewEl,
   urlHistoryListEl,
   urlHistoryEmptyEl,
   urlHistoryMoreBtn,
 }) {
   let entries = [];
-  let historyPage = 0;
+  let changeLogPage = 0;
+
+  const changeLogViewEl = urlsChangeLogViewEl || urlsHistoryViewEl;
+  const changeLogListEl = urlChangeLogListEl || urlHistoryListEl;
+  const changeLogEmptyEl = urlChangeLogEmptyEl || urlHistoryEmptyEl;
+  const changeLogMoreBtn = urlChangeLogMoreBtn || urlHistoryMoreBtn;
 
   function setEntries(nextEntries) {
     entries = Array.isArray(nextEntries) ? nextEntries : [];
@@ -79,41 +89,41 @@ export function createUrlsHistoryView({
   }
 
   function setPage(page) {
-    historyPage = Math.max(0, Number(page) || 0);
+    changeLogPage = Math.max(0, Number(page) || 0);
   }
 
   function incrementPage() {
-    historyPage += 1;
+    changeLogPage += 1;
   }
 
   function resetPage() {
-    historyPage = 0;
+    changeLogPage = 0;
   }
 
-  function renderHistoryList() {
-    urlHistoryListEl.innerHTML = '';
+  function renderChangeLogList() {
+    changeLogListEl.innerHTML = '';
     if (!entries.length) {
-      urlHistoryListEl.style.display = 'none';
-      urlHistoryEmptyEl.style.display = 'flex';
-      urlHistoryMoreBtn.classList.add('hidden');
+      changeLogListEl.style.display = 'none';
+      changeLogEmptyEl.style.display = 'flex';
+      changeLogMoreBtn.classList.add('hidden');
       return;
     }
 
-    const visibleCount = Math.min(entries.length, (historyPage + 1) * URL_HISTORY_PAGE_SIZE);
+    const visibleCount = Math.min(entries.length, (changeLogPage + 1) * URL_HISTORY_PAGE_SIZE);
     const visibleEntries = entries.slice(0, visibleCount);
-    urlHistoryListEl.style.display = 'block';
-    urlHistoryEmptyEl.style.display = 'none';
+    changeLogListEl.style.display = 'block';
+    changeLogEmptyEl.style.display = 'none';
     const fragment = document.createDocumentFragment();
     visibleEntries.forEach((entry) => {
-      fragment.appendChild(createHistoryItemEl(entry));
+      fragment.appendChild(createChangeLogItemEl(entry));
     });
-    urlHistoryListEl.appendChild(fragment);
-    urlHistoryMoreBtn.classList.toggle('hidden', visibleCount >= entries.length);
+    changeLogListEl.appendChild(fragment);
+    changeLogMoreBtn.classList.toggle('hidden', visibleCount >= entries.length);
   }
 
-  function showHistoryView(show) {
+  function showChangeLogView(show) {
     urlsMainViewEl.classList.toggle('hidden', show);
-    urlsHistoryViewEl.classList.toggle('hidden', !show);
+    changeLogViewEl.classList.toggle('hidden', !show);
   }
 
   return {
@@ -122,7 +132,12 @@ export function createUrlsHistoryView({
     setPage,
     incrementPage,
     resetPage,
-    renderHistoryList,
-    showHistoryView,
+    renderChangeLogList,
+    showChangeLogView,
+    // Backward-compatible method aliases for legacy call sites.
+    renderHistoryList: renderChangeLogList,
+    showHistoryView: showChangeLogView,
   };
 }
+
+export const createUrlsHistoryView = createUrlsChangeLogView;

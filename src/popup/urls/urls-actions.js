@@ -12,6 +12,7 @@ export function wireUrlsPanelEvents({
   renderList,
   reportError,
   state,
+  changeLogView,
   historyView,
   setClearConfirmTimer,
   getClearConfirmTimer,
@@ -26,12 +27,23 @@ export function wireUrlsPanelEvents({
     emailBtn,
     restoreBtn,
     clearBtn,
+    urlChangeLogBtn,
+    urlChangeLogBackBtn,
+    urlChangeLogClearBtn,
+    urlChangeLogListEl,
+    urlChangeLogMoreBtn,
     urlHistoryBtn,
     urlHistoryBackBtn,
     urlHistoryClearBtn,
     urlHistoryListEl,
     urlHistoryMoreBtn,
   } = els;
+  const activeChangeLogView = changeLogView || historyView;
+  const activeChangeLogBtn = urlChangeLogBtn || urlHistoryBtn;
+  const activeChangeLogBackBtn = urlChangeLogBackBtn || urlHistoryBackBtn;
+  const activeChangeLogClearBtn = urlChangeLogClearBtn || urlHistoryClearBtn;
+  const activeChangeLogListEl = urlChangeLogListEl || urlHistoryListEl;
+  const activeChangeLogMoreBtn = urlChangeLogMoreBtn || urlHistoryMoreBtn;
 
   function updateRestoreButtonState() {
     const canRestore = canRestoreUrls(getCurrentUrlCount(), getUndoUrlCount());
@@ -52,12 +64,12 @@ export function wireUrlsPanelEvents({
     updateRestoreButtonState();
   }
 
-  async function openHistoryView() {
-    historyView.resetPage();
+  async function openChangeLogView() {
+    activeChangeLogView.resetPage();
     const entries = await state.refreshHistoryEntries();
-    historyView.setEntries(entries);
-    historyView.renderHistoryList();
-    historyView.showHistoryView(true);
+    activeChangeLogView.setEntries(entries);
+    activeChangeLogView.renderChangeLogList();
+    activeChangeLogView.showChangeLogView(true);
   }
 
   urlListEl.addEventListener('click', async (e) => {
@@ -411,90 +423,92 @@ export function wireUrlsPanelEvents({
     }
   });
 
-  urlHistoryBtn.addEventListener('click', async () => {
+  activeChangeLogBtn.addEventListener('click', async () => {
     try {
-      await openHistoryView();
+      await openChangeLogView();
     } catch (err) {
-      reportError(err, 'Could not load URL history');
+      reportError(err, 'Could not load URL change log');
     }
   });
 
-  urlHistoryBackBtn.addEventListener('click', () => {
-    historyView.showHistoryView(false);
+  activeChangeLogBackBtn.addEventListener('click', () => {
+    activeChangeLogView.showChangeLogView(false);
   });
 
-  urlHistoryClearBtn.addEventListener('click', async () => {
+  activeChangeLogClearBtn.addEventListener('click', async () => {
     try {
       await saveUrlHistory([]);
-      historyView.setEntries([]);
-      historyView.resetPage();
-      historyView.renderHistoryList();
-      showToast('URL history cleared');
+      activeChangeLogView.setEntries([]);
+      activeChangeLogView.resetPage();
+      activeChangeLogView.renderChangeLogList();
+      showToast('Change log cleared');
     } catch (err) {
-      reportError(err, 'Could not clear URL history');
+      reportError(err, 'Could not clear URL change log');
     }
   });
 
-  urlHistoryListEl.addEventListener('click', async (e) => {
+  activeChangeLogListEl.addEventListener('click', async (e) => {
     const target = e.target instanceof Element ? e.target : e.target?.parentElement;
     if (!target) return;
-    const actionEl = target.closest('button[data-history-action]');
+    const actionEl = target.closest('button[data-change-log-action], button[data-history-action]');
     if (!actionEl) return;
-    const itemEl = actionEl.closest('.history-item');
+    const itemEl = actionEl.closest('.change-log-item, .history-item');
     if (!itemEl) return;
 
-    const historyId = itemEl.dataset.historyId || '';
-    const entry = historyView.getEntries().find((it) => it.id === historyId);
+    const changeLogId = itemEl.dataset.changeLogId || itemEl.dataset.historyId || '';
+    const action = actionEl.dataset.changeLogAction || actionEl.dataset.historyAction;
+    const entry = activeChangeLogView.getEntries().find((it) => it.id === changeLogId);
     if (!entry) {
-      showToast('History entry no longer available');
-      await openHistoryView();
+      showToast('Change log entry no longer available');
+      await openChangeLogView();
       return;
     }
 
     try {
-      if (actionEl.dataset.historyAction === 'copy') {
+      if (action === 'copy') {
         await state.copyUrlsToClipboard(entry.urls);
         showToast(`Copied ${formatUrlCount(entry.urls.length)}`);
         return;
       }
 
-      if (actionEl.dataset.historyAction === 'txt') {
-        await state.exportUrlsAsTxt(entry.urls, 'urls-history.txt');
+      if (action === 'txt') {
+        await state.exportUrlsAsTxt(entry.urls, 'urls-change-log.txt');
         showToast(`Saved ${formatUrlCount(entry.urls.length)} as TXT`);
         return;
       }
 
-      if (actionEl.dataset.historyAction === 'csv') {
-        await state.exportUrlsAsCsv(entry.urls, 'urls-history.csv');
+      if (action === 'csv') {
+        await state.exportUrlsAsCsv(entry.urls, 'urls-change-log.csv');
         showToast(`Saved ${formatUrlCount(entry.urls.length)} as CSV`);
         return;
       }
 
-      if (actionEl.dataset.historyAction === 'restore') {
-        const result = await state.mutations.restoreUrlsFromHistory(historyId);
+      if (action === 'restore') {
+        const result = await state.mutations.restoreUrlsFromHistory(changeLogId);
         if (!result.restored) {
           showToast('Could not restore this snapshot');
-          await openHistoryView();
+          await openChangeLogView();
           return;
         }
         renderList(result.urls);
         await refreshUndoState();
-        historyView.showHistoryView(false);
+        activeChangeLogView.showChangeLogView(false);
         showToast(`Restored ${formatUrlCount(result.restoredCount)}`);
       }
     } catch (err) {
-      reportError(err, 'Could not run history action');
+      reportError(err, 'Could not run change log action');
     }
   });
 
-  urlHistoryMoreBtn.addEventListener('click', () => {
-    historyView.incrementPage();
-    historyView.renderHistoryList();
+  activeChangeLogMoreBtn.addEventListener('click', () => {
+    activeChangeLogView.incrementPage();
+    activeChangeLogView.renderChangeLogList();
   });
 
   return {
     refreshUndoState,
     updateRestoreButtonState,
-    showHistoryView: historyView.showHistoryView,
+    showChangeLogView: activeChangeLogView.showChangeLogView,
+    showHistoryView: activeChangeLogView.showHistoryView,
   };
 }

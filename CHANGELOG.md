@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.9.61 - 2026-03-12
+
+- Sprint 2C naming cleanup (`2C-01`, `2C-02`):
+  - aligned popup URL operation microcopy to `Change Log` terminology.
+  - renamed popup URL change-log DOM/data handles in legacy panel modules from `history`-specific selectors to `change-log` selectors.
+  - updated popup change-log export filenames to `urls-change-log.txt` and `urls-change-log.csv`.
+  - preserved backward-compatible aliases for legacy `history` call sites during transition.
+- Documentation:
+  - updated README URL collection feature wording from `URL Collection History` to `URL Change Log`.
+- Version sync:
+  - synchronized version to `1.9.61` across manifest/package/docs pointers.
+
 ## 1.9.60 - 2026-03-12
 
 - URL Library Sprint 2B-04:
