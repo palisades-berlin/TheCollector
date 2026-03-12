@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.9.44 - 2026-03-12
+
+- Design System 2.0 token-foundation slice (v2.0 Sprint 1):
+  - added semantic token tiers in `src/shared/ui.css`:
+    - `--sc-color-surface-{1..4}`
+    - `--sc-color-brand-{primary,accent,success,warning,danger}`
+    - `--sc-motion-{quick,base,slow}`
+    - `--sc-elevation-{0..4}`
+    - `--sc-radius-{xs,sm,md,lg,pill}`
+    - `--sc-density-{compact,default,comfortable}`
+  - mapped legacy shared `--sc-*` aliases to semantic tiers for migration-safe compatibility.
+- No interaction or IA redesign in this slice; visual behavior remains stable while enabling incremental per-surface migration.
+- Version sync:
+  - synchronized version to `1.9.44` across manifest/package/docs pointers.
+
 ## 1.9.43 - 2026-03-12
 
 - Omnibox action delivery + gating:

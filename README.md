@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.43`.
+Current extension version: `1.9.44`.
 
 ## Overview
 
@@ -18,11 +18,11 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- Added Ultra omnibox actions: `tc research`, `tc star`, and `tc queue` with capability-tier gating in service worker.
-- Synced shipped omnibox behavior across both help surfaces and updated docs-policy to treat omnibox commands as shipped.
-- Added release-process attestation gate: release notes must include `manual-smoke: pass` and publish script now requires `MANUAL_SMOKE_ATTEST=pass`.
-- Completed drift cleanup items and moved unresolved follow-up tracking to `docs/todo-list.md`.
-- Version bumped to `1.9.43`.
+- Added Design System 2.0 semantic token foundations in `src/shared/ui.css` (`--sc-color-surface-*`, `--sc-color-brand-*`, `--sc-motion-*`, `--sc-elevation-*`, `--sc-radius-*`, `--sc-density-*`).
+- Wired backward-compatible aliases from legacy `--sc-*` tokens to new semantic tiers to keep UI stable while migrating.
+- Preserved existing visual behavior while enabling incremental token migration across popup/history/preview/options.
+- Updated roadmap release baseline and changelog for the token-foundation slice.
+- Version bumped to `1.9.44`.
 
 ## Core Architecture
 
