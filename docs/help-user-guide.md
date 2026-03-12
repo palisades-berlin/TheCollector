@@ -88,6 +88,12 @@ Smart Save Profiles are fixed presets in v1. Editable custom profiles are planne
 2. Use bulk actions to **Copy**, **Open**, **TXT/CSV export**, or **Delete** selected URLs.
 3. Use **Select Visible** to quickly select the current filtered list.
 
+### 10) Use URL Change Log in URL Library
+
+1. Open **URL Library** and select the **Change Log** view tab.
+2. Review snapshot entries and run **Restore**, **Copy**, **TXT**, or **CSV** actions.
+3. Press **Esc** or use **Back to URL List** to return focus to where you opened Change Log.
+
 ## Tips and Quick Examples
 
 - If a page cannot be captured, switch to a regular website tab and try again.

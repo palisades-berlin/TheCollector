@@ -57,6 +57,7 @@ const els = {
   emptyState: document.getElementById('emptyState'),
   urlsView: document.getElementById('urlsView'),
   changeLogView: document.getElementById('changeLogView'),
+  changeLogBackBtn: document.getElementById('changeLogBackBtn'),
   changeLogList: document.getElementById('changeLogList'),
   changeLogEmpty: document.getElementById('changeLogEmpty'),
   viewAll: document.getElementById('view-all'),
@@ -76,6 +77,7 @@ let notesEnabled = false;
 let bulkActionsEnabled = false;
 const URL_NOTE_MAX = 140;
 const selectedUrls = new Set();
+let changeLogReturnFocusEl = null;
 
 const TAG_SUGGESTIONS = [
   'Research',
@@ -157,7 +159,8 @@ function getRecordByUrl(url) {
   return records.find((record) => normalizeUrlForCompare(record.url) === normalizedUrl) || null;
 }
 
-function setActiveView(view) {
+function setActiveView(view, { focusReturn = false } = {}) {
+  const wasChangeLog = activeView === 'change-log';
   activeView = view;
   const map = {
     all: els.viewAll,
@@ -177,9 +180,36 @@ function setActiveView(view) {
   if (showChangeLog) {
     renderChangeLog();
     renderBulkActions();
+    els.changeLogBackBtn?.focus();
     return;
   }
   renderUrls();
+
+  if (wasChangeLog && focusReturn) {
+    const fallback = els.viewChangeLog;
+    const target =
+      changeLogReturnFocusEl instanceof HTMLElement && changeLogReturnFocusEl.isConnected
+        ? changeLogReturnFocusEl
+        : fallback;
+    target?.focus();
+    changeLogReturnFocusEl = null;
+  }
+}
+
+function openChangeLog(fromEl = null) {
+  if (fromEl instanceof HTMLElement) {
+    changeLogReturnFocusEl = fromEl;
+  } else if (document.activeElement instanceof HTMLElement) {
+    changeLogReturnFocusEl = document.activeElement;
+  } else {
+    changeLogReturnFocusEl = null;
+  }
+  setActiveView('change-log');
+}
+
+function closeChangeLogWithFocusReturn() {
+  if (activeView !== 'change-log') return;
+  setActiveView('all', { focusReturn: true });
 }
 
 function getFilteredRecords() {
@@ -682,18 +712,20 @@ els.changeLogList.addEventListener('click', async (event) => {
 document.addEventListener('keydown', (event) => {
   if (event.key !== 'Escape') return;
   if (activeView !== 'change-log') return;
-  setActiveView('all');
-  els.viewChangeLog.blur();
-  els.viewAll.focus();
+  closeChangeLogWithFocusReturn();
 });
 
 els.viewAll.addEventListener('click', () => setActiveView('all'));
 els.viewStarred.addEventListener('click', () => setActiveView('starred'));
 els.viewToday.addEventListener('click', () => setActiveView('today'));
 els.viewDomain.addEventListener('click', () => setActiveView('domain'));
-els.viewChangeLog.addEventListener('click', async () => {
+els.viewChangeLog.addEventListener('click', async (event) => {
   historyEntries = await refreshHistoryEntries();
-  setActiveView('change-log');
+  openChangeLog(event.currentTarget);
+});
+
+els.changeLogBackBtn?.addEventListener('click', () => {
+  closeChangeLogWithFocusReturn();
 });
 
 for (const input of [els.filterDomain, els.filterTag, els.filterFrom, els.filterTo]) {

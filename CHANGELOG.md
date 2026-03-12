@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.9.60 - 2026-03-12
+
+- URL Library Sprint 2B-04:
+  - promoted URL Change Log as a first-class URL Library sub-surface with explicit toolbar/back affordance.
+  - implemented focus-return contract: pressing `Esc` or `Back to URL List` returns focus to the origin control that opened Change Log.
+  - preserved existing Change Log snapshot actions and data behavior.
+- Validation:
+  - `npm run lint` passed.
+  - `npm run test:unit` passed.
+  - `npm run test:docs-policy` passed.
+  - `npm run test:ui-calibration` passed.
+  - `npm run format:check` passed.
+- Version sync:
+  - synchronized version to `1.9.60` across manifest/package/docs pointers.
+
 ## 1.9.59 - 2026-03-12
 
 - URL Library Sprint 2B-03:

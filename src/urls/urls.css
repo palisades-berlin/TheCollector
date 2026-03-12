@@ -72,6 +72,20 @@ body {
   gap: 8px;
 }
 
+.change-log-toolbar {
+  margin-bottom: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.change-log-hint {
+  font-size: 12px;
+  color: var(--sc-color-text-muted);
+}
+
 .bulk-actions-bar {
   margin-bottom: 10px;
   padding: 8px;
