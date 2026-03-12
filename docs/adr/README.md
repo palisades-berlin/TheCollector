@@ -21,3 +21,5 @@ operations, or governance.
 - [0008-capture-queue-batch-v1.md](./0008-capture-queue-batch-v1.md)
 - [0009-always-free-local-only-product-model.md](./0009-always-free-local-only-product-model.md)
 - [0010-design-system-2.0-sequencing.md](./0010-design-system-2.0-sequencing.md)
+- [0011-url-library-canonical-surface.md](./0011-url-library-canonical-surface.md)
+- [0012-navigation-and-naming-semantics.md](./0012-navigation-and-naming-semantics.md)

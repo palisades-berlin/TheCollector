@@ -50,11 +50,11 @@ Implemented roadmap features and current delivery level:
 4. Weekly Value Report: **v1 delivered slice** (`1.9.24`) — Settings card only.
 5. Capture Queue + Batch Mode: **v1 delivered slice + hardening fixes** (`1.9.28` through `1.9.33`).
 6. Extension Help Page: **v1 delivered slice** (docs + Settings `Help & FAQ` section in `1.9.35`).
-7. URL Collector 2.0: **Saved URL Views + URL Tags + URL Notes + URL Bulk Actions v1 delivered; Change Log promoted on URL Library; Sprint 2A migration completed; popup retained as quick-capture surface** (`1.9.46` through `1.9.60`).
+7. URL Collector 2.0: **Saved URL Views + URL Tags + URL Notes + URL Bulk Actions v1 delivered; Change Log promoted on URL Library; Sprint 2A migration completed; popup retained as quick-capture surface; legacy popup URL panel-swap retired** (`1.9.46` through `1.9.62`).
 
 Versioning status:
 
-1. Current release baseline: **`1.9.60`**.
+1. Current release baseline: **`1.9.62`**.
 2. No roadmap **v2** feature is fully shipped yet.
 3. Smart Save Profiles editable management remains planned for v2.0.
 4. Command Palette (Cmd/Ctrl+K) remains **unshipped**; user-facing help/docs are aligned to the shipped feature set.
@@ -73,31 +73,31 @@ Authoritative visibility contract:
 
 ### Feature-to-Tier Matrix (Current planning scope)
 
-| Feature Area      | Feature                                                                      | Tier  | Primary Surfaces                 | Visibility Rule             |
-| ----------------- | ---------------------------------------------------------------------------- | ----- | -------------------------------- | --------------------------- |
-| Core capture      | Save current page, add note, tags, collection select                         | Basic | Popup, Sidebar                   | Always visible              |
-| Core retrieval    | Search, filter, sort, open, copy, delete                                     | Basic | Sidebar, History                 | Always visible              |
-| Core settings     | Tier selector, sync toggle, data import/export, shortcuts base               | Basic | Settings                         | Always visible              |
-| Core preview      | Save PNG/JPG/PDF, copy image, PDF size select                                | Basic | Preview                          | Always visible              |
-| Quick wins        | Smart Save Profiles                                                          | Pro   | Popup, Settings                  | Hidden unless tier >= Pro   |
-| Quick wins        | History profile filter                                                       | Pro   | History, Sidebar                 | Hidden unless tier >= Pro   |
-| Quick wins        | Bulk Actions v1                                                              | Pro   | History, Sidebar                 | Hidden unless tier >= Pro   |
-| Quick wins        | Weekly Value Report (v1: Settings card; v2: popup footer card)               | Pro   | Settings, Popup                  | Hidden unless tier >= Pro   |
-| Quick wins        | Smart Revisit Nudges                                                         | Pro   | Settings, Popup                  | Hidden unless tier >= Pro   |
-| Quick wins        | Capture Queue + Batch Mode (v1: popup queue + sequential run)                | Pro   | Popup, History                   | Hidden unless tier >= Pro   |
-| Quick wins        | Quick Note at Save (post-capture inline note prompt)                         | Pro   | Popup                            | Hidden unless tier >= Pro   |
-| Intelligence      | Command Palette (`Cmd/Ctrl+K`)                                               | Ultra | Popup, Sidebar, History, Preview | Hidden unless tier >= Ultra |
-| Intelligence      | Omnibox Actions (`tc research`, `tc star`, `tc queue`)                       | Ultra | Omnibox                          | Hidden unless tier >= Ultra |
-| Intelligence      | Magic Mode v1 (rule-based domain→profile suggestion)                         | Ultra | Popup, Sidebar                   | Hidden unless tier >= Ultra |
-| Intelligence      | Workflow Automations v1 (3–4 preset automation toggles)                      | Ultra | Settings                         | Hidden unless tier >= Ultra |
-| Intelligence      | Admin Config Profile (importable JSON for defaults + privacy rules)          | Ultra | Settings                         | Hidden unless tier >= Ultra |
-| Monitoring        | Capture Diff as Monitoring (scheduled re-capture + auto-diff + notification) | Ultra | Settings, History                | Hidden unless tier >= Ultra |
-| URL Collector 2.0 | Saved URL Views (Starred, Today, By Domain)                                  | Pro   | URL Library page                 | Hidden unless tier >= Pro   |
-| URL Collector 2.0 | URL Tags (8 pre-populated + free text, chip UI, shared taxonomy)             | Pro   | URL Library page                 | Hidden unless tier >= Pro   |
-| URL Collector 2.0 | URL Bulk Actions (copy/export/delete/open)                                   | Pro   | URL Library page                 | Hidden unless tier >= Pro   |
-| URL Collector 2.0 | URL Notes (140-char, inline expand on click)                                 | Pro   | URL Library page                 | Hidden unless tier >= Pro   |
-| URL Collector 2.0 | Smart URL Collections (domain-grouping view, auto-generated)                 | Ultra | URL Library page, Sidebar        | Hidden unless tier >= Ultra |
-| Sharing           | Team Spaces Lite (self-contained ZIP + viewer.html export)                   | Ultra | History, Preview                 | Hidden unless tier >= Ultra |
+| Feature Area      | Feature                                                                      | Tier  | Primary Surfaces                     | Visibility Rule             |
+| ----------------- | ---------------------------------------------------------------------------- | ----- | ------------------------------------ | --------------------------- |
+| Core capture      | Save current page, add note, tags, collection select                         | Basic | Popup, Sidebar                       | Always visible              |
+| Core retrieval    | Search, filter, sort, open, copy, delete                                     | Basic | Sidebar, Screenshots                 | Always visible              |
+| Core settings     | Tier selector, sync toggle, data import/export, shortcuts base               | Basic | Settings                             | Always visible              |
+| Core preview      | Save PNG/JPG/PDF, copy image, PDF size select                                | Basic | Preview                              | Always visible              |
+| Quick wins        | Smart Save Profiles                                                          | Pro   | Popup, Settings                      | Hidden unless tier >= Pro   |
+| Quick wins        | Screenshots profile filter                                                   | Pro   | Screenshots, Sidebar                 | Hidden unless tier >= Pro   |
+| Quick wins        | Bulk Actions v1                                                              | Pro   | Screenshots, Sidebar                 | Hidden unless tier >= Pro   |
+| Quick wins        | Weekly Value Report (v1: Settings card; v2: popup footer card)               | Pro   | Settings, Popup                      | Hidden unless tier >= Pro   |
+| Quick wins        | Smart Revisit Nudges                                                         | Pro   | Settings, Popup                      | Hidden unless tier >= Pro   |
+| Quick wins        | Capture Queue + Batch Mode (v1: popup queue + sequential run)                | Pro   | Popup, Screenshots                   | Hidden unless tier >= Pro   |
+| Quick wins        | Quick Note at Save (post-capture inline note prompt)                         | Pro   | Popup                                | Hidden unless tier >= Pro   |
+| Intelligence      | Command Palette (`Cmd/Ctrl+K`)                                               | Ultra | Popup, Sidebar, Screenshots, Preview | Hidden unless tier >= Ultra |
+| Intelligence      | Omnibox Actions (`tc research`, `tc star`, `tc queue`)                       | Ultra | Omnibox                              | Hidden unless tier >= Ultra |
+| Intelligence      | Magic Mode v1 (rule-based domain→profile suggestion)                         | Ultra | Popup, Sidebar                       | Hidden unless tier >= Ultra |
+| Intelligence      | Workflow Automations v1 (3–4 preset automation toggles)                      | Ultra | Settings                             | Hidden unless tier >= Ultra |
+| Intelligence      | Admin Config Profile (importable JSON for defaults + privacy rules)          | Ultra | Settings                             | Hidden unless tier >= Ultra |
+| Monitoring        | Capture Diff as Monitoring (scheduled re-capture + auto-diff + notification) | Ultra | Settings, Screenshots                | Hidden unless tier >= Ultra |
+| URL Collector 2.0 | Saved URL Views (Starred, Today, By Domain)                                  | Pro   | URL Library page                     | Hidden unless tier >= Pro   |
+| URL Collector 2.0 | URL Tags (8 pre-populated + free text, chip UI, shared taxonomy)             | Pro   | URL Library page                     | Hidden unless tier >= Pro   |
+| URL Collector 2.0 | URL Bulk Actions (copy/export/delete/open)                                   | Pro   | URL Library page                     | Hidden unless tier >= Pro   |
+| URL Collector 2.0 | URL Notes (140-char, inline expand on click)                                 | Pro   | URL Library page                     | Hidden unless tier >= Pro   |
+| URL Collector 2.0 | Smart URL Collections (domain-grouping view, auto-generated)                 | Ultra | URL Library page, Sidebar            | Hidden unless tier >= Ultra |
+| Sharing           | Team Spaces Lite (self-contained ZIP + viewer.html export)                   | Ultra | Screenshots, Preview                 | Hidden unless tier >= Ultra |
 
 Roadmap certainty note:
 
@@ -158,7 +158,7 @@ Scope boundary: this sprint migrates the visual system. It does NOT simultaneous
 
 6. Saved URL Views: `Starred` (always available, doubles as Revisit Queue), `Today`, `By Domain` (Pro/Ultra). Starred is a flag, not a separate list — it filters the existing URL list.
 7. URL Tags: 8 pre-populated tag suggestions seeded from profile names (Research, Interest, Private) plus common tags (reading, follow-up, reference, archive, later). Free-text entry allowed. Chip UI on URL row, collapsed by default, expand on click. Max 10 tags per URL. Shared taxonomy with capture tags. No custom tag management in v1.
-8. URL Bulk Actions: copy / export / delete / open. Reuse bulk-action patterns from History Bulk Actions v1.
+8. URL Bulk Actions: copy / export / delete / open. Reuse bulk-action patterns from Screenshots Bulk Actions v1.
 9. URL Notes: 140-character hard limit. Note icon on the URL row; click to expand inline text field. Never always-visible. Persisted alongside URL metadata in IndexedDB.
 10. Smart URL Collections: domain-grouping view only — collapsible sections in "By Domain" view, auto-generated from registered domain. Zero ML, zero user configuration. No topic clustering in v1.
 
@@ -238,7 +238,7 @@ For historical record — all features below are delivered and stable:
 | Feature                       | Shipped In | Tier  | Notes                                       |
 | ----------------------------- | ---------- | ----- | ------------------------------------------- |
 | Smart Save Profiles v1        | 1.9.18–38  | Pro   | Fixed presets only; editable v2 in v2.0     |
-| History Profile Filter        | 1.9.38     | Pro   | Part of Smart Save Profiles completion      |
+| Screenshots Profile Filter    | 1.9.38     | Pro   | Part of Smart Save Profiles completion      |
 | Bulk Actions v1               | 1.9.23     | Pro   | Download + delete; tag/move in v2.0         |
 | Weekly Value Report v1        | 1.9.24     | Pro   | Settings card only; popup card in v1.10     |
 | Smart Revisit Nudges v1       | 1.9.20     | Pro   | Local evaluator, cadence control            |
@@ -557,7 +557,7 @@ that these interfaces are already shipped in the current release baseline.
 
 9. Quick Note at Save: appears 3 seconds after capture, dismiss does not block next capture.
 10. Omnibox: `tc research` queues the current tab and applies Research profile in under 200ms.
-11. Capture Diff as Monitoring: scheduled re-capture runs without user interaction; diff result surfaces in History with change indicator.
+11. Capture Diff as Monitoring: scheduled re-capture runs without user interaction; diff result surfaces in Screenshots with change indicator.
 
 ---
 

@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.61`.
+Current extension version: `1.9.62`.
 
 ## Overview
 
@@ -32,7 +32,7 @@ The capture pipeline is split across extension contexts:
 - `content script`: page metrics, target detection, scrolling, temporary fixed/sticky suppression
 - `offscreen document`: tile stitching and final image persistence
 - `preview page`: review, editing, and export
-- `history page`: stored capture browsing and deletion
+- `screenshots page` (`src/history/history.html`): stored capture browsing and deletion
 - `Settings page`: export defaults, auto-download behavior, optional permissions
 
 ## Features
@@ -43,11 +43,11 @@ The capture pipeline is split across extension contexts:
 - Keyboard shortcut: `Alt+Shift+P`
 - Smart Save Profiles (Pro/Ultra tier): fixed presets `Research`, `Interest`, `Private`
 - Default Smart Save Profile can be set in Settings (Pro/Ultra tier)
-- Read-only Smart Save usage summaries in History and Settings (Pro/Ultra tier)
+- Read-only Smart Save usage summaries in Screenshots and Settings (Pro/Ultra tier)
 - Capture Queue + Batch Mode v1 (Pro/Ultra tier):
   - queue current tab or current window tabs
   - run queued captures sequentially from popup
-  - after completion, History opens automatically with queue result summary
+  - after completion, Screenshots opens automatically with queue result summary
 - Tile-by-tile full-page capture via `chrome.tabs.captureVisibleTab`
 - Fixed/sticky element suppression during capture pass
 - Capture target detection/locking:
@@ -85,7 +85,7 @@ The capture pipeline is split across extension contexts:
 ### Preview & Editing
 
 - Click-to-zoom preview
-- Visual Diff mode (History compare 2 screenshots) with translucent change boxes:
+- Visual Diff mode (Screenshots compare 2 screenshots) with translucent change boxes:
   - green = added/brighter
   - red = removed/darker
 - Editing tools:
@@ -111,16 +111,16 @@ The capture pipeline is split across extension contexts:
 - Smart PDF page splitting for `A4`/`Letter` (heuristic break selection)
 - In split overview mode, export/edit actions are intentionally disabled
 
-### History & Storage
+### Screenshots & Storage
 
 - Local persistence in IndexedDB
 - Open, single delete, and clear-all flows
-- Client-side History filters:
+- Client-side Screenshots filters:
   - domain text filter
   - date range filter (from/to)
   - export type filter (`PNG`, `JPG`, `PDF`)
   - profile filter (`Research`, `Interest`, `Private`) for Pro/Ultra tier users
-- History diagnostics:
+- Screenshots diagnostics:
   - Per-capture “why slow” hints (slow duration, retries/backoffs, oversized auto-scale fallback)
   - Latest capture failure note (if the most recent run failed)
   - Dismiss control (`×`) for the latest failure note
@@ -173,7 +173,7 @@ No runtime environment variables are required for the extension. See `.env.examp
 1. Open the extension popup.
 2. Use the `Capture` tab for screenshots (`Alt+Shift+P` also works).
 3. Use the `URLs` tab to collect, clean, and export links.
-4. Use History and Settings for screenshot management and defaults.
+4. Use Screenshots and Settings for screenshot management and defaults.
 
 ## Local checks
 
@@ -217,7 +217,7 @@ Create a release zip that excludes local/development artifacts such as `node_mod
 
 For store submission, use the zip uploaded by CI (`the-collector-release-zip`) as the source-of-truth artifact, not a local machine zip.
 `./scripts/package-release.sh` validates version alignment between `manifest.json`, top `CHANGELOG.md` entry, and exact `HEAD` tag (when present).
-Before upload, run `npm run test:e2e:manual` once to smoke test capture + URL export + history + settings in a real extension context.
+Before upload, run `npm run test:e2e:manual` once to smoke test capture + URL export + screenshots + settings in a real extension context.
 When creating/publishing a GitHub release asset with `./scripts/publish-release-with-asset.sh`, run it as `MANUAL_SMOKE_ATTEST=pass ./scripts/publish-release-with-asset.sh`.
 Release notes must include the exact line `manual-smoke: pass`.
 
@@ -226,7 +226,7 @@ Release notes policy: keep notes in `CHANGELOG.md` only; do not add `GITHUB_RELE
 ## Security & Privacy
 
 - Captures remain in extension-local storage unless downloaded by the user.
-- Deleting from History removes stored records from IndexedDB.
+- Deleting from Screenshots removes stored records from IndexedDB.
 - Uninstalling the extension clears extension storage per browser behavior.
 - No backend upload path exists in this codebase.
 

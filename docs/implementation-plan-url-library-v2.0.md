@@ -4,7 +4,7 @@
 
 # Date: 2026-03-12
 
-# Status: ACTIVE — Sprint 2A complete, Sprint 2B-01/2B-02/2B-03/2B-04 shipped, remaining Sprint 2B slices in progress
+# Status: ACTIVE — Sprint 2A complete, Sprint 2B-01/2B-02/2B-03/2B-04 shipped, Sprint 2C-01/2C-02/2C-03/2C-04/2C-05 shipped
 
 ## PREREQUISITE GATE
 
@@ -183,7 +183,7 @@ Execution order (critical path): 2B-01 + 2B-02 in parallel → 2B-03 → 2B-04 �
 
 ### Steps
 
-Execution order (critical path): 2C-03 in parallel with 2C-01 → 2C-02 → 2C-04 → 2C-05.
+Execution order (critical path): 2C-03 in parallel with 2C-01 → 2C-02 → 2C-04 → 2C-05. Current status: 2C-01/2C-02/2C-03/2C-04/2C-05 completed.
 
 1. **2C-01 — Rename user-facing popup `History` label to `Change Log` and align URL operation microcopy consistently.**
 
@@ -292,6 +292,12 @@ Execution order (target): B-01 + B-02 + B-03 land in earliest Sprint 2A hardenin
 
 1. **ADR: URL Library as canonical URL organizational surface** (required if this redefines roadmap architecture from popup-centric to page-centric ownership).
 2. **ADR: URL navigation model and naming semantics** (required if `History`/`Screenshots`/`Change Log` nomenclature and cross-surface nav are standardized as long-term policy).
+
+Status update (2026-03-12):
+
+- Completed with:
+  - `docs/adr/0011-url-library-canonical-surface.md`
+  - `docs/adr/0012-navigation-and-naming-semantics.md`
 
 ## HELP DOCUMENTATION IMPACT
 

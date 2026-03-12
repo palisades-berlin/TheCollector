@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.9.62 - 2026-03-12
+
+- Sprint 2C cleanup (`2C-03`, `2C-04`, `2C-05`):
+  - aligned remaining screenshot-surface popup wording from `History` to `Screenshots` (`Open in Screenshots`).
+  - retired legacy popup URL panel-swap implementation artifacts now superseded by URL Library Change Log.
+  - removed dead popup URL panel-swap styling and deleted unused legacy modules:
+    - `src/popup/urls/urls-actions.js`
+    - `src/popup/urls/urls-history-view.js`
+  - completed nomenclature/help cleanup pass across roadmap + README: URL operations use `Change Log`; screenshot surface references use `Screenshots`.
+- Version sync:
+  - synchronized version to `1.9.62` across manifest/package/docs pointers.
+
 ## 1.9.61 - 2026-03-12
 
 - Sprint 2C naming cleanup (`2C-01`, `2C-02`):
