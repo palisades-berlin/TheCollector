@@ -149,6 +149,38 @@ body {
   min-height: 30px;
 }
 
+.url-note-controls {
+  margin-top: 8px;
+  display: grid;
+  gap: 8px;
+}
+
+.url-note-controls.hidden {
+  display: none;
+}
+
+.url-note-input {
+  min-height: 58px;
+  resize: vertical;
+}
+
+.url-note-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.url-note-count {
+  font-size: 11px;
+  color: var(--sc-color-text-muted);
+}
+
+.url-note-actions {
+  display: flex;
+  gap: 6px;
+}
+
 .url-actions,
 .change-log-actions {
   display: flex;

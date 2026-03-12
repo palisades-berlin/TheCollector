@@ -328,6 +328,25 @@ export async function setUrlRecordTags(url, tags) {
   return next;
 }
 
+export async function setUrlRecordNote(url, note) {
+  if (typeof url !== 'string' || !url) return null;
+  const normalizedUrl = normalizeUrlForCompare(url);
+  if (!normalizedUrl) return null;
+  const records = await ensureUrlMetadata([url]);
+  const existing = records.get(normalizedUrl) || buildDefaultUrlMeta(url);
+  const next = normalizeUrlMetaRecord(
+    {
+      ...existing,
+      url,
+      note: normalizeUrlNote(note),
+      updatedAt: Date.now(),
+    },
+    url
+  );
+  await writeUrlMetaRecord(next);
+  return next;
+}
+
 export async function removeUrlRecordMetadata(url) {
   if (typeof url !== 'string' || !url) return;
   const normalizedUrl = normalizeUrlForCompare(url);

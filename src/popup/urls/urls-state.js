@@ -12,6 +12,7 @@ import {
   loadUrlRecords as loadUrlRecordsRepo,
   setUrlRecordStar,
   setUrlRecordTags,
+  setUrlRecordNote,
   removeUrlRecordMetadata,
 } from '../../shared/repos/url-repo.js';
 
@@ -66,6 +67,10 @@ export async function setUrlStar(url, starred) {
 
 export async function setUrlTags(url, tags) {
   return setUrlRecordTags(url, tags);
+}
+
+export async function setUrlNote(url, note) {
+  return setUrlRecordNote(url, note);
 }
 
 export async function removeUrlMetadata(url) {

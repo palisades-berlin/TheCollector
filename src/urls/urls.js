@@ -18,6 +18,7 @@ import {
   copyUrlsToClipboard,
   setUrlStar,
   setUrlTags,
+  setUrlNote,
   removeUrlMetadata,
   createUrlMutations,
   formatUrlCount,
@@ -62,6 +63,8 @@ let undoCount = 0;
 let clearConfirmTimer = null;
 let historyEntries = [];
 let tagsEnabled = false;
+let notesEnabled = false;
+const URL_NOTE_MAX = 140;
 
 const TAG_SUGGESTIONS = [
   'Research',
@@ -217,6 +220,8 @@ function renderDomainView(filtered) {
 
 function renderUrlRow(record) {
   const tags = Array.isArray(record.tags) ? record.tags : [];
+  const note = typeof record.note === 'string' ? record.note : '';
+  const hasNote = note.length > 0;
   const tagsHtml = tags.length
     ? `<div class="url-tags">${tags
         .map(
@@ -242,6 +247,24 @@ function renderUrlRow(record) {
         </div>
       </div>`
     : '';
+  const noteControlsHtml = notesEnabled
+    ? `<div class="url-note-controls hidden">
+        <textarea
+          class="sc-input url-note-input"
+          rows="2"
+          maxlength="${URL_NOTE_MAX}"
+          placeholder="Add note (max ${URL_NOTE_MAX} characters)"
+          data-action="note-input"
+        >${esc(note)}</textarea>
+        <div class="url-note-row">
+          <span class="url-note-count" data-action="note-count">${note.length}/${URL_NOTE_MAX}</span>
+          <div class="url-note-actions">
+            <button class="sc-btn sc-btn-secondary sc-btn-sm" type="button" data-action="note-save">Save</button>
+            <button class="sc-btn sc-btn-sm" type="button" data-action="note-clear">Clear</button>
+          </div>
+        </div>
+      </div>`
+    : '';
   return `
     <div class="url-row" data-url="${esc(record.url)}">
       <div class="url-main">
@@ -249,14 +272,21 @@ function renderUrlRow(record) {
         <div class="url-meta">
           <span>${esc(getRegisteredDomain(record.url) || 'unknown')}</span>
           <span>${new Date(record.createdAt || Date.now()).toLocaleString()}</span>
+          ${notesEnabled && hasNote ? '<span class="sc-pill">Note saved</span>' : ''}
         </div>
         ${tagsHtml}
         ${tagControlsHtml}
+        ${noteControlsHtml}
       </div>
       <div class="url-actions">
         ${
           tagsEnabled
             ? '<button class="sc-btn sc-btn-sm" data-action="toggle-tags" aria-expanded="false">Tags</button>'
+            : ''
+        }
+        ${
+          notesEnabled
+            ? '<button class="sc-btn sc-btn-sm" data-action="toggle-note" aria-expanded="false">Note</button>'
             : ''
         }
         <button class="sc-btn sc-btn-sm" data-action="star" aria-pressed="${record.starred ? 'true' : 'false'}">${record.starred ? 'Unstar' : 'Star'}</button>
@@ -338,6 +368,15 @@ function reportError(err, fallback) {
   showToast(fallback);
 }
 
+function updateNoteCounter(row) {
+  const input = row.querySelector('textarea[data-action="note-input"]');
+  const counter = row.querySelector('[data-action="note-count"]');
+  if (!input || !counter) return;
+  const next = String(input.value || '').slice(0, URL_NOTE_MAX);
+  if (next !== input.value) input.value = next;
+  counter.textContent = `${next.length}/${URL_NOTE_MAX}`;
+}
+
 els.urlList.addEventListener('click', async (event) => {
   const rawTarget = event.target instanceof Element ? event.target : null;
   if (!rawTarget) return;
@@ -380,6 +419,20 @@ els.urlList.addEventListener('click', async (event) => {
     if (nextExpanded) {
       const input = controls.querySelector('input[data-action="tag-input"]');
       input?.focus();
+    }
+    return;
+  }
+
+  if (action === 'toggle-note') {
+    const controls = row.querySelector('.url-note-controls');
+    if (!controls) return;
+    const nextExpanded = controls.classList.contains('hidden');
+    controls.classList.toggle('hidden', !nextExpanded);
+    target.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
+    if (nextExpanded) {
+      const input = controls.querySelector('textarea[data-action="note-input"]');
+      input?.focus();
+      updateNoteCounter(row);
     }
     return;
   }
@@ -438,6 +491,20 @@ els.urlList.addEventListener('click', async (event) => {
     return;
   }
 
+  if (action === 'note-save' || action === 'note-clear') {
+    try {
+      const input = row.querySelector('textarea[data-action="note-input"]');
+      if (!input) return;
+      const nextNote = action === 'note-clear' ? '' : String(input.value || '').trim();
+      await setUrlNote(url, nextNote);
+      await reload();
+      showToast(action === 'note-clear' ? 'Note cleared' : 'Note saved');
+    } catch (err) {
+      reportError(err, 'Could not update note');
+    }
+    return;
+  }
+
   if (action === 'star') {
     try {
       const next = target.getAttribute('aria-pressed') !== 'true';
@@ -480,6 +547,14 @@ els.urlList.addEventListener('keydown', (event) => {
   if (!row) return;
   const addButton = row.querySelector('button[data-action="tag-add"]');
   addButton?.click();
+});
+
+els.urlList.addEventListener('input', (event) => {
+  const target = event.target instanceof Element ? event.target : null;
+  if (!target || target.getAttribute('data-action') !== 'note-input') return;
+  const row = target.closest('.url-row');
+  if (!row) return;
+  updateNoteCounter(row);
 });
 
 els.changeLogList.addEventListener('click', async (event) => {
@@ -547,8 +622,10 @@ async function initFeatureVisibility() {
   try {
     const settings = await getUserSettings();
     tagsEnabled = canUseFeature('url_tags', settings);
+    notesEnabled = canUseFeature('url_notes', settings);
   } catch {
     tagsEnabled = false;
+    notesEnabled = false;
   }
 }
 

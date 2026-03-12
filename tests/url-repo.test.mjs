@@ -7,6 +7,7 @@ import {
   loadUrlRecords,
   setUrlRecordStar,
   setUrlRecordTags,
+  setUrlRecordNote,
 } from '../src/shared/repos/url-repo.js';
 
 async function runTest(name, fn) {
@@ -134,4 +135,34 @@ await runTest('url repo enforces max 10 tags per URL record', async () => {
   const records = await loadUrlRecords();
   assert.equal(records[0].tags.length, 10);
   assert.deepEqual(records[0].tags, tags.slice(0, 10));
+});
+
+await runTest('url repo persists notes and enforces note normalization', async () => {
+  const storageLocal = createStorageMock({ urls: ['https://note.example.com'] });
+  globalThis.indexedDB = undefined;
+  globalThis.chrome = {
+    runtime: { lastError: null },
+    storage: { local: storageLocal },
+  };
+
+  await loadUrlRecords();
+  await setUrlRecordNote('https://note.example.com', '  keep this note  ');
+  const records = await loadUrlRecords();
+  assert.equal(records[0].note, 'keep this note');
+});
+
+await runTest('url repo enforces max 140 chars per URL note', async () => {
+  const storageLocal = createStorageMock({ urls: ['https://note-limit.example.com'] });
+  globalThis.indexedDB = undefined;
+  globalThis.chrome = {
+    runtime: { lastError: null },
+    storage: { local: storageLocal },
+  };
+
+  const longNote = 'x'.repeat(180);
+  await loadUrlRecords();
+  await setUrlRecordNote('https://note-limit.example.com', longNote);
+  const records = await loadUrlRecords();
+  assert.equal(records[0].note.length, 140);
+  assert.equal(records[0].note, longNote.slice(0, 140));
 });

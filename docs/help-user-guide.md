@@ -20,7 +20,7 @@ You will mainly use three areas:
 Your tier is selected in **Settings**. It is a **display preference** — it controls how much of the feature surface is shown. All levels are free. Each tier includes everything in the one below it.
 
 - **Basic:** full-page capture, URL collection, Screenshots filters, and PNG/JPG/PDF export. The essentials, kept simple.
-- **Pro:** everything in Basic, plus Smart Save Profiles (`Research`, `Interest`, `Private`), Queue Capture, Smart Revisit Nudges, Bulk Actions, Weekly Value Report, and URL Library views/tags.
+- **Pro:** everything in Basic, plus Smart Save Profiles (`Research`, `Interest`, `Private`), Queue Capture, Smart Revisit Nudges, Bulk Actions, Weekly Value Report, and URL Library views/tags/notes.
 - **Ultra:** everything in Pro, plus Omnibox actions (`tc research`, `tc star`, `tc queue`).
 
 If you want access to a feature that is not visible, switch to a higher tier in **Settings**. You can switch freely at any time — there is no cost.
@@ -74,6 +74,13 @@ Smart Save Profiles are fixed presets in v1. Editable custom profiles are planne
 2. Existing tags remain attached to each URL record.
 3. A URL can store up to 10 tags.
 4. URL views and tag filter can be combined with domain/date filters.
+
+### 8) Add a Note to a URL (Pro/Ultra tier)
+
+1. In **URL Library**, click **Note** on a URL row.
+2. Enter a short note inline and click **Save**.
+3. Notes are limited to 140 characters per URL.
+4. Use **Clear** to remove a saved note.
 
 ## Tips and Quick Examples
 

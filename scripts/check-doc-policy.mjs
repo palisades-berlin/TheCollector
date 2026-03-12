@@ -47,8 +47,6 @@ const UNSHIPPED_PHRASES = [
   // Command Palette — planned for v1.10
   'Cmd/Ctrl + K',
   'Cmd/Ctrl+K',
-  // URL Notes — planned for v2.0
-  'Add a Note to a URL',
   // Magic Mode — planned for v2.1
   'Magic Mode',
   // Workflow Automations — planned for v2.1

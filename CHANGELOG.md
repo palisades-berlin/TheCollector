@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.9.58 - 2026-03-12
+
+- URL Library Sprint 2B-02:
+  - added inline URL Notes editing on URL Library rows (expand/collapse, save, clear, max 140 chars).
+  - added Pro capability gate key `url_notes` and aligned capability tests.
+  - activated URL note persistence updates in shared URL metadata repo/state flow.
+- Policy/docs sync:
+  - updated shipped help surfaces for URL Notes behavior (`docs/help-user-guide.md` and Settings `Help & FAQ`).
+  - removed shipped URL Notes phrase from `UNSHIPPED_PHRASES` in `scripts/check-doc-policy.mjs`.
+  - updated roadmap progress baseline for URL Collector 2.0 URL Notes delivery.
+- Version sync:
+  - synchronized version to `1.9.58` across manifest/package/docs pointers.
+
 ## 1.9.57 - 2026-03-12
 
 - Visual hardening reduction pass (evidence-driven):
