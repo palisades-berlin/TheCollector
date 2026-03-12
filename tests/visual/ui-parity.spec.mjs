@@ -16,6 +16,7 @@ const FIGMA_NODE_MAP = {
   sharedPrimitives: '1:4',
   onboardingDefault: '1:830',
   popupStates: '1:4',
+  urlLibraryStates: '19:2',
   historyStates: '1:4',
   optionsStates: '1:753',
   previewStates: '1:4',
@@ -30,6 +31,8 @@ const FIGMA_SNAPSHOT_NODE_MAP = {
   'popup-urls-default.png': '1:4',
   'popup-error-state.png': '1:885',
   'popup-success-state.png': '1:885',
+  'urls-library-desktop.png': '19:2',
+  'urls-library-narrow.png': '19:2',
   'history-default.png': '1:4',
   'history-empty.png': '1:885',
   'history-loading.png': '1:885',
@@ -397,6 +400,22 @@ test.describe('Figma parity snapshots', () => {
     });
     await expect(page).toHaveScreenshot('popup-success-state.png', {
       maxDiffPixels: 10400,
+    });
+  });
+
+  test('urls library / desktop + narrow filters layout', async ({ page }) => {
+    await page.setViewportSize({ width: 1360, height: 920 });
+    await page.goto(`${baseUrl}/src/urls/urls.html`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(220);
+
+    await expect(page).toHaveScreenshot('urls-library-desktop.png', {
+      fullPage: true,
+    });
+
+    await page.setViewportSize({ width: 900, height: 920 });
+    await page.waitForTimeout(160);
+    await expect(page).toHaveScreenshot('urls-library-narrow.png', {
+      fullPage: true,
     });
   });
 

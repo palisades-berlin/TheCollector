@@ -406,17 +406,6 @@ body {
   flex-direction: column;
   align-items: stretch;
 }
-.change-log-topbar {
-  padding: var(--popup-footer-padding);
-  border-bottom: 1px solid var(--popup-border);
-  display: flex;
-  gap: var(--popup-row-gap);
-  align-items: center;
-}
-.change-log-footer {
-  padding: var(--popup-footer-padding);
-  border-top: 1px solid var(--popup-border);
-}
 
 .shortcut {
   font-size: 11px;
@@ -509,38 +498,6 @@ body {
   gap: var(--popup-row-gap);
   transition: background 0.15s ease;
   animation: popup-fade-up var(--popup-t-mid) var(--popup-ease) both;
-}
-
-.change-log-item {
-  padding: var(--sc-sp-3);
-  border-bottom: 1px solid var(--popup-bg);
-  display: grid;
-  gap: var(--popup-row-gap);
-}
-
-.change-log-item-title {
-  font-size: 11px;
-  color: var(--popup-text);
-  font-weight: 600;
-  font-family: var(--sc-font-mono);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.change-log-item-meta {
-  font-size: var(--sc-font-caption-size);
-  color: var(--popup-text-faint);
-}
-
-.change-log-item-actions {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--popup-row-gap);
-}
-
-.change-log-item-actions .btn-footer {
-  flex: none;
 }
 
 .url-item:hover {
@@ -735,7 +692,6 @@ body {
 }
 
 .footer .sc-btn:hover,
-.change-log-topbar .sc-btn:hover,
 .footer-row .sc-btn:hover,
 .tabs .sc-tab:hover {
   transform: none;

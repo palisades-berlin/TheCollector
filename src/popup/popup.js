@@ -315,7 +315,7 @@ chrome.runtime.onMessage.addListener((msg) => {
       const success = Number(msg?.payload?.success || 0);
       const failed = Number(msg?.payload?.failed || 0);
       doneMsgEl.classList.remove('hidden');
-      doneMsgTextEl.textContent = `Queue finished: ${success} succeeded, ${failed} failed.`;
+      doneMsgTextEl.textContent = `Queue finished: ${success} succeeded, ${failed} failed. Screenshots opened.`;
       loadPersistedCaptureQueue()
         .then((nextQueue) => {
           captureQueue = nextQueue;
