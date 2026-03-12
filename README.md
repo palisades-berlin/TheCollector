@@ -174,6 +174,7 @@ No runtime environment variables are required for the extension. See `.env.examp
 ```bash
 npm run lint
 npm run test:repo-hygiene
+npm run test:docs-policy
 npm run test:unit
 npm run test:coverage
 npm run test:coverage:runtime
@@ -182,9 +183,12 @@ npm run test:integration
 npm run test:security-policy
 npm run test:stability
 npm run test:performance
+npx playwright install chromium
 npm run test:e2e:smoke
 npm run test:e2e:visual
+npm run test:e2e:manual
 npm run format:check
+npm run check
 ```
 
 ## Developer checks

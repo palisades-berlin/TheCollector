@@ -15,13 +15,12 @@ import { evaluateRevisitNudge } from '../shared/nudges.js';
 import { loadRevisitNudgeState } from '../shared/repos/nudge-repo.js';
 import { listScreenshotMetaRecords } from '../shared/repos/screenshot-repo.js';
 import { canUseFeature } from '../shared/capabilities.js';
+import { CAPTURE_QUEUE_SESSION_KEY, CAPTURE_QUEUE_STORAGE_KEY } from '../shared/constants.js';
 
 const captureService = createCaptureService();
 const MENU_CAPTURE_PAGE = 'tc_capture_page';
 const MENU_COLLECT_PAGE = 'tc_collect_page_url';
 const MENU_COLLECT_LINK = 'tc_collect_link_url';
-const CAPTURE_QUEUE_STORAGE_KEY = 'popupCaptureQueueV1';
-const CAPTURE_QUEUE_SESSION_KEY = 'captureQueueSessionV1';
 let runningQueueCapture = false;
 
 function logNonFatal(context, err) {

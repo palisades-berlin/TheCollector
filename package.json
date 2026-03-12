@@ -4,6 +4,9 @@
   "private": true,
   "license": "MIT",
   "type": "module",
+  "engines": {
+    "node": ">=20 <21"
+  },
   "scripts": {
     "test:repo-hygiene": "node scripts/check-repo-hygiene.mjs",
     "test:docs-policy": "node scripts/check-doc-policy.mjs",
@@ -30,7 +33,7 @@
     "espree": "^10.4.0",
     "eslint": "^10.0.2",
     "globals": "^17.4.0",
-    "playwright": "^1.53.2",
+    "playwright": "^1.58.2",
     "prettier": "^3.6.2"
   }
 }

@@ -481,7 +481,10 @@ Animation rule: no motion may block primary action path.
 
 ---
 
-## Important Changes or Additions to Public APIs / Interfaces / Types
+## Important Planned Changes or Additions to Public APIs / Interfaces / Types
+
+This section defines forward roadmap interfaces for upcoming milestones and is not a statement
+that these interfaces are already shipped in the current release baseline.
 
 1. Message protocol additions:
 

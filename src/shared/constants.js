@@ -15,3 +15,7 @@ export const SCROLL_SETTLE_MS = 200;
 export const CAPTURE_MIN_INTERVAL_MS = 550;
 export const CAPTURE_RETRY_MAX_ATTEMPTS = 5;
 export const CAPTURE_RETRY_BASE_DELAY_MS = 400;
+
+// Queue state storage keys shared between popup and service worker.
+export const CAPTURE_QUEUE_STORAGE_KEY = 'popupCaptureQueueV1';
+export const CAPTURE_QUEUE_SESSION_KEY = 'captureQueueSessionV1';

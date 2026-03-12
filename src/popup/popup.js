@@ -18,6 +18,7 @@ import {
 import { buildCaptureQueuePayload, buildCaptureStartPayload } from './popup-profile-payload.js';
 import { evaluateRevisitNudge } from '../shared/nudges.js';
 import { addTabsToQueue, normalizeQueueEntries, removeFromQueue } from './capture-queue.js';
+import { CAPTURE_QUEUE_STORAGE_KEY } from '../shared/constants.js';
 
 const POPUP_DEBUG =
   new URLSearchParams(location.search).get('debugPopupPerf') === '1' ||
@@ -62,7 +63,6 @@ let currentRevisitNudgeId = null;
 let queueBatchEnabled = false;
 let runningQueue = false;
 let captureQueue = [];
-const CAPTURE_QUEUE_STORAGE_KEY = 'popupCaptureQueueV1';
 
 function reportNonFatal(context, err) {
   console.error('[THE Collector][non-fatal]', context, err);
