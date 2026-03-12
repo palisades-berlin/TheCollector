@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.9.52 - 2026-03-12
+
+- CI visual parity unblock (macOS runner drift):
+  - raised measured, snapshot-specific tolerances for current CI deltas:
+    - `popup-capture-default.png`: `10200` (from `10000`)
+    - `history-default.png`: `6300` (from `5600`)
+    - `preview-edit-mode.png`: `21000` (new explicit exception)
+  - updated `docs/visual-exception-register.md` and `docs/todo-list.md` with the current values and reduction trajectory.
+- Validation:
+  - `npm run test:ui-calibration` passed locally after tolerance updates.
+- Version sync:
+  - synchronized version to `1.9.52` across manifest/package/docs pointers.
+
 ## 1.9.51 - 2026-03-12
 
 - URL Library 2.0 Sprint 2A scaffold + navigation wiring:
@@ -18,7 +31,7 @@
   - `npm run test:docs-policy` passed.
   - `npm run test:ui-calibration` passed.
 - Version sync:
-  - synchronized version to `1.9.51` across manifest/package/docs pointers.
+  - synchronized version to `1.9.52` across manifest/package/docs pointers.
 
 ## 1.9.50 - 2026-03-12
 

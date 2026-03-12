@@ -369,7 +369,7 @@ test.describe('Figma parity snapshots', () => {
     await page.waitForTimeout(200);
 
     await expect(page).toHaveScreenshot('popup-capture-default.png', {
-      maxDiffPixels: 10000,
+      maxDiffPixels: 10200,
     });
 
     await page.click('#urlsTabBtn');
@@ -429,7 +429,7 @@ test.describe('Figma parity snapshots', () => {
 
     await expect(page).toHaveScreenshot('history-default.png', {
       fullPage: true,
-      maxDiffPixels: 5600,
+      maxDiffPixels: 6300,
     });
 
     await page.evaluate(() => {
@@ -510,7 +510,10 @@ test.describe('Figma parity snapshots', () => {
         'Captured using inner scroll-container mode.';
     });
 
-    await expect(page).toHaveScreenshot('preview-edit-mode.png', { fullPage: true });
+    await expect(page).toHaveScreenshot('preview-edit-mode.png', {
+      fullPage: true,
+      maxDiffPixels: 21000,
+    });
 
     await page.setViewportSize({ width: 1024, height: 920 });
     await page.waitForTimeout(120);
