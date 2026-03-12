@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.65 - 2026-03-12
+
+- Visual parity reduction pass (URL Library exceptions):
+  - reduced `urls-library-desktop.png` tolerance from `600` to `400` (CI observed drift baseline: `212`).
+  - reduced `urls-library-narrow.png` tolerance from `600` to `400` (CI observed drift baseline: `206`).
+  - synchronized `docs/visual-exception-register.md` and `docs/todo-list.md` with the reduced values.
+- Version sync:
+  - synchronized version to `1.9.65` across manifest/package/docs pointers.
+
 ## 1.9.64 - 2026-03-12
 
 - CI visual parity stabilization follow-up (URL Library narrow snapshot):
