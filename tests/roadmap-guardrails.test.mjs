@@ -4,11 +4,22 @@ import {
   assertNoTrackingPayload,
   enforceRoadmapActionPolicy,
   isLocalOnlyUrl,
+  roadmapFeatureFetch,
 } from '../src/shared/roadmap-guardrails.js';
 
 function test(name, fn) {
   try {
     fn();
+    process.stdout.write(`PASS ${name}\n`);
+  } catch (err) {
+    process.stderr.write(`FAIL ${name}\n${err.stack}\n`);
+    process.exitCode = 1;
+  }
+}
+
+async function testAsync(name, fn) {
+  try {
+    await fn();
     process.stdout.write(`PASS ${name}\n`);
   } catch (err) {
     process.stderr.write(`FAIL ${name}\n${err.stack}\n`);
@@ -67,4 +78,90 @@ test('enforceRoadmapActionPolicy checks both tier gate and payload policy', () =
   assert.doesNotThrow(() =>
     enforceRoadmapActionPolicy('smart_save_profiles', { capabilityTier: 'pro' }, { event: 'run' })
   );
+});
+
+await testAsync('roadmapFeatureFetch blocks unavailable tier before issuing fetch', async () => {
+  const originalFetch = globalThis.fetch;
+  let fetchCalled = false;
+  globalThis.fetch = async () => {
+    fetchCalled = true;
+    return { ok: true };
+  };
+
+  try {
+    await assert.rejects(
+      roadmapFeatureFetch('magic_mode', { capabilityTier: 'pro' }, '/local/api', { body: {} }),
+      /not available/
+    );
+    assert.equal(fetchCalled, false);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+await testAsync('roadmapFeatureFetch blocks external URLs', async () => {
+  const originalFetch = globalThis.fetch;
+  let fetchCalled = false;
+  globalThis.fetch = async () => {
+    fetchCalled = true;
+    return { ok: true };
+  };
+
+  try {
+    await assert.rejects(
+      roadmapFeatureFetch('smart_save_profiles', { capabilityTier: 'pro' }, 'https://example.com', {
+        body: {},
+      }),
+      /Blocked external/
+    );
+    assert.equal(fetchCalled, false);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+await testAsync('roadmapFeatureFetch blocks tracking payload in init.body object', async () => {
+  const originalFetch = globalThis.fetch;
+  let fetchCalled = false;
+  globalThis.fetch = async () => {
+    fetchCalled = true;
+    return { ok: true };
+  };
+
+  try {
+    await assert.rejects(
+      roadmapFeatureFetch('smart_save_profiles', { capabilityTier: 'pro' }, '/local/api', {
+        body: { deviceId: 'abc' },
+      }),
+      /Blocked tracking payload key/
+    );
+    assert.equal(fetchCalled, false);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+await testAsync('roadmapFeatureFetch allows local calls with non-tracking payload', async () => {
+  const originalFetch = globalThis.fetch;
+  let fetchCalls = 0;
+  const expectedResult = { ok: true, status: 200 };
+  globalThis.fetch = async (input, init) => {
+    fetchCalls += 1;
+    assert.equal(input, '/local/api');
+    assert.deepEqual(init, { method: 'POST', body: { event: 'run' } });
+    return expectedResult;
+  };
+
+  try {
+    const result = await roadmapFeatureFetch(
+      'smart_save_profiles',
+      { capabilityTier: 'pro' },
+      '/local/api',
+      { method: 'POST', body: { event: 'run' } }
+    );
+    assert.equal(fetchCalls, 1);
+    assert.equal(result, expectedResult);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
