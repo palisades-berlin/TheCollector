@@ -8,6 +8,8 @@ This register tracks temporary visual snapshot tolerances above the default targ
 | `history-empty.png`   | `300`             | Empty state vertical rhythm still differs slightly across platforms.     | `<= 100`          |
 | `history-loading.png` | `300`             | Skeleton/loading gradients vary across render backends and antialiasing. | `<= 100`          |
 
+Active reduction tasks for these temporary exceptions are tracked in `docs/todo-list.md`.
+
 Reduction policy:
 
 1. Exceptions are temporary and reviewed every UX/UI calibration pass.

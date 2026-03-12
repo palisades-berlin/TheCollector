@@ -155,8 +155,7 @@ State coverage target:
 ### Pass 5 - Figma Pixel Validation
 
 - [x] Map each audited state family to Figma file key + frame/node IDs
-- [ ] Record deltas in geometry/tokens/state visuals
-- [ ] certify <=2px diff or document approved exception
+- Operational follow-ups for parity deltas/certification are tracked in `docs/todo-list.md`.
 
 ## Testing Contract
 
@@ -188,7 +187,7 @@ Final pixel-perfect certification still requires a full per-state node matrix an
 - Synced canonical Figma URL and file key into repo docs.
 - Synced active handoff authority node (`19:2`) into repo docs.
 - Synced core section nodes for settings/onboarding/system states and UI kit roots into repo docs.
-- Next parity increment: add per-snapshot node annotations for each visual test state.
+- Next parity increment tracking moved to `docs/todo-list.md`.
 
 ## Recent Calibration Note (2026-03-05)
 
