@@ -74,6 +74,8 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 6. Keep roadmap/help/ADR/README/wiki updates synchronized within the same feature delivery cycle.
 7. From now on, update the help guide whenever necessary to reflect UX, feature, tier, or flow changes.
 8. If `docs/help-user-guide.md` changes, update the Settings `Help & FAQ` content in `src/options/options.html` in the same work cycle.
+9. Use `docs/todo-list.md` as the dedicated place for operational follow-ups (for example drift cleanup, housekeeping, and technical chores) so roadmap files remain focused on product planning and execution milestones.
+10. When working from `docs/todo-list.md`, remove each task immediately after it is completed in the same work cycle.
 
 ## Help Documentation Rules (added 2026-03-11)
 
