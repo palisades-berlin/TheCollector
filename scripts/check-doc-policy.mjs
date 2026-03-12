@@ -47,11 +47,6 @@ const UNSHIPPED_PHRASES = [
   // Command Palette — planned for v1.10
   'Cmd/Ctrl + K',
   'Cmd/Ctrl+K',
-  // URL Collector 2.0 views — planned for v2.0
-  'Saved URL Views',
-  'By Domain',
-  // URL Tags — planned for v2.0
-  'Add Tags to a URL',
   // URL Notes — planned for v2.0
   'Add a Note to a URL',
   // Magic Mode — planned for v2.1

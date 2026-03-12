@@ -13,6 +13,7 @@ const PRO_FEATURES = [
   'featured_ready_ux_pack',
   'capture_queue_batch_mode',
   'saved_url_views',
+  'url_tags',
 ];
 
 // 90-day roadmap features (Options toggle: Ultra)

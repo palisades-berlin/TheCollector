@@ -458,6 +458,28 @@ body {
   background: var(--popup-surface-alt);
 }
 
+.url-tag-filter-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-sp-2);
+  padding: var(--sc-sp-2) var(--sc-sp-3);
+  border-bottom: 1px solid var(--popup-border);
+  background: var(--popup-surface);
+}
+
+.url-tag-filter-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--popup-text-faint);
+  min-width: 58px;
+}
+
+.url-tag-filter-select.sc-select {
+  min-height: 28px;
+  font-size: 11px;
+  padding: 0 var(--sc-sp-2);
+}
+
 .url-view-btn.sc-btn {
   min-height: 28px;
   padding: 0 var(--sc-sp-2);
@@ -544,6 +566,101 @@ body {
   word-break: break-all;
   line-height: 1.5;
   font-family: var(--sc-font-mono);
+}
+
+.url-main {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  gap: var(--sc-sp-1);
+}
+
+.url-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sc-sp-1);
+}
+
+.url-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px;
+  border: 1px solid var(--popup-primary-border);
+  border-radius: var(--popup-r-pill);
+  font-size: 10px;
+  line-height: 1.4;
+  color: var(--popup-primary-active);
+  background: var(--popup-primary-soft);
+}
+
+.url-tag-chip-remove {
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  font-size: 10px;
+}
+
+.url-tag-chip-empty {
+  font-size: 10px;
+  color: var(--popup-text-faint);
+}
+
+.url-tags-toggle {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: var(--sc-sp-1);
+  color: var(--popup-text-faint);
+  border-radius: var(--sc-r-xs);
+  opacity: 0.86;
+}
+
+.url-item-expanded .url-tags-toggle,
+.url-tags-toggle:hover {
+  color: var(--popup-primary-active);
+  background: var(--popup-primary-soft);
+}
+
+.url-tags-editor {
+  margin-top: var(--sc-sp-1);
+  padding: var(--sc-sp-2);
+  border: 1px solid var(--popup-border-ui);
+  border-radius: var(--popup-r-sm);
+  background: var(--popup-surface-alt);
+  display: grid;
+  gap: var(--sc-sp-2);
+}
+
+.url-tag-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sc-sp-1);
+}
+
+.url-tag-suggest-btn.sc-btn {
+  min-height: 24px;
+  padding: 0 var(--sc-sp-2);
+  font-size: 10px;
+}
+
+.url-tag-input-row {
+  display: flex;
+  gap: var(--sc-sp-1);
+}
+
+.url-tag-input.sc-input {
+  min-height: 28px;
+  font-size: 11px;
+}
+
+.url-tag-add.sc-btn {
+  min-height: 28px;
+  font-size: 11px;
+  padding: 0 var(--sc-sp-2);
 }
 
 .btn-open,

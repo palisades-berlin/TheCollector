@@ -309,6 +309,25 @@ export async function setUrlRecordStar(url, starred) {
   return next;
 }
 
+export async function setUrlRecordTags(url, tags) {
+  if (typeof url !== 'string' || !url) return null;
+  const normalizedUrl = normalizeUrlForCompare(url);
+  if (!normalizedUrl) return null;
+  const records = await ensureUrlMetadata([url]);
+  const existing = records.get(normalizedUrl) || buildDefaultUrlMeta(url);
+  const next = normalizeUrlMetaRecord(
+    {
+      ...existing,
+      url,
+      tags: normalizeUrlTags(tags),
+      updatedAt: Date.now(),
+    },
+    url
+  );
+  await writeUrlMetaRecord(next);
+  return next;
+}
+
 export async function removeUrlRecordMetadata(url) {
   if (typeof url !== 'string' || !url) return;
   const normalizedUrl = normalizeUrlForCompare(url);

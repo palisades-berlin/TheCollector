@@ -170,6 +170,19 @@ npm run format:check
 
 Visual snapshots must be updated only for intentionally changed surfaces/states.
 
+## Parity Delta Log (2026-03-12)
+
+| Snapshot              | Figma Node | Calibrated Tolerance | Delta Summary                                                                     |
+| --------------------- | ---------- | -------------------- | --------------------------------------------------------------------------------- |
+| `history-default.png` | `1:4`      | `220`                | Remaining drift is concentrated in header/filter text antialiasing and spacing.   |
+| `history-empty.png`   | `1:885`    | `220`                | Residual diff is primarily vertical rhythm/font rendering variance.               |
+| `history-loading.png` | `1:885`    | `220`                | Residual diff is mostly skeleton gradient/antialiasing behavior across renderers. |
+
+Certification status:
+
+- Reduced temporary history tolerances from `300` to `220` for the current calibration wave.
+- Next reduction target remains `<=100` before returning to the default global `<=2` target.
+
 ## Acceptance Criteria
 
 1. 0 unresolved Critical/High UI inconsistencies for in-scope surfaces

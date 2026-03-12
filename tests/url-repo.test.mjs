@@ -6,6 +6,7 @@ import {
   writeUrlsAndUndo,
   loadUrlRecords,
   setUrlRecordStar,
+  setUrlRecordTags,
 } from '../src/shared/repos/url-repo.js';
 
 async function runTest(name, fn) {
@@ -96,4 +97,41 @@ await runTest('url repo persists starred state for URL records', async () => {
   await setUrlRecordStar('https://star.example.com', true);
   const records = await loadUrlRecords();
   assert.equal(records[0].starred, true);
+});
+
+await runTest('url repo persists tags and enforces tag normalization', async () => {
+  const storageLocal = createStorageMock({ urls: ['https://tags.example.com'] });
+  globalThis.indexedDB = undefined;
+  globalThis.chrome = {
+    runtime: { lastError: null },
+    storage: { local: storageLocal },
+  };
+
+  await loadUrlRecords();
+  await setUrlRecordTags('https://tags.example.com', [
+    '  Research  ',
+    'Research',
+    'follow-up',
+    '',
+    123,
+  ]);
+
+  const records = await loadUrlRecords();
+  assert.deepEqual(records[0].tags, ['Research', 'follow-up']);
+});
+
+await runTest('url repo enforces max 10 tags per URL record', async () => {
+  const storageLocal = createStorageMock({ urls: ['https://tag-limit.example.com'] });
+  globalThis.indexedDB = undefined;
+  globalThis.chrome = {
+    runtime: { lastError: null },
+    storage: { local: storageLocal },
+  };
+
+  const tags = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'];
+  await loadUrlRecords();
+  await setUrlRecordTags('https://tag-limit.example.com', tags);
+  const records = await loadUrlRecords();
+  assert.equal(records[0].tags.length, 10);
+  assert.deepEqual(records[0].tags, tags.slice(0, 10));
 });

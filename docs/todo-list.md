@@ -11,12 +11,6 @@ Working rule:
   - Keep strict local-only policy (no external API calls, no tracking, no backend).
   - Reevaluate tier placement (default target: Ultra) and define a technical feasibility slice before implementation.
 
-- [ ] Visual parity follow-up: record Figma-vs-snapshot deltas and certify `<=2px` diff (or document a narrow approved exception) for the current calibration wave.
-
-- [ ] Add per-snapshot Figma node annotations for each visual test state in `tests/visual/ui-parity.spec.mjs`.
-
-- [ ] Reduce temporary visual tolerances in `docs/visual-exception-register.md` for:
-  - `history-default.png` (`300` -> `<=100`)
-  - `history-empty.png` (`300` -> `<=100`)
-  - `history-loading.png` (`300` -> `<=100`)
-  - Remove exception rows once snapshots pass at the default target.
+- [ ] Continue visual parity reduction pass:
+  - lower `history-default.png`, `history-empty.png`, and `history-loading.png` tolerances from `220` toward `<=100`.
+  - remove exception rows once each snapshot returns to the default `maxDiffPixels <= 2` target.

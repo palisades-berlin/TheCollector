@@ -11,6 +11,7 @@ import {
   appendUrlHistoryEntry,
   loadUrlRecords as loadUrlRecordsRepo,
   setUrlRecordStar,
+  setUrlRecordTags,
   removeUrlRecordMetadata,
 } from '../../shared/repos/url-repo.js';
 
@@ -61,6 +62,10 @@ export async function loadUrlRecords() {
 
 export async function setUrlStar(url, starred) {
   return setUrlRecordStar(url, starred);
+}
+
+export async function setUrlTags(url, tags) {
+  return setUrlRecordTags(url, tags);
 }
 
 export async function removeUrlMetadata(url) {

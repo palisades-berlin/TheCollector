@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.46`.
+Current extension version: `1.9.47`.
 
 ## Overview
 
@@ -18,11 +18,11 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- Added URL Collector v2 foundation schema for URL metadata records (`starred`, `createdAt`, `updatedAt`, `tags`, `note`) with backward-compatible migration from legacy string-only URL lists.
-- Implemented Saved URL Views slice in popup (Pro/Ultra): `Starred`, `Today`, and `By Domain`, while keeping default `All` flow stable.
-- Added star/unstar interaction on URL rows and persisted star state through URL metadata storage.
-- Added registered-domain resolver and tests used by domain-grouped URL view.
-- Version bumped to `1.9.46`.
+- Added URL Tags v1 (Pro/Ultra): tag suggestions + free-text tag add/remove on popup URL rows with max-10 tag enforcement.
+- Added URL tag filtering that composes with Saved URL Views (`All`, `Starred`, `Today`, `By Domain`).
+- Added URL tag persistence API (`setUrlRecordTags`) and migration-safe repository coverage.
+- Added per-snapshot Figma node annotations in visual parity tests and reduced temporary history tolerances from `300` to `220`.
+- Version bumped to `1.9.47`.
 
 ## Core Architecture
 
@@ -66,6 +66,8 @@ The capture pipeline is split across extension contexts:
 
 - Add current tab URL
 - Add all URLs from current window
+- Saved URL Views (Pro/Ultra): `All`, `Starred`, `Today`, `By Domain`
+- URL Tags v1 (Pro/Ultra): add/remove up to 10 tags per URL and filter list by tag
 - Automatic tracking-parameter cleanup (UTM, gclid, fbclid, and similar)
 - URL deduplication (normalized compare)
 - Open/remove individual URLs

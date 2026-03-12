@@ -14,6 +14,7 @@ import {
   exportUrlsAsCsv,
   copyUrlsToClipboard,
   setUrlStar,
+  setUrlTags,
   refreshHistoryEntries,
   createUrlMutations,
 } from './urls/urls-state.js';
@@ -30,9 +31,22 @@ let currentUrlCount = 0;
 let undoUrlCount = 0;
 let initStartedAt = 0;
 let savedViewsEnabled = false;
+let tagsEnabled = false;
 let activeUrlView = 'all';
+let activeTagFilter = '';
 let urlRecordsCache = [];
 let renderVersion = 0;
+
+const TAG_SUGGESTIONS = [
+  'Research',
+  'Interest',
+  'Private',
+  'reading',
+  'follow-up',
+  'reference',
+  'archive',
+  'later',
+];
 
 const urlCount = document.getElementById('urlCount');
 const urlListEl = document.getElementById('url-list');
@@ -58,6 +72,8 @@ const urlViewAllBtn = document.getElementById('btn-url-view-all');
 const urlViewStarredBtn = document.getElementById('btn-url-view-starred');
 const urlViewTodayBtn = document.getElementById('btn-url-view-today');
 const urlViewDomainBtn = document.getElementById('btn-url-view-domain');
+const urlTagFilterRow = document.getElementById('urlTagFilterRow');
+const urlTagFilterSelect = document.getElementById('urlTagFilterSelect');
 
 let actionsApi = null;
 
@@ -89,12 +105,82 @@ function updateBadge(count) {
 function createUrlItemEl(record) {
   const url = typeof record?.url === 'string' ? record.url : String(record || '');
   const starred = record?.starred === true;
+  const tags = Array.isArray(record?.tags) ? record.tags : [];
+  const tagChipsHtml =
+    tags.length === 0
+      ? '<span class="url-tag-chip-empty">No tags</span>'
+      : tags
+          .map(
+            (tag) => `
+        <span class="url-tag-chip">
+          <span>${esc(tag)}</span>
+          <button
+            class="url-tag-chip-remove"
+            type="button"
+            data-action="tag-remove"
+            data-tag="${esc(tag)}"
+            aria-label="Remove tag ${esc(tag)}"
+            title="Remove tag ${esc(tag)}"
+          >
+            ×
+          </button>
+        </span>`
+          )
+          .join('');
+  const tagSuggestionsHtml = TAG_SUGGESTIONS.map(
+    (tag) => `
+      <button
+        class="url-tag-suggest-btn sc-btn sc-btn-ghost"
+        type="button"
+        data-action="tag-suggest"
+        data-tag="${esc(tag)}"
+      >
+        ${esc(tag)}
+      </button>`
+  ).join('');
   const item = document.createElement('div');
   item.className = 'url-item';
   item.dataset.url = url;
   item.innerHTML = `
     <span class="url-index"></span>
-    <span class="url-text" title="${esc(url)}">${esc(url)}</span>
+    <div class="url-main">
+      <span class="url-text" title="${esc(url)}">${esc(url)}</span>
+      ${
+        tagsEnabled
+          ? `<div class="url-tag-row">${tagChipsHtml}</div>
+      <div class="url-tags-editor hidden">
+        <div class="url-tag-suggestions">${tagSuggestionsHtml}</div>
+        <div class="url-tag-input-row">
+          <input
+            class="url-tag-input sc-input"
+            type="text"
+            maxlength="24"
+            placeholder="Add tag"
+            data-action="tag-input"
+            aria-label="Add tag"
+          />
+          <button class="url-tag-add sc-btn sc-btn-secondary" type="button" data-action="tag-add">
+            Add
+          </button>
+        </div>
+      </div>`
+          : ''
+      }
+    </div>
+    ${
+      tagsEnabled
+        ? `<button
+      class="url-tags-toggle"
+      type="button"
+      title="Edit tags"
+      aria-label="Edit tags"
+      data-action="toggle-tags"
+      aria-expanded="false"
+    >
+      #
+    </button>`
+        : ''
+    }
     <button
       class="btn-star ${starred ? 'active' : ''}"
       title="${starred ? 'Remove from Starred' : 'Add to Starred'}"
@@ -130,19 +216,57 @@ function isSameLocalDay(a, b) {
   );
 }
 
+function normalizeTagValue(input) {
+  return String(input || '')
+    .trim()
+    .slice(0, 24);
+}
+
+function getTagFilterOptions(records) {
+  const out = [];
+  for (const record of records) {
+    const tags = Array.isArray(record?.tags) ? record.tags : [];
+    for (const tag of tags) {
+      const normalized = normalizeTagValue(tag);
+      if (!normalized) continue;
+      if (out.includes(normalized)) continue;
+      out.push(normalized);
+    }
+  }
+  return out.sort((a, b) => a.localeCompare(b));
+}
+
+function syncTagFilterControls(records) {
+  if (!urlTagFilterRow || !urlTagFilterSelect) return;
+  urlTagFilterRow.classList.toggle('hidden', !tagsEnabled);
+  if (!tagsEnabled) {
+    activeTagFilter = '';
+    return;
+  }
+  const options = getTagFilterOptions(records);
+  const current = activeTagFilter;
+  urlTagFilterSelect.innerHTML = `<option value="">All Tags</option>${options
+    .map((tag) => `<option value="${esc(tag)}">${esc(tag)}</option>`)
+    .join('')}`;
+  const preserve = options.includes(current) ? current : '';
+  activeTagFilter = preserve;
+  urlTagFilterSelect.value = preserve;
+}
+
 function getRecordsForCurrentView() {
-  if (!savedViewsEnabled || activeUrlView === 'all') return urlRecordsCache;
-
-  if (activeUrlView === 'starred') {
-    return urlRecordsCache.filter((record) => record.starred === true);
-  }
-
-  if (activeUrlView === 'today') {
+  let records = urlRecordsCache;
+  if (savedViewsEnabled && activeUrlView === 'starred') {
+    records = records.filter((record) => record.starred === true);
+  } else if (savedViewsEnabled && activeUrlView === 'today') {
     const now = Date.now();
-    return urlRecordsCache.filter((record) => isSameLocalDay(record.createdAt, now));
+    records = records.filter((record) => isSameLocalDay(record.createdAt, now));
   }
-
-  return urlRecordsCache;
+  if (tagsEnabled && activeTagFilter) {
+    records = records.filter((record) =>
+      (Array.isArray(record.tags) ? record.tags : []).some((tag) => tag === activeTagFilter)
+    );
+  }
+  return records;
 }
 
 function setActiveUrlView(view) {
@@ -201,7 +325,10 @@ function renderCurrentView() {
       domain: 'No URLs available by domain',
     };
     const titleEl = emptyStateEl.querySelector('.empty-title');
-    if (titleEl) titleEl.textContent = labels[activeUrlView] || labels.all;
+    if (titleEl) {
+      const base = labels[activeUrlView] || labels.all;
+      titleEl.textContent = activeTagFilter ? `No URLs match tag "${activeTagFilter}"` : base;
+    }
     actionsApi?.updateRestoreButtonState();
     return;
   }
@@ -232,6 +359,7 @@ function renderList(urls) {
     .then((records) => {
       if (seq !== renderVersion) return;
       urlRecordsCache = records;
+      syncTagFilterControls(records);
       renderCurrentView();
       perfLog('urls.renderList', {
         count: urls.length,
@@ -246,15 +374,19 @@ async function initSavedViewsFeature() {
   try {
     const settings = await getUserSettings();
     savedViewsEnabled = canUseFeature('saved_url_views', settings);
+    tagsEnabled = canUseFeature('url_tags', settings);
   } catch {
     savedViewsEnabled = false;
+    tagsEnabled = false;
   }
 
   if (!urlViewsBar) return;
   urlViewsBar.classList.toggle('hidden', !savedViewsEnabled);
+  if (urlTagFilterRow) urlTagFilterRow.classList.toggle('hidden', !tagsEnabled);
   setActiveUrlView('all');
+  activeTagFilter = '';
 
-  if (!savedViewsEnabled) return;
+  if (!savedViewsEnabled && !tagsEnabled) return;
 
   const viewMap = [
     ['all', urlViewAllBtn],
@@ -269,6 +401,11 @@ async function initSavedViewsFeature() {
       renderCurrentView();
     });
   }
+
+  urlTagFilterSelect?.addEventListener('change', () => {
+    activeTagFilter = normalizeTagValue(urlTagFilterSelect.value);
+    renderCurrentView();
+  });
 }
 
 export async function initUrlsPanel() {
@@ -294,6 +431,7 @@ export async function initUrlsPanel() {
     loadUrls,
     loadUrlRecords,
     setUrlStar,
+    setUrlTags,
     loadUndoSnapshot,
     getCurrentTabUrl,
     getAllTabUrls,

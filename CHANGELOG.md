@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.9.47 - 2026-03-12
+
+- Lane A — visual hardening closure:
+  - added per-snapshot Figma node annotations in `tests/visual/ui-parity.spec.mjs` for calibration traceability.
+  - reduced temporary visual tolerances for `history-default.png`, `history-empty.png`, and `history-loading.png` from `300` to `220`.
+  - documented current parity delta log in `docs/ui-qa-audit.md` and moved completed operational follow-ups out of `docs/todo-list.md`.
+- Lane B — URL Tags v1 (Pro/Ultra):
+  - added URL tag persistence API (`setUrlRecordTags`) in `src/shared/repos/url-repo.js` with migration-safe normalization and max-10 tag enforcement.
+  - implemented popup URL row tag UI (collapsed by default), suggestion chips, free-text add, tag remove, and per-tag filtering.
+  - added Pro gating key `url_tags` and expanded capabilities/unit coverage.
+- Policy/docs sync:
+  - updated `docs/help-user-guide.md` and Settings `Help & FAQ` (`src/options/options.html`) for shipped Saved URL Views + URL Tags behavior.
+  - removed shipped phrases from `UNSHIPPED_PHRASES` in `scripts/check-doc-policy.mjs` (`Saved URL Views`, `By Domain`, `Add Tags to a URL`).
+  - updated roadmap baseline status for URL Collector slices.
+- Version sync:
+  - synchronized version to `1.9.47` across manifest/package/docs pointers.
+
 ## 1.9.46 - 2026-03-12
 
 - URL Collector 2.0 Sprint 2 foundation slice:

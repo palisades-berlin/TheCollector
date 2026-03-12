@@ -21,6 +21,26 @@ const FIGMA_NODE_MAP = {
   previewStates: '1:4',
 };
 
+// Per-snapshot Figma node references for calibration traceability.
+const FIGMA_SNAPSHOT_NODE_MAP = {
+  'shared-primitives-matrix.png': '1:4',
+  'shared-primitives-matrix-dark.png': '1:930',
+  'onboarding-default.png': '1:830',
+  'popup-capture-default.png': '1:4',
+  'popup-urls-default.png': '1:4',
+  'popup-error-state.png': '1:885',
+  'popup-success-state.png': '1:885',
+  'history-default.png': '1:4',
+  'history-empty.png': '1:885',
+  'history-loading.png': '1:885',
+  'history-modal-open.png': '1:4',
+  'options-default.png': '1:753',
+  'options-feedback-state.png': '1:753',
+  'preview-error.png': '1:885',
+  'preview-edit-mode.png': '1:4',
+  'preview-toolbar-wrap.png': '1:4',
+};
+
 const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
@@ -147,6 +167,7 @@ test.describe('Figma parity snapshots', () => {
     void FIGMA_FILE_KEY;
     void FIGMA_ACTIVE_HANDOFF_NODE;
     void FIGMA_NODE_MAP;
+    void FIGMA_SNAPSHOT_NODE_MAP;
 
     const started = await startStaticServer();
     server = started.server;
@@ -382,7 +403,7 @@ test.describe('Figma parity snapshots', () => {
 
     await expect(page).toHaveScreenshot('history-default.png', {
       fullPage: true,
-      maxDiffPixels: 300,
+      maxDiffPixels: 220,
     });
 
     await page.evaluate(() => {
@@ -393,7 +414,7 @@ test.describe('Figma parity snapshots', () => {
     });
     await expect(page).toHaveScreenshot('history-empty.png', {
       fullPage: true,
-      maxDiffPixels: 300,
+      maxDiffPixels: 220,
     });
 
     await page.evaluate(() => {
@@ -402,7 +423,7 @@ test.describe('Figma parity snapshots', () => {
     });
     await expect(page).toHaveScreenshot('history-loading.png', {
       fullPage: true,
-      maxDiffPixels: 300,
+      maxDiffPixels: 220,
     });
 
     await page.evaluate(() => {

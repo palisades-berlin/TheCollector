@@ -63,6 +63,18 @@ export function wireUrlsPanelEvents({
   urlListEl.addEventListener('click', async (e) => {
     const target = e.target instanceof Element ? e.target : e.target?.parentElement;
     if (!target) return;
+    const rowEl = target.closest('.url-item');
+    if (rowEl && !target.closest('button[data-action]') && !target.closest('input[data-action]')) {
+      const editor = rowEl.querySelector('.url-tags-editor');
+      const toggle = rowEl.querySelector('button[data-action="toggle-tags"]');
+      if (editor && toggle) {
+        const nextExpanded = editor.classList.contains('hidden');
+        editor.classList.toggle('hidden', !nextExpanded);
+        rowEl.classList.toggle('url-item-expanded', nextExpanded);
+        toggle.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
+      }
+      return;
+    }
     const actionEl = target.closest('button[data-action]');
     if (!actionEl) return;
     const itemEl = actionEl.closest('.url-item');
@@ -87,6 +99,99 @@ export function wireUrlsPanelEvents({
       return;
     }
 
+    if (actionEl.dataset.action === 'toggle-tags') {
+      const editor = itemEl.querySelector('.url-tags-editor');
+      if (!editor) return;
+      const nextExpanded = editor.classList.contains('hidden');
+      editor.classList.toggle('hidden', !nextExpanded);
+      itemEl.classList.toggle('url-item-expanded', nextExpanded);
+      actionEl.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
+      if (nextExpanded) {
+        const input = itemEl.querySelector('input[data-action="tag-input"]');
+        input?.focus();
+      }
+      return;
+    }
+
+    async function updateTags(nextTags, successMessage) {
+      await state.setUrlTags(url, nextTags);
+      const urls = await state.loadUrls();
+      renderList(urls);
+      showToast(successMessage);
+    }
+
+    if (actionEl.dataset.action === 'tag-suggest') {
+      try {
+        const tag = String(actionEl.dataset.tag || '')
+          .trim()
+          .slice(0, 24);
+        if (!tag) return;
+        const existingTags = Array.from(
+          itemEl.querySelectorAll('.url-tag-chip [data-action="tag-remove"]')
+        )
+          .map((btn) => String(btn.getAttribute('data-tag') || '').trim())
+          .filter(Boolean);
+        if (existingTags.includes(tag)) {
+          showToast('Tag already added');
+          return;
+        }
+        if (existingTags.length >= 10) {
+          showToast('Tag limit reached (max 10)');
+          return;
+        }
+        await updateTags([...existingTags, tag], `Tag "${tag}" added`);
+      } catch (err) {
+        reportError(err, 'Could not add tag');
+      }
+      return;
+    }
+
+    if (actionEl.dataset.action === 'tag-add') {
+      try {
+        const input = itemEl.querySelector('input[data-action="tag-input"]');
+        const tag = String(input?.value || '')
+          .trim()
+          .slice(0, 24);
+        if (!tag) {
+          showToast('Enter a tag');
+          return;
+        }
+        const existingTags = Array.from(
+          itemEl.querySelectorAll('.url-tag-chip [data-action="tag-remove"]')
+        )
+          .map((btn) => String(btn.getAttribute('data-tag') || '').trim())
+          .filter(Boolean);
+        if (existingTags.includes(tag)) {
+          showToast('Tag already added');
+          return;
+        }
+        if (existingTags.length >= 10) {
+          showToast('Tag limit reached (max 10)');
+          return;
+        }
+        await updateTags([...existingTags, tag], `Tag "${tag}" added`);
+      } catch (err) {
+        reportError(err, 'Could not add tag');
+      }
+      return;
+    }
+
+    if (actionEl.dataset.action === 'tag-remove') {
+      try {
+        const tagToRemove = String(actionEl.dataset.tag || '').trim();
+        const existingTags = Array.from(
+          itemEl.querySelectorAll('.url-tag-chip [data-action="tag-remove"]')
+        )
+          .map((btn) => String(btn.getAttribute('data-tag') || '').trim())
+          .filter(Boolean);
+        const nextTags = existingTags.filter((tag) => tag !== tagToRemove);
+        await updateTags(nextTags, `Tag "${tagToRemove}" removed`);
+      } catch (err) {
+        reportError(err, 'Could not remove tag');
+      }
+      return;
+    }
+
     if (actionEl.dataset.action === 'remove') {
       try {
         const urls = await state.mutations.mutateUrls(
@@ -104,6 +209,17 @@ export function wireUrlsPanelEvents({
         reportError(err, 'Could not remove URL');
       }
     }
+  });
+
+  urlListEl.addEventListener('keydown', async (e) => {
+    const target = e.target instanceof Element ? e.target : null;
+    if (!target || target.getAttribute('data-action') !== 'tag-input') return;
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const itemEl = target.closest('.url-item');
+    if (!itemEl) return;
+    const addBtn = itemEl.querySelector('button[data-action="tag-add"]');
+    addBtn?.click();
   });
 
   addBtn.addEventListener('click', async () => {

@@ -19,7 +19,7 @@ You will mainly use three areas:
 Your tier is selected in **Settings**. It is a **display preference** — it controls how much of the feature surface is shown. All levels are free. Each tier includes everything in the one below it.
 
 - **Basic:** full-page capture, URL collection, History filters, and PNG/JPG/PDF export. The essentials, kept simple.
-- **Pro:** everything in Basic, plus Smart Save Profiles (`Research`, `Interest`, `Private`), Queue Capture, Smart Revisit Nudges, Bulk Actions, and the Weekly Value Report.
+- **Pro:** everything in Basic, plus Smart Save Profiles (`Research`, `Interest`, `Private`), Queue Capture, Smart Revisit Nudges, Bulk Actions, Weekly Value Report, Saved URL Views, and URL Tags.
 - **Ultra:** everything in Pro, plus Omnibox actions (`tc research`, `tc star`, `tc queue`).
 
 If you want access to a feature that is not visible, switch to a higher tier in **Settings**. You can switch freely at any time — there is no cost.
@@ -60,6 +60,19 @@ Smart Save Profiles are fixed presets in v1. Editable custom profiles are planne
    - `star` to save the current URL to your URL list
    - `queue` to queue the current tab for batch capture
 2. Press Enter to run the action.
+
+### 6) Use Saved URL Views (Pro/Ultra tier)
+
+1. Open the popup and switch to **URLs**.
+2. Use the view bar to switch between **All**, **Starred**, **Today**, and **By Domain**.
+3. Views update the visible URL list without changing your saved data.
+
+### 7) Add Tags to a URL (Pro/Ultra tier)
+
+1. In **URLs**, click a URL row to expand tag controls.
+2. Add tags from suggestions (Research, Interest, Private, reading, follow-up, reference, archive, later) or type a custom tag.
+3. A URL can store up to 10 tags.
+4. Use **Tag Filter** above the list to show only URLs with a selected tag.
 
 ## Tips and Quick Examples
 
