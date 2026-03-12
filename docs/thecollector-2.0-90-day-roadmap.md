@@ -50,11 +50,11 @@ Implemented roadmap features and current delivery level:
 4. Weekly Value Report: **v1 delivered slice** (`1.9.24`) — Settings card only.
 5. Capture Queue + Batch Mode: **v1 delivered slice + hardening fixes** (`1.9.28` through `1.9.33`).
 6. Extension Help Page: **v1 delivered slice** (docs + Settings `Help & FAQ` section in `1.9.35`).
-7. URL Collector 2.0: **Saved URL Views + URL Tags v1 slices delivered, URL Library Sprint 2A scaffold live** (`1.9.46` through `1.9.51`).
+7. URL Collector 2.0: **Saved URL Views + URL Tags v1 delivered, URL Library Sprint 2A migration completed, popup retained as quick-capture surface** (`1.9.46` through `1.9.56`).
 
 Versioning status:
 
-1. Current release baseline: **`1.9.51`**.
+1. Current release baseline: **`1.9.56`**.
 2. No roadmap **v2** feature is fully shipped yet.
 3. Smart Save Profiles editable management remains planned for v2.0.
 4. Command Palette (Cmd/Ctrl+K) remains **unshipped**; user-facing help/docs are aligned to the shipped feature set.
@@ -177,7 +177,7 @@ Scope boundary: this sprint migrates the visual system. It does NOT simultaneous
 v2.0 acceptance gates:
 
 1. Design System 2.0 token migration complete across popup, history, preview, and options before any URL Collector 2.0 or v2 Promotion feature ships.
-2. URL Collector v2 features fully functional within existing popup URL panel without layout regression.
+2. URL Collector v2 features fully functional on the URL Library page without regressions to popup quick-capture (`add/add-all/copy/export/restore/clear`).
 3. URL tags and capture tags share a single taxonomy — no divergent tag sets.
 4. Smart URL Collections domain view uses registered domain (not full hostname).
 5. Smart Save Profiles v2: editable profile CRUD in Settings does not break v1 profile IDs in capture history.
@@ -261,7 +261,7 @@ All URL Collector 2.0 features are local-only. Basic URL flow must stay fast and
 - Free-text entry for tags not in the suggestion list.
 - Tags share a single taxonomy with capture tags. No separate URL-only tag management.
 - No custom tag management UI in v1. The suggestion list is fixed.
-- Tag filter in History and in the URL panel.
+- Tag filtering is owned by URL Library list views (not popup quick-capture).
 
 **URL Notes:**
 
@@ -339,6 +339,11 @@ All URL Collector 2.0 features are local-only. Basic URL flow must stay fast and
 **Sequencing rule:** Design System 2.0 is v2.0 item #1. Token migration across all four surfaces (popup, history, preview, options) must complete before any URL Collector 2.0 or v2 Promotion feature work begins. This prevents double-building: every v2.0 feature is built on the new token system from day one, and v2.1/v3.0 features inherit it without migration cost.
 
 **Scope boundary:** this is a visual system migration, not a simultaneous interaction redesign. Do not combine token migration with navigation restructuring, IA changes, or new interaction patterns. Those decisions are informed by the Post-Milestone Full Assessment at the end of v2.0. See ADR 0010.
+
+**Gate evidence (Sprint 1 complete):**
+
+1. `CHANGELOG.md` entries `1.9.44` and `1.9.45` record the token-foundation and token-consumption completion slices.
+2. `docs/ui-qa-audit.md` remains the visual parity acceptance artifact used by `npm run test:ui-calibration`.
 
 ### Tokens
 

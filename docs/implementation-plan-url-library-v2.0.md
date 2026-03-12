@@ -4,7 +4,7 @@
 
 # Date: 2026-03-12
 
-# Status: DRAFT — pending human review
+# Status: ACTIVE — Sprint 2A complete, Sprint 2B in progress
 
 ## PREREQUISITE GATE
 
@@ -53,6 +53,28 @@ Resolved decisions for implementation:
 2. RESOLVED: keep popup as quick-capture surface and route deep organization to URL Library.
 3. RESOLVED: keep URL Change Log, but relocate it from popup panel-swap to URL Library.
 4. Use a single header-nav pattern across full-tab surfaces: `Screenshots · URLs · Settings`.
+
+## SPRINT 2A COMPLETION LEDGER (CLOSED)
+
+All Sprint 2A migration items are now completed and are no longer blockers for Sprint 2B continuation.
+
+1. `2A-01` gate evidence recorded:
+   - Design System 2.0 token migration completion captured in `CHANGELOG.md` (`1.9.44`, `1.9.45`).
+   - Visual acceptance artifact anchored in `docs/ui-qa-audit.md` + `npm run test:ui-calibration`.
+2. `2A-02` completed:
+   - URL Library full-tab surface live in `src/urls/urls.html`, `src/urls/urls.js`, `src/urls/urls.css`.
+3. `2A-03` completed:
+   - Full-tab nav standardized to `Screenshots · URLs · Settings`.
+4. `2A-04` completed:
+   - Saved URL Views ownership moved to URL Library (`All/Starred/Today/By Domain`).
+5. `2A-05` completed:
+   - Popup URLs remains quick-capture focused with `Open URL Library ->` path.
+6. `2A-06` completed:
+   - `url_bulk_actions` added and tested in shared capability gating.
+7. `2A-07` completed:
+   - Escape dismiss behavior wired for URL Change Log flow.
+8. `2A-08` completed:
+   - URL remove flow cleans orphaned URL metadata.
 
 ## SPRINT 2A — URL Library Scaffold + Navigation Wiring
 

@@ -289,7 +289,7 @@ test.describe('Figma parity snapshots', () => {
 
     await page.waitForTimeout(120);
     await expect(page).toHaveScreenshot('shared-primitives-matrix.png', {
-      maxDiffPixels: 13000,
+      maxDiffPixels: 12800,
     });
   });
 
@@ -521,14 +521,14 @@ test.describe('Figma parity snapshots', () => {
 
     await expect(page).toHaveScreenshot('preview-edit-mode.png', {
       fullPage: true,
-      maxDiffPixels: 21000,
+      maxDiffPixels: 20600,
     });
 
     await page.setViewportSize({ width: 1024, height: 920 });
     await page.waitForTimeout(120);
     await expect(page).toHaveScreenshot('preview-toolbar-wrap.png', {
       fullPage: true,
-      maxDiffPixels: 26000,
+      maxDiffPixels: 25800,
     });
   });
 });

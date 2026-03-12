@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.9.57 - 2026-03-12
+
+- Visual hardening reduction pass (evidence-driven):
+  - reduced snapshot-specific tolerances using observed GitHub macOS CI peaks:
+    - `shared-primitives-matrix.png`: `13000` -> `12800` (recent peak `12655`)
+    - `preview-edit-mode.png`: `21000` -> `20600` (recent peak `20242`)
+    - `preview-toolbar-wrap.png`: `26000` -> `25800` (recent peak `25598`)
+  - kept `preview-error.png` at `17000` because recent CI peak (`16910`) leaves insufficient safe margin for a reduction in this pass.
+  - synchronized `docs/visual-exception-register.md` and `docs/todo-list.md` with measured values and rationale.
+- URL Library Sprint 2A follow-up closure:
+  - updated roadmap notes to reflect URL Library ownership and popup quick-capture contract.
+  - linked Design System 2.0 gate evidence in roadmap notes (`CHANGELOG.md` 1.9.44/1.9.45 + `docs/ui-qa-audit.md`).
+  - marked Sprint 2A migration items completed in `docs/implementation-plan-url-library-v2.0.md`.
+  - removed completed Sprint 2A follow-up item from `docs/todo-list.md`.
+- Version sync:
+  - synchronized version to `1.9.57` across manifest/package/docs pointers.
+
 ## 1.9.56 - 2026-03-12
 
 - CI visual parity follow-up (GitHub macOS runner):
