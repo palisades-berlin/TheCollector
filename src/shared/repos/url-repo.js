@@ -6,6 +6,9 @@ import {
 } from '../url-history.js';
 import { normalizeUrlForCompare } from '../url-utils.js';
 
+/** @typedef {import('../types.js').UrlMetaRecord} UrlMetaRecord */
+/** @typedef {import('../types.js').UrlHistoryEntryPayload} UrlHistoryEntryPayload */
+
 const URLS_KEY = 'urls';
 const URL_UNDO_KEY = 'urlsUndoSnapshot';
 const URL_META_DB_NAME = 'the-collector-url-meta';
@@ -174,6 +177,10 @@ async function deleteUrlMetaRecord(normalizedUrl) {
   });
 }
 
+/**
+ * @param {string[]} urls
+ * @returns {Promise<Map<string, UrlMetaRecord>>}
+ */
 async function ensureUrlMetadata(urls) {
   const normalizedUrls = normalizeUrlArray(urls);
   const allMeta = await readAllUrlMetaRecords();
@@ -269,7 +276,10 @@ export async function saveUrlHistoryEntries(entries) {
 }
 
 export async function appendUrlHistoryEntry(payload) {
-  return appendUrlHistorySnapshot(payload);
+  /** @type {UrlHistoryEntryPayload} */
+  const safePayload = payload || {};
+  if (!Array.isArray(safePayload.urls)) return null;
+  return appendUrlHistorySnapshot(safePayload);
 }
 
 export async function loadUrlRecords() {

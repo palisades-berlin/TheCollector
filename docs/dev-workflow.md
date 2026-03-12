@@ -66,6 +66,15 @@ Packaging script guardrails:
 - Use `docs/chrome-web-store-permissions.md` as canonical permission justification text in the CWS listing/policy form.
 - Every GitHub release must include the generated extension ZIP artifact.
 
+## GitHub Metadata Checklist (Per Release)
+
+Keep repository metadata aligned with shipped state in the same cycle:
+
+- Repository description reflects current product scope (capture + URL Library).
+- Topics are present and current (extension/chrome-extension/product-specific tags).
+- Security reporting visibility points to `SECURITY.md` and private advisory intake is enabled.
+- Release notes/changelog include any metadata-policy updates done in this cycle.
+
 ## Rollback Procedure
 
 - Follow `docs/release-rollback.md` for emergency release rollback and post-rollback verification.

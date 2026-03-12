@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.9.68 - 2026-03-12
+
+- Gap hardening cycle (`Gap-Severity-Fix.csv`) implementation:
+  - added `SECURITY.md` as canonical vulnerability disclosure policy with support matrix, reporting path, SLAs, and disclosure expectations.
+  - linked security disclosure path from `README.md` and `CONTRIBUTING.md`.
+  - added README trust badges (CI, coverage gate, license).
+  - documented required `contextMenus` and `alarms` permission rationale in README, aligned with `docs/chrome-web-store-permissions.md`.
+- JSDoc typing baseline:
+  - added shared typedef contract module `src/shared/types.js`.
+  - referenced shared types in key module boundaries (`src/background/service-worker.js`, `src/shared/repos/url-repo.js`, `src/popup/urls/urls-state.js`) without runtime behavior changes.
+- Regression prevention:
+  - added `tests/gap-remediation-contract.test.mjs` and wired it into `npm run test:unit` to enforce security doc link, badge row, permission rationale, and shared typedef references.
+- Process and backlog updates:
+  - added release-cycle GitHub metadata checklist to `docs/dev-workflow.md` (description/topics/security visibility).
+  - added separate non-blocking distribution visibility workstream entry to `docs/todo-list.md`.
+- Version sync:
+  - synchronized version to `1.9.68` across manifest/package/docs pointers.
+
+## 1.9.67 - 2026-03-12
+
+- URL Library dark-theme parity fix:
+  - applied saved theme on `src/urls/urls.js` so `urls.html` respects `light/dark/system` user settings.
+- Regression guardrails:
+  - added `tests/theme-contract.test.mjs` to enforce theme application across all primary surface entrypoints.
+  - extended `tests/accessibility-contract.test.mjs` coverage to include `src/urls/urls.html`.
+  - wired theme contract into `npm run test:unit`.
+- Version sync:
+  - synchronized version to `1.9.67` across manifest/package/docs pointers.
+
 ## 1.9.66 - 2026-03-12
 
 - Implementation-plan B-section refresh + closure:

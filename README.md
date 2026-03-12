@@ -2,7 +2,11 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.66`.
+[![CI](https://github.com/palisades-berlin/TheCollector/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/palisades-berlin/TheCollector/actions/workflows/ci.yml)
+[![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-90%25%20lines-brightgreen)](./package.json)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
+Current extension version: `1.9.68`.
 
 ## Overview
 
@@ -18,7 +22,7 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- Added new full-tab **URL Library** page with URL Saved Views (`All`, `Starred`, `Today`, `By Domain`) and integrated Change Log view.
+- URL Library now honors saved theme preference (`light` / `dark` / `system`) like all other main surfaces.
 - Added URL tag editing directly in URL Library rows (suggestions + free-text + remove, max-10 enforcement).
 - Added inline URL notes in URL Library rows (Pro/Ultra, max 140 characters).
 - Promoted URL Change Log to a first-class URL Library sub-surface with explicit back/escape focus return.
@@ -233,6 +237,7 @@ Release notes policy: keep notes in `CHANGELOG.md` only; do not add `GITHUB_RELE
 ## Governance & Compliance
 
 - Project license: [MIT](./LICENSE).
+- Security policy and vulnerability disclosure: [SECURITY.md](./SECURITY.md).
 - Contribution and review policy: [CONTRIBUTING.md](./CONTRIBUTING.md).
 - Code ownership is enforced via [CODEOWNERS](./.github/CODEOWNERS).
 - `main` branch protection requires:
@@ -247,6 +252,8 @@ Phase A focuses on dead-permission cleanup only. Current audit result: no remova
   - Needed for temporary host access on the user-invoked tab during capture/injection flows.
 - Required: `tabs`
   - Needed for active/current-window queries, opening history/preview tabs, and capture-tab operations.
+- Required: `contextMenus`
+  - Needed for right-click quick actions (`Capture this page`, `Collect this page URL`, `Collect this link URL`) that reuse existing local capture/URL flows.
 - Required: `scripting`
   - Needed to inject/execute capture logic in the target tab.
 - Required: `storage`
@@ -255,8 +262,12 @@ Phase A focuses on dead-permission cleanup only. Current audit result: no remova
   - Needed for offscreen stitching/composition document lifecycle.
 - Required: `unlimitedStorage`
   - Retained for screenshot history reliability on larger capture datasets.
+- Required: `alarms`
+  - Needed for periodic local Smart Revisit Nudge checks (badge refresh cadence) without external services.
 - Optional: `downloads`
   - Requested/revoked by user in Settings; used only for explicit export/download flows.
+
+Canonical store-facing permission rationale: [docs/chrome-web-store-permissions.md](./docs/chrome-web-store-permissions.md).
 
 Next refinement phases should focus on architectural reductions (not blind permission removal), especially around large-capture storage strategy.
 

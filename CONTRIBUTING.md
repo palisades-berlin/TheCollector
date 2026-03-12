@@ -103,6 +103,7 @@ For code changes, keep versions synchronized:
 - Local-only and no-tracking policy is mandatory for roadmap features.
 - Do not introduce external network calls without explicit approval and policy updates.
 - Respect manifest permission baseline checks.
+- Vulnerability reporting path and disclosure expectations are defined in [SECURITY.md](./SECURITY.md).
 
 ## Review Standards
 

@@ -16,6 +16,9 @@ import {
   removeUrlRecordMetadata,
 } from '../../shared/repos/url-repo.js';
 
+/** @typedef {import('../../shared/types.js').UrlMutationContext} UrlMutationContext */
+/** @typedef {import('../../shared/types.js').UrlHistoryActionType} UrlHistoryActionType */
+
 export const URL_LIMIT = 500;
 function arraysEqual(a, b) {
   if (a.length !== b.length) return false;
@@ -120,6 +123,9 @@ export async function refreshHistoryEntries() {
   return loadUrlHistoryEntries();
 }
 
+/**
+ * @param {UrlMutationContext} param0
+ */
 export function createUrlMutations({ onHistoryChange, isHistoryViewOpen }) {
   let urlMutationQueue = Promise.resolve();
 
@@ -129,6 +135,11 @@ export function createUrlMutations({ onHistoryChange, isHistoryViewOpen }) {
     onHistoryChange(entries);
   }
 
+  /**
+   * @param {(current: string[]) => Promise<string[] | void> | string[] | void} mutator
+   * @param {UrlHistoryActionType} [actionType]
+   * @param {Record<string, unknown>} [meta]
+   */
   function mutateUrls(mutator, actionType = URL_HISTORY_ACTION.UNKNOWN, meta = {}) {
     const run = urlMutationQueue.then(async () => {
       const urls = await loadUrls();

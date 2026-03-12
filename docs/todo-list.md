@@ -20,3 +20,8 @@ Working rule:
   - reduce `urls-library-desktop.png` from `400` to `300` with CI evidence.
   - reduce `urls-library-narrow.png` from `400` to `300` with CI evidence.
   - update `docs/visual-exception-register.md` and `CHANGELOG.md` in the same cycle.
+
+- [ ] Distribution visibility workstream (non-blocking engineering):
+  - track repository discoverability actions separately from product/code hardening.
+  - include README polish, release announcement cadence, and ecosystem listing channels as GTM tasks.
+  - do not block technical quality gates on watcher/star counts.
