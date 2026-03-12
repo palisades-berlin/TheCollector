@@ -12,16 +12,15 @@ const PRO_FEATURES = [
   'smart_revisit_nudges',
   'featured_ready_ux_pack',
   'capture_queue_batch_mode',
-  'command_palette',
 ];
 
 // 90-day roadmap features (Options toggle: Ultra)
 const ULTRA_FEATURES = [
+  'command_palette',
   'magic_mode',
   'workflow_automations',
   'cross_browser_core',
   'team_spaces_lite',
-  'enterprise_controls_v1',
 ];
 
 const FEATURE_TIER_MAP = new Map();

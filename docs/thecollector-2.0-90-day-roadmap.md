@@ -40,7 +40,7 @@ North-star outcomes by end of roadmap:
 4. Perceived value uplift: 3x (weekly value report + automation outcomes).
 5. Chrome Web Store featuring: qualify and apply within v1.10 milestone window.
 
-### Persisted Roadmap Progress Baseline (as of 2026-03-11)
+### Persisted Roadmap Progress Baseline (as of 2026-03-12)
 
 Implemented roadmap features and current delivery level:
 
@@ -53,10 +53,10 @@ Implemented roadmap features and current delivery level:
 
 Versioning status:
 
-1. Current release baseline: **`1.9.39`**.
+1. Current release baseline: **`1.9.41`**.
 2. No roadmap **v2** feature is fully shipped yet.
 3. Smart Save Profiles editable management remains planned for v2.0.
-4. Command Palette (Cmd/Ctrl+K) — verify ship status against help guide and resolve discrepancy in v1.10.
+4. Command Palette (Cmd/Ctrl+K) remains **unshipped**; user-facing help/docs are aligned to the shipped feature set.
 
 ---
 
@@ -116,7 +116,7 @@ Goal: Close the gap between shipped features and product promises. Harden tier i
 Implementation backlog:
 
 1. Simplify tier gating for a free product: implement single `capabilityTier` setting as UX complexity selector with no entitlement enforcement. Replace independent Pro/Ultra booleans with hierarchical checks. Update Settings UI to one tier selector and inheritance helper copy.
-2. Resolve Command Palette discrepancy: the help guide documents Cmd/Ctrl+K for Ultra but the roadmap baseline does not list it as shipped. Ship it or update docs — resolve in this milestone.
+2. Command Palette discrepancy **resolved**: help/docs now treat Cmd/Ctrl+K as unshipped until implementation lands.
 3. Featured-Ready UX Polish Pack: premium store screenshots (first 3 must tell the full value loop in 10 seconds), updated listing copy leading with outcomes not features, and permission trust copy pre-empting "why does this need tabs access?"
 4. Weekly Value Report promoted from Settings-only to popup footer card (dismissible, shown for Pro/Ultra).
 5. Microcopy pass: convert status text to "outcome + next step" format across all surfaces. Add value language ("Saved in 1 click", "You saved 42 min this week").

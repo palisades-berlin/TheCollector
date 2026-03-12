@@ -22,8 +22,9 @@ function test(name, fn) {
 test('maps roadmap features to expected tiers', () => {
   assert.equal(getRequiredTier('smart_save_profiles'), CAPABILITY_TIER.PRO);
   assert.equal(getRequiredTier('bulk_actions_v1'), CAPABILITY_TIER.PRO);
+  assert.equal(getRequiredTier('command_palette'), CAPABILITY_TIER.ULTRA);
   assert.equal(getRequiredTier('magic_mode'), CAPABILITY_TIER.ULTRA);
-  assert.equal(getRequiredTier('enterprise_controls_v1'), CAPABILITY_TIER.ULTRA);
+  assert.equal(getRequiredTier('enterprise_controls_v1'), CAPABILITY_TIER.BASIC);
   assert.equal(getRequiredTier('unknown_core_feature'), CAPABILITY_TIER.BASIC);
 });
 
