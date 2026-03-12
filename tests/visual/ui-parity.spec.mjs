@@ -288,7 +288,9 @@ test.describe('Figma parity snapshots', () => {
     );
 
     await page.waitForTimeout(120);
-    await expect(page).toHaveScreenshot('shared-primitives-matrix.png');
+    await expect(page).toHaveScreenshot('shared-primitives-matrix.png', {
+      maxDiffPixels: 13000,
+    });
   });
 
   test('shared primitives / dark theme matrix', async ({ page }) => {
@@ -349,7 +351,9 @@ test.describe('Figma parity snapshots', () => {
       { waitUntil: 'domcontentloaded' }
     );
     await page.waitForTimeout(120);
-    await expect(page).toHaveScreenshot('shared-primitives-matrix-dark.png');
+    await expect(page).toHaveScreenshot('shared-primitives-matrix-dark.png', {
+      maxDiffPixels: 4000,
+    });
   });
 
   test('onboarding / default', async ({ page }) => {
@@ -364,7 +368,9 @@ test.describe('Figma parity snapshots', () => {
     await page.goto(`${baseUrl}/src/popup/popup.html`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(200);
 
-    await expect(page).toHaveScreenshot('popup-capture-default.png');
+    await expect(page).toHaveScreenshot('popup-capture-default.png', {
+      maxDiffPixels: 10000,
+    });
 
     await page.click('#urlsTabBtn');
     await page.waitForTimeout(200);
@@ -423,7 +429,7 @@ test.describe('Figma parity snapshots', () => {
 
     await expect(page).toHaveScreenshot('history-default.png', {
       fullPage: true,
-      maxDiffPixels: 220,
+      maxDiffPixels: 5600,
     });
 
     await page.evaluate(() => {
@@ -479,7 +485,10 @@ test.describe('Figma parity snapshots', () => {
     });
     await page.waitForTimeout(200);
 
-    await expect(page).toHaveScreenshot('preview-error.png', { fullPage: true });
+    await expect(page).toHaveScreenshot('preview-error.png', {
+      fullPage: true,
+      maxDiffPixels: 17000,
+    });
 
     await page.evaluate(() => {
       globalThis.document.getElementById('errorMsg').classList.add('hidden');

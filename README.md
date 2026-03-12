@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.49`.
+Current extension version: `1.9.50`.
 
 ## Overview
 
@@ -22,7 +22,7 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 - Added URL tag filtering that composes with Saved URL Views (`All`, `Starred`, `Today`, `By Domain`).
 - Added URL tag persistence API (`setUrlRecordTags`) and migration-safe repository coverage.
 - Added per-snapshot Figma node annotations in visual parity tests and reduced temporary history tolerances from `300` to `220`.
-- Stabilized visual parity CI by enforcing a deterministic test font stack before screenshots.
+- Stabilized visual parity CI with deterministic test fonts, normalized Chromium rendering flags, and measured snapshot-specific CI bridging tolerances.
 
 ## Core Architecture
 

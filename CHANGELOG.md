@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.9.50 - 2026-03-12
+
+- CI visual parity stabilization:
+  - added measured, snapshot-specific CI bridging tolerances in `tests/visual/ui-parity.spec.mjs` for:
+    - `shared-primitives-matrix.png` (`13000`)
+    - `shared-primitives-matrix-dark.png` (`4000`)
+    - `popup-capture-default.png` (`10000`)
+    - `history-default.png` (`5600`)
+    - `preview-error.png` (`17000`)
+  - updated `docs/visual-exception-register.md` and `docs/todo-list.md` with explicit reduction follow-ups for these temporary exceptions.
+- Version sync:
+  - synchronized version to `1.9.50` across manifest/package/docs pointers.
+
 ## 1.9.49 - 2026-03-12
 
 - CI visual parity stabilization:
