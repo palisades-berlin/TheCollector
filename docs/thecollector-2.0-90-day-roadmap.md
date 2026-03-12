@@ -50,11 +50,11 @@ Implemented roadmap features and current delivery level:
 4. Weekly Value Report: **v1 delivered slice** (`1.9.24`) — Settings card only.
 5. Capture Queue + Batch Mode: **v1 delivered slice + hardening fixes** (`1.9.28` through `1.9.33`).
 6. Extension Help Page: **v1 delivered slice** (docs + Settings `Help & FAQ` section in `1.9.35`).
-7. URL Collector 2.0: **Saved URL Views + URL Tags + URL Notes v1 delivered, URL Library Sprint 2A migration completed, popup retained as quick-capture surface** (`1.9.46` through `1.9.58`).
+7. URL Collector 2.0: **Saved URL Views + URL Tags + URL Notes + URL Bulk Actions v1 delivered, URL Library Sprint 2A migration completed, popup retained as quick-capture surface** (`1.9.46` through `1.9.59`).
 
 Versioning status:
 
-1. Current release baseline: **`1.9.58`**.
+1. Current release baseline: **`1.9.59`**.
 2. No roadmap **v2** feature is fully shipped yet.
 3. Smart Save Profiles editable management remains planned for v2.0.
 4. Command Palette (Cmd/Ctrl+K) remains **unshipped**; user-facing help/docs are aligned to the shipped feature set.

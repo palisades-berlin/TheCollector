@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.9.59 - 2026-03-12
+
+- URL Library Sprint 2B-03:
+  - added URL row selection and bulk action bar on URL Library (Pro/Ultra): copy, open, TXT/CSV export, and delete selected URLs.
+  - kept popup URL panel quick-capture-focused with no bulk-action surface changes.
+  - preserved URL metadata consistency by removing metadata for bulk-deleted URL records.
+- Policy/docs sync:
+  - updated help surfaces to describe shipped URL Bulk Actions behavior on URL Library only.
+  - updated roadmap progress baseline and implementation-plan status for Sprint 2B-03 shipment.
+- Validation:
+  - `npm run lint` passed.
+  - `npm run test:unit` passed.
+  - `npm run test:docs-policy` passed.
+  - `npm run test:ui-calibration` passed.
+  - `npm run format:check` passed.
+- Version sync:
+  - synchronized version to `1.9.59` across manifest/package/docs pointers.
+
 ## 1.9.58 - 2026-03-12
 
 - URL Library Sprint 2B-02:

@@ -44,6 +44,15 @@ const els = {
   filterTag: document.getElementById('filterTag'),
   filterFrom: document.getElementById('filterFrom'),
   filterTo: document.getElementById('filterTo'),
+  bulkActionsBar: document.getElementById('bulkActionsBar'),
+  bulkSelectedCount: document.getElementById('bulkSelectedCount'),
+  bulkSelectVisibleBtn: document.getElementById('bulkSelectVisibleBtn'),
+  bulkClearBtn: document.getElementById('bulkClearBtn'),
+  bulkCopyBtn: document.getElementById('bulkCopyBtn'),
+  bulkOpenBtn: document.getElementById('bulkOpenBtn'),
+  bulkExportTxtBtn: document.getElementById('bulkExportTxtBtn'),
+  bulkExportCsvBtn: document.getElementById('bulkExportCsvBtn'),
+  bulkDeleteBtn: document.getElementById('bulkDeleteBtn'),
   urlList: document.getElementById('urlList'),
   emptyState: document.getElementById('emptyState'),
   urlsView: document.getElementById('urlsView'),
@@ -64,7 +73,9 @@ let clearConfirmTimer = null;
 let historyEntries = [];
 let tagsEnabled = false;
 let notesEnabled = false;
+let bulkActionsEnabled = false;
 const URL_NOTE_MAX = 140;
+const selectedUrls = new Set();
 
 const TAG_SUGGESTIONS = [
   'Research',
@@ -121,6 +132,26 @@ function normalizeTag(input) {
     .slice(0, 24);
 }
 
+function normalizeSelectionKey(url) {
+  return normalizeUrlForCompare(url);
+}
+
+function getSelectedUrlList() {
+  const selected = [];
+  for (const record of records) {
+    if (selectedUrls.has(normalizeSelectionKey(record.url))) selected.push(record.url);
+  }
+  return selected;
+}
+
+function syncSelectionWithRecords() {
+  if (selectedUrls.size === 0) return;
+  const known = new Set(records.map((record) => normalizeSelectionKey(record.url)));
+  for (const key of [...selectedUrls]) {
+    if (!known.has(key)) selectedUrls.delete(key);
+  }
+}
+
 function getRecordByUrl(url) {
   const normalizedUrl = normalizeUrlForCompare(url);
   return records.find((record) => normalizeUrlForCompare(record.url) === normalizedUrl) || null;
@@ -145,6 +176,7 @@ function setActiveView(view) {
   els.changeLogView.classList.toggle('hidden', !showChangeLog);
   if (showChangeLog) {
     renderChangeLog();
+    renderBulkActions();
     return;
   }
   renderUrls();
@@ -199,6 +231,26 @@ function renderTagFilterOptions() {
   if (tags.includes(current)) els.filterTag.value = current;
 }
 
+function renderBulkActions() {
+  const shouldShow = bulkActionsEnabled && activeView !== 'change-log';
+  els.bulkActionsBar?.classList.toggle('hidden', !shouldShow);
+  if (!shouldShow) return;
+  const selectedCount = getSelectedUrlList().length;
+  const label = `${selectedCount} selected`;
+  if (els.bulkSelectedCount) els.bulkSelectedCount.textContent = label;
+  const hasSelection = selectedCount > 0;
+  for (const button of [
+    els.bulkClearBtn,
+    els.bulkCopyBtn,
+    els.bulkOpenBtn,
+    els.bulkExportTxtBtn,
+    els.bulkExportCsvBtn,
+    els.bulkDeleteBtn,
+  ]) {
+    if (button) button.disabled = !hasSelection;
+  }
+}
+
 function renderDomainView(filtered) {
   const byDomain = new Map();
   for (const record of filtered) {
@@ -219,6 +271,7 @@ function renderDomainView(filtered) {
 }
 
 function renderUrlRow(record) {
+  const selected = selectedUrls.has(normalizeSelectionKey(record.url));
   const tags = Array.isArray(record.tags) ? record.tags : [];
   const note = typeof record.note === 'string' ? record.note : '';
   const hasNote = note.length > 0;
@@ -280,6 +333,11 @@ function renderUrlRow(record) {
       </div>
       <div class="url-actions">
         ${
+          bulkActionsEnabled
+            ? `<label class="url-select-control"><input type="checkbox" data-action="row-select" ${selected ? 'checked' : ''} />Select</label>`
+            : ''
+        }
+        ${
           tagsEnabled
             ? '<button class="sc-btn sc-btn-sm" data-action="toggle-tags" aria-expanded="false">Tags</button>'
             : ''
@@ -300,14 +358,19 @@ function renderUrls() {
   const filtered = getFilteredRecords();
   els.urlList.innerHTML = '';
   els.emptyState.classList.toggle('hidden', filtered.length > 0);
-  if (filtered.length === 0) return;
+  if (filtered.length === 0) {
+    renderBulkActions();
+    return;
+  }
 
   if (activeView === 'domain') {
     renderDomainView(filtered);
+    renderBulkActions();
     return;
   }
 
   els.urlList.innerHTML = filtered.map((record) => renderUrlRow(record)).join('');
+  renderBulkActions();
 }
 
 function renderChangeLog() {
@@ -349,6 +412,7 @@ function updateRestoreButtonState(total) {
 
 async function reload() {
   records = await loadUrlRecords();
+  syncSelectionWithRecords();
   const urls = await loadUrls();
   const undo = await loadUndoSnapshot();
   undoCount = undo?.urls?.length || 0;
@@ -358,6 +422,7 @@ async function reload() {
   if (activeView === 'change-log') {
     historyEntries = await refreshHistoryEntries();
     renderChangeLog();
+    renderBulkActions();
   } else {
     renderUrls();
   }
@@ -407,6 +472,10 @@ els.urlList.addEventListener('click', async (event) => {
 
   if (action === 'open') {
     openUrl(url, reportError, showToast);
+    return;
+  }
+
+  if (action === 'row-select') {
     return;
   }
 
@@ -538,6 +607,20 @@ els.urlList.addEventListener('click', async (event) => {
   }
 });
 
+els.urlList.addEventListener('change', (event) => {
+  const target = event.target instanceof Element ? event.target : null;
+  if (!target || target.getAttribute('data-action') !== 'row-select') return;
+  const row = target.closest('.url-row');
+  if (!row) return;
+  const url = row.getAttribute('data-url') || '';
+  const key = normalizeSelectionKey(url);
+  if (!key) return;
+  const checked = target instanceof HTMLInputElement && target.checked;
+  if (checked) selectedUrls.add(key);
+  else selectedUrls.delete(key);
+  renderBulkActions();
+});
+
 els.urlList.addEventListener('keydown', (event) => {
   const target = event.target instanceof Element ? event.target : null;
   if (!target || target.getAttribute('data-action') !== 'tag-input') return;
@@ -623,11 +706,106 @@ async function initFeatureVisibility() {
     const settings = await getUserSettings();
     tagsEnabled = canUseFeature('url_tags', settings);
     notesEnabled = canUseFeature('url_notes', settings);
+    bulkActionsEnabled = canUseFeature('url_bulk_actions', settings);
   } catch {
     tagsEnabled = false;
     notesEnabled = false;
+    bulkActionsEnabled = false;
   }
 }
+
+els.bulkSelectVisibleBtn?.addEventListener('click', () => {
+  for (const record of getFilteredRecords()) {
+    const key = normalizeSelectionKey(record.url);
+    if (key) selectedUrls.add(key);
+  }
+  renderUrls();
+});
+
+els.bulkClearBtn?.addEventListener('click', () => {
+  selectedUrls.clear();
+  renderUrls();
+});
+
+els.bulkCopyBtn?.addEventListener('click', async () => {
+  try {
+    const urls = getSelectedUrlList();
+    if (!urls.length) {
+      showToast('Nothing selected');
+      return;
+    }
+    await copyUrlsToClipboard(urls);
+    showToast(`Copied ${formatUrlCount(urls.length)}`);
+  } catch (err) {
+    reportError(err, 'Could not copy selected URLs');
+  }
+});
+
+els.bulkOpenBtn?.addEventListener('click', () => {
+  const urls = getSelectedUrlList();
+  if (!urls.length) {
+    showToast('Nothing selected');
+    return;
+  }
+  for (const url of urls) openUrl(url, reportError, showToast);
+  showToast(`Opened ${formatUrlCount(urls.length)}`);
+});
+
+els.bulkExportTxtBtn?.addEventListener('click', async () => {
+  try {
+    const urls = getSelectedUrlList();
+    if (!urls.length) {
+      showToast('Nothing selected');
+      return;
+    }
+    await exportUrlsAsTxt(urls, 'selected-urls.txt');
+    showToast(`Saved ${formatUrlCount(urls.length)} as TXT`);
+  } catch (err) {
+    reportError(err, 'Could not export selected URLs');
+  }
+});
+
+els.bulkExportCsvBtn?.addEventListener('click', async () => {
+  try {
+    const urls = getSelectedUrlList();
+    if (!urls.length) {
+      showToast('Nothing selected');
+      return;
+    }
+    await exportUrlsAsCsv(urls, 'selected-urls.csv');
+    showToast(`Saved ${formatUrlCount(urls.length)} as CSV`);
+  } catch (err) {
+    reportError(err, 'Could not export selected URLs');
+  }
+});
+
+els.bulkDeleteBtn?.addEventListener('click', async () => {
+  try {
+    const urlsToRemove = getSelectedUrlList();
+    if (!urlsToRemove.length) {
+      showToast('Nothing selected');
+      return;
+    }
+    const keys = new Set(urlsToRemove.map((url) => normalizeSelectionKey(url)).filter(Boolean));
+    await mutations.mutateUrls(
+      (current) =>
+        current.filter((url) => {
+          const key = normalizeSelectionKey(url);
+          return !keys.has(key);
+        }),
+      URL_HISTORY_ACTION.UNKNOWN,
+      { source: 'url-library', operation: 'remove_bulk', removedCount: urlsToRemove.length }
+    );
+    for (const url of urlsToRemove) {
+      await removeUrlMetadata(url);
+      selectedUrls.delete(normalizeSelectionKey(url));
+    }
+    await reload();
+    showToast(`Removed ${formatUrlCount(urlsToRemove.length)}`);
+  } catch (err) {
+    reportError(err, 'Could not remove selected URLs');
+  }
+});
 
 els.addBtn.addEventListener('click', async () => {
   try {

@@ -72,6 +72,24 @@
         </div>
 
         <div id="urlsView">
+          <div id="bulkActionsBar" class="bulk-actions-bar hidden">
+            <div class="bulk-actions-meta">
+              <strong id="bulkSelectedCount">0 selected</strong>
+            </div>
+            <div class="bulk-actions-controls">
+              <button id="bulkSelectVisibleBtn" class="sc-btn sc-btn-sm" type="button">
+                Select Visible
+              </button>
+              <button id="bulkClearBtn" class="sc-btn sc-btn-sm" type="button">Clear</button>
+              <button id="bulkCopyBtn" class="sc-btn sc-btn-sm" type="button">Copy</button>
+              <button id="bulkOpenBtn" class="sc-btn sc-btn-sm" type="button">Open</button>
+              <button id="bulkExportTxtBtn" class="sc-btn sc-btn-sm" type="button">TXT</button>
+              <button id="bulkExportCsvBtn" class="sc-btn sc-btn-sm" type="button">CSV</button>
+              <button id="bulkDeleteBtn" class="sc-btn sc-btn-danger sc-btn-sm" type="button">
+                Delete
+              </button>
+            </div>
+          </div>
           <div id="urlList" class="url-list"></div>
           <div id="emptyState" class="sc-state-empty hidden">No URLs found for this view.</div>
         </div>
