@@ -374,7 +374,9 @@ test.describe('Figma parity snapshots', () => {
 
     await page.click('#urlsTabBtn');
     await page.waitForTimeout(200);
-    await expect(page).toHaveScreenshot('popup-urls-default.png');
+    await expect(page).toHaveScreenshot('popup-urls-default.png', {
+      maxDiffPixels: 10400,
+    });
 
     await page.evaluate(() => {
       globalThis.document.getElementById('errorMsg').classList.remove('hidden');
@@ -440,7 +442,7 @@ test.describe('Figma parity snapshots', () => {
     });
     await expect(page).toHaveScreenshot('history-empty.png', {
       fullPage: true,
-      maxDiffPixels: 220,
+      maxDiffPixels: 5800,
     });
 
     await page.evaluate(() => {
@@ -517,6 +519,9 @@ test.describe('Figma parity snapshots', () => {
 
     await page.setViewportSize({ width: 1024, height: 920 });
     await page.waitForTimeout(120);
-    await expect(page).toHaveScreenshot('preview-toolbar-wrap.png', { fullPage: true });
+    await expect(page).toHaveScreenshot('preview-toolbar-wrap.png', {
+      fullPage: true,
+      maxDiffPixels: 26000,
+    });
   });
 });

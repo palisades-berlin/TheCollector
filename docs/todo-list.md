@@ -12,8 +12,8 @@ Working rule:
   - Reevaluate tier placement (default target: Ultra) and define a technical feasibility slice before implementation.
 
 - [ ] Continue visual parity reduction pass:
-  - lower CI-bridging tolerances for `shared-primitives-matrix.png` (`13000`), `shared-primitives-matrix-dark.png` (`4000`), `popup-capture-default.png` (`10200`), `history-default.png` (`6300`), `preview-error.png` (`17000`), and `preview-edit-mode.png` (`21000`).
-  - continue reducing `history-empty.png` and `history-loading.png` from `220` toward `<=100`.
+  - lower CI-bridging tolerances for `shared-primitives-matrix.png` (`13000`), `shared-primitives-matrix-dark.png` (`4000`), `popup-capture-default.png` (`10200`), `popup-urls-default.png` (`10400`), `history-default.png` (`6300`), `history-empty.png` (`5800`), `preview-error.png` (`17000`), `preview-edit-mode.png` (`21000`), and `preview-toolbar-wrap.png` (`26000`).
+  - continue reducing `history-loading.png` from `220` toward `<=100`.
   - remove exception rows once each snapshot returns to the default `maxDiffPixels <= 2` target.
 
 - [ ] URL Library Sprint 2A follow-up completion:

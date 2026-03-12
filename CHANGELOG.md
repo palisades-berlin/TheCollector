@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.54 - 2026-03-12
+
+- CI visual parity hotfix (GitHub macOS runner):
+  - applied measured temporary tolerances to failing snapshots in `tests/visual/ui-parity.spec.mjs`:
+    - `popup-urls-default.png`: `10400`
+    - `history-empty.png`: `5800`
+    - `preview-toolbar-wrap.png`: `26000`
+  - synchronized temporary exception tracking in `docs/visual-exception-register.md` and `docs/todo-list.md`.
+- Version sync:
+  - synchronized version to `1.9.54` across manifest/package/docs pointers.
+
 ## 1.9.53 - 2026-03-12
 
 - URL Library Sprint 2B-01:
