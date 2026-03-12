@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.42 - 2026-03-12
+
+- Roadmap/capability parity hardening:
+  - aligned Ultra capability keys in `src/shared/capabilities.js` with roadmap terminology by adding `omnibox_actions`, `admin_config_profile`, `capture_diff_monitoring`, and `smart_url_collections`
+  - removed stale capability key `cross_browser_core`.
+- Expanded guardrail coverage for roadmap feature actions:
+  - added async tests for `roadmapFeatureFetch` tier checks, local-only URL enforcement, tracking payload rejection, and successful local request passthrough.
+- Documentation consistency updates:
+  - corrected runtime module mapping in `docs/architecture.md` to current `src/background/*` files
+  - synchronized version pointers across `manifest.json`, `package.json`, `README.md`, `AGENTS.md`, `CLAUDE.md`, and roadmap baseline.
+
 ## 1.9.41 - 2026-03-11
 
 - Smart Revisit Nudges: proactive badge signal via `chrome.alarms` (solves pull-model gap).

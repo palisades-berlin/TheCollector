@@ -23,8 +23,11 @@ test('maps roadmap features to expected tiers', () => {
   assert.equal(getRequiredTier('smart_save_profiles'), CAPABILITY_TIER.PRO);
   assert.equal(getRequiredTier('bulk_actions_v1'), CAPABILITY_TIER.PRO);
   assert.equal(getRequiredTier('command_palette'), CAPABILITY_TIER.ULTRA);
+  assert.equal(getRequiredTier('omnibox_actions'), CAPABILITY_TIER.ULTRA);
   assert.equal(getRequiredTier('magic_mode'), CAPABILITY_TIER.ULTRA);
+  assert.equal(getRequiredTier('admin_config_profile'), CAPABILITY_TIER.ULTRA);
   assert.equal(getRequiredTier('enterprise_controls_v1'), CAPABILITY_TIER.BASIC);
+  assert.equal(getRequiredTier('cross_browser_core'), CAPABILITY_TIER.BASIC);
   assert.equal(getRequiredTier('unknown_core_feature'), CAPABILITY_TIER.BASIC);
 });
 
@@ -63,6 +66,9 @@ test('returns deterministic capability snapshot and feature lists', () => {
   const features = listGatedFeatures();
   assert.ok(features.pro.includes('smart_save_profiles'));
   assert.ok(features.ultra.includes('magic_mode'));
+  assert.ok(features.ultra.includes('admin_config_profile'));
+  assert.ok(features.ultra.includes('omnibox_actions'));
+  assert.equal(features.ultra.includes('cross_browser_core'), false);
   assert.equal(features.pro.includes('magic_mode'), false);
 });
 

@@ -17,9 +17,12 @@ const PRO_FEATURES = [
 // 90-day roadmap features (Options toggle: Ultra)
 const ULTRA_FEATURES = [
   'command_palette',
+  'omnibox_actions',
   'magic_mode',
   'workflow_automations',
-  'cross_browser_core',
+  'admin_config_profile',
+  'capture_diff_monitoring',
+  'smart_url_collections',
   'team_spaces_lite',
 ];
 
