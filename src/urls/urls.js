@@ -1,5 +1,10 @@
 import { showToast } from '../shared/toast.js';
-import { getRegisteredDomain, cleanUrl, normalizeUrlForCompare, isCollectibleUrl } from '../shared/url-utils.js';
+import {
+  getRegisteredDomain,
+  cleanUrl,
+  normalizeUrlForCompare,
+  isCollectibleUrl,
+} from '../shared/url-utils.js';
 import { URL_HISTORY_ACTION } from '../shared/url-history.js';
 import {
   loadUrls,
@@ -160,7 +165,9 @@ function getFilteredRecords() {
   }
 
   if (tagFilter) {
-    out = out.filter((record) => (Array.isArray(record.tags) ? record.tags : []).includes(tagFilter));
+    out = out.filter((record) =>
+      (Array.isArray(record.tags) ? record.tags : []).includes(tagFilter)
+    );
   }
 
   if (fromTs) out = out.filter((record) => Number(record.createdAt || 0) >= fromTs);
@@ -350,7 +357,8 @@ els.urlList.addEventListener('click', async (event) => {
     }
     return;
   }
-  const target = event.target instanceof Element ? event.target.closest('button[data-action]') : null;
+  const target =
+    event.target instanceof Element ? event.target.closest('button[data-action]') : null;
   if (!target) return;
   const row = target.closest('[data-url]');
   if (!row) return;
@@ -379,7 +387,9 @@ els.urlList.addEventListener('click', async (event) => {
   if (action === 'tag-suggest' || action === 'tag-add' || action === 'tag-remove') {
     try {
       const record = getRecordByUrl(url);
-      const existingTags = Array.isArray(record?.tags) ? record.tags.map(normalizeTag).filter(Boolean) : [];
+      const existingTags = Array.isArray(record?.tags)
+        ? record.tags.map(normalizeTag).filter(Boolean)
+        : [];
       let nextTags = [...existingTags];
 
       if (action === 'tag-suggest') {
@@ -473,7 +483,8 @@ els.urlList.addEventListener('keydown', (event) => {
 });
 
 els.changeLogList.addEventListener('click', async (event) => {
-  const target = event.target instanceof Element ? event.target.closest('button[data-history-action]') : null;
+  const target =
+    event.target instanceof Element ? event.target.closest('button[data-history-action]') : null;
   if (!target) return;
   const row = target.closest('[data-history-id]');
   if (!row) return;
@@ -671,7 +682,11 @@ els.clearBtn.addEventListener('click', async () => {
       clearConfirmTimer = null;
       const { snapshotCount } = await mutations.clearUrlsWithUndoSnapshot();
       await reload();
-      showToast(snapshotCount > 0 ? `Cleared ${formatUrlCount(snapshotCount)} (undo available)` : 'List already empty');
+      showToast(
+        snapshotCount > 0
+          ? `Cleared ${formatUrlCount(snapshotCount)} (undo available)`
+          : 'List already empty'
+      );
       els.clearBtn.textContent = 'Clear All';
       els.clearBtn.classList.remove('confirming');
       return;

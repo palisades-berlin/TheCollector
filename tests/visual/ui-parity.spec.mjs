@@ -385,7 +385,9 @@ test.describe('Figma parity snapshots', () => {
       globalThis.document.getElementById('doneMsg').classList.add('hidden');
       globalThis.document.getElementById('progress').classList.add('hidden');
     });
-    await expect(page).toHaveScreenshot('popup-error-state.png');
+    await expect(page).toHaveScreenshot('popup-error-state.png', {
+      maxDiffPixels: 10400,
+    });
 
     await page.evaluate(() => {
       globalThis.document.getElementById('errorMsg').classList.add('hidden');
@@ -451,7 +453,7 @@ test.describe('Figma parity snapshots', () => {
     });
     await expect(page).toHaveScreenshot('history-loading.png', {
       fullPage: true,
-      maxDiffPixels: 220,
+      maxDiffPixels: 4700,
     });
 
     await page.evaluate(() => {

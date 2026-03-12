@@ -1,7 +1,11 @@
 # PM Findings: URL Features Architecture & URL Library Proposal
+
 # THE Collector — v1.9.47
+
 # Date: 2026-03-12
+
 # Author: Principal PM Analysis
+
 # Status: RECOMMENDATION — input for v2.0 scoping
 
 ---
@@ -32,15 +36,15 @@ files_read:
 
 The following URL Collector 2.0 features are live:
 
-| Feature | Location | Status |
-|---|---|---|
-| Saved URL Views (All / Starred / Today / By Domain) | Popup URL panel — 4 view tabs | SHIPPED |
-| URL Tags (chip UI, 8 presets + free text, max 10) | Popup URL panel — inline per row | SHIPPED |
-| URL Starring | Popup URL panel — toggle per row | SHIPPED |
-| URL Change Log ("History" button) | Popup URL panel — panel-swap subview | SHIPPED |
-| URL Notes (140-char) | IndexedDB data model only | DATA MODEL ONLY — NO UI |
-| URL Bulk Actions | Not implemented | MISSING — also missing capability gate |
-| Smart URL Collections (By Domain grouping) | Popup URL panel — By Domain tab | SHIPPED (basic) |
+| Feature                                             | Location                             | Status                                 |
+| --------------------------------------------------- | ------------------------------------ | -------------------------------------- |
+| Saved URL Views (All / Starred / Today / By Domain) | Popup URL panel — 4 view tabs        | SHIPPED                                |
+| URL Tags (chip UI, 8 presets + free text, max 10)   | Popup URL panel — inline per row     | SHIPPED                                |
+| URL Starring                                        | Popup URL panel — toggle per row     | SHIPPED                                |
+| URL Change Log ("History" button)                   | Popup URL panel — panel-swap subview | SHIPPED                                |
+| URL Notes (140-char)                                | IndexedDB data model only            | DATA MODEL ONLY — NO UI                |
+| URL Bulk Actions                                    | Not implemented                      | MISSING — also missing capability gate |
+| Smart URL Collections (By Domain grouping)          | Popup URL panel — By Domain tab      | SHIPPED (basic)                        |
 
 ### 1.2 What the screenshot History page contains
 
@@ -66,12 +70,14 @@ This is structurally overloaded for a 400px-wide height-constrained popup.
 ### 1.4 The URL data model (url-repo.js)
 
 Storage architecture:
+
 - URL list: chrome.storage.local key "urls" (plain string array)
 - URL metadata: IndexedDB "the-collector-url-meta" / store "url_meta"
 - URL change log: separate store via url-history.js
 - Undo snapshot: chrome.storage.local key "urlsUndoSnapshot"
 
 URL metadata record shape:
+
 ```
 {
   normalizedUrl: string,   // key
@@ -94,17 +100,18 @@ IndexedDB indexes: "starred", "createdAt"
 
 The word "History" currently means three different things:
 
-| Usage | What it actually is |
-|---|---|
-| "History" — header nav link in history.html | Screenshot History page (full-tab) |
-| "History" — button in popup URL footer | URL Change Log (add/remove operation snapshots) |
-| "History" — roadmap surface reference | Conceptual URL Library page (does not exist yet) |
+| Usage                                       | What it actually is                              |
+| ------------------------------------------- | ------------------------------------------------ |
+| "History" — header nav link in history.html | Screenshot History page (full-tab)               |
+| "History" — button in popup URL footer      | URL Change Log (add/remove operation snapshots)  |
+| "History" — roadmap surface reference       | Conceptual URL Library page (does not exist yet) |
 
 This is a UX debt item that gets worse with every new URL feature added.
 
 ### 2.2 HIGH — No dedicated URL Library page exists
 
 The roadmap table lists "Popup URLs, History" as primary surfaces for URL Collector 2.0 features. However:
+
 - The screenshot History page has zero URL features
 - "History" in the roadmap table was aspirational placeholding for a URL Library page that was never built
 - All URL organizational features are popup-bound with no full-tab destination
@@ -116,6 +123,7 @@ url-repo.js implements full note support (normalizeUrlNote, 140-char limit, Inde
 ### 2.4 HIGH — url_bulk_actions capability gate is missing
 
 capabilities.js PRO_FEATURES array:
+
 ```
 ['smart_save_profiles', 'bulk_actions_v1', 'weekly_value_report',
  'smart_revisit_nudges', 'featured_ready_ux_pack', 'capture_queue_batch_mode',
@@ -151,6 +159,7 @@ Build src/urls/urls.html as a full-tab extension page.
 This page is the permanent home for all URL organizational features, directly analogous to history.html for screenshots.
 
 Proposed page structure:
+
 ```
 HEADER
   - Title: "URL Library"  +  count badge
@@ -190,6 +199,7 @@ PAGINATION
 ```
 
 Acceptance criteria:
+
 - All URL metadata (star, tags, notes) readable and writable from this page
 - URL Bulk Actions (copy, export CSV/TXT, delete) work on selection
 - By Domain view renders collapsible sections with registered domain grouping
@@ -216,6 +226,7 @@ POPUP URL TAB — AFTER
 ```
 
 Remove from popup:
+
 - All / Starred / Today / By Domain view tabs
 - Tag filter dropdown
 - Inline tag chip editors
@@ -225,12 +236,12 @@ Performance benefit: removes repeated IndexedDB calls, reduces DOM complexity, h
 
 ### REC-03 — Fix the "History" naming collision (PRIORITY: MEDIUM, TARGET: v2.0 Sprint 2C)
 
-| Current | Rename to | Location |
-|---|---|---|
-| "History" button (popup URL footer) | "Change Log" | Popup URL footer |
-| urlsHistoryView DOM ID | urlChangeLogView | Internal DOM |
-| urlHistoryListEl | urlChangeLogListEl | Internal DOM |
-| "URL history cleared" toast | "Change log cleared" | Microcopy |
+| Current                                         | Rename to                   | Location             |
+| ----------------------------------------------- | --------------------------- | -------------------- |
+| "History" button (popup URL footer)             | "Change Log"                | Popup URL footer     |
+| urlsHistoryView DOM ID                          | urlChangeLogView            | Internal DOM         |
+| urlHistoryListEl                                | urlChangeLogListEl          | Internal DOM         |
+| "URL history cleared" toast                     | "Change log cleared"        | Microcopy            |
 | history.html page title "THE Collector History" | "THE Collector Screenshots" | history.html <title> |
 
 The screenshot History page keeps its URL. Only the popup button label and internal IDs change.
@@ -301,13 +312,13 @@ Each sprint is independently shippable. 2B requires 2A. 2C can be parallelized w
 
 The following roadmap table entries need surface corrections when v2.0 scope is locked:
 
-| Feature | Current surface in roadmap | Corrected surface |
-|---|---|---|
-| Saved URL Views | Popup URLs, History | URL Library page |
-| URL Tags | Popup URLs, History | URL Library page (with minimal star-only in popup) |
-| URL Bulk Actions | Popup URLs, History | URL Library page only |
-| URL Notes | Popup URLs, History | URL Library page only |
-| Smart URL Collections | History, Sidebar | URL Library page |
+| Feature               | Current surface in roadmap | Corrected surface                                  |
+| --------------------- | -------------------------- | -------------------------------------------------- |
+| Saved URL Views       | Popup URLs, History        | URL Library page                                   |
+| URL Tags              | Popup URLs, History        | URL Library page (with minimal star-only in popup) |
+| URL Bulk Actions      | Popup URLs, History        | URL Library page only                              |
+| URL Notes             | Popup URLs, History        | URL Library page only                              |
+| Smart URL Collections | History, Sidebar           | URL Library page                                   |
 
 ---
 
@@ -326,6 +337,7 @@ The following roadmap table entries need surface corrections when v2.0 scope is 
 ## SECTION 7: CONSTRAINTS THAT MUST NOT CHANGE
 
 Per ADR 0009 and project CLAUDE.md:
+
 - Always free, local-only, no external connections
 - No tracking, no telemetry export
 - Tier selector (Basic/Pro/Ultra) is UX complexity preference, not a paywall
@@ -336,4 +348,7 @@ Per ADR 0009 and project CLAUDE.md:
 ---
 
 END OF FINDINGS
+
+```
+
 ```

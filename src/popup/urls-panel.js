@@ -108,7 +108,9 @@ async function renderList() {
   currentUrlCount = urls.length;
   updateBadge(currentUrlCount);
 
-  const byNormalized = new Map(records.map((record) => [normalizeUrlForCompare(record.url), record]));
+  const byNormalized = new Map(
+    records.map((record) => [normalizeUrlForCompare(record.url), record])
+  );
   const recent = urls
     .slice()
     .reverse()
@@ -141,7 +143,8 @@ function resetClearButton() {
 
 function wireListEvents() {
   urlListEl.addEventListener('click', async (event) => {
-    const target = event.target instanceof Element ? event.target.closest('button[data-action]') : null;
+    const target =
+      event.target instanceof Element ? event.target.closest('button[data-action]') : null;
     if (!target) return;
     const row = target.closest('.url-item');
     if (!row) return;
@@ -191,7 +194,9 @@ function wirePrimaryEvents() {
       );
 
       if (!added) {
-        showToast(urls.length >= URL_LIMIT ? `List full (max ${URL_LIMIT} URLs)` : 'Already in list');
+        showToast(
+          urls.length >= URL_LIMIT ? `List full (max ${URL_LIMIT} URLs)` : 'Already in list'
+        );
         return;
       }
       await renderList();
