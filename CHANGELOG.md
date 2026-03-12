@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.49 - 2026-03-12
+
+- CI visual parity stabilization:
+  - normalized Playwright Chromium rendering flags (`--force-color-profile=srgb`, `--disable-font-subpixel-positioning`, `--disable-lcd-text`, `--font-render-hinting=none`) in `playwright.visual.config.mjs`.
+  - retained deterministic test font override in visual suite init for baseline consistency across macOS environments.
+  - verified `npm run test:ui-calibration` passes locally with the normalized renderer profile.
+- Version sync:
+  - synchronized version to `1.9.49` across manifest/package/docs pointers.
+
 ## 1.9.48 - 2026-03-12
 
 - CI visual parity stabilization:

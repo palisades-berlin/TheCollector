@@ -16,6 +16,14 @@ export default defineConfig({
     colorScheme: 'light',
     locale: 'en-US',
     timezoneId: 'UTC',
+    launchOptions: {
+      args: [
+        '--force-color-profile=srgb',
+        '--disable-font-subpixel-positioning',
+        '--disable-lcd-text',
+        '--font-render-hinting=none',
+      ],
+    },
   },
   reporter: [['list']],
 });
