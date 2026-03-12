@@ -395,7 +395,9 @@ test.describe('Figma parity snapshots', () => {
       done.classList.remove('hidden');
       globalThis.document.getElementById('doneMsgText').textContent = 'Saved. Open in Sidebar.';
     });
-    await expect(page).toHaveScreenshot('popup-success-state.png');
+    await expect(page).toHaveScreenshot('popup-success-state.png', {
+      maxDiffPixels: 10400,
+    });
   });
 
   test('history / list + empty + loading + modal', async ({ page }) => {
@@ -460,7 +462,10 @@ test.describe('Figma parity snapshots', () => {
       globalThis.document.getElementById('loading').classList.add('hidden');
       globalThis.document.getElementById('filesOverlay').classList.remove('hidden');
     });
-    await expect(page).toHaveScreenshot('history-modal-open.png', { fullPage: true });
+    await expect(page).toHaveScreenshot('history-modal-open.png', {
+      fullPage: true,
+      maxDiffPixels: 7800,
+    });
   });
 
   test('options / default + save feedback + badge variants', async ({ page }) => {

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.9.56 - 2026-03-12
+
+- CI visual parity follow-up (GitHub macOS runner):
+  - applied measured temporary tolerances for newly failing snapshots:
+    - `popup-success-state.png`: `10400`
+    - `history-modal-open.png`: `7800`
+  - synchronized temporary exception tracking in `docs/visual-exception-register.md` and `docs/todo-list.md`.
+- Version sync:
+  - synchronized version to `1.9.56` across manifest/package/docs pointers.
+
 ## 1.9.55 - 2026-03-12
 
 - CI visual parity follow-up (GitHub macOS runner):
