@@ -74,6 +74,19 @@ export function wireUrlsPanelEvents({
       return;
     }
 
+    if (actionEl.dataset.action === 'star') {
+      try {
+        const nextStarred = actionEl.getAttribute('aria-pressed') !== 'true';
+        await state.setUrlStar(url, nextStarred);
+        const urls = await state.loadUrls();
+        renderList(urls);
+        showToast(nextStarred ? 'Added to Starred' : 'Removed from Starred');
+      } catch (err) {
+        reportError(err, 'Could not update starred state');
+      }
+      return;
+    }
+
     if (actionEl.dataset.action === 'remove') {
       try {
         const urls = await state.mutations.mutateUrls(

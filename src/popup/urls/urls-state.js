@@ -9,6 +9,9 @@ import {
   clearUrlUndoSnapshot,
   loadUrlHistoryEntries,
   appendUrlHistoryEntry,
+  loadUrlRecords as loadUrlRecordsRepo,
+  setUrlRecordStar,
+  removeUrlRecordMetadata,
 } from '../../shared/repos/url-repo.js';
 
 export const URL_LIMIT = 500;
@@ -50,6 +53,18 @@ export async function loadUndoSnapshot() {
 
 export async function saveUrls(urls) {
   await saveUrlList(urls);
+}
+
+export async function loadUrlRecords() {
+  return loadUrlRecordsRepo();
+}
+
+export async function setUrlStar(url, starred) {
+  return setUrlRecordStar(url, starred);
+}
+
+export async function removeUrlMetadata(url) {
+  return removeUrlRecordMetadata(url);
 }
 
 export async function getCurrentTabUrl() {

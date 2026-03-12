@@ -4,6 +4,8 @@ import {
   saveUrlList,
   loadUrlUndoSnapshot,
   writeUrlsAndUndo,
+  loadUrlRecords,
+  setUrlRecordStar,
 } from '../src/shared/repos/url-repo.js';
 
 async function runTest(name, fn) {
@@ -62,4 +64,36 @@ await runTest('url repo handles undo snapshot reads/writes', async () => {
   const snapshot = await loadUrlUndoSnapshot();
   assert.deepEqual(snapshot.urls, ['https://prev.com']);
   assert.deepEqual(storageLocal.state.urls, ['https://now.com']);
+});
+
+await runTest('url repo migrates string list to URL metadata records', async () => {
+  const storageLocal = createStorageMock({
+    urls: ['https://a.example.com', 'https://b.example.com'],
+  });
+  globalThis.indexedDB = undefined;
+  globalThis.chrome = {
+    runtime: { lastError: null },
+    storage: { local: storageLocal },
+  };
+
+  const records = await loadUrlRecords();
+  assert.equal(records.length, 2);
+  assert.equal(records[0].url, 'https://a.example.com');
+  assert.equal(records[0].starred, false);
+  assert.ok(Number.isFinite(records[0].createdAt));
+  assert.equal(typeof storageLocal.state.urlMetaFallbackV1, 'object');
+});
+
+await runTest('url repo persists starred state for URL records', async () => {
+  const storageLocal = createStorageMock({ urls: ['https://star.example.com'] });
+  globalThis.indexedDB = undefined;
+  globalThis.chrome = {
+    runtime: { lastError: null },
+    storage: { local: storageLocal },
+  };
+
+  await loadUrlRecords();
+  await setUrlRecordStar('https://star.example.com', true);
+  const records = await loadUrlRecords();
+  assert.equal(records[0].starred, true);
 });

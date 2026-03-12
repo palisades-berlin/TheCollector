@@ -4,6 +4,7 @@ import {
   normalizeUrlForCompare,
   isCollectibleUrl,
   escapeCsvCell,
+  getRegisteredDomain,
 } from '../src/shared/url-utils.js';
 
 function test(name, fn) {
@@ -40,4 +41,11 @@ test('escapeCsvCell quotes content and mitigates formula injection', () => {
   assert.equal(escapeCsvCell('https://example.com'), '"https://example.com"');
   assert.equal(escapeCsvCell('=HYPERLINK("https://evil")'), '"\'=HYPERLINK(""https://evil"")"');
   assert.equal(escapeCsvCell('hello "world"'), '"hello ""world"""');
+});
+
+test('getRegisteredDomain resolves base domain for saved views grouping', () => {
+  assert.equal(getRegisteredDomain('https://www.docs.example.com/path'), 'example.com');
+  assert.equal(getRegisteredDomain('https://a.b.c.gov.uk/info'), 'c.gov.uk');
+  assert.equal(getRegisteredDomain('https://example.com'), 'example.com');
+  assert.equal(getRegisteredDomain('notaurl'), '');
 });

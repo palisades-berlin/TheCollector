@@ -1,6 +1,6 @@
 {
   "name": "the-collector",
-  "version": "1.9.45",
+  "version": "1.9.46",
   "private": true,
   "license": "MIT",
   "type": "module",

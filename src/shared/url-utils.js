@@ -104,4 +104,32 @@ export function escapeCsvCell(value) {
   return `"${safe.replace(/"/g, '""')}"`;
 }
 
+const MULTI_LABEL_PUBLIC_SUFFIXES = new Set([
+  'co.uk',
+  'org.uk',
+  'gov.uk',
+  'ac.uk',
+  'co.jp',
+  'com.au',
+  'net.au',
+  'org.au',
+  'co.nz',
+]);
+
+export function getRegisteredDomain(rawUrl) {
+  try {
+    const host = new URL(rawUrl).hostname.toLowerCase();
+    if (!host) return '';
+    const parts = host.split('.').filter(Boolean);
+    if (parts.length <= 2) return host;
+    const tail2 = `${parts[parts.length - 2]}.${parts[parts.length - 1]}`;
+    if (MULTI_LABEL_PUBLIC_SUFFIXES.has(tail2) && parts.length >= 3) {
+      return `${parts[parts.length - 3]}.${tail2}`;
+    }
+    return tail2;
+  } catch {
+    return '';
+  }
+}
+
 export { TRACKING_PARAMS };

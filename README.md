@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.45`.
+Current extension version: `1.9.46`.
 
 ## Overview
 
@@ -18,11 +18,11 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- Completed Sprint 1 token-consumption pass across popup/history/preview/options by replacing remaining raw color/timing literals with shared semantic tokens.
-- Added shared semantic alias tokens for on-brand alpha states, overlay scrims, emphasis tints, skeleton stripes, and elevation variants in `src/shared/ui.css`.
-- Preserved existing interaction/IA while hardening visual-system consistency (no layout or flow redesign in this slice).
-- Kept visual parity gates green against the Figma baseline after the migration pass.
-- Version bumped to `1.9.45`.
+- Added URL Collector v2 foundation schema for URL metadata records (`starred`, `createdAt`, `updatedAt`, `tags`, `note`) with backward-compatible migration from legacy string-only URL lists.
+- Implemented Saved URL Views slice in popup (Pro/Ultra): `Starred`, `Today`, and `By Domain`, while keeping default `All` flow stable.
+- Added star/unstar interaction on URL rows and persisted star state through URL metadata storage.
+- Added registered-domain resolver and tests used by domain-grouped URL view.
+- Version bumped to `1.9.46`.
 
 ## Core Architecture
 

@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.9.46 - 2026-03-12
+
+- URL Collector 2.0 Sprint 2 foundation slice:
+  - introduced URL metadata records in `src/shared/repos/url-repo.js` with schema fields `starred`, `createdAt`, `updatedAt`, `tags`, and `note`.
+  - added backward-compatible migration path from legacy string-only URL lists by seeding metadata records on read/write.
+  - added persisted star toggle support for URL records.
+- Popup URL Saved Views (Pro/Ultra) slice:
+  - added `All`, `Starred`, `Today`, and `By Domain` views in `src/popup/popup.html` + `src/popup/urls-panel.js`.
+  - added domain-grouped rendering using registered-domain normalization from `src/shared/url-utils.js`.
+  - kept existing default URL add/copy/export/restore flows unchanged.
+- Capability + test coverage:
+  - added `saved_url_views` to Pro gating in `src/shared/capabilities.js`.
+  - expanded tests in `tests/capabilities.test.mjs`, `tests/url-utils.test.mjs`, and `tests/url-repo.test.mjs` for new gating, domain normalization, migration, and star persistence.
+- Validation:
+  - `npm run check` passed.
+  - `npm run test:ui-calibration` passed (visual parity snapshots green).
+- Version sync:
+  - synchronized version to `1.9.46` across manifest/package/docs pointers.
+
 ## 1.9.45 - 2026-03-12
 
 - Design System 2.0 Sprint 1 token-consumption completion slice:
