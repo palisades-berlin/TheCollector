@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.52`.
+Current extension version: `1.9.53`.
 
 ## Overview
 
@@ -19,7 +19,7 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 ## Top Changes
 
 - Added new full-tab **URL Library** page with URL Saved Views (`All`, `Starred`, `Today`, `By Domain`) and integrated Change Log view.
-- Re-scoped popup URL tab to quick capture actions + recent list, with direct URL Library entry points.
+- Added URL tag editing directly in URL Library rows (suggestions + free-text + remove, max-10 enforcement).
 - Updated full-tab header navigation to `Screenshots · URLs · Settings`.
 - Added Pro capability gate key `url_bulk_actions` and aligned capability tests.
 - Fixed URL remove data integrity by deleting orphaned metadata records on removal.

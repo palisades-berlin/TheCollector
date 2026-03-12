@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.9.53 - 2026-03-12
+
+- URL Library Sprint 2B-01:
+  - added full URL tag editing on URL Library rows (toggle, suggestion chips, free-text add, remove, max-10 enforcement).
+  - gated URL tag controls and tag filter visibility by `url_tags` capability (hidden for Basic, visible for Pro/Ultra).
+  - kept popup URL tab in quick-capture mode; no return of popup inline tag editing.
+- Validation:
+  - `npm run lint` passed.
+  - `npm run test:unit` passed.
+  - `npm run test:docs-policy` passed.
+  - `npm run test:ui-calibration` passed.
+- Version sync:
+  - synchronized version to `1.9.53` across manifest/package/docs pointers.
+
 ## 1.9.52 - 2026-03-12
 
 - CI visual parity unblock (macOS runner drift):
@@ -31,7 +45,7 @@
   - `npm run test:docs-policy` passed.
   - `npm run test:ui-calibration` passed.
 - Version sync:
-  - synchronized version to `1.9.52` across manifest/package/docs pointers.
+  - synchronized version to `1.9.51` across manifest/package/docs pointers.
 
 ## 1.9.50 - 2026-03-12
 

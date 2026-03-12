@@ -77,7 +77,7 @@ body {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 10px;
-  align-items: center;
+  align-items: start;
   border: 1px solid var(--sc-color-border);
   border-radius: 8px;
   padding: 10px;
@@ -109,6 +109,44 @@ body {
   gap: 6px;
   flex-wrap: wrap;
   margin-top: 6px;
+}
+
+.url-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.url-tag-remove {
+  border: 0;
+  background: transparent;
+  color: var(--sc-color-text-muted);
+  cursor: pointer;
+}
+
+.url-tag-controls {
+  margin-top: 8px;
+  display: grid;
+  gap: 8px;
+}
+
+.url-tag-controls.hidden {
+  display: none;
+}
+
+.url-tag-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.url-tag-input-row {
+  display: flex;
+  gap: 6px;
+}
+
+.url-tag-input-row .sc-input {
+  min-height: 30px;
 }
 
 .url-actions,

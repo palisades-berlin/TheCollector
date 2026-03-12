@@ -12,6 +12,7 @@ import {
   exportUrlsAsCsv,
   copyUrlsToClipboard,
   setUrlStar,
+  setUrlTags,
   removeUrlMetadata,
   createUrlMutations,
   formatUrlCount,
@@ -19,6 +20,8 @@ import {
   URL_LIMIT,
   refreshHistoryEntries,
 } from '../popup/urls/urls-state.js';
+import { getUserSettings } from '../shared/repos/settings-repo.js';
+import { canUseFeature } from '../shared/capabilities.js';
 
 const els = {
   urlCount: document.getElementById('urlCount'),
@@ -31,6 +34,7 @@ const els = {
   restoreBtn: document.getElementById('btn-restore'),
   clearBtn: document.getElementById('btn-clear'),
   filterDomain: document.getElementById('filterDomain'),
+  filterTagWrap: document.getElementById('filterTagWrap'),
   filterTag: document.getElementById('filterTag'),
   filterFrom: document.getElementById('filterFrom'),
   filterTo: document.getElementById('filterTo'),
@@ -52,6 +56,18 @@ let records = [];
 let undoCount = 0;
 let clearConfirmTimer = null;
 let historyEntries = [];
+let tagsEnabled = false;
+
+const TAG_SUGGESTIONS = [
+  'Research',
+  'Interest',
+  'Private',
+  'reading',
+  'follow-up',
+  'reference',
+  'archive',
+  'later',
+];
 
 const mutations = createUrlMutations({
   isHistoryViewOpen: () => activeView === 'change-log',
@@ -89,6 +105,17 @@ function isSameLocalDay(a, b) {
     aa.getMonth() === bb.getMonth() &&
     aa.getDate() === bb.getDate()
   );
+}
+
+function normalizeTag(input) {
+  return String(input || '')
+    .trim()
+    .slice(0, 24);
+}
+
+function getRecordByUrl(url) {
+  const normalizedUrl = normalizeUrlForCompare(url);
+  return records.find((record) => normalizeUrlForCompare(record.url) === normalizedUrl) || null;
 }
 
 function setActiveView(view) {
@@ -143,6 +170,11 @@ function getFilteredRecords() {
 }
 
 function renderTagFilterOptions() {
+  els.filterTagWrap?.classList.toggle('hidden', !tagsEnabled);
+  if (!tagsEnabled) {
+    els.filterTag.value = '';
+    return;
+  }
   const tags = [];
   for (const record of records) {
     for (const tag of Array.isArray(record.tags) ? record.tags : []) {
@@ -179,7 +211,29 @@ function renderDomainView(filtered) {
 function renderUrlRow(record) {
   const tags = Array.isArray(record.tags) ? record.tags : [];
   const tagsHtml = tags.length
-    ? `<div class="url-tags">${tags.map((tag) => `<span class="sc-pill">${esc(tag)}</span>`).join('')}</div>`
+    ? `<div class="url-tags">${tags
+        .map(
+          (tag) =>
+            `<span class="sc-pill url-tag-chip">${esc(tag)}${
+              tagsEnabled
+                ? ` <button class="url-tag-remove" type="button" data-action="tag-remove" data-tag="${esc(tag)}" aria-label="Remove tag ${esc(tag)}">×</button>`
+                : ''
+            }</span>`
+        )
+        .join('')}</div>`
+    : '';
+  const suggestionsHtml = TAG_SUGGESTIONS.map(
+    (tag) =>
+      `<button class="sc-btn sc-btn-sm" type="button" data-action="tag-suggest" data-tag="${esc(tag)}">${esc(tag)}</button>`
+  ).join('');
+  const tagControlsHtml = tagsEnabled
+    ? `<div class="url-tag-controls hidden">
+        <div class="url-tag-suggestions">${suggestionsHtml}</div>
+        <div class="url-tag-input-row">
+          <input class="sc-input" type="text" maxlength="24" placeholder="Add tag" data-action="tag-input" />
+          <button class="sc-btn sc-btn-secondary sc-btn-sm" type="button" data-action="tag-add">Add</button>
+        </div>
+      </div>`
     : '';
   return `
     <div class="url-row" data-url="${esc(record.url)}">
@@ -190,8 +244,14 @@ function renderUrlRow(record) {
           <span>${new Date(record.createdAt || Date.now()).toLocaleString()}</span>
         </div>
         ${tagsHtml}
+        ${tagControlsHtml}
       </div>
       <div class="url-actions">
+        ${
+          tagsEnabled
+            ? '<button class="sc-btn sc-btn-sm" data-action="toggle-tags" aria-expanded="false">Tags</button>'
+            : ''
+        }
         <button class="sc-btn sc-btn-sm" data-action="star" aria-pressed="${record.starred ? 'true' : 'false'}">${record.starred ? 'Unstar' : 'Star'}</button>
         <button class="sc-btn sc-btn-sm" data-action="open">Open</button>
         <button class="sc-btn sc-btn-sm sc-btn-danger" data-action="remove">Remove</button>
@@ -272,6 +332,24 @@ function reportError(err, fallback) {
 }
 
 els.urlList.addEventListener('click', async (event) => {
+  const rawTarget = event.target instanceof Element ? event.target : null;
+  if (!rawTarget) return;
+  const rowForExpand = rawTarget.closest('.url-row');
+  if (
+    tagsEnabled &&
+    rowForExpand &&
+    !rawTarget.closest('button[data-action]') &&
+    !rawTarget.closest('input[data-action]')
+  ) {
+    const controls = rowForExpand.querySelector('.url-tag-controls');
+    const toggleBtn = rowForExpand.querySelector('button[data-action="toggle-tags"]');
+    if (controls && toggleBtn) {
+      const nextExpanded = controls.classList.contains('hidden');
+      controls.classList.toggle('hidden', !nextExpanded);
+      toggleBtn.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
+    }
+    return;
+  }
   const target = event.target instanceof Element ? event.target.closest('button[data-action]') : null;
   if (!target) return;
   const row = target.closest('[data-url]');
@@ -282,6 +360,71 @@ els.urlList.addEventListener('click', async (event) => {
 
   if (action === 'open') {
     openUrl(url, reportError, showToast);
+    return;
+  }
+
+  if (action === 'toggle-tags') {
+    const controls = row.querySelector('.url-tag-controls');
+    if (!controls) return;
+    const nextExpanded = controls.classList.contains('hidden');
+    controls.classList.toggle('hidden', !nextExpanded);
+    target.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
+    if (nextExpanded) {
+      const input = controls.querySelector('input[data-action="tag-input"]');
+      input?.focus();
+    }
+    return;
+  }
+
+  if (action === 'tag-suggest' || action === 'tag-add' || action === 'tag-remove') {
+    try {
+      const record = getRecordByUrl(url);
+      const existingTags = Array.isArray(record?.tags) ? record.tags.map(normalizeTag).filter(Boolean) : [];
+      let nextTags = [...existingTags];
+
+      if (action === 'tag-suggest') {
+        const tag = normalizeTag(target.getAttribute('data-tag'));
+        if (!tag) return;
+        if (nextTags.includes(tag)) {
+          showToast('Tag already added');
+          return;
+        }
+        if (nextTags.length >= 10) {
+          showToast('Tag limit reached (max 10)');
+          return;
+        }
+        nextTags.push(tag);
+      }
+
+      if (action === 'tag-add') {
+        const input = row.querySelector('input[data-action="tag-input"]');
+        const tag = normalizeTag(input?.value);
+        if (!tag) {
+          showToast('Enter a tag');
+          return;
+        }
+        if (nextTags.includes(tag)) {
+          showToast('Tag already added');
+          return;
+        }
+        if (nextTags.length >= 10) {
+          showToast('Tag limit reached (max 10)');
+          return;
+        }
+        nextTags.push(tag);
+      }
+
+      if (action === 'tag-remove') {
+        const tagToRemove = normalizeTag(target.getAttribute('data-tag'));
+        nextTags = nextTags.filter((tag) => tag !== tagToRemove);
+      }
+
+      await setUrlTags(url, nextTags);
+      await reload();
+      showToast('Tags updated');
+    } catch (err) {
+      reportError(err, 'Could not update tags');
+    }
     return;
   }
 
@@ -316,6 +459,17 @@ els.urlList.addEventListener('click', async (event) => {
       reportError(err, 'Could not remove URL');
     }
   }
+});
+
+els.urlList.addEventListener('keydown', (event) => {
+  const target = event.target instanceof Element ? event.target : null;
+  if (!target || target.getAttribute('data-action') !== 'tag-input') return;
+  if (event.key !== 'Enter') return;
+  event.preventDefault();
+  const row = target.closest('.url-row');
+  if (!row) return;
+  const addButton = row.querySelector('button[data-action="tag-add"]');
+  addButton?.click();
 });
 
 els.changeLogList.addEventListener('click', async (event) => {
@@ -376,6 +530,15 @@ els.viewChangeLog.addEventListener('click', async () => {
 for (const input of [els.filterDomain, els.filterTag, els.filterFrom, els.filterTo]) {
   input.addEventListener('input', () => renderUrls());
   input.addEventListener('change', () => renderUrls());
+}
+
+async function initFeatureVisibility() {
+  try {
+    const settings = await getUserSettings();
+    tagsEnabled = canUseFeature('url_tags', settings);
+  } catch {
+    tagsEnabled = false;
+  }
 }
 
 els.addBtn.addEventListener('click', async () => {
@@ -539,4 +702,7 @@ els.restoreBtn.addEventListener('click', async () => {
   }
 });
 
-reload().catch((err) => reportError(err, 'Could not load URL Library'));
+void (async () => {
+  await initFeatureVisibility();
+  await reload();
+})().catch((err) => reportError(err, 'Could not load URL Library'));
