@@ -50,11 +50,11 @@ Implemented roadmap features and current delivery level:
 4. Weekly Value Report: **v1 delivered slice** (`1.9.24`) — Settings card only.
 5. Capture Queue + Batch Mode: **v1 delivered slice + hardening fixes** (`1.9.28` through `1.9.33`).
 6. Extension Help Page: **v1 delivered slice** (docs + Settings `Help & FAQ` section in `1.9.35`).
-7. URL Collector 2.0: **Saved URL Views + URL Tags v1 slices delivered** (`1.9.46` through `1.9.47`).
+7. URL Collector 2.0: **Saved URL Views + URL Tags v1 slices delivered, URL Library Sprint 2A scaffold live** (`1.9.46` through `1.9.51`).
 
 Versioning status:
 
-1. Current release baseline: **`1.9.47`**.
+1. Current release baseline: **`1.9.51`**.
 2. No roadmap **v2** feature is fully shipped yet.
 3. Smart Save Profiles editable management remains planned for v2.0.
 4. Command Palette (Cmd/Ctrl+K) remains **unshipped**; user-facing help/docs are aligned to the shipped feature set.
@@ -92,11 +92,11 @@ Authoritative visibility contract:
 | Intelligence      | Workflow Automations v1 (3–4 preset automation toggles)                      | Ultra | Settings                         | Hidden unless tier >= Ultra |
 | Intelligence      | Admin Config Profile (importable JSON for defaults + privacy rules)          | Ultra | Settings                         | Hidden unless tier >= Ultra |
 | Monitoring        | Capture Diff as Monitoring (scheduled re-capture + auto-diff + notification) | Ultra | Settings, History                | Hidden unless tier >= Ultra |
-| URL Collector 2.0 | Saved URL Views (Starred, Today, By Domain)                                  | Pro   | Popup URLs, History              | Hidden unless tier >= Pro   |
-| URL Collector 2.0 | URL Tags (8 pre-populated + free text, chip UI, shared taxonomy)             | Pro   | Popup URLs, History              | Hidden unless tier >= Pro   |
-| URL Collector 2.0 | URL Bulk Actions (copy/export/delete/open)                                   | Pro   | Popup URLs, History              | Hidden unless tier >= Pro   |
-| URL Collector 2.0 | URL Notes (140-char, inline expand on click)                                 | Pro   | Popup URLs, History              | Hidden unless tier >= Pro   |
-| URL Collector 2.0 | Smart URL Collections (domain-grouping view, auto-generated)                 | Ultra | History, Sidebar                 | Hidden unless tier >= Ultra |
+| URL Collector 2.0 | Saved URL Views (Starred, Today, By Domain)                                  | Pro   | URL Library page                 | Hidden unless tier >= Pro   |
+| URL Collector 2.0 | URL Tags (8 pre-populated + free text, chip UI, shared taxonomy)             | Pro   | URL Library page                 | Hidden unless tier >= Pro   |
+| URL Collector 2.0 | URL Bulk Actions (copy/export/delete/open)                                   | Pro   | URL Library page                 | Hidden unless tier >= Pro   |
+| URL Collector 2.0 | URL Notes (140-char, inline expand on click)                                 | Pro   | URL Library page                 | Hidden unless tier >= Pro   |
+| URL Collector 2.0 | Smart URL Collections (domain-grouping view, auto-generated)                 | Ultra | URL Library page, Sidebar        | Hidden unless tier >= Ultra |
 | Sharing           | Team Spaces Lite (self-contained ZIP + viewer.html export)                   | Ultra | History, Preview                 | Hidden unless tier >= Ultra |
 
 Roadmap certainty note:

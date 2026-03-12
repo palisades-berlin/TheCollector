@@ -708,6 +708,15 @@ body {
   opacity: 1;
 }
 
+.compact-url-item {
+  align-items: center;
+}
+
+.compact-url-item .btn-open,
+.compact-url-item .btn-star {
+  opacity: 1;
+}
+
 .btn-open:hover {
   color: var(--popup-primary);
   background: var(--popup-primary-soft);

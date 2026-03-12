@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.9.51 - 2026-03-12
+
+- URL Library 2.0 Sprint 2A scaffold + navigation wiring:
+  - added new full-tab URL Library surface (`src/urls/urls.html`, `src/urls/urls.js`, `src/urls/urls.css`) with Saved Views (`All`, `Starred`, `Today`, `By Domain`) and Change Log view.
+  - rewired primary header nav across full-tab pages to `Screenshots · URLs · Settings` and renamed screenshot surface title copy to `Screenshots`.
+  - rebuilt popup URL tab into quick-capture-first mode (add current/add all/recent list/export/restore/clear) with direct URL Library entry points.
+- URL operations hardening:
+  - added Pro capability key `url_bulk_actions` to `src/shared/capabilities.js` with expanded unit coverage.
+  - fixed URL removal data integrity on URL Library surface by removing orphaned URL metadata records on delete.
+  - added keyboard Escape dismiss behavior for URL Library Change Log view.
+- Help/docs parity:
+  - synchronized `docs/help-user-guide.md` and Settings `Help & FAQ` in `src/options/options.html` to new Screenshots/URL Library surface model.
+- Validation:
+  - `npm run lint` passed.
+  - `npm run test:unit` passed.
+  - `npm run test:docs-policy` passed.
+  - `npm run test:ui-calibration` passed.
+- Version sync:
+  - synchronized version to `1.9.51` across manifest/package/docs pointers.
+
 ## 1.9.50 - 2026-03-12
 
 - CI visual parity stabilization:
@@ -10,8 +30,6 @@
     - `history-default.png` (`5600`)
     - `preview-error.png` (`17000`)
   - updated `docs/visual-exception-register.md` and `docs/todo-list.md` with explicit reduction follow-ups for these temporary exceptions.
-- Version sync:
-  - synchronized version to `1.9.50` across manifest/package/docs pointers.
 
 ## 1.9.49 - 2026-03-12
 

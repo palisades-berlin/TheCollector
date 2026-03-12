@@ -27,6 +27,7 @@ const popupInitStartedAt = performance.now();
 
 const captureTabBtn = document.getElementById('captureTabBtn');
 const urlsTabBtn = document.getElementById('urlsTabBtn');
+const libraryTabBtn = document.getElementById('libraryTabBtn');
 const capturePanel = document.getElementById('capturePanel');
 const urlsPanel = document.getElementById('urlsPanel');
 
@@ -78,6 +79,7 @@ function setActiveTab(mode) {
   const showCapture = mode === 'capture';
   captureTabBtn.classList.toggle('active', showCapture);
   urlsTabBtn.classList.toggle('active', !showCapture);
+  if (libraryTabBtn) libraryTabBtn.classList.remove('active');
   captureTabBtn.setAttribute('aria-selected', showCapture ? 'true' : 'false');
   urlsTabBtn.setAttribute('aria-selected', showCapture ? 'false' : 'true');
   capturePanel.classList.toggle('hidden', !showCapture);
@@ -148,6 +150,10 @@ urlsTabBtn.addEventListener('click', () => {
     reportNonFatal('load URL panel', err);
     showToast('Could not load URL panel');
   });
+});
+libraryTabBtn?.addEventListener('click', () => {
+  chrome.tabs.create({ url: chrome.runtime.getURL('src/urls/urls.html') });
+  window.close();
 });
 
 for (const tabButton of [captureTabBtn, urlsTabBtn]) {

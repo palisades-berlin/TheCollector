@@ -11,15 +11,16 @@ Nothing is uploaded anywhere by the extension. Your screenshots, URL lists, and 
 You will mainly use three areas:
 
 - **Popup:** capture pages or collect URLs in seconds.
-- **History:** search, filter, review, and manage saved items.
+- **Screenshots:** search, filter, review, and manage saved captures.
+- **URL Library:** full-tab URL organization with views and change log.
 - **Settings:** choose your feature surface level, defaults, and daily behavior.
 
 ## Feature Surface Levels (Tier Selector)
 
 Your tier is selected in **Settings**. It is a **display preference** — it controls how much of the feature surface is shown. All levels are free. Each tier includes everything in the one below it.
 
-- **Basic:** full-page capture, URL collection, History filters, and PNG/JPG/PDF export. The essentials, kept simple.
-- **Pro:** everything in Basic, plus Smart Save Profiles (`Research`, `Interest`, `Private`), Queue Capture, Smart Revisit Nudges, Bulk Actions, Weekly Value Report, Saved URL Views, and URL Tags.
+- **Basic:** full-page capture, URL collection, Screenshots filters, and PNG/JPG/PDF export. The essentials, kept simple.
+- **Pro:** everything in Basic, plus Smart Save Profiles (`Research`, `Interest`, `Private`), Queue Capture, Smart Revisit Nudges, Bulk Actions, Weekly Value Report, and URL Library views/tags.
 - **Ultra:** everything in Pro, plus Omnibox actions (`tc research`, `tc star`, `tc queue`).
 
 If you want access to a feature that is not visible, switch to a higher tier in **Settings**. You can switch freely at any time — there is no cost.
@@ -43,7 +44,7 @@ Smart Save Profiles are fixed presets in v1. Editable custom profiles are planne
 
 ### 3) Find and filter saved content
 
-1. Open **History**.
+1. Open **Screenshots**.
 2. Filter by domain, date, export type, or profile (Pro/Ultra tier).
 3. Open, delete, or bulk-manage items (Pro/Ultra tier) from the list.
 
@@ -51,7 +52,7 @@ Smart Save Profiles are fixed presets in v1. Editable custom profiles are planne
 
 1. In **Capture**, click **Queue Current** or **Queue Window**.
 2. Click **Run Queue**.
-3. When complete, THE Collector opens **History** automatically with queue results.
+3. When complete, THE Collector opens **Screenshots** automatically with queue results.
 
 ### 5) Use Omnibox Actions (Ultra tier)
 
@@ -63,16 +64,16 @@ Smart Save Profiles are fixed presets in v1. Editable custom profiles are planne
 
 ### 6) Use Saved URL Views (Pro/Ultra tier)
 
-1. Open the popup and switch to **URLs**.
-2. Use the view bar to switch between **All**, **Starred**, **Today**, and **By Domain**.
-3. Views update the visible URL list without changing your saved data.
+1. Open **URL Library** from popup (**Library** tab or **Open URL Library** button).
+2. Use views to switch between **All**, **Starred**, **Today**, and **By Domain**.
+3. Views update the visible URL list without changing saved data.
 
 ### 7) Add Tags to a URL (Pro/Ultra tier)
 
-1. In **URLs**, click a URL row to expand tag controls.
-2. Add tags from suggestions (Research, Interest, Private, reading, follow-up, reference, archive, later) or type a custom tag.
+1. In **URL Library**, use **Tag** filter to narrow URLs by tag.
+2. Existing tags remain attached to each URL record.
 3. A URL can store up to 10 tags.
-4. Use **Tag Filter** above the list to show only URLs with a selected tag.
+4. URL views and tag filter can be combined with domain/date filters.
 
 ## Tips and Quick Examples
 
@@ -81,4 +82,4 @@ Smart Save Profiles are fixed presets in v1. Editable custom profiles are planne
 - Keep your default profile and export settings current in **Settings**.
 - Features outside your current tier are hidden to keep the UI focused. Switch tier freely at any time — all features are free.
 
-**Quick example:** You are collecting references for a research project. Set tier to **Pro**, select **Research** in the popup, capture several tabs with Queue, then open **History** and filter by profile to resume work instantly.
+**Quick example:** You are collecting references for a research project. Set tier to **Pro**, select **Research** in the popup, capture several tabs with Queue, then open **Screenshots** and filter by profile to resume work instantly.

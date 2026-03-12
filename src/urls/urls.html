@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>THE Collector URL Library</title>
+    <link rel="stylesheet" href="../shared/ui.css" />
+    <link rel="stylesheet" href="urls.css" />
+  </head>
+  <body class="sc-page-enter">
+    <header class="header sc-header">
+      <div class="header-left">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path
+            d="M3.9 12A5.1 5.1 0 0 1 9 6.9h3V5.1H9A6.9 6.9 0 1 0 9 18.9h3v-1.8H9A5.1 5.1 0 0 1 3.9 12Zm5.7.9h4.8v-1.8H9.6v1.8ZM15 5.1h-3v1.8h3a5.1 5.1 0 0 1 0 10.2h-3v1.8h3A6.9 6.9 0 1 0 15 5.1Z"
+          />
+        </svg>
+        THE Collector URL Library
+        <span class="sc-pill" id="urlCount" aria-live="polite">0 URLs</span>
+      </div>
+      <nav class="sc-header-nav" aria-label="Primary">
+        <a class="sc-header-link" href="../history/history.html">Screenshots</a>
+        <a class="sc-header-link" href="urls.html" aria-current="page">URLs</a>
+        <a class="sc-header-link" href="../options/options.html">Settings</a>
+      </nav>
+    </header>
+
+    <main class="urls-shell">
+      <section class="sc-card control-card">
+        <div class="quick-actions">
+          <button id="btn-add" class="sc-btn sc-btn-primary">Add Current Tab URL</button>
+          <button id="btn-add-all" class="sc-btn sc-btn-secondary">Add All Tabs in Window</button>
+          <button id="btn-copy" class="sc-btn">Copy</button>
+          <button id="btn-export" class="sc-btn">TXT</button>
+          <button id="btn-export-csv" class="sc-btn">CSV</button>
+          <button id="btn-email" class="sc-btn">Email</button>
+          <button id="btn-restore" class="sc-btn">Restore Last Clear</button>
+          <button id="btn-clear" class="sc-btn sc-btn-danger">Clear All</button>
+        </div>
+        <div class="filters-grid">
+          <label>
+            <span>Domain</span>
+            <input id="filterDomain" class="sc-input" type="text" placeholder="e.g. example.com" />
+          </label>
+          <label>
+            <span>Tag</span>
+            <select id="filterTag" class="sc-select">
+              <option value="">All Tags</option>
+            </select>
+          </label>
+          <label>
+            <span>From</span>
+            <input id="filterFrom" class="sc-input" type="date" />
+          </label>
+          <label>
+            <span>To</span>
+            <input id="filterTo" class="sc-input" type="date" />
+          </label>
+        </div>
+      </section>
+
+      <section class="sc-card list-card">
+        <div class="views sc-tablist" role="tablist" aria-label="URL library views">
+          <button id="view-all" class="sc-tab active" role="tab" aria-selected="true">All</button>
+          <button id="view-starred" class="sc-tab" role="tab" aria-selected="false">Starred</button>
+          <button id="view-today" class="sc-tab" role="tab" aria-selected="false">Today</button>
+          <button id="view-domain" class="sc-tab" role="tab" aria-selected="false">By Domain</button>
+          <button id="view-change-log" class="sc-tab" role="tab" aria-selected="false">
+            Change Log
+          </button>
+        </div>
+
+        <div id="urlsView">
+          <div id="urlList" class="url-list"></div>
+          <div id="emptyState" class="sc-state-empty hidden">No URLs found for this view.</div>
+        </div>
+
+        <div id="changeLogView" class="hidden">
+          <div id="changeLogList" class="change-log-list"></div>
+          <div id="changeLogEmpty" class="sc-state-empty hidden">No change log entries yet.</div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="urls.js"></script>
+  </body>
+</html>

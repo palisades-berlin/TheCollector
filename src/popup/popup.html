@@ -38,6 +38,9 @@
       >
         URLs
       </button>
+      <button id="libraryTabBtn" class="tab-btn sc-tab" type="button" aria-label="Open URL Library">
+        Library
+      </button>
     </div>
 
     <section id="capturePanel" class="panel" role="tabpanel" aria-labelledby="captureTabBtn">
@@ -159,9 +162,9 @@
           <button
             id="historyBtn"
             class="btn-history sc-btn sc-btn-secondary sc-btn-sm"
-            aria-label="Open screenshot history"
+            aria-label="Open Screenshots page"
           >
-            History
+            Screenshots
           </button>
           <button
             id="optionsBtn"
@@ -175,169 +178,60 @@
     </section>
 
     <section id="urlsPanel" class="panel hidden" role="tabpanel" aria-labelledby="urlsTabBtn">
-      <div id="urlsMainView">
-        <div class="add-section">
-          <button
-            class="btn-add sc-btn sc-btn-primary sc-btn-md sc-btn-block"
-            id="btn-add"
-            aria-label="Add current tab URL"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-            </svg>
-            Add Current Tab URL
-          </button>
-          <button
-            class="btn-add-all sc-btn sc-btn-ghost sc-btn-block"
-            id="btn-add-all"
-            aria-label="Add all tabs in this window"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path
-                d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"
-              />
-            </svg>
-            Add All Tabs in Window
-          </button>
-        </div>
+      <div class="add-section">
+        <button
+          class="btn-add sc-btn sc-btn-primary sc-btn-md sc-btn-block"
+          id="btn-add"
+          aria-label="Add current tab URL"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+          </svg>
+          Add Current Tab URL
+        </button>
+        <button
+          class="btn-add-all sc-btn sc-btn-ghost sc-btn-block"
+          id="btn-add-all"
+          aria-label="Add all tabs in this window"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"
+            />
+          </svg>
+          Add All Tabs in Window
+        </button>
+      </div>
 
-        <div class="list-wrapper">
-          <div
-            id="urlViewsBar"
-            class="url-views-bar hidden"
-            role="tablist"
-            aria-label="Saved URL views"
-          >
-            <button
-              id="btn-url-view-all"
-              class="url-view-btn sc-btn sc-btn-sm active"
-              type="button"
-              role="tab"
-              aria-selected="true"
-            >
-              All
-            </button>
-            <button
-              id="btn-url-view-starred"
-              class="url-view-btn sc-btn sc-btn-sm"
-              type="button"
-              role="tab"
-              aria-selected="false"
-            >
-              Starred
-            </button>
-            <button
-              id="btn-url-view-today"
-              class="url-view-btn sc-btn sc-btn-sm"
-              type="button"
-              role="tab"
-              aria-selected="false"
-            >
-              Today
-            </button>
-            <button
-              id="btn-url-view-domain"
-              class="url-view-btn sc-btn sc-btn-sm"
-              type="button"
-              role="tab"
-              aria-selected="false"
-            >
-              By Domain
-            </button>
-          </div>
-          <div id="urlTagFilterRow" class="url-tag-filter-row hidden">
-            <label class="url-tag-filter-label" for="urlTagFilterSelect">Tag Filter</label>
-            <select id="urlTagFilterSelect" class="sc-select url-tag-filter-select">
-              <option value="">All Tags</option>
-            </select>
-          </div>
-          <div id="url-list"></div>
-          <div id="empty-state" class="empty sc-state-empty" role="status" aria-live="polite">
-            <span class="empty-title">No URLs collected yet</span>
-          </div>
-        </div>
-
-        <div class="footer url-footer">
-          <div class="footer-row">
-            <button class="btn-footer sc-btn sc-btn-sm" id="btn-copy" aria-label="Copy all URLs">
-              Copy
-            </button>
-            <button
-              class="btn-footer sc-btn sc-btn-sm"
-              id="btn-export"
-              aria-label="Save URLs as text file"
-            >
-              TXT
-            </button>
-            <button
-              class="btn-footer sc-btn sc-btn-sm"
-              id="btn-export-csv"
-              aria-label="Save URLs as CSV file"
-            >
-              CSV
-            </button>
-          </div>
-          <div class="footer-row">
-            <button
-              class="btn-footer sc-btn sc-btn-sm"
-              id="btn-restore"
-              aria-label="Restore last cleared URLs"
-            >
-              Restore Last Clear
-            </button>
-            <button class="btn-footer sc-btn sc-btn-sm" id="btn-email" aria-label="Email URLs">
-              Email
-            </button>
-            <button
-              class="btn-footer sc-btn sc-btn-sm sc-btn-danger danger"
-              id="btn-clear"
-              aria-label="Clear all URLs"
-            >
-              Clear All
-            </button>
-          </div>
-          <div class="footer-row">
-            <button
-              class="btn-footer sc-btn sc-btn-sm"
-              id="btn-url-history"
-              aria-label="Open URL history"
-            >
-              History
-            </button>
-          </div>
+      <div class="list-wrapper">
+        <div id="url-list"></div>
+        <div id="empty-state" class="empty sc-state-empty" role="status" aria-live="polite">
+          <span class="empty-title">No URLs collected yet</span>
         </div>
       </div>
 
-      <div id="urlsHistoryView" class="hidden">
-        <div class="history-topbar">
-          <button
-            class="btn-footer sc-btn sc-btn-sm"
-            id="btn-url-history-back"
-            aria-label="Back to URL list"
-          >
-            Back
+      <div class="footer url-footer">
+        <div class="footer-row">
+          <button class="btn-footer sc-btn sc-btn-sm" id="btn-copy" aria-label="Copy all URLs">Copy</button>
+          <button class="btn-footer sc-btn sc-btn-sm" id="btn-export" aria-label="Save URLs as text file">
+            TXT
           </button>
-          <button
-            class="btn-footer sc-btn sc-btn-sm sc-btn-danger danger"
-            id="btn-url-history-clear"
-            aria-label="Clear URL history"
-          >
-            Clear History
+          <button class="btn-footer sc-btn sc-btn-sm" id="btn-export-csv" aria-label="Save URLs as CSV file">
+            CSV
           </button>
         </div>
-        <div class="list-wrapper">
-          <div id="url-history-list"></div>
-          <div id="url-history-empty" class="empty sc-state-empty" role="status" aria-live="polite">
-            <span class="empty-title">No URL history yet</span>
-          </div>
+        <div class="footer-row">
+          <button class="btn-footer sc-btn sc-btn-sm" id="btn-restore" aria-label="Restore last cleared URLs">
+            Restore Last Clear
+          </button>
+          <button class="btn-footer sc-btn sc-btn-sm" id="btn-email" aria-label="Email URLs">Email</button>
+          <button class="btn-footer sc-btn sc-btn-sm sc-btn-danger danger" id="btn-clear" aria-label="Clear all URLs">
+            Clear All
+          </button>
         </div>
-        <div class="history-footer">
-          <button
-            class="btn-footer sc-btn sc-btn-sm hidden"
-            id="btn-url-history-more"
-            aria-label="Load more history"
-          >
-            Load More
+        <div class="footer-row">
+          <button class="btn-footer sc-btn sc-btn-sm" id="btn-open-url-library" aria-label="Open URL Library">
+            Open URL Library
           </button>
         </div>
       </div>

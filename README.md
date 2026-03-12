@@ -2,7 +2,7 @@
 
 Manifest V3 browser extension for Chrome and Edge that combines full-page screenshot capture with URL collection in one popup.
 
-Current extension version: `1.9.50`.
+Current extension version: `1.9.51`.
 
 ## Overview
 
@@ -18,11 +18,11 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- Added URL Tags v1 (Pro/Ultra): tag suggestions + free-text tag add/remove on popup URL rows with max-10 tag enforcement.
-- Added URL tag filtering that composes with Saved URL Views (`All`, `Starred`, `Today`, `By Domain`).
-- Added URL tag persistence API (`setUrlRecordTags`) and migration-safe repository coverage.
-- Added per-snapshot Figma node annotations in visual parity tests and reduced temporary history tolerances from `300` to `220`.
-- Stabilized visual parity CI with deterministic test fonts, normalized Chromium rendering flags, and measured snapshot-specific CI bridging tolerances.
+- Added new full-tab **URL Library** page with URL Saved Views (`All`, `Starred`, `Today`, `By Domain`) and integrated Change Log view.
+- Re-scoped popup URL tab to quick capture actions + recent list, with direct URL Library entry points.
+- Updated full-tab header navigation to `Screenshots · URLs · Settings`.
+- Added Pro capability gate key `url_bulk_actions` and aligned capability tests.
+- Fixed URL remove data integrity by deleting orphaned metadata records on removal.
 
 ## Core Architecture
 
@@ -66,8 +66,10 @@ The capture pipeline is split across extension contexts:
 
 - Add current tab URL
 - Add all URLs from current window
-- Saved URL Views (Pro/Ultra): `All`, `Starred`, `Today`, `By Domain`
-- URL Tags v1 (Pro/Ultra): add/remove up to 10 tags per URL and filter list by tag
+- Popup quick URL actions: add/copy/export/email/clear/restore + recent list
+- URL Library full-tab surface with Saved Views: `All`, `Starred`, `Today`, `By Domain`
+- URL Change Log view available in URL Library
+- URL Tags v1 (Pro/Ultra): stored per URL record (max 10 tags)
 - Automatic tracking-parameter cleanup (UTM, gclid, fbclid, and similar)
 - URL deduplication (normalized compare)
 - Open/remove individual URLs

@@ -23,6 +23,7 @@ test('maps roadmap features to expected tiers', () => {
   assert.equal(getRequiredTier('smart_save_profiles'), CAPABILITY_TIER.PRO);
   assert.equal(getRequiredTier('saved_url_views'), CAPABILITY_TIER.PRO);
   assert.equal(getRequiredTier('url_tags'), CAPABILITY_TIER.PRO);
+  assert.equal(getRequiredTier('url_bulk_actions'), CAPABILITY_TIER.PRO);
   assert.equal(getRequiredTier('bulk_actions_v1'), CAPABILITY_TIER.PRO);
   assert.equal(getRequiredTier('command_palette'), CAPABILITY_TIER.ULTRA);
   assert.equal(getRequiredTier('omnibox_actions'), CAPABILITY_TIER.ULTRA);
@@ -41,12 +42,15 @@ test('enforces hierarchical gating by capabilityTier', () => {
   assert.equal(canUseFeature('smart_save_profiles', basic), false);
   assert.equal(canUseFeature('saved_url_views', basic), false);
   assert.equal(canUseFeature('url_tags', basic), false);
+  assert.equal(canUseFeature('url_bulk_actions', basic), false);
   assert.equal(canUseFeature('smart_save_profiles', pro), true);
   assert.equal(canUseFeature('saved_url_views', pro), true);
   assert.equal(canUseFeature('url_tags', pro), true);
+  assert.equal(canUseFeature('url_bulk_actions', pro), true);
   assert.equal(canUseFeature('smart_save_profiles', ultra), true);
   assert.equal(canUseFeature('saved_url_views', ultra), true);
   assert.equal(canUseFeature('url_tags', ultra), true);
+  assert.equal(canUseFeature('url_bulk_actions', ultra), true);
 
   assert.equal(canUseFeature('magic_mode', basic), false);
   assert.equal(canUseFeature('magic_mode', pro), false);
@@ -75,6 +79,7 @@ test('returns deterministic capability snapshot and feature lists', () => {
   assert.ok(features.pro.includes('smart_save_profiles'));
   assert.ok(features.pro.includes('saved_url_views'));
   assert.ok(features.pro.includes('url_tags'));
+  assert.ok(features.pro.includes('url_bulk_actions'));
   assert.ok(features.ultra.includes('magic_mode'));
   assert.ok(features.ultra.includes('admin_config_profile'));
   assert.ok(features.ultra.includes('omnibox_actions'));
