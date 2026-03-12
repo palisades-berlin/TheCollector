@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.48 - 2026-03-12
+
+- CI visual parity stabilization:
+  - forced deterministic font stack in visual parity test init (`Arial, Helvetica, sans-serif`) to remove machine-dependent `Poppins` rendering drift.
+  - regenerated affected visual baselines for onboarding, history, options, and preview snapshots.
+  - verified `npm run test:ui-calibration` passes locally after baseline refresh.
+- Version sync:
+  - synchronized version to `1.9.48` across manifest/package/docs pointers.
+
 ## 1.9.47 - 2026-03-12
 
 - Lane A — visual hardening closure:

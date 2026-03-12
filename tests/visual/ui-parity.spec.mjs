@@ -123,6 +123,26 @@ function createChromeStubInitScript() {
         executeScript: async () => [],
       },
     };
+
+    // Keep visual snapshots deterministic across machines by pinning a test font stack.
+    const applyDeterministicFontStack = () => {
+      globalThis.document?.documentElement?.style?.setProperty(
+        '--sc-font-sans',
+        'Arial, Helvetica, sans-serif'
+      );
+      globalThis.document?.documentElement?.style?.setProperty(
+        '--sc-font-mono',
+        'Menlo, Consolas, monospace'
+      );
+    };
+
+    if (globalThis.document?.readyState === 'loading') {
+      globalThis.document.addEventListener('DOMContentLoaded', applyDeterministicFontStack, {
+        once: true,
+      });
+    } else {
+      applyDeterministicFontStack();
+    }
   };
 }
 
