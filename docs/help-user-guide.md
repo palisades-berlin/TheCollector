@@ -55,9 +55,13 @@ If you want access to a feature that is not visible, switch to a higher tier in 
 ### 5) Find and filter saved content
 
 1. Open **Screenshots**.
-2. Filter by domain, date, export type, or profile (Pro/Ultra tier).
-3. Open, delete, or use **Bulk** actions (Pro/Ultra tier) from the list.
-4. Check card diagnostics like slow-run hints and latest failure notes when present.
+2. Click the domain field to open saved domain suggestions (each shows how many screenshots match).
+3. Type to filter suggestions, then press **Enter** or click one to apply.
+4. You can also type a TLD like `.com` when you want a broader suffix match.
+5. Use the clear icon in the domain field to reset domain search quickly.
+6. Combine domain search with date, export type, or profile (Pro/Ultra tier) filters.
+7. Open, delete, or use **Bulk** actions (Pro/Ultra tier) from the list.
+8. Check card diagnostics like slow-run hints and latest failure notes when present.
 
 ### 6) Compare screenshots with Visual Diff
 
@@ -96,7 +100,7 @@ If you want access to a feature that is not visible, switch to a higher tier in 
 
 ### 11) Add Tags to a URL (Pro/Ultra tier)
 
-1. In **URL Library**, click **Tags** on a URL row (or click the row) to expand tag controls.
+1. In **URL Library**, click **Tags** on a URL row to expand tag controls.
 2. Add tags from suggestion chips or type your own tag and click **Add**.
 3. Use the **Tag** filter at the top to narrow URLs by tag.
 4. A URL can store up to 10 tags.
@@ -128,11 +132,19 @@ If you want access to a feature that is not visible, switch to a higher tier in 
 3. For controls like Smart Revisit Nudges, changes apply after Save.
 4. In **Feature Access** (Pro/Ultra), use Smart Revisit Nudges and Weekly Value Report for revisit guidance and weekly local summary.
 
+### 16) Manage screenshot storage safely
+
+1. Open **Settings → Feature Access**.
+2. Keep **Enable Auto-purge oldest screenshots** on if you want capture to continue automatically when the screenshot limit is reached.
+3. Check **Storage usage** (for example `123/500 screenshots`) to see how close you are to the limit.
+4. If you turn Auto-purge off and hit the limit, new saves stop until you delete screenshots or turn Auto-purge back on.
+
 ## Tips and Quick Examples
 
 - If a page cannot be captured, switch to a regular website tab and try again.
 - The optional `downloads` permission only affects direct file saving. If it is off, the browser fallback download still works.
 - Keep your default profile and export settings current in **Settings**.
+- If you keep Auto-purge on, THE Collector removes the oldest screenshots first when storage is full so new captures can continue.
 - Features outside your current tier are hidden to keep the UI focused. Switch tier freely at any time — all features are free.
 
 **Quick example:** You are collecting references for a research project. Set tier to **Pro**, select **Research**, run **Queue Window**, compare two captures with **Visual Diff**, then open **URL Library Change Log** to restore a previous URL snapshot if needed.

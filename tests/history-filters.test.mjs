@@ -47,7 +47,14 @@ const getType = (record) => {
 test('filterRecords applies domain filter', () => {
   const out = filterRecords(
     sample,
-    { domain: 'example.com', fromDate: '', toDate: '', type: 'all', profile: 'all' },
+    {
+      domain: 'example.com',
+      domainMode: 'domain',
+      fromDate: '',
+      toDate: '',
+      type: 'all',
+      profile: 'all',
+    },
     getDomain,
     getType,
     (record) => record.captureProfileId || ''
@@ -61,7 +68,14 @@ test('filterRecords applies domain filter', () => {
 test('filterRecords applies date range and type filters', () => {
   const out = filterRecords(
     sample,
-    { domain: '', fromDate: '2026-03-02', toDate: '2026-03-03', type: 'pdf', profile: 'all' },
+    {
+      domain: '',
+      domainMode: 'domain',
+      fromDate: '2026-03-02',
+      toDate: '2026-03-03',
+      type: 'pdf',
+      profile: 'all',
+    },
     getDomain,
     getType,
     (record) => record.captureProfileId || ''
@@ -75,7 +89,14 @@ test('filterRecords applies date range and type filters', () => {
 test('filterRecords applies profile filter', () => {
   const out = filterRecords(
     sample,
-    { domain: '', fromDate: '', toDate: '', type: 'all', profile: 'interest' },
+    {
+      domain: '',
+      domainMode: 'domain',
+      fromDate: '',
+      toDate: '',
+      type: 'all',
+      profile: 'interest',
+    },
     getDomain,
     getType,
     (record) => record.captureProfileId || ''
@@ -93,7 +114,14 @@ test('filterRecords ignores legacy/invalid profile ids when filtering', () => {
   ];
   const out = filterRecords(
     sampleWithInvalid,
-    { domain: '', fromDate: '', toDate: '', type: 'all', profile: 'research' },
+    {
+      domain: '',
+      domainMode: 'domain',
+      fromDate: '',
+      toDate: '',
+      type: 'all',
+      profile: 'research',
+    },
     getDomain,
     getType,
     (record) => sanitizeCaptureProfileId(record.captureProfileId || '')
@@ -101,5 +129,84 @@ test('filterRecords ignores legacy/invalid profile ids when filtering', () => {
   assert.deepEqual(
     out.map((r) => r.id),
     ['a']
+  );
+});
+
+test('filterRecords applies TLD suffix filter when domainMode is tld', () => {
+  const out = filterRecords(
+    sample,
+    { domain: '.com', domainMode: 'tld', fromDate: '', toDate: '', type: 'all', profile: 'all' },
+    getDomain,
+    getType,
+    (record) => record.captureProfileId || ''
+  );
+  assert.deepEqual(
+    out.map((r) => r.id),
+    ['a', 'b', 'c']
+  );
+});
+
+test('filterRecords applies exact match when domainMode is domain_exact', () => {
+  const out = filterRecords(
+    sample,
+    {
+      domain: 'example.com',
+      domainMode: 'domain_exact',
+      fromDate: '',
+      toDate: '',
+      type: 'all',
+      profile: 'all',
+    },
+    getDomain,
+    getType,
+    (record) => record.captureProfileId || ''
+  );
+  assert.deepEqual(
+    out.map((r) => r.id),
+    ['a']
+  );
+});
+
+test('filterRecords normalizes TLD search without leading dot', () => {
+  const out = filterRecords(
+    sample,
+    { domain: 'com', domainMode: 'tld', fromDate: '', toDate: '', type: 'all', profile: 'all' },
+    getDomain,
+    getType,
+    (record) => record.captureProfileId || ''
+  );
+  assert.deepEqual(
+    out.map((r) => r.id),
+    ['a', 'b', 'c']
+  );
+});
+
+test('filterRecords supports multi-label TLD filtering', () => {
+  const out = filterRecords(
+    [
+      ...sample,
+      {
+        id: 'uk',
+        url: 'https://news.bbc.co.uk/article',
+        timestamp: new Date('2026-03-04T11:00:00Z').getTime(),
+        blobType: 'image/png',
+        captureProfileId: 'research',
+      },
+    ],
+    {
+      domain: '.co.uk',
+      domainMode: 'tld',
+      fromDate: '',
+      toDate: '',
+      type: 'all',
+      profile: 'all',
+    },
+    getDomain,
+    getType,
+    (record) => record.captureProfileId || ''
+  );
+  assert.deepEqual(
+    out.map((r) => r.id),
+    ['uk']
   );
 });

@@ -44,6 +44,14 @@ npm run check
 3. Click "Load unpacked" and select the repository root.
 4. Pin THE Collector and open the popup to test capture/URL workflows.
 
+Storage guardrails smoke checks (required when storage logic changes):
+
+1. Verify **Settings → Feature Access** shows:
+   - `Enable Auto-purge oldest screenshots`
+   - `Storage usage: <count>/500 screenshots`
+2. With Auto-purge ON at limit, confirm new capture saves and oldest screenshots are removed first.
+3. With Auto-purge OFF at limit, confirm capture fails with actionable message and no automatic deletion.
+
 ## Release Packaging
 
 ```bash
@@ -149,6 +157,7 @@ Publish workflow:
   - default target is `maxDiffPixels <= 2`; explicit per-snapshot exceptions in `tests/visual/ui-parity.spec.mjs` are temporary and must be tracked/reduced via `docs/visual-exception-register.md`.
   - popup calibration must enforce single error feedback surface (toast-only) and no duplicate stacked error messages.
   - calibration must verify modal focus trap + focus return behavior (History Files overlay) and URL Library tab keyboard navigation.
+  - calibration must verify History Domain combobox behavior: captured-domain suggestion list opens on focus, supports Arrow/Enter selection, and clear icon resets domain filter state.
 - For every feature add/change that affects user behavior, UX, or tier availability, update:
   - `docs/help-user-guide.md`
   - `docs/thecollector-2.0-90-day-roadmap.md` (if roadmap scope/status changed)

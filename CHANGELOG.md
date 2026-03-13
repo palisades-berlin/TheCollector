@@ -1,5 +1,58 @@
 # Changelog
 
+## 1.9.86 - 2026-03-13
+
+### Changed
+
+- Added a premium History Domain combobox filter:
+  - clicking the domain field now opens captured-domain suggestions with per-domain screenshot counts,
+  - typing filters suggestions live with keyboard navigation (`ArrowUp/ArrowDown`) and `Enter` selection,
+  - selecting a domain from the dropdown now filters cards to that exact selected domain,
+  - typing a suffix like `.com` still performs TLD-style suffix matching,
+  - added one-click clear icon behavior for fast domain filter reset.
+- Updated help and QA workflow docs for the new domain combobox behavior and keyboard/clear-state expectations.
+- Added/updated unit coverage for domain/TLD filter modes and domain suggestion building.
+
+## 1.9.85 - 2026-03-13
+
+### Changed
+
+- Fixed unreadable History screenshot thumbnails after thumb fast-path rollout:
+  - improved thumbnail generation quality in offscreen stitching (`4:3` top-aligned thumb output tuned for History card rendering),
+  - added quality-aware runtime fallback that ignores undersized legacy thumb blobs,
+  - for affected legacy records, History now falls back to full image render and regenerates a sharper stored thumb in the background.
+
+## 1.9.84 - 2026-03-13
+
+### Changed
+
+- Fixed History “mini-load delay” on small libraries with large screenshots:
+  - added dedicated IndexedDB thumbnail store (`screenshot_thumbs`) and thumb-first load path for card rendering.
+  - thumbnail decode source order is now thumb-store → record thumb → full blob fallback.
+  - lazy thumbnail backfill now writes legacy `record.thumbBlob` into the new thumb store.
+  - first visible cards are eagerly queued while viewport observer scheduling remains for the rest.
+- Updated screenshot delete/save transactions to keep `screenshots`, `screenshot_meta`, and `screenshot_thumbs` synchronized.
+- Added unit coverage for thumbnail source-priority behavior (`tests/history-thumbs.test.mjs`).
+
+## 1.9.83 - 2026-03-13
+
+### Changed
+
+- Added screenshot storage guardrails with user-visible control:
+  - new `autoPurgeEnabled` setting (default `true`),
+  - Settings now shows `Enable Auto-purge oldest screenshots` and `Storage usage: 000/500 screenshots`.
+- Added deterministic oldest-first retention policy at screenshot limit:
+  - with Auto-purge on, oldest screenshots are removed before save continues,
+  - with Auto-purge off, capture save is blocked with actionable guidance.
+- Improved storage-path reliability and History performance:
+  - removed UI-level full-Blob fallback for History metadata loading,
+  - bumped DB migration to v5 and hardened metadata recovery path,
+  - thumbnail scheduling is now viewport-driven with bounded pending queue and stale-generation invalidation.
+- Added user-facing storage transparency:
+  - History shows a deduped notice toast when automatic purge occurs,
+  - Help guide and Settings Help & FAQ now document Auto-purge behavior and limit handling.
+- Updated architecture/workflow/UI handoff docs, roadmap baseline, and ADR set (`0013`) for storage retention policy.
+
 ## 1.9.82 - 2026-03-13
 
 Pre-Release Code Assessment

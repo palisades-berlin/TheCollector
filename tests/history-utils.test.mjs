@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import {
   getRecordDomain,
   getRecordExportType,
+  getCanonicalTldFromHost,
+  buildDomainFilterSuggestions,
   buildGroups,
   buildRecordHints,
   formatDuration,
@@ -39,6 +41,27 @@ test('getRecordExportType detects pdf/jpg and defaults to png', () => {
   assert.equal(getRecordExportType({ blobType: 'application/pdf' }), 'pdf');
   assert.equal(getRecordExportType({ blobType: 'image/jpeg' }), 'jpg');
   assert.equal(getRecordExportType({ blobType: 'image/png' }), 'png');
+});
+
+test('getCanonicalTldFromHost normalizes simple and multi-label public suffixes', () => {
+  assert.equal(getCanonicalTldFromHost('www.example.com'), '.com');
+  assert.equal(getCanonicalTldFromHost('news.bbc.co.uk'), '.co.uk');
+  assert.equal(getCanonicalTldFromHost('localhost'), '');
+});
+
+test('buildDomainFilterSuggestions deduplicates captured domains and sorts by frequency', () => {
+  const suggestions = buildDomainFilterSuggestions([
+    { url: 'https://example.com/a' },
+    { url: 'https://example.com/b' },
+    { url: 'https://foo.de/path' },
+    { url: 'https://bar.co.uk/path' },
+    { url: 'invalid-url' },
+  ]);
+  assert.deepEqual(suggestions, [
+    { value: 'example.com', count: 2 },
+    { value: 'bar.co.uk', count: 1 },
+    { value: 'foo.de', count: 1 },
+  ]);
 });
 
 test('buildGroups returns timestamp-descending one-record groups', () => {

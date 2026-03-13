@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-90%25%20lines-brightgreen)](./package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-Current extension version: `1.9.82`.
+Current extension version: `1.9.86`.
 
 ## Overview
 
@@ -22,11 +22,11 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- Popup errors now render as a single toast-only surface with duplicate suppression and improved screen-reader semantics.
-- URL Library view tabs now support keyboard navigation (`Left/Right/Home/End`) with explicit tab-to-panel mapping.
-- History Files overlay now traps focus while open and restores focus to the opener on close.
-- Settings now includes a global unsaved-changes save bar so save actions stay consistent across all sections.
-- History card compare action now preserves icon + label state and card diagnostics use a stable reserved row.
+- Screenshot storage guardrails now include a user-controlled Auto-purge toggle (default on) plus a visible `Storage usage: 000/500 screenshots` counter in Settings.
+- At screenshot limit, oldest-first auto-purge keeps capture running when enabled; with Auto-purge off, capture save is blocked with actionable guidance.
+- History Domain filter now uses a premium combobox with captured-domain suggestions (count badges), keyboard selection (`Arrow`/`Enter`), TLD typing support, and one-click clear/reset.
+- Popup/URL accessibility pass: popup errors render as a single toast-only surface and URL Library tabs support keyboard navigation (`Left/Right/Home/End`) with explicit tab-to-panel mapping.
+- History Files overlay traps focus while open and restores focus to the opener on close.
 
 ## Core Architecture
 

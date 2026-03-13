@@ -199,6 +199,11 @@
                 <option value="high">High</option>
               </select>
             </label>
+            <label id="autoPurgeEnabledRow" class="check-row">
+              <input id="autoPurgeEnabled" type="checkbox" />
+              <span>Enable Auto-purge oldest screenshots</span>
+            </label>
+            <p id="storageUsageCounter" class="muted">Storage usage: 000/500 screenshots</p>
             <p class="muted">Changes apply after you click Save Settings.</p>
           </section>
 
@@ -424,9 +429,13 @@
               <details class="faq-item">
                 <summary>How do I find, filter, and manage screenshots?</summary>
                 <p>
-                  Open <b>Screenshots</b> to review your saved captures. Use domain, date, export
-                  type, and profile filters to narrow results. Then open, delete, or bulk-manage
-                  items from the list.
+                  Open <b>Screenshots</b> to review your saved captures. Click the domain field to
+                  open saved domain suggestions (with a screenshot count beside each), type to
+                  filter, and press Enter or click to apply.
+                </p>
+                <p>
+                  Use the clear icon in the domain field to reset that filter quickly. You can also
+                  combine domain search with date, export type, and profile filters.
                 </p>
                 <p>
                   Watch for diagnostic hints like slow-run notes or the latest failure note when
@@ -487,13 +496,26 @@
               <details class="faq-item">
                 <summary>How do I add tags to a URL (Pro/Ultra)?</summary>
                 <p>
-                  In <b>URL Library</b>, click <b>Tags</b> on a URL row, or click the row to expand
-                  controls. Add a tag from suggestions or type your own and click <b>Add</b>. You
-                  can save up to 10 tags per URL.
+                  In <b>URL Library</b>, click <b>Tags</b> on a URL row to expand controls. Add a
+                  tag from suggestions or type your own and click <b>Add</b>. You can save up to 10
+                  tags per URL.
                 </p>
                 <p>
                   Use the <b>Tag</b> filter to show matching URLs. You can combine this with domain
                   and date filters.
+                </p>
+              </details>
+              <details class="faq-item">
+                <summary>How does Auto-purge screenshot storage work?</summary>
+                <p>
+                  Open <b>Settings → Feature Access</b> to control
+                  <b>Enable Auto-purge oldest screenshots</b>. It is on by default so capture can
+                  continue when storage reaches the screenshot limit.
+                </p>
+                <p>
+                  Check <b>Storage usage</b> (for example <b>123/500 screenshots</b>) anytime. If
+                  you turn Auto-purge off and reach the limit, new saves pause until you delete
+                  screenshots or enable Auto-purge again.
                 </p>
               </details>
               <details class="faq-item">

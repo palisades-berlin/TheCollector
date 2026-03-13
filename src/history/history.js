@@ -1,16 +1,19 @@
 import { showToast } from '../shared/toast.js';
 import {
   listScreenshotMetaRecords,
-  listScreenshotRecords,
+  getScreenshotThumbById,
   getScreenshotById,
+  saveScreenshotThumbById,
   deleteScreenshotRecords,
   loadCaptureReports as loadCaptureReportsFromRepo,
+  loadScreenshotStorageEvent,
 } from '../shared/repos/screenshot-repo.js';
 import {
   getRecordDomain,
   getRecordExportType,
   buildGroups,
   formatDuration,
+  buildDomainFilterSuggestions,
 } from './history-utils.js';
 import { createHistoryFilters, filterRecords } from './history-filters.js';
 import { createThumbLoader } from './history-thumbs.js';
@@ -37,6 +40,9 @@ const openFilesBtn = document.getElementById('openFilesBtn');
 const compareBtn = document.getElementById('compareBtn');
 const cardTpl = document.getElementById('cardTpl');
 const filterDomainEl = document.getElementById('filterDomain');
+const filterDomainComboboxEl = document.getElementById('filterDomainCombobox');
+const filterDomainListboxEl = document.getElementById('filterDomainListbox');
+const clearDomainFilterBtn = document.getElementById('clearDomainFilterBtn');
 const filterFromEl = document.getElementById('filterFrom');
 const filterToEl = document.getElementById('filterTo');
 const filterTypeEl = document.getElementById('filterType');
@@ -117,6 +123,32 @@ function maybeShowQueueCompletionToast() {
   window.history.replaceState({}, '', nextUrl);
 }
 
+function maybeShowStorageNoticeToast() {
+  loadScreenshotStorageEvent()
+    .then((event) => {
+      if (!event || event.type !== 'auto_purge') return;
+      const noticeId = String(event.id || '');
+      if (!noticeId) return;
+      const key = `history.storageNoticeSeen.${noticeId}`;
+      try {
+        if (window.localStorage.getItem(key) === '1') return;
+      } catch {
+        // ignore localStorage access failures for dedupe.
+      }
+      showToast(
+        'Storage limit reached. Oldest screenshots were removed automatically.',
+        'info',
+        3200
+      );
+      try {
+        window.localStorage.setItem(key, '1');
+      } catch {
+        // ignore localStorage access failures for dedupe.
+      }
+    })
+    .catch((err) => logNonFatal('loadScreenshotStorageEvent', err));
+}
+
 function openPreview(id) {
   const url = chrome.runtime.getURL(`src/preview/preview.html?id=${id}`);
   chrome.tabs.create({ url });
@@ -164,7 +196,9 @@ function toggleCompareSelection(id) {
 }
 
 const thumbLoader = createThumbLoader({
+  getScreenshotThumb: getScreenshotThumbById,
   getScreenshot: getScreenshotById,
+  saveScreenshotThumb: saveScreenshotThumbById,
   deleteScreenshots: deleteScreenshotRecords,
   logNonFatal,
   debugEnabled: DEBUG_THUMB_QUEUE,
@@ -222,6 +256,9 @@ function applyFiltersAndRender(resetSelection = false) {
 
 const filters = createHistoryFilters({
   filterDomainEl,
+  filterDomainComboboxEl,
+  filterDomainListboxEl,
+  clearDomainFilterBtn,
   filterFromEl,
   filterToEl,
   filterTypeEl,
@@ -278,8 +315,10 @@ function renderMainView() {
   updateCount(records.length, allRecords.length);
 
   const fragment = document.createDocumentFragment();
-  for (const record of records) {
-    fragment.appendChild(cards.buildCard(record));
+  const eagerCount = Math.max(1, Number(thumbLoader.eagerVisibleCount || 4));
+  for (let idx = 0; idx < records.length; idx++) {
+    const record = records[idx];
+    fragment.appendChild(cards.buildCard(record, { eager: idx < eagerCount }));
   }
   gridEl.appendChild(fragment);
   updateCompareUi();
@@ -381,21 +420,9 @@ compareBtn?.addEventListener('click', () => {
 async function refreshAll() {
   gridEl.setAttribute('aria-busy', 'true');
   captureReports = await loadCaptureReports();
-  try {
-    allRecords = await listScreenshotMetaRecords();
-  } catch (err) {
-    if (String(err?.message || '').includes('object stores was not found')) {
-      const full = await listScreenshotRecords();
-      allRecords = full.map((r) => ({
-        ...r,
-        byteSize: r.blob?.size || 0,
-        blobType: r.blobType || r.blob?.type || 'image/png',
-      }));
-    } else {
-      throw err;
-    }
-  }
+  allRecords = await listScreenshotMetaRecords();
   allRecords.sort((a, b) => b.timestamp - a.timestamp);
+  filters.setDomainSuggestions(buildDomainFilterSuggestions(allRecords));
   applyFilters();
   if (historySkeletonEl) historySkeletonEl.classList.add('hidden');
   loadingEl.classList.add('hidden');
@@ -409,6 +436,7 @@ async function refreshAll() {
 async function init() {
   await applySavedTheme();
   maybeShowQueueCompletionToast();
+  maybeShowStorageNoticeToast();
   try {
     const settings = await getUserSettings();
     const showProfileFilter = canUseFeature('smart_save_profiles', settings || {});

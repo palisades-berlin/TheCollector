@@ -55,9 +55,54 @@
     </div>
 
     <section class="filters" aria-label="History filters">
-      <label class="filter-item">
+      <label class="filter-item filter-item-domain">
         <span>Domain</span>
-        <input id="filterDomain" class="sc-input" type="text" placeholder="e.g. example.com" />
+        <div
+          id="filterDomainCombobox"
+          class="domain-combobox"
+          role="combobox"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-owns="filterDomainListbox"
+        >
+          <svg
+            class="domain-combobox-icon"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 21.49 21.49 20 15.5 14zM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+            />
+          </svg>
+          <input
+            id="filterDomain"
+            class="sc-input domain-combobox-input"
+            type="text"
+            placeholder="e.g. .com or example.com"
+            autocomplete="off"
+            aria-autocomplete="list"
+            aria-controls="filterDomainListbox"
+          />
+          <button
+            id="clearDomainFilterBtn"
+            class="domain-combobox-clear"
+            type="button"
+            aria-label="Clear domain filter"
+            title="Clear domain filter"
+            hidden
+          >
+            ×
+          </button>
+        </div>
+        <div
+          id="filterDomainListbox"
+          class="domain-listbox hidden"
+          role="listbox"
+          aria-label="Saved domains"
+        ></div>
       </label>
       <label class="filter-item">
         <span>From</span>

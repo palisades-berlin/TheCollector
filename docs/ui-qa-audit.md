@@ -136,8 +136,12 @@ State coverage target:
 
 - [ ] Popup spacing and segmented tabs aligned
 - [ ] History filters/grid/cards/actions aligned
+- [ ] History Domain combobox opens captured-domain suggestions on focus (max 5 visible, scrollable) and supports Arrow/Enter/click selection
+- [ ] History Domain clear icon resets only domain search and updates results immediately
 - [ ] History card rows maintain equal-height geometry for mixed content states (with/without optional diagnostics)
+- [ ] History thumbnails load lazily by viewport and do not schedule full-list Blob fetch bursts on initial render
 - [ ] Settings shell/rows/actions aligned
+- [ ] Settings shows Auto-purge toggle + storage usage counter (`000/500`) and preserves explicit-save behavior
 - [ ] Preview toolbar/editbar/stage spacing aligned
 
 ### Pass 3 - State and Flow QA
@@ -145,6 +149,7 @@ State coverage target:
 - [ ] loading/empty/success/error/disabled states match system
 - [ ] primary flows remain behavior-identical
 - [ ] popup capture errors show a single toast only; repeated identical errors do not stack
+- [ ] at screenshot limit: auto-purge ON shows one informational storage toast; auto-purge OFF shows one actionable limit message
 
 ### Pass 4 - Accessibility QA
 

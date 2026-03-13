@@ -6,6 +6,50 @@ export function getRecordDomain(record) {
   }
 }
 
+export function getCanonicalTldFromHost(hostname) {
+  const host = String(hostname || '')
+    .trim()
+    .toLowerCase();
+  if (!host || !host.includes('.')) return '';
+
+  const parts = host.split('.').filter(Boolean);
+  if (parts.length < 2) return '';
+  const tail2 = `${parts[parts.length - 2]}.${parts[parts.length - 1]}`;
+  if (MULTI_LABEL_PUBLIC_SUFFIXES.has(tail2) && parts.length >= 3) {
+    return `.${tail2}`;
+  }
+
+  return `.${parts[parts.length - 1]}`;
+}
+
+const MULTI_LABEL_PUBLIC_SUFFIXES = new Set([
+  'co.uk',
+  'org.uk',
+  'gov.uk',
+  'ac.uk',
+  'co.jp',
+  'com.au',
+  'net.au',
+  'org.au',
+  'co.nz',
+]);
+
+export function buildDomainFilterSuggestions(records) {
+  const counts = new Map();
+  for (const record of records || []) {
+    const domain = getRecordDomain(record);
+    if (!domain || !domain.includes('.') || domain.includes('/')) continue;
+    counts.set(domain, Number(counts.get(domain) || 0) + 1);
+  }
+
+  return [...counts.entries()]
+    .map(([value, count]) => ({ value, count }))
+    .sort((a, b) => {
+      if (b.count !== a.count) return b.count - a.count;
+      return a.value.localeCompare(b.value);
+    });
+}
+
 export function getRecordExportType(record) {
   const type = String(record.blobType || '').toLowerCase();
   if (type.includes('pdf')) return 'pdf';
