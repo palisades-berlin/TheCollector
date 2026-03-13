@@ -22,6 +22,35 @@ The extension is **free forever** — no subscriptions, no payments, no paid tie
 - Packaging discipline: release archives must exclude local/development artifacts (`node_modules`, `.git`, tests, and local notes/docs not required by runtime).
 - Permission-scope policy (Phase A): remove only demonstrably dead permissions; do not remove permissions that are runtime-required for capture/export flows.
 
+## Pre-Commit Checklist
+
+Run this in order before every commit/push. No exceptions.
+
+### Always — every commit
+
+1. Bump version (`x.y.z`) in all six files: `manifest.json`, `package.json`, `README.md`, `CHANGELOG.md`, `AGENTS.md`, `CLAUDE.md`
+2. Add a `CHANGELOG.md` entry for the new version
+3. Update `README.md` `## Overview` with the top changes (max 5 lines)
+4. Update `SESSION.md`: today's date + tool, what was completed, exact next task, open decisions/blockers
+5. Run `npm run test:docs-policy` — fix all failures before committing, never bypass
+6. Wiki sync: clone `https://github.com/palisades-berlin/TheCollector.wiki.git` → update `Home.md` → commit + push in same session
+
+### Conditional — only when the commit touches the relevant area
+
+| Trigger | Required action |
+|---|---|
+| Feature, UX, or tier behavior changed | Update `docs/help-user-guide.md` + `src/options/options.html` Help & FAQ |
+| New feature ships | Remove phrase(s) from `UNSHIPPED_PHRASES` in `scripts/check-doc-policy.mjs`; add feature to both help surfaces |
+| Roadmap scope or status changed | Update `docs/thecollector-2.0-90-day-roadmap.md` |
+| Architecture or policy decision made | Create or update ADR in `docs/adr/` |
+| `docs/help-user-guide.md` changed | Run `docs/codex-prompt-help-faq-regeneration.md` to regenerate `src/options/options.html` FAQ section |
+| `README.md` changed | Refresh wiki Home.md Overview section |
+| `docs/dev-workflow.md` changed | Refresh wiki Home.md workflow section |
+| `docs/ui-handoff.md` changed | Refresh wiki Home.md UI/UX section |
+| `docs/thecollector-2.0-90-day-roadmap.md` changed | Refresh wiki Home.md roadmap section |
+
+---
+
 ## Help Documentation Rules
 
 - **Rule 1 — Implementation parity:** All help files, documents, and pages (`docs/help-user-guide.md`, `src/options/options.html` Help & FAQ) must only describe features that are actually implemented and available in the current release. Roadmap or planned features must never appear in user-facing help content.

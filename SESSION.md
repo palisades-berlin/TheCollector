@@ -16,26 +16,11 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 ## Last session
 
 **Date:** 2026-03-13
-**Tool:** Codex + Claude (Cowork)
+**Tool:** Claude (Cowork)
 
 **Done:**
-- Deep housekeeping pass across all docs — full scan of every file:
-  - `AGENTS.md` — added Help Documentation Rules 1–4 (were missing, only Rule 5 was present)
-  - `docs/architecture.md` — removed duplicate `src/shared/db.js` line
-  - `docs/thecollector-2.0-90-day-roadmap.md` — version baseline updated 1.9.84 → 1.9.86; added items 10 (1.9.85 thumbnail quality) and 11 (1.9.86 domain combobox)
-  - `docs/ui-handoff.md` — Figma table naming updated: "Sidebar / History*" → "Screenshots / *" per ADR 0012; 6 design principles from master plan §3.2 added (hard gate for Phase 2 — now done)
-  - `docs/design-overhaul-master-plan-2026-03-13.md` — BF-01–04 and S-07/S-08 marked as likely pre-completed (per ADR 0011/0012 and implementation plan Sprint 2A/2B/2C); post-phase 1 gate note updated to reflect design principles already added
-- Cross-machine sync and publish completed:
-  - hard sync performed from GitHub (`reset --hard origin/main` + clean) to make this machine match remote exactly
-  - pushed docs housekeeping commit to `main`: `5935793` (`docs: housekeeping pass, cross-machine workflow, and design overhaul master plan`)
-  - same-session wiki sync completed: `TheCollector.wiki` `Home.md` commit `d37616f`
-  - local and remote are clean/aligned (`main...origin/main`)
-- Blocker verification completed (pre-Phase 1 gate):
-  - BF-01 confirmed: shipped naming uses `Screenshots` + `Change Log` across live surfaces.
-  - BF-02 confirmed: URL Change Log supports `Esc` + `Back to URL List` focus-return flow.
-  - BF-03 confirmed: URL remove flow calls metadata cleanup (`removeUrlMetadata`/`removeUrlRecordMetadata`).
-  - BF-04 confirmed: `url_bulk_actions` is correctly gated as Pro in capabilities.
-  - evidence run: `node tests/capabilities.test.mjs && node tests/url-repo.test.mjs && node tests/url-library-change-log-accessibility.test.mjs` (all pass).
+- Generated `docs/design-system-rules.md` — full codebase-derived design system spec for Phase 0 Figma rebuild (tokens, components, dark mode, Figma naming convention, design principles)
+- Added `## Pre-Commit Checklist` to `CLAUDE.md` and `AGENTS.md` — numbered ordered list, mandatory vs conditional clearly separated; fixes gap where rules were scattered across 4 files with no single checklist
 
 ---
 
@@ -63,12 +48,9 @@ First step: 0-A-1 — update colour styles (dark mode surface tokens, light mode
 
 | File | Status |
 |---|---|
-| `docs/design-overhaul-master-plan-2026-03-13.md` | ✅ Updated — BF/S pre-completed notes added |
-| `AGENTS.md` | ✅ Help Doc Rules 1–4 added |
-| `docs/architecture.md` | ✅ Duplicate line removed |
-| `docs/thecollector-2.0-90-day-roadmap.md` | ✅ Version baseline 1.9.86, items 10–11 added |
-| `docs/ui-handoff.md` | ✅ Screenshots naming fixed, 6 design principles added |
-| `WORKFLOW.md` | ✅ Updated in housekeeping push |
+| `docs/design-system-rules.md` | ✅ New — full DS spec for Phase 0 Figma |
+| `CLAUDE.md` | ✅ Pre-Commit Checklist added |
+| `AGENTS.md` | ✅ Pre-Commit Checklist added |
 | `SESSION.md` | ✅ This file |
 
 ---
@@ -87,4 +69,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session.
 
 ---
 
-*Last updated: 2026-03-13 (blocker verification completed; ready for Phase 0 Figma start next session)*
+*Last updated: 2026-03-13 (DS rules doc + pre-commit checklist added; Phase 0 Figma is next)*
