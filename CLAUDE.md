@@ -38,7 +38,7 @@ The extension is **free forever** — no subscriptions, no payments, no paid tie
 
 - **Rule 5 — Help & FAQ HTML generation:** `docs/help-user-guide.md` is the
   single source of truth for content. `src/options/options.html` (Help & FAQ
-  section) is the *user-friendly rendering* of that source. Whenever
+  section) is the _user-friendly rendering_ of that source. Whenever
   `docs/help-user-guide.md` is modified, run
   `docs/codex-prompt-help-faq-regeneration.md` in the same work cycle to
   regenerate the HTML section with plain, goal-oriented language. The markdown

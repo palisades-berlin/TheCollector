@@ -44,7 +44,7 @@ export function createCaptureService() {
     await chrome.scripting.executeScript({
       target: { tabId },
       func: (protocol) => {
-        window.__THE_COLLECTOR_PROTOCOL = protocol;
+        /** @type {any} */ (window).__THE_COLLECTOR_PROTOCOL = protocol;
       },
       args: [
         {

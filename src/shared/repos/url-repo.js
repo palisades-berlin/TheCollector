@@ -279,7 +279,7 @@ export async function appendUrlHistoryEntry(payload) {
   /** @type {UrlHistoryEntryPayload} */
   const safePayload = payload || {};
   if (!Array.isArray(safePayload.urls)) return null;
-  return appendUrlHistorySnapshot(safePayload);
+  return appendUrlHistorySnapshot(/** @type {any} */ (safePayload));
 }
 
 export async function loadUrlRecords() {

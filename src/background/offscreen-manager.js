@@ -4,7 +4,8 @@ export function createEnsureOffscreen() {
 
   async function hasOffscreenDocument() {
     try {
-      const contexts = await chrome.offscreen.getContexts({
+      const offscreenApi = /** @type {any} */ (chrome.offscreen);
+      const contexts = await offscreenApi.getContexts({
         contextTypes: ['OFFSCREEN_DOCUMENT'],
       });
       return contexts.length > 0;

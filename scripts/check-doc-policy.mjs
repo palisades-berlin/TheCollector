@@ -39,11 +39,11 @@ if (overviewIdx === -1 || topChangesIdx === -1 || topChangesIdx < overviewIdx) {
   }
 }
 
-// ── 2. Help-doc freshness gate ────────────────────────────────────────────────
-// These phrases identify features that are NOT yet shipped. They must never
-// appear in user-facing help files. Update this list whenever a feature ships
-// (remove its entry) or a new unshipped feature is mistakenly documented (add entry).
-const UNSHIPPED_PHRASES = [
+// ── 2. Tiered docs freshness gate (repo-wide discovery) ──────────────────────
+// These phrases identify features that are NOT yet shipped.
+// They must never appear in "user_facing_strict" documents.
+// They are allowed in "internal_planning_allowed" documents.
+const USER_FACING_UNSHIPPED_PHRASES = [
   // Command Palette — planned for v1.10
   'Cmd/Ctrl + K',
   'Cmd/Ctrl+K',
@@ -53,27 +53,112 @@ const UNSHIPPED_PHRASES = [
   'Workflow Automation',
 ];
 
-const HELP_FILES = [
-  { label: 'docs/help-user-guide.md', path: path.join(root, 'docs/help-user-guide.md') },
-  {
-    label: 'src/options/options.html (Help & FAQ section)',
-    path: path.join(root, 'src/options/options.html'),
-  },
+const USER_FACING_STRICT_ALLOWLIST = new Set([
+  'README.md',
+  'docs/help-user-guide.md',
+  'src/options/options.html',
+]);
+
+const INTERNAL_PLANNING_ALLOWED_PATTERNS = [
+  /^docs\/adr\//i,
+  /^docs\/.*roadmap.*\.md$/i,
+  /^docs\/.*implementation-plan.*\.md$/i,
+  /^docs\/.*(assessment|audit).*\.(md|html)$/i,
+  /^docs\/.*todo.*\.md$/i,
 ];
 
-for (const file of HELP_FILES) {
-  const text = fs.readFileSync(file.path, 'utf8');
-  const hits = UNSHIPPED_PHRASES.filter((phrase) => text.includes(phrase));
+const DOCS_DIR = path.join(root, 'docs');
+const SELECTED_HTML_DOCS = [path.join(root, 'src/options/options.html')];
+
+function toRepoRel(absPath) {
+  return path.relative(root, absPath).split(path.sep).join('/');
+}
+
+function listMarkdownDocsInDir(dirAbs) {
+  if (!fs.existsSync(dirAbs)) return [];
+  const out = [];
+  for (const entry of fs.readdirSync(dirAbs, { withFileTypes: true })) {
+    const abs = path.join(dirAbs, entry.name);
+    if (entry.isDirectory()) {
+      out.push(...listMarkdownDocsInDir(abs));
+      continue;
+    }
+    if (entry.isFile() && entry.name.toLowerCase().endsWith('.md')) {
+      out.push(abs);
+    }
+  }
+  return out;
+}
+
+function listRootMarkdownDocs() {
+  const out = [];
+  for (const entry of fs.readdirSync(root, { withFileTypes: true })) {
+    if (!entry.isFile()) continue;
+    if (!entry.name.toLowerCase().endsWith('.md')) continue;
+    out.push(path.join(root, entry.name));
+  }
+  return out;
+}
+
+function discoverDocs() {
+  const discovered = [
+    ...listRootMarkdownDocs(),
+    ...listMarkdownDocsInDir(DOCS_DIR),
+    ...SELECTED_HTML_DOCS.filter((absPath) => fs.existsSync(absPath)),
+  ];
+  const byRel = new Map();
+  for (const absPath of discovered) {
+    byRel.set(toRepoRel(absPath), absPath);
+  }
+  return [...byRel.entries()]
+    .map(([relPath, absPath]) => ({ relPath, absPath }))
+    .sort((a, b) => a.relPath.localeCompare(b.relPath));
+}
+
+function classifyDoc(relPath) {
+  if (USER_FACING_STRICT_ALLOWLIST.has(relPath)) return 'user_facing_strict';
+  if (INTERNAL_PLANNING_ALLOWED_PATTERNS.some((pattern) => pattern.test(relPath))) {
+    return 'internal_planning_allowed';
+  }
+  return 'internal_planning_allowed';
+}
+
+const classified = {
+  user_facing_strict: [],
+  internal_planning_allowed: [],
+};
+
+for (const doc of discoverDocs()) {
+  const cls = classifyDoc(doc.relPath);
+  classified[cls].push(doc);
+}
+
+for (const doc of classified.user_facing_strict) {
+  const text = fs.readFileSync(doc.absPath, 'utf8');
+  const hits = USER_FACING_UNSHIPPED_PHRASES.filter((phrase) => text.includes(phrase));
   if (hits.length > 0) {
     console.error(
-      `FAIL help-doc freshness: ${file.label} references unshipped feature(s): ${hits.map((h) => `"${h}"`).join(', ')}`
+      `FAIL docs policy [user_facing_strict]: ${doc.relPath} references unshipped feature(s): ${hits.map((h) => `"${h}"`).join(', ')}`
     );
     failed = true;
-  } else {
-    console.log(
-      `PASS help-doc freshness: ${file.label} contains no references to unshipped features.`
-    );
   }
+}
+
+if (!failed) {
+  console.log(
+    `PASS docs policy [user_facing_strict]: scanned ${classified.user_facing_strict.length} file(s).`
+  );
+}
+
+console.log(
+  `PASS docs policy [internal_planning_allowed]: discovered ${classified.internal_planning_allowed.length} file(s); unshipped-feature mentions are allowed by policy.`
+);
+
+if (classified.user_facing_strict.length === 0) {
+  console.error(
+    'FAIL docs policy: user_facing_strict classification is empty (at least one strict doc is required).'
+  );
+  failed = true;
 }
 
 if (failed) process.exit(1);

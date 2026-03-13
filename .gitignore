@@ -23,6 +23,7 @@ artifacts/
 
 # Build artifacts
 *.zip
+tsconfig.tsbuildinfo
 test-results/
 .playwright-cli/
 output/
@@ -31,4 +32,3 @@ tmp/
 # Do not track per-release GitHub note files
 GITHUB_RELEASE_*.md
 CHROME_WEB_STORE_RELEASE_NOTES_*.md
-

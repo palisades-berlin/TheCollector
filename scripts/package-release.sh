@@ -34,6 +34,7 @@ zip -r "$ZIP_PATH" manifest.json assets src \
   -x "*.DS_Store" \
      "docs/*" \
      "tests/*" \
+     "jsconfig.json" \
      "*.md" \
      ".editorconfig" \
      ".gitignore" \

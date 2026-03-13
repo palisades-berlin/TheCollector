@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "useUnknownInCatchVariables": false,
+    "noEmit": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM"],
+    "types": ["chrome", "node"],
+    "allowJs": true,
+    "skipLibCheck": false,
+    "maxNodeModuleJsDepth": 0
+  },
+  "include": ["src/**/*.js", "scripts/**/*.mjs", "tests/**/*.mjs"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "test-results",
+    "scripts/e2e-smoke.mjs",
+    "scripts/perf-popup-budget.mjs",
+    "src/content/capture-agent.js",
+    "src/history/history.js",
+    "src/options/options.js",
+    "src/popup/popup.js",
+    "src/popup/urls-panel.js",
+    "src/preview/preview.js",
+    "src/urls/urls.js",
+    "tests/integration/**/*.mjs",
+    "tests/roadmap-guardrails.test.mjs",
+    "tests/settings.test.mjs",
+    "tests/stability-capture-concurrency.test.mjs",
+    "tests/url-repo.test.mjs",
+    "tests/preview-export.test.mjs",
+    "tests/nudge-repo.test.mjs",
+    "tests/visual/**/*.mjs"
+  ]
+}

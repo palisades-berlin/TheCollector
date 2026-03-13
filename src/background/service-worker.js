@@ -97,7 +97,9 @@ async function markQueueTabProcessed(tabId) {
     const state = await readQueueState();
     const nextQueue = state.queue.filter((item) => Number(item.tabId) !== Number(tabId));
     const currentSession =
-      state.session && typeof state.session === 'object' ? state.session : null;
+      state.session && typeof state.session === 'object'
+        ? /** @type {any} */ (state.session)
+        : null;
     const nextSession = currentSession
       ? {
           ...currentSession,
@@ -149,8 +151,7 @@ const NUDGE_BADGE_COLOR = '#E53935';
 
 async function checkAndUpdateNudgeBadge() {
   try {
-    /** @type {UserSettings} */
-    const settings = await getUserSettings();
+    const settings = /** @type {any} */ (await getUserSettings());
     const nudgesEnabled =
       settings?.nudgesEnabled === true && canUseFeature('smart_revisit_nudges', settings);
     if (!nudgesEnabled) {
@@ -297,8 +298,7 @@ chrome.omnibox?.onInputEntered?.addListener(async (text) => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab?.id) return;
   try {
-    /** @type {UserSettings} */
-    const settings = await getUserSettings();
+    const settings = /** @type {any} */ (await getUserSettings());
     if (!canUseFeature('omnibox_actions', settings)) {
       await chrome.tabs.create({ url: chrome.runtime.getURL('src/options/options.html') });
       return;

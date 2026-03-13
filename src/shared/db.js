@@ -8,7 +8,8 @@ function openDB() {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
 
     req.onupgradeneeded = (e) => {
-      const db = e.target.result;
+      const target = /** @type {IDBOpenDBRequest} */ (e.target);
+      const db = target.result;
       const oldVersion = e.oldVersion || 0;
 
       if (!db.objectStoreNames.contains(STORE_NAME)) {
@@ -24,11 +25,11 @@ function openDB() {
       // Backfill lightweight metadata entries for existing screenshots.
       // Run again for v4 to repair profiles that reached v3 without META_STORE.
       if (oldVersion < 4) {
-        const tx = e.target.transaction;
+        const tx = target.transaction;
         const screenshotStore = tx.objectStore(STORE_NAME);
         const metaStore = tx.objectStore(META_STORE);
         screenshotStore.openCursor().onsuccess = (ev) => {
-          const cursor = ev.target.result;
+          const cursor = /** @type {IDBRequest} */ (ev.target).result;
           if (!cursor) return;
           metaStore.put(toMetaRecord(cursor.value));
           cursor.continue();

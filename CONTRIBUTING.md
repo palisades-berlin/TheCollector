@@ -105,6 +105,10 @@ For code changes, keep versions synchronized:
 - Respect manifest permission baseline checks.
 - Vulnerability reporting path and disclosure expectations are defined in [SECURITY.md](./SECURITY.md).
 
+## Community Standards
+
+- All participation in this repository is governed by [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
+
 ## Review Standards
 
 - At least one human review is required for merges to `main`.

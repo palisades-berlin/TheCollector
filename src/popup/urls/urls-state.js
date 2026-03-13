@@ -127,6 +127,7 @@ export async function refreshHistoryEntries() {
  * @param {UrlMutationContext} param0
  */
 export function createUrlMutations({ onHistoryChange, isHistoryViewOpen }) {
+  /** @type {Promise<any>} */
   let urlMutationQueue = Promise.resolve();
 
   async function refreshHistoryViewIfOpen() {
@@ -140,7 +141,11 @@ export function createUrlMutations({ onHistoryChange, isHistoryViewOpen }) {
    * @param {UrlHistoryActionType} [actionType]
    * @param {Record<string, unknown>} [meta]
    */
-  function mutateUrls(mutator, actionType = URL_HISTORY_ACTION.UNKNOWN, meta = {}) {
+  function mutateUrls(
+    mutator,
+    actionType = /** @type {UrlHistoryActionType} */ (URL_HISTORY_ACTION.UNKNOWN),
+    meta = {}
+  ) {
     const run = urlMutationQueue.then(async () => {
       const urls = await loadUrls();
       const nextUrls = normalizeUrlArray(await mutator([...urls]));
