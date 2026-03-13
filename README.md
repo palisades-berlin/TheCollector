@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-90%25%20lines-brightgreen)](./package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-Current extension version: `1.9.68`.
+Current extension version: `1.9.71`.
 
 ## Overview
 
@@ -238,6 +238,7 @@ Release notes policy: keep notes in `CHANGELOG.md` only; do not add `GITHUB_RELE
 
 - Project license: [MIT](./LICENSE).
 - Security policy and vulnerability disclosure: [SECURITY.md](./SECURITY.md).
+- Community standards and conduct policy: [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
 - Contribution and review policy: [CONTRIBUTING.md](./CONTRIBUTING.md).
 - Code ownership is enforced via [CODEOWNERS](./.github/CODEOWNERS).
 - `main` branch protection requires:
@@ -330,8 +331,8 @@ Milestones in delivery order:
 
 **v2.1 — Intelligence Layer**
 
-- Magic Mode v1 (rule-based domain → profile suggestion, no ML)
-- Workflow Automations v1 (3–4 preset toggles, no rule builder)
+- Rule-Based Assist v1 (domain → profile suggestion, no ML)
+- Preset Capture Routines v1 (3–4 preset toggles, no rule builder)
 - Quick Note at Save, Omnibox Actions (`tc research`, `tc star`)
 - Admin Config Profile (importable JSON)
 

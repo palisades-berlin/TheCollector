@@ -3,7 +3,7 @@
 ## Project Summary
 
 `THE Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.9.68`.
+Current extension version: `1.9.71`.
 The extension is **free forever** — no subscriptions, no payments, no paid tiers. The tier selector (Basic / Pro / Ultra) is a UX complexity preference, not a paywall. See ADR 0009.
 
 ## Product Model
@@ -28,3 +28,12 @@ The extension is **free forever** — no subscriptions, no payments, no paid tie
   - `docs/dev-workflow.md`
 - UI handoff/source-of-truth guidance:
   - `docs/ui-handoff.md`
+
+- **Rule 5 — Help & FAQ HTML generation:** `docs/help-user-guide.md` is the
+  single source of truth for content. `src/options/options.html` (Help & FAQ
+  section) is the *user-friendly rendering* of that source. Whenever
+  `docs/help-user-guide.md` is modified, run
+  `docs/codex-prompt-help-faq-regeneration.md` in the same work cycle to
+  regenerate the HTML section with plain, goal-oriented language. The markdown
+  and the HTML must never diverge in content coverage (Rule 3), but they may —
+  and should — differ in tone and phrasing.

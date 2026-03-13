@@ -1,5 +1,45 @@
 # Changelog
 
+## 1.9.71 - 2026-03-13
+
+### Changed
+
+- Regenerate Help & FAQ page from updated `docs/help-user-guide.md` with improved user-friendly language.
+
+## 1.9.70 - 2026-03-13
+
+- Docs policy expansion (tiered, low-noise):
+  - upgraded `scripts/check-doc-policy.mjs` from a narrow two-file freshness check to a repo-wide discovered docs gate with classification.
+  - kept README `Top Changes` structure gate unchanged.
+  - added docs classification matrix:
+    - `user_facing_strict` (unshipped-feature phrases fail the gate)
+    - `internal_planning_allowed` (planning/ADR/roadmap-style docs may mention unshipped work)
+  - added grouped policy output with per-class scanned/discovered counts and strict-file violation detail.
+  - retained `UNSHIPPED_PHRASES` intent as the single phrase source of truth for user-facing freshness enforcement.
+- Version sync:
+  - synchronized version to `1.9.70` across manifest/package/docs pointers.
+
+## 1.9.69 - 2026-03-13
+
+- JS-only type-check enablement (zero emit):
+  - added `jsconfig.json` and enabled repository type-checking with `checkJs` + strict baseline and no emit.
+  - added TypeScript toolchain dev dependencies: `typescript`, `@types/chrome`, `@types/node`.
+  - added `check:types` script and wired it as the first step in `npm run check`.
+- Type-check remediation:
+  - fixed **14** `tsc` diagnostics in currently checked core modules:
+    - `src/background/capture-service.js`
+    - `src/background/offscreen-manager.js`
+    - `src/background/service-worker.js`
+    - `src/popup/urls/urls-state.js`
+    - `src/shared/db.js`
+    - `src/shared/repos/url-repo.js`
+  - introduced explicit `jsconfig.json` file-level exceptions for legacy UI/e2e-heavy surfaces to keep runtime behavior unchanged in this phase while establishing a working type gate.
+- Packaging and ignore hygiene:
+  - added `tsconfig.tsbuildinfo` to `.gitignore`.
+  - updated `scripts/package-release.sh` to explicitly exclude `jsconfig.json` from release archives.
+- Version sync:
+  - synchronized version to `1.9.69` across manifest/package/docs pointers.
+
 ## 1.9.68 - 2026-03-12
 
 - Gap hardening cycle (`Gap-Severity-Fix.csv`) implementation:
