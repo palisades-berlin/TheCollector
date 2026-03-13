@@ -16,31 +16,36 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 ## Last session
 
 **Date:** 2026-03-13
-**Tool:** Claude (Cowork)
+**Tool:** Codex
 
 **Done:**
-- Generated `docs/design-system-rules.md` — full codebase-derived design system spec for Phase 0 Figma rebuild (tokens, components, dark mode, Figma naming convention, design principles)
-- Added `## Pre-Commit Checklist` to `CLAUDE.md` and `AGENTS.md` — numbered ordered list, mandatory vs conditional clearly separated; fixes gap where rules were scattered across 4 files with no single checklist
+- Executed Phase 0 access-unblock validation package for Figma:
+  - `mcp__figma__whoami` confirms authenticated user but current seat is `View` on starter plan.
+  - first and follow-up read attempts (`mcp__figma__get_metadata`) both fail with MCP plan/call-limit error.
+- Result: unblock checkpoint failed (`permission + capacity` not satisfied), so 0-A-1 token style updates were not executed.
+- Applied stop-rule from plan: carry blocker forward and update session handoff instead of forcing partial design work.
 
 ---
 
 ## Do next
 
-**Task:** Phase 0 — begin Figma rebuild.
+**Task:** Unblock Figma execution capability, then run Phase 0-A-1.
 
 Where: Figma file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`)
 What: Phase 0 checklist in master plan §6, steps 0-A through 0-F
 Gate: ALL Phase 0 Figma work must be complete and approved before any Phase 1 code begins
-First step: 0-A-1 — update colour styles (dark mode surface tokens, light mode surface tokens, border tokens)
+First step after unblock: 0-A-1 — update colour styles (dark mode surface tokens, light mode surface tokens, border tokens)
 
-**Blocker status:** cleared — BF-01–04 verified in current build on 2026-03-13.
+**Blocker status:** active — Figma seat/capacity blocker prevents MCP execution (`View` + tool-call limit).
 
 ---
 
 ## Open decisions / blockers
 
-- No active technical blocker for Phase 0 start.
-- S-07/S-08 are code-precompleted; next work is Figma documentation + DS 2.0 visual treatment planning only.
+- Figma permission/capacity blocker:
+  - file access must be upgraded to `Editor`
+  - MCP plan/call allowance must be sufficient for style update + validation pass
+- S-07/S-08 remain code-precompleted; design work stays pending until Figma unblock is resolved.
 
 ---
 
@@ -51,6 +56,7 @@ First step: 0-A-1 — update colour styles (dark mode surface tokens, light mode
 | `docs/design-system-rules.md` | ✅ New — full DS spec for Phase 0 Figma |
 | `CLAUDE.md` | ✅ Pre-Commit Checklist added |
 | `AGENTS.md` | ✅ Pre-Commit Checklist added |
+| `docs/design-overhaul-master-plan-2026-03-13.md` | ✅ Phase 0-A-1 token values remain source of truth |
 | `SESSION.md` | ✅ This file |
 
 ---
@@ -69,4 +75,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session.
 
 ---
 
-*Last updated: 2026-03-13 (DS rules doc + pre-commit checklist added; Phase 0 Figma is next)*
+*Last updated: 2026-03-13 (Figma unblock validation run; 0-A-1 pending on seat + MCP capacity upgrade)*
