@@ -18,7 +18,7 @@ import {
 import { buildCaptureQueuePayload, buildCaptureStartPayload } from './popup-profile-payload.js';
 import { evaluateRevisitNudge } from '../shared/nudges.js';
 import { addTabsToQueue, normalizeQueueEntries, removeFromQueue } from './capture-queue.js';
-import { CAPTURE_QUEUE_STORAGE_KEY } from '../shared/constants.js';
+import { CAPTURE_QUEUE_STORAGE_KEY, SCREENSHOT_ITEM_LIMIT } from '../shared/constants.js';
 
 const POPUP_DEBUG =
   new URLSearchParams(location.search).get('debugPopupPerf') === '1' ||
@@ -251,6 +251,10 @@ function toFriendlyCaptureError(rawMessage) {
 
   if (lower.includes('no active tab found')) {
     return 'No active tab found. Click into a webpage tab and try again.';
+  }
+
+  if (lower.includes('storage limit reached')) {
+    return `Storage limit reached (${SCREENSHOT_ITEM_LIMIT}). Delete screenshots or enable Auto-purge in Settings.`;
   }
 
   return message || 'Capture failed. Please try again on a regular webpage tab.';

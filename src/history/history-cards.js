@@ -9,7 +9,7 @@ export function createHistoryCards({
   compareSelection,
   toggleCompareSelection,
 }) {
-  function buildCard(record) {
+  function buildCard(record, options = {}) {
     const node = cardTpl.content.cloneNode(true);
     const card = node.querySelector('.card');
     const canvas = node.querySelector('.thumb-canvas');
@@ -29,7 +29,7 @@ export function createHistoryCards({
     })();
 
     canvas.classList.remove('thumb-broken');
-    enqueueThumbLoad(record.id, canvas);
+    enqueueThumbLoad(record.id, canvas, options);
 
     try {
       urlEl.textContent = new URL(record.url).hostname;

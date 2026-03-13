@@ -23,3 +23,4 @@ operations, or governance.
 - [0010-design-system-2.0-sequencing.md](./0010-design-system-2.0-sequencing.md)
 - [0011-url-library-canonical-surface.md](./0011-url-library-canonical-surface.md)
 - [0012-navigation-and-naming-semantics.md](./0012-navigation-and-naming-semantics.md)
+- [0013-screenshot-storage-retention-guardrails.md](./0013-screenshot-storage-retention-guardrails.md)

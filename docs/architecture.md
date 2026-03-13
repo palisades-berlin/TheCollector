@@ -32,6 +32,7 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
 - `src/shared/constants.js`: capture/export limits and shared constants.
 - `src/shared/non-fatal.js`: shared debug-gated non-fatal logging helper for extension contexts.
 - `src/shared/db.js`: IndexedDB access primitives.
+- `src/shared/db.js`: IndexedDB access primitives plus screenshot storage guardrails (metadata-first listing, oldest-first auto-purge policy, quota fallback handling) and a dedicated thumbnail fast-path store for History rendering.
 - `src/shared/capture-profiles.js`: fixed Smart Save Profiles catalog and capture override resolver.
 - `src/popup/popup-profile-payload.js`: canonical popup payload builders for Smart Save capture and queue actions.
 - `src/shared/nudges.js`: local Smart Revisit Nudge evaluator logic.
@@ -62,6 +63,7 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
 - Service worker delegates to capture service.
 - Capture service coordinates content script scrolling and `captureVisibleTab` snapshots.
 - Tiles are stitched in offscreen document; oversized pages are synthesized into one merged previewable record with original dimensions preserved in metadata, then persisted.
+- Save pipeline enforces screenshot retention guardrails: when the screenshot limit is reached, oldest records are purged first only if Auto-purge is enabled; otherwise save is blocked with user-facing guidance.
 - Capture metadata persists selected profile ID for History filtering.
 - Service worker emits queue completion (`SW_QUEUE_DONE`) and opens History with queue summary on batch completion.
 - Popup receives progress/done/error messages and queue completion status updates.
@@ -75,6 +77,7 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
 3. Review/export flow
 
 - History/preview read persisted screenshot records.
+- History list rendering uses `screenshot_meta` metadata records (not full Blob reads) and thumbnail loading is viewport-driven with a thumb-store fast path; legacy records fall back safely and backfill thumbnails lazily.
 - Preview applies non-destructive visual operations and exports PNG/JPG/PDF or clipboard output.
 - History supports profile-based filtering (Pro/Ultra tier) using persisted capture profile metadata.
 - History and Settings expose read-only Smart Save profile usage summaries (Pro/Ultra tier), including unknown/legacy profile ID counts for migration-safe visibility.
@@ -102,3 +105,6 @@ Accepted ADRs are tracked in `docs/adr/`:
 - `0008`: Capture Queue + Batch Mode v1 (popup queue, Pro/Ultra tier)
 - `0009`: always-free, local-only product model (added 2026-03-11)
 - `0010`: Design System 2.0 as v2.0 first item — token migration prerequisite gate (added 2026-03-11)
+- `0011`: URL Library canonical surface for full URL management (added 2026-03-12)
+- `0012`: navigation and naming semantics (added 2026-03-12)
+- `0013`: screenshot storage retention guardrails (added 2026-03-13)

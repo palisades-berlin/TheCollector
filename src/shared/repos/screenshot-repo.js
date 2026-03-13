@@ -4,10 +4,14 @@ import {
   listScreenshots,
   listScreenshotMeta,
   deleteScreenshots,
+  getScreenshotUsage,
+  getScreenshotThumb,
+  saveScreenshotThumb,
 } from '../db.js';
 
 const CAPTURE_REPORTS_KEY = 'captureReports';
 const CAPTURE_REPORTS_LIMIT = 30;
+const SCREENSHOT_STORAGE_EVENT_KEY = 'screenshotStorageEvent';
 
 export async function saveScreenshotRecord(record) {
   return saveScreenshot(record);
@@ -15,6 +19,14 @@ export async function saveScreenshotRecord(record) {
 
 export async function getScreenshotById(id) {
   return getScreenshot(id);
+}
+
+export async function getScreenshotThumbById(id) {
+  return getScreenshotThumb(id);
+}
+
+export async function saveScreenshotThumbById(id, thumbBlob, timestamp) {
+  return saveScreenshotThumb(id, thumbBlob, timestamp);
 }
 
 export async function listScreenshotRecords() {
@@ -27,6 +39,15 @@ export async function listScreenshotMetaRecords() {
 
 export async function deleteScreenshotRecords(ids) {
   return deleteScreenshots(ids);
+}
+
+export async function getScreenshotStorageUsage() {
+  return getScreenshotUsage();
+}
+
+export async function loadScreenshotStorageEvent() {
+  const state = await chrome.storage.local.get({ [SCREENSHOT_STORAGE_EVENT_KEY]: null });
+  return state[SCREENSHOT_STORAGE_EVENT_KEY] || null;
 }
 
 export async function loadCaptureReports() {

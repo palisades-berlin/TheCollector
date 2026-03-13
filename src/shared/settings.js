@@ -11,6 +11,7 @@ const SETTINGS_DEFAULTS = {
   theme: 'system', // system | light | dark
   nudgesEnabled: false,
   notificationCadence: 'balanced', // low | balanced | high
+  autoPurgeEnabled: true,
   // Empty default allows migration from legacy booleans when no tier is stored yet.
   capabilityTier: '', // basic | pro | ultra
   defaultCaptureProfileId: DEFAULT_CAPTURE_PROFILE_ID,
@@ -39,6 +40,7 @@ export async function getSettings() {
     theme: normalizeTheme(stored.theme),
     nudgesEnabled: normalizeNudgesEnabled(stored.nudgesEnabled),
     notificationCadence: normalizeNotificationCadence(stored.notificationCadence),
+    autoPurgeEnabled: normalizeAutoPurgeEnabled(stored.autoPurgeEnabled),
     capabilityTier,
     defaultCaptureProfileId: normalizeCaptureProfileId(stored.defaultCaptureProfileId),
     // Deprecated compatibility projection for legacy callsites.
@@ -62,6 +64,7 @@ export async function setSettings(partial) {
   next.theme = normalizeTheme(next.theme);
   next.nudgesEnabled = normalizeNudgesEnabled(next.nudgesEnabled);
   next.notificationCadence = normalizeNotificationCadence(next.notificationCadence);
+  next.autoPurgeEnabled = normalizeAutoPurgeEnabled(next.autoPurgeEnabled);
   next.defaultCaptureProfileId = normalizeCaptureProfileId(next.defaultCaptureProfileId);
   next.capabilityTier = normalizeCapabilityTier(
     next.capabilityTier,
@@ -118,6 +121,11 @@ function normalizeTheme(v) {
 
 function normalizeNudgesEnabled(v) {
   return v === true;
+}
+
+function normalizeAutoPurgeEnabled(v) {
+  if (v === false) return false;
+  return true;
 }
 
 function normalizeCapabilityTier(tier, legacyProEnabled, legacyUltraEnabled) {

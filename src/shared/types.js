@@ -42,6 +42,7 @@
  * @property {ThemeSetting} theme
  * @property {boolean} nudgesEnabled
  * @property {NotificationCadence} notificationCadence
+ * @property {boolean} autoPurgeEnabled
  * @property {CapabilityTier} capabilityTier
  * @property {CaptureProfileId} defaultCaptureProfileId
  * @property {boolean} proEnabled

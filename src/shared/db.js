@@ -1,6 +1,16 @@
-import { DB_NAME, DB_VERSION, STORE_NAME, META_STORE, TILES_STORE } from './constants.js';
+import {
+  DB_NAME,
+  DB_VERSION,
+  STORE_NAME,
+  META_STORE,
+  THUMBS_STORE,
+  TILES_STORE,
+  SCREENSHOT_ITEM_LIMIT,
+} from './constants.js';
+import { getSettings } from './settings.js';
 
 let _db = null;
+const STORAGE_EVENT_KEY = 'screenshotStorageEvent';
 
 function openDB() {
   if (_db) return Promise.resolve(_db);
@@ -23,8 +33,8 @@ function openDB() {
       }
 
       // Backfill lightweight metadata entries for existing screenshots.
-      // Run again for v4 to repair profiles that reached v3 without META_STORE.
-      if (oldVersion < 4) {
+      // Run again for v6 to harden metadata migration in older installs.
+      if (oldVersion < 6) {
         const tx = target.transaction;
         const screenshotStore = tx.objectStore(STORE_NAME);
         const metaStore = tx.objectStore(META_STORE);
@@ -34,6 +44,10 @@ function openDB() {
           metaStore.put(toMetaRecord(cursor.value));
           cursor.continue();
         };
+      }
+
+      if (!db.objectStoreNames.contains(THUMBS_STORE)) {
+        db.createObjectStore(THUMBS_STORE, { keyPath: 'id' });
       }
 
       // Temporary tile buffer: tiles are written here during capture,
@@ -55,14 +69,42 @@ function openDB() {
 // ─── Screenshots ──────────────────────────────────────────────────────────────
 
 export async function saveScreenshot(record) {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction([STORE_NAME, META_STORE], 'readwrite');
-    tx.objectStore(STORE_NAME).put(record);
-    tx.objectStore(META_STORE).put(toMetaRecord(record));
-    tx.oncomplete = () => resolve(record.id);
-    tx.onerror = () => reject(tx.error);
-  });
+  const settings = await loadStoragePolicySettings();
+  let purgedCount = 0;
+
+  const currentUsage = await getScreenshotUsage();
+  if (currentUsage.count >= SCREENSHOT_ITEM_LIMIT) {
+    if (settings.autoPurgeEnabled !== true) {
+      throw new Error(
+        `Storage limit reached (${SCREENSHOT_ITEM_LIMIT}). Delete screenshots or enable Auto-purge in Settings.`
+      );
+    }
+    purgedCount += await purgeOldestScreenshots(currentUsage.count - SCREENSHOT_ITEM_LIMIT + 1);
+  }
+
+  try {
+    await putScreenshotRecord(record);
+  } catch (err) {
+    if (!isQuotaExceededError(err)) throw err;
+    if (settings.autoPurgeEnabled !== true) {
+      throw new Error(
+        `Storage limit reached (${SCREENSHOT_ITEM_LIMIT}). Delete screenshots or enable Auto-purge in Settings.`,
+        { cause: err }
+      );
+    }
+    purgedCount += await purgeOldestScreenshots(1);
+    await putScreenshotRecord(record);
+  }
+
+  if (purgedCount > 0) {
+    await persistStorageEvent({
+      type: 'auto_purge',
+      purgedCount,
+      limit: SCREENSHOT_ITEM_LIMIT,
+      timestamp: Date.now(),
+    });
+  }
+  return record.id;
 }
 
 export async function getScreenshot(id) {
@@ -85,24 +127,69 @@ export async function listScreenshots() {
 
 export async function listScreenshotMeta() {
   const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const req = db.transaction(META_STORE).objectStore(META_STORE).getAll();
-    req.onsuccess = () => resolve(req.result.sort((a, b) => b.timestamp - a.timestamp));
-    req.onerror = () => reject(req.error);
-  });
+  if (!db.objectStoreNames.contains(META_STORE)) {
+    return listMetaViaScreenshotCursor(db);
+  }
+  try {
+    return await new Promise((resolve, reject) => {
+      const req = db.transaction(META_STORE).objectStore(META_STORE).getAll();
+      req.onsuccess = () => resolve(req.result.sort((a, b) => b.timestamp - a.timestamp));
+      req.onerror = () => reject(req.error);
+    });
+  } catch (err) {
+    if (!isMissingMetaStoreError(err)) throw err;
+    return listMetaViaScreenshotCursor(db);
+  }
 }
 
 export async function deleteScreenshots(ids) {
   if (!Array.isArray(ids) || ids.length === 0) return;
   const db = await openDB();
   return new Promise((resolve, reject) => {
-    const tx = db.transaction([STORE_NAME, META_STORE], 'readwrite');
+    const tx = db.transaction([STORE_NAME, META_STORE, THUMBS_STORE], 'readwrite');
     const screenshotStore = tx.objectStore(STORE_NAME);
     const metaStore = tx.objectStore(META_STORE);
+    const thumbsStore = tx.objectStore(THUMBS_STORE);
     for (const id of ids) {
       screenshotStore.delete(id);
       metaStore.delete(id);
+      thumbsStore.delete(id);
     }
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+export async function getScreenshotUsage() {
+  const rows = await listScreenshotMeta();
+  let bytes = 0;
+  for (const row of rows) {
+    bytes += Number(row?.byteSize || 0);
+  }
+  return { count: rows.length, bytes };
+}
+
+export async function getScreenshotThumb(id) {
+  const db = await openDB();
+  if (!db.objectStoreNames.contains(THUMBS_STORE)) return null;
+  return new Promise((resolve, reject) => {
+    const req = db.transaction(THUMBS_STORE).objectStore(THUMBS_STORE).get(id);
+    req.onsuccess = () => resolve(req.result ?? null);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+export async function saveScreenshotThumb(id, thumbBlob, timestamp = Date.now()) {
+  if (!(thumbBlob instanceof Blob) || thumbBlob.size <= 0) return;
+  const db = await openDB();
+  if (!db.objectStoreNames.contains(THUMBS_STORE)) return;
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(THUMBS_STORE, 'readwrite');
+    tx.objectStore(THUMBS_STORE).put({
+      id,
+      thumbBlob,
+      timestamp: Number(timestamp || Date.now()),
+    });
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
   });
@@ -197,4 +284,90 @@ export async function deleteTiles(jobId) {
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
   });
+}
+
+async function loadStoragePolicySettings() {
+  try {
+    return await getSettings();
+  } catch {
+    return { autoPurgeEnabled: true };
+  }
+}
+
+async function putScreenshotRecord(record) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction([STORE_NAME, META_STORE, THUMBS_STORE], 'readwrite');
+    tx.objectStore(STORE_NAME).put(record);
+    tx.objectStore(META_STORE).put(toMetaRecord(record));
+    if (record?.thumbBlob instanceof Blob && record.thumbBlob.size > 0) {
+      tx.objectStore(THUMBS_STORE).put({
+        id: record.id,
+        thumbBlob: record.thumbBlob,
+        timestamp: Number(record.timestamp || Date.now()),
+      });
+    }
+    tx.oncomplete = () => resolve(record.id);
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function purgeOldestScreenshots(neededCount) {
+  const toDelete = Math.max(0, Number(neededCount || 0));
+  if (toDelete === 0) return 0;
+  const rows = await listScreenshotMeta();
+  if (rows.length === 0) return 0;
+  const ids = rows
+    .slice()
+    .sort((a, b) => Number(a?.timestamp || 0) - Number(b?.timestamp || 0))
+    .slice(0, toDelete)
+    .map((row) => row?.id)
+    .filter(Boolean);
+  if (ids.length === 0) return 0;
+  await deleteScreenshots(ids);
+  return ids.length;
+}
+
+function listMetaViaScreenshotCursor(db) {
+  return new Promise((resolve, reject) => {
+    const out = [];
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const req = tx.objectStore(STORE_NAME).openCursor();
+    req.onsuccess = (event) => {
+      const cursor = event?.target?.result;
+      if (!cursor) return;
+      out.push(toMetaRecord(cursor.value));
+      cursor.continue();
+    };
+    tx.oncomplete = () =>
+      resolve(out.sort((a, b) => Number(b?.timestamp || 0) - Number(a?.timestamp || 0)));
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+function isMissingMetaStoreError(err) {
+  const message = String(err?.message || err || '');
+  return message.includes('object stores was not found') || message.includes('not found');
+}
+
+function isQuotaExceededError(err) {
+  const message = String(err?.message || err || '');
+  return (
+    err?.name === 'QuotaExceededError' ||
+    message.includes('QuotaExceededError') ||
+    message.toLowerCase().includes('quota')
+  );
+}
+
+async function persistStorageEvent(event) {
+  try {
+    await chrome.storage.local.set({
+      [STORAGE_EVENT_KEY]: {
+        id: `${event.type}:${event.timestamp}:${event.purgedCount || 0}`,
+        ...event,
+      },
+    });
+  } catch {
+    // Non-fatal. Storage notices remain best-effort.
+  }
 }

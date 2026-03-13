@@ -102,6 +102,10 @@ const REQUIRED_HELP_CUES = [
     key: 'weekly_value_report',
     any: ['weekly value report'],
   },
+  {
+    key: 'storage_guardrails_autopurge',
+    any: ['auto-purge', 'storage usage', '500 screenshots'],
+  },
 ];
 
 const INTERNAL_PLANNING_ALLOWED_PATTERNS = [

@@ -9,8 +9,12 @@ import {
 } from '../shared/capture-profiles.js';
 import { normalizeNotificationCadence } from '../shared/nudges.js';
 import { buildWeeklyValueReport } from '../shared/value-report.js';
-import { listScreenshotMetaRecords } from '../shared/repos/screenshot-repo.js';
+import {
+  listScreenshotMetaRecords,
+  getScreenshotStorageUsage,
+} from '../shared/repos/screenshot-repo.js';
 import { loadUrlList } from '../shared/repos/url-repo.js';
+import { SCREENSHOT_ITEM_LIMIT } from '../shared/constants.js';
 
 const defaultExportFormatEl = document.getElementById('defaultExportFormat');
 const defaultPdfPageSizeEl = document.getElementById('defaultPdfPageSize');
@@ -28,6 +32,8 @@ const nudgesEnabledRowEl = document.getElementById('nudgesEnabledRow');
 const nudgesEnabledEl = document.getElementById('nudgesEnabled');
 const notificationCadenceRowEl = document.getElementById('notificationCadenceRow');
 const notificationCadenceEl = document.getElementById('notificationCadence');
+const autoPurgeEnabledEl = document.getElementById('autoPurgeEnabled');
+const storageUsageCounterEl = document.getElementById('storageUsageCounter');
 const profileUsageCardEl = document.getElementById('profileUsageCard');
 const profileUsageSettingsResearchEl = document.getElementById('profileUsageSettingsResearch');
 const profileUsageSettingsInterestEl = document.getElementById('profileUsageSettingsInterest');
@@ -109,10 +115,12 @@ async function init() {
     notificationCadenceEl.value = normalizeNotificationCadence(settings.notificationCadence);
     notificationCadenceEl.disabled = !(nudgesEnabledEl && nudgesEnabledEl.checked);
   }
+  if (autoPurgeEnabledEl) autoPurgeEnabledEl.checked = settings.autoPurgeEnabled !== false;
   setDirtyState(false);
   syncProfileRowVisibility(settings);
   syncNudgesVisibility(settings);
   await syncProfileUsageSummary(settings);
+  await syncStorageUsageCounter();
   await syncWeeklyValueReportVisibility(settings);
   await refreshPermissionStatus();
   setupPermissionStatusRefresh();
@@ -136,6 +144,7 @@ async function handleSave() {
     const normalized = await getUserSettings();
     downloadDirectoryEl.value = normalized.downloadDirectory;
     setDirtyState(false);
+    await syncStorageUsageCounter();
     showStatus('Settings saved.', 'success');
     showToast('Settings saved.', 'success');
   } catch (err) {
@@ -165,6 +174,7 @@ function collectSettingsPayload() {
     notificationCadence: notificationCadenceEl
       ? normalizeNotificationCadence(notificationCadenceEl.value)
       : 'balanced',
+    autoPurgeEnabled: autoPurgeEnabledEl ? autoPurgeEnabledEl.checked : true,
   };
 }
 
@@ -430,6 +440,18 @@ async function syncWeeklyValueReportVisibility(settings) {
   }
 }
 
+async function syncStorageUsageCounter() {
+  if (!storageUsageCounterEl) return;
+  try {
+    const usage = await getScreenshotStorageUsage();
+    const count = Math.max(0, Number(usage?.count || 0));
+    storageUsageCounterEl.textContent = `Storage usage: ${String(count).padStart(3, '0')}/${SCREENSHOT_ITEM_LIMIT} screenshots`;
+  } catch (err) {
+    logNonFatal('syncStorageUsageCounter', err);
+    storageUsageCounterEl.textContent = `Storage usage: ---/${SCREENSHOT_ITEM_LIMIT} screenshots`;
+  }
+}
+
 async function syncProfileUsageSummary(settings) {
   const showProfiles = canUseFeature('smart_save_profiles', settings || {});
   if (!profileUsageCardEl) return;
@@ -507,6 +529,7 @@ function wireDirtyTracking() {
     defaultCaptureProfileIdEl,
     nudgesEnabledEl,
     notificationCadenceEl,
+    autoPurgeEnabledEl,
   ];
   for (const control of changeTrackedControls) {
     control?.addEventListener('change', () => markSettingsDirty());

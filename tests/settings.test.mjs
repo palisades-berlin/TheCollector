@@ -50,6 +50,7 @@ await runTest('getSettings normalizes invalid values and legacy autoDownload fla
     theme: 'system',
     nudgesEnabled: false,
     notificationCadence: 'balanced',
+    autoPurgeEnabled: true,
     capabilityTier: 'basic',
     defaultCaptureProfileId: 'research',
     proEnabled: false,
@@ -84,6 +85,14 @@ await runTest('getSettings uses valid capabilityTier over legacy booleans', asyn
   assert.equal(settings.capabilityTier, 'basic');
   assert.equal(settings.proEnabled, false);
   assert.equal(settings.ultraEnabled, false);
+  assert.equal(settings.autoPurgeEnabled, true);
+});
+
+await runTest('getSettings preserves explicit autoPurgeEnabled false', async () => {
+  const mockSync = createMockSyncStorage({ autoPurgeEnabled: false });
+  globalThis.chrome = { storage: { sync: mockSync } };
+  const settings = await getSettings();
+  assert.equal(settings.autoPurgeEnabled, false);
 });
 
 await runTest('setSettings merges and persists normalized values', async () => {
@@ -97,6 +106,7 @@ await runTest('setSettings merges and persists normalized values', async () => {
     theme: 'system',
     nudgesEnabled: false,
     notificationCadence: 'balanced',
+    autoPurgeEnabled: true,
     capabilityTier: 'basic',
     defaultCaptureProfileId: 'research',
   });
@@ -111,6 +121,7 @@ await runTest('setSettings merges and persists normalized values', async () => {
     theme: 'dark',
     nudgesEnabled: 1,
     notificationCadence: 'noisy',
+    autoPurgeEnabled: false,
     capabilityTier: 'invalid-tier',
     defaultCaptureProfileId: 'not-a-real-profile',
     proEnabled: true,
@@ -126,6 +137,7 @@ await runTest('setSettings merges and persists normalized values', async () => {
     theme: 'dark',
     nudgesEnabled: false,
     notificationCadence: 'balanced',
+    autoPurgeEnabled: false,
     capabilityTier: 'pro',
     defaultCaptureProfileId: 'research',
     proEnabled: true,
@@ -140,6 +152,7 @@ await runTest('setSettings merges and persists normalized values', async () => {
   assert.equal(persisted.theme, 'dark');
   assert.equal(persisted.nudgesEnabled, false);
   assert.equal(persisted.notificationCadence, 'balanced');
+  assert.equal(persisted.autoPurgeEnabled, false);
   assert.equal(persisted.capabilityTier, 'pro');
   assert.equal(persisted.defaultCaptureProfileId, 'research');
   assert.equal(persisted.proEnabled, undefined);

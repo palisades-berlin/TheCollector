@@ -317,18 +317,25 @@ function loadImage(src) {
 }
 
 async function createThumbBlob(sourceCanvas) {
-  const maxW = 720;
-  const maxH = 540;
-  const scale = Math.min(1, maxW / sourceCanvas.width, maxH / sourceCanvas.height);
-  const outW = Math.max(1, Math.round(sourceCanvas.width * scale));
-  const outH = Math.max(1, Math.round(sourceCanvas.height * scale));
+  // History cards render thumbnails width-priority into a 4:3 frame.
+  // Generate thumb blobs in the same 4:3 geometry (top-aligned) so tall pages
+  // remain readable and avoid heavy upscaling artifacts.
+  const outW = 960;
+  const outH = 720;
+  const scale = outW / Math.max(1, sourceCanvas.width);
+  const drawW = outW;
+  const drawH = Math.max(1, Math.round(sourceCanvas.height * scale));
   const thumbCanvas = document.createElement('canvas');
   thumbCanvas.width = outW;
   thumbCanvas.height = outH;
   const tctx = thumbCanvas.getContext('2d');
   if (!tctx) return null;
-  tctx.drawImage(sourceCanvas, 0, 0, outW, outH);
-  return canvasToBlob(thumbCanvas, 'image/jpeg', 0.84);
+  tctx.fillStyle = '#e9eef5';
+  tctx.fillRect(0, 0, outW, outH);
+  tctx.imageSmoothingEnabled = true;
+  tctx.imageSmoothingQuality = 'high';
+  tctx.drawImage(sourceCanvas, 0, 0, drawW, drawH);
+  return canvasToBlob(thumbCanvas, 'image/jpeg', 0.9);
 }
 
 function canvasToBlob(canvas, type = 'image/png', quality) {
