@@ -32,3 +32,6 @@ tmp/
 # Do not track per-release GitHub note files
 GITHUB_RELEASE_*.md
 CHROME_WEB_STORE_RELEASE_NOTES_*.md
+
+# Claude Code worktree artefacts
+.claude/
