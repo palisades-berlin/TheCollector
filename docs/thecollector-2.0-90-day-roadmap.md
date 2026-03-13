@@ -53,10 +53,12 @@ Implemented roadmap features and current delivery level:
 7. URL Collector 2.0: **Saved URL Views + URL Tags + URL Notes + URL Bulk Actions v1 delivered; Change Log promoted on URL Library; Sprint 2A migration completed; popup retained as quick-capture surface; legacy popup URL panel-swap retired** (`1.9.46` through `1.9.62`).
 8. Screenshot storage guardrails v1: **delivered** (`1.9.83`) with metadata-first history listing, viewport-driven thumbnail loading, and user-controlled oldest-first auto-purge.
 9. History thumbnail fast-path hardening: **delivered** (`1.9.84`) with dedicated thumb-store reads and lazy legacy backfill to reduce first-paint delay.
+10. History thumbnail quality improvement: **delivered** (`1.9.85`) — sharp `4:3` top-aligned thumb output, quality-aware runtime fallback for legacy blobs, background regeneration for affected records.
+11. History Domain combobox filter: **delivered** (`1.9.86`) — premium combobox with captured-domain suggestions and per-domain counts, keyboard navigation (`Arrow`/`Enter`), TLD suffix matching, one-click clear.
 
 Versioning status:
 
-1. Current release baseline: **`1.9.84`**.
+1. Current release baseline: **`1.9.86`**.
 2. No roadmap **v2** feature is fully shipped yet.
 3. Smart Save Profiles editable management remains planned for v2.0.
 4. Command Palette (Cmd/Ctrl+K) remains **unshipped**; user-facing help/docs are aligned to the shipped feature set.

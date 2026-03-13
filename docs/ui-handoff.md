@@ -107,9 +107,9 @@ Use these shared classes before creating surface-specific variants:
 | Popup / Capture              | `1:4`      | default/progress/success/error            | `sc-btn*`, `sc-banner*`, `sc-kbd` + `--popup-*` aliases                                                                                                                                                 | `src/popup/popup.html`, `src/popup/popup.css`                                                           |
 | Popup / Smart Save Profiles  | `1:4`      | quick preset actions (Pro/Ultra)          | `sc-btn`/`sc-btn-secondary` in compact action row; hidden unless tier >= Pro                                                                                                                            | `src/popup/popup.html`, `src/popup/popup.css`, `src/popup/popup.js`                                     |
 | Popup / Capture Queue        | `1:4`      | queue current/window + run/clear (Pro)    | `sc-btn*` controls in compact queue card/list; hidden unless tier >= Pro                                                                                                                                | `src/popup/popup.html`, `src/popup/popup.css`, `src/popup/popup.js`                                     |
-| Sidebar / History            | `1:4`      | default/filter/empty/loading/overlay      | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-modal`, `sc-state-*` + `--history-*` aliases; cards enforce equal-height body slots for URL/meta/diagnostic and use viewport-driven thumbnail loading | `src/history/history.html`, `src/history/history.css`, `src/history/history-thumbs.js`                  |
-| Sidebar / History Filters    | `1:4`      | domain/date/export/profile filters        | `sc-input`, `sc-select`, `sc-btn`; profile filter hidden unless tier >= Pro                                                                                                                             | `src/history/history.html`, `src/history/history.css`, `src/history/history.js`                         |
-| Sidebar / Bulk Actions       | `1:4`      | multi-select overlay (Pro/Ultra)          | `sc-modal`, `sc-btn`, checkbox list rows; entry action hidden unless tier >= Pro                                                                                                                        | `src/history/history.html`, `src/history/history-files-overlay.js`, `src/history/history.js`            |
+| Screenshots / History        | `1:4`      | default/filter/empty/loading/overlay      | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-modal`, `sc-state-*` + `--history-*` aliases; cards enforce equal-height body slots for URL/meta/diagnostic and use viewport-driven thumbnail loading | `src/history/history.html`, `src/history/history.css`, `src/history/history-thumbs.js`                  |
+| Screenshots / Filters        | `1:4`      | domain/date/export/profile filters        | `sc-input`, `sc-select`, `sc-btn`; profile filter hidden unless tier >= Pro                                                                                                                             | `src/history/history.html`, `src/history/history.css`, `src/history/history.js`                         |
+| Screenshots / Bulk Actions   | `1:4`      | multi-select overlay (Pro/Ultra)          | `sc-modal`, `sc-btn`, checkbox list rows; entry action hidden unless tier >= Pro                                                                                                                        | `src/history/history.html`, `src/history/history-files-overlay.js`, `src/history/history.js`            |
 | Settings / Account           | `1:753`    | default/status/permission badges          | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-pill*`, `sc-banner*`                                                                                                                                  | `src/options/options.html`, `src/options/options.css`                                                   |
 | Settings / Navigation Shell  | `1:753`    | left nav + section switching              | tokenized nav buttons + section panels; URL section state via `?section=<id>`                                                                                                                           | `src/options/options.html`, `src/options/options.css`, `src/options/options.js`                         |
 | Settings / Save Contract     | `1:753`    | section editing + save feedback           | explicit save model with global dirty-state bar (`#globalSaveBar`) and status banner guidance; includes Auto-purge toggle + storage usage counter (`000/500`)                                           | `src/options/options.html`, `src/options/options.css`, `src/options/options.js`                         |
@@ -117,6 +117,30 @@ Use these shared classes before creating surface-specific variants:
 | Preview / Inspector          | `1:4`      | toolbar/editing/loading/error             | `sc-btn*`, `sc-select`, `sc-banner*`, `sc-state-loading` + `--preview-*` aliases                                                                                                                        | `src/preview/preview.html`, `src/preview/preview.css`                                                   |
 | Onboarding / First run       | `1:830`    | install guidance + quick entry actions    | `sc-card`, `sc-btn*`, `sc-banner*`                                                                                                                                                                      | `src/onboarding/onboarding.html`, `src/onboarding/onboarding.css`                                       |
 | System States                | `1:885`    | permission/offline/storage/confirmation   | `sc-banner*`, `sc-btn*`, `sc-modal`                                                                                                                                                                     | `src/popup/popup.html`, `src/options/options.html`, `src/history/history.html`                          |
+
+## Design Principles
+
+Six non-negotiable principles that govern every implementation decision across all surfaces. Source: `docs/design-overhaul-master-plan-2026-03-13.md` §3.2. Required before Phase 2 (DS 2.0 Sprint 1) begins.
+
+**Principle 1 — One nav, always in the same place.**
+Every full-page surface renders `sc-header-nav` as the second child of `<header>`. No exceptions.
+
+**Principle 2 — The header contains navigation. The command bar contains actions.**
+Page-specific CTAs do not live in the header. The header is for identity (logo + title + badge) and navigation only. Actions live in a `sc-command-bar` component below the header.
+
+**Principle 3 — Max 3 visible top-level actions per surface.**
+If a surface needs more than 3 top-level actions, group related ones into a dropdown. The user's eye should land on one primary action on first view.
+
+**Principle 4 — Contextual UI is hidden until needed.**
+Selection bars, bulk action toolbars, and inline editors appear only when triggered. Persistent zero-state UI (e.g. "0 selected") is noise, not affordance.
+
+**Principle 5 — Tabs filter one data type. Different data types use different navigation patterns.**
+A tab in a tablist must operate on the same data set as its sibling tabs. An audit log is not a tab alongside All/Starred/Today.
+
+**Principle 6 — Destructive actions have spatial separation.**
+`Clear All` is always right-aligned and separated from other actions by a visual gap. It never sits adjacent to an export or copy button.
+
+---
 
 ## Change Policy
 

@@ -29,6 +29,12 @@ The extension is **free forever** — no subscriptions, no payments, no paid tie
 - **Rule 3 — Consistency:** `docs/help-user-guide.md` and the `Help & FAQ` section in `src/options/options.html` must always be in sync. Any change to one requires a matching update to the other in the same work cycle.
 - **Rule 4 — Shipping a feature:** When a new feature ships, remove its phrase(s) from the `UNSHIPPED_PHRASES` list in `scripts/check-doc-policy.mjs` and add the feature to both help surfaces in the same work cycle.
 
+## Session State Rule
+
+- **At the end of every session** — before any commit/push — update `SESSION.md` in the repo root with: (1) today's date and tool used, (2) what was completed this session, (3) the exact next task, (4) any open decisions or blockers.
+- `SESSION.md` is the handoff file between machines and AI tools. It must always reflect the true current state of the work.
+- Keep it short. 5–10 lines under each heading is enough.
+
 ## Canonical Workflow Doc
 
 - Source of truth for local checks, manual smoke flow, packaging, and release policy:
@@ -47,4 +53,4 @@ The extension is **free forever** — no subscriptions, no payments, no paid tie
 
 # currentDate
 
-Today's date is 2026-03-12.
+Today's date is 2026-03-13.
