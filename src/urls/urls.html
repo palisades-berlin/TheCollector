@@ -60,18 +60,59 @@
 
       <section class="sc-card list-card">
         <div class="views sc-tablist" role="tablist" aria-label="URL library views">
-          <button id="view-all" class="sc-tab active" role="tab" aria-selected="true">All</button>
-          <button id="view-starred" class="sc-tab" role="tab" aria-selected="false">Starred</button>
-          <button id="view-today" class="sc-tab" role="tab" aria-selected="false">Today</button>
-          <button id="view-domain" class="sc-tab" role="tab" aria-selected="false">
+          <button
+            id="view-all"
+            class="sc-tab active"
+            role="tab"
+            aria-selected="true"
+            aria-controls="urlsView"
+            tabindex="0"
+          >
+            All
+          </button>
+          <button
+            id="view-starred"
+            class="sc-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="urlsView"
+            tabindex="-1"
+          >
+            Starred
+          </button>
+          <button
+            id="view-today"
+            class="sc-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="urlsView"
+            tabindex="-1"
+          >
+            Today
+          </button>
+          <button
+            id="view-domain"
+            class="sc-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="urlsView"
+            tabindex="-1"
+          >
             By Domain
           </button>
-          <button id="view-change-log" class="sc-tab" role="tab" aria-selected="false">
+          <button
+            id="view-change-log"
+            class="sc-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="changeLogView"
+            tabindex="-1"
+          >
             Change Log
           </button>
         </div>
 
-        <div id="urlsView">
+        <div id="urlsView" role="tabpanel" aria-label="URL list view">
           <div id="bulkActionsBar" class="bulk-actions-bar hidden">
             <div class="bulk-actions-meta">
               <strong id="bulkSelectedCount">0 selected</strong>
@@ -94,7 +135,7 @@
           <div id="emptyState" class="sc-state-empty hidden">No URLs found for this view.</div>
         </div>
 
-        <div id="changeLogView" class="hidden">
+        <div id="changeLogView" class="hidden" role="tabpanel" aria-label="URL change log view">
           <div class="change-log-toolbar">
             <button id="changeLogBackBtn" class="sc-btn sc-btn-sm" type="button">
               Back to URL List

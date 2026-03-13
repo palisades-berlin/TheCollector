@@ -42,6 +42,25 @@ async function main() {
   const popupHtml = await read('src/popup/popup.html');
   assert.equal(/role="tablist"/.test(popupHtml), true, 'popup: tablist role is required');
   assert.equal(/role="tab"/.test(popupHtml), true, 'popup: tab role is required');
+  assert.equal(
+    /<div class="tabs sc-tablist"[\s\S]*?<\/div>\s*<button[\s\S]*id="libraryTabBtn"/.test(
+      popupHtml
+    ),
+    true,
+    'popup: Library button must be rendered outside the tablist'
+  );
+
+  const urlsHtml = await read('src/urls/urls.html');
+  assert.equal(
+    /id="view-all"[\s\S]*aria-controls="urlsView"/.test(urlsHtml),
+    true,
+    'urls: All tab must map to urlsView tabpanel'
+  );
+  assert.equal(
+    /id="view-change-log"[\s\S]*aria-controls="changeLogView"/.test(urlsHtml),
+    true,
+    'urls: Change Log tab must map to changeLogView tabpanel'
+  );
 
   process.stdout.write('PASS accessibility and isolation contracts\n');
 }

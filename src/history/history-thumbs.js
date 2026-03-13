@@ -55,21 +55,31 @@ export function createThumbLoader({
   async function loadCardThumb(id, canvasEl) {
     if (!canvasEl?.isConnected) return;
     const record = await getScreenshot(id);
-    if (!record?.blob) {
+    const sourceBlobs = [];
+    if (record?.blob instanceof Blob && record.blob.size > 0) {
+      sourceBlobs.push(record.blob);
+    }
+    if (record?.thumbBlob instanceof Blob && record.thumbBlob.size > 0) {
+      sourceBlobs.push(record.thumbBlob);
+    }
+    if (sourceBlobs.length === 0) {
       await deleteScreenshots([id]).catch((err) => logNonFatal('deleteScreenshots', err));
       return;
     }
-    const thumbBlob =
-      record.thumbBlob instanceof Blob && record.thumbBlob.size > 0
-        ? record.thumbBlob
-        : record.blob;
-    const bitmap = await createImageBitmap(thumbBlob);
-    try {
-      if (!canvasEl.isConnected) return;
-      drawThumbBitmapCover(canvasEl, bitmap);
-    } finally {
-      if (typeof bitmap.close === 'function') bitmap.close();
+    for (const sourceBlob of sourceBlobs) {
+      let bitmap;
+      try {
+        bitmap = await createImageBitmap(sourceBlob);
+        if (!canvasEl.isConnected) return;
+        drawThumbBitmapWidthPriority(canvasEl, bitmap);
+        return;
+      } catch (err) {
+        logNonFatal('createImageBitmap', err);
+      } finally {
+        if (typeof bitmap?.close === 'function') bitmap.close();
+      }
     }
+    throw new Error('Failed to decode thumbnail source');
   }
 
   async function loadCardThumbWhenReady(id, canvasEl) {
@@ -93,19 +103,27 @@ function nextFrame() {
   return new Promise((resolve) => requestAnimationFrame(() => resolve()));
 }
 
-function drawThumbBitmapCover(canvas, bitmap) {
+function drawThumbBitmapWidthPriority(canvas, bitmap) {
   const targetW = Math.max(1, canvas.clientWidth || 320);
   const targetH = Math.max(1, canvas.clientHeight || 240);
-  const ratio = Math.max(targetW / bitmap.width, targetH / bitmap.height);
-  const drawW = Math.max(1, Math.round(bitmap.width * ratio));
-  const drawH = Math.max(1, Math.round(bitmap.height * ratio));
-  const dx = Math.round((targetW - drawW) / 2);
-  const dy = Math.round((targetH - drawH) / 2);
+  const dpr = Math.max(1, globalThis.devicePixelRatio || 1);
+  const scale = targetW / Math.max(1, bitmap.width);
+  const drawW = targetW;
+  const drawH = Math.max(1, Math.round(bitmap.height * scale));
+  const dx = 0;
+  const dy = 0;
 
-  canvas.width = targetW;
-  canvas.height = targetH;
+  canvas.width = Math.max(1, Math.round(targetW * dpr));
+  canvas.height = Math.max(1, Math.round(targetH * dpr));
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
-  ctx.clearRect(0, 0, targetW, targetH);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+
+  const bgSource = canvas.parentElement || canvas;
+  const bgColor = getComputedStyle(bgSource).backgroundColor || '#e9eef5';
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, targetW, targetH);
   ctx.drawImage(bitmap, dx, dy, drawW, drawH);
 }

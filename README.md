@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-90%25%20lines-brightgreen)](./package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-Current extension version: `1.9.71`.
+Current extension version: `1.9.82`.
 
 ## Overview
 
@@ -22,11 +22,11 @@ Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.
 
 ## Top Changes
 
-- URL Library now honors saved theme preference (`light` / `dark` / `system`) like all other main surfaces.
-- Added URL tag editing directly in URL Library rows (suggestions + free-text + remove, max-10 enforcement).
-- Added inline URL notes in URL Library rows (Pro/Ultra, max 140 characters).
-- Promoted URL Change Log to a first-class URL Library sub-surface with explicit back/escape focus return.
-- Updated full-tab header navigation to `Screenshots · URLs · Settings`.
+- Popup errors now render as a single toast-only surface with duplicate suppression and improved screen-reader semantics.
+- URL Library view tabs now support keyboard navigation (`Left/Right/Home/End`) with explicit tab-to-panel mapping.
+- History Files overlay now traps focus while open and restores focus to the opener on close.
+- Settings now includes a global unsaved-changes save bar so save actions stay consistent across all sections.
+- History card compare action now preserves icon + label state and card diagnostics use a stable reserved row.
 
 ## Core Architecture
 

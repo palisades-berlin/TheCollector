@@ -45,6 +45,7 @@ This document is the implementation QA contract for exhaustive UX/UI verificatio
 State coverage target:
 
 - default, hover, active/pressed, focus-visible, disabled, empty, loading, success, warning, error, hidden/visible transitions.
+- Popup error surface contract: capture errors must render as a single toast surface only (no inline red error banner and no duplicated stacked messages).
 
 ## Calibration Targets
 
@@ -143,13 +144,16 @@ State coverage target:
 
 - [ ] loading/empty/success/error/disabled states match system
 - [ ] primary flows remain behavior-identical
+- [ ] popup capture errors show a single toast only; repeated identical errors do not stack
 
 ### Pass 4 - Accessibility QA
 
 - [ ] focus-visible consistency across controls
 - [ ] keyboard tab order and activation checks
 - [ ] live region behavior for dynamic statuses
-- [ ] modal semantics and close interactions
+- [ ] modal semantics, focus trap, and focus-return interactions
+- [ ] URL Library tablist arrow-key navigation (Left/Right/Home/End) across all views
+- [ ] URL row expansion only via explicit action buttons (no implicit full-row expand)
 - [x] HTML accessibility/isolation contracts enforced (`tests/accessibility-contract.test.mjs`)
 
 ### Pass 5 - Figma Pixel Validation

@@ -25,3 +25,8 @@ Working rule:
   - track repository discoverability actions separately from product/code hardening.
   - include README polish, release announcement cadence, and ecosystem listing channels as GTM tasks.
   - do not block technical quality gates on watcher/star counts.
+
+- [ ] Reevaluate Settings save-button logic and placement:
+  - review whether the global `Save Settings` button is sufficiently discoverable from all sections, especially `Feature Access`.
+  - assess adding a section-local save affordance in `Feature Access` that reuses the same save action for UX clarity.
+  - preserve explicit-save consistency across Settings unless product decision changes.

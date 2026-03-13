@@ -1,6 +1,6 @@
 # THE Collector Project Ruleset
 
-Last updated: 2026-03-11
+Last updated: 2026-03-13
 Source import: `codex_rules.txt` (local import source)
 Precedence note: when rules overlap, the newest explicit user instruction supersedes older guidance.
 Normative source note: this file is the policy authority when other docs summarize workflow/rules.
@@ -76,6 +76,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 8. If `docs/help-user-guide.md` changes, update the Settings `Help & FAQ` content in `src/options/options.html` in the same work cycle.
 9. Use `docs/todo-list.md` as the dedicated place for operational follow-ups (for example drift cleanup, housekeeping, and technical chores) so roadmap files remain focused on product planning and execution milestones.
 10. When working from `docs/todo-list.md`, remove each task immediately after it is completed in the same work cycle.
+11. When any feature, UX flow, behavior, policy, or release process changes, adapt all impacted documentation in the same work cycle (README, help, ADRs, roadmap/plans, changelog, wiki, and policy docs as applicable).
 
 ## Help Documentation Rules (added 2026-03-11)
 
@@ -116,3 +117,4 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 - 2026-03-11: Documentation consistency pass after repository sync: normalized user-facing terminology to `Settings` while preserving `src/options/*` path references.
 - 2026-03-11: Product model clarification: extension is free forever (ADR 0009). Tier model updated to UX complexity preference (ADR 0001). Roadmap restructured to v1.10/v2.0/v2.1/v3.0 milestones. Enterprise Controls v1 and URL Bundle Export Packs cut. Rule 3–4 updated to reflect always-free model.
 - 2026-03-11: Added UX/UI Design System rule 6: Design System 2.0 is v2.0 item #1; token migration is prerequisite gate for all v2.0 feature work; visual migration and interaction/IA redesign are separate concerns (ADR 0010).
+- 2026-03-13: Added documentation adaptation rule: any feature/behavior/policy change must update all impacted docs in the same work cycle.

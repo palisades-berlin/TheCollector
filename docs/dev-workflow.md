@@ -147,6 +147,8 @@ Publish workflow:
 - Visual parity gate is mandatory for release candidates:
   - run `npm run test:e2e:visual`
   - default target is `maxDiffPixels <= 2`; explicit per-snapshot exceptions in `tests/visual/ui-parity.spec.mjs` are temporary and must be tracked/reduced via `docs/visual-exception-register.md`.
+  - popup calibration must enforce single error feedback surface (toast-only) and no duplicate stacked error messages.
+  - calibration must verify modal focus trap + focus return behavior (History Files overlay) and URL Library tab keyboard navigation.
 - For every feature add/change that affects user behavior, UX, or tier availability, update:
   - `docs/help-user-guide.md`
   - `docs/thecollector-2.0-90-day-roadmap.md` (if roadmap scope/status changed)

@@ -108,7 +108,6 @@ export function createCaptureService() {
 
     let captureId = null;
     let stitchSucceeded = false;
-    let firstThumbBlob = null;
     const captureStartedAt = Date.now();
     let totalTiles = 0;
     let capturedTiles = 0;
@@ -182,9 +181,6 @@ export function createCaptureService() {
                   w: Math.max(1, Math.round(viewW * dpr)),
                   h: Math.max(1, Math.round(viewH * dpr)),
                 };
-            if (tileIndex === 0 && !firstThumbBlob) {
-              firstThumbBlob = blob;
-            }
             await savePendingTile(
               id,
               tileIndex,
@@ -250,7 +246,6 @@ export function createCaptureService() {
         await saveScreenshotRecord({
           ...finalRecord,
           captureProfileId: effectiveProfileId || '',
-          ...(firstThumbBlob instanceof Blob ? { thumbBlob: firstThumbBlob } : {}),
           captureReport,
         });
         await persistCaptureReport({

@@ -287,12 +287,10 @@ select {
     transform var(--sc-t-mid) var(--sc-ease-spring);
 }
 
-.sc-btn:active,
 .sc-header-link:active {
   transform: scale(0.98);
 }
 
-.sc-btn:hover,
 .sc-header-link:hover {
   transform: translateY(var(--sc-lift-y));
 }

@@ -52,6 +52,7 @@ Use these shared classes before creating surface-specific variants:
 - Feedback states:
   - `sc-banner`
   - `sc-banner-info`, `sc-banner-success`, `sc-banner-warn`, `sc-banner-error`
+  - popup capture errors use toast-only feedback (`.sc-toast.error`) as single-surface messaging (no inline red error banner)
   - `sc-state-empty`, `sc-state-loading`
 - Overlay shell: `sc-modal`
 - Keyboard hint: `sc-kbd`
@@ -66,7 +67,9 @@ Use these shared classes before creating surface-specific variants:
   - set `aria-busy="true"` for loading/capture workflows; restore to `false` on completion/failure.
 - Keyboard behavior:
   - tablists support arrow-key navigation.
+  - modal overlays must trap focus while open and return focus to the trigger on close.
   - hidden row actions become visible on `:focus-within` as well as hover.
+  - URL Library row expansion actions are explicit-button only (no implicit whole-row toggle).
 
 ## Screen Mapping
 
@@ -109,6 +112,7 @@ Use these shared classes before creating surface-specific variants:
 | Sidebar / Bulk Actions       | `1:4`      | multi-select overlay (Pro/Ultra)          | `sc-modal`, `sc-btn`, checkbox list rows; entry action hidden unless tier >= Pro                                                                              | `src/history/history.html`, `src/history/history-files-overlay.js`, `src/history/history.js`            |
 | Settings / Account           | `1:753`    | default/status/permission badges          | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-pill*`, `sc-banner*`                                                                                        | `src/options/options.html`, `src/options/options.css`                                                   |
 | Settings / Navigation Shell  | `1:753`    | left nav + section switching              | tokenized nav buttons + section panels; URL section state via `?section=<id>`                                                                                 | `src/options/options.html`, `src/options/options.css`, `src/options/options.js`                         |
+| Settings / Save Contract     | `1:753`    | section editing + save feedback           | explicit save model with global dirty-state bar (`#globalSaveBar`) and status banner guidance                                                                 | `src/options/options.html`, `src/options/options.css`, `src/options/options.js`                         |
 | Settings / Weekly Report     | `1:753`    | Pro/Ultra summary card                    | `sc-card` with tokenized stat tiles; hidden unless tier >= Pro                                                                                                | `src/options/options.html`, `src/options/options.css`, `src/options/options.js`                         |
 | Preview / Inspector          | `1:4`      | toolbar/editing/loading/error             | `sc-btn*`, `sc-select`, `sc-banner*`, `sc-state-loading` + `--preview-*` aliases                                                                              | `src/preview/preview.html`, `src/preview/preview.css`                                                   |
 | Onboarding / First run       | `1:830`    | install guidance + quick entry actions    | `sc-card`, `sc-btn*`, `sc-banner*`                                                                                                                            | `src/onboarding/onboarding.html`, `src/onboarding/onboarding.css`                                       |

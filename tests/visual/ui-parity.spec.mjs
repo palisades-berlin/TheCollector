@@ -381,19 +381,33 @@ test.describe('Figma parity snapshots', () => {
       maxDiffPixels: 10400,
     });
 
-    await page.evaluate(() => {
-      globalThis.document.getElementById('errorMsg').classList.remove('hidden');
-      globalThis.document.getElementById('errorMsg').textContent =
-        'Sync failed. Please sign in to continue.';
+    await page.evaluate(async () => {
+      const { showToast } = await import('/src/shared/toast.js');
       globalThis.document.getElementById('doneMsg').classList.add('hidden');
       globalThis.document.getElementById('progress').classList.add('hidden');
+      showToast(
+        'Browser internal pages cannot be captured. Open a regular website tab and try again.',
+        'error',
+        2600
+      );
     });
+    await expect.poll(async () => page.locator('.sc-toast').count()).toBe(1);
+    await page.waitForTimeout(120);
     await expect(page).toHaveScreenshot('popup-error-state.png', {
       maxDiffPixels: 10400,
     });
 
+    await page.evaluate(async () => {
+      const { showToast } = await import('/src/shared/toast.js');
+      const msg =
+        'Browser internal pages cannot be captured. Open a regular website tab and try again.';
+      showToast(msg, 'error', 2600);
+      showToast(msg, 'error', 2600);
+    });
+    await expect.poll(async () => page.locator('.sc-toast').count()).toBe(1);
+
     await page.evaluate(() => {
-      globalThis.document.getElementById('errorMsg').classList.add('hidden');
+      globalThis.document.querySelector('.sc-toast')?.remove();
       const done = globalThis.document.getElementById('doneMsg');
       done.classList.remove('hidden');
       globalThis.document.getElementById('doneMsgText').textContent = 'Saved. Open in Sidebar.';
@@ -407,6 +421,18 @@ test.describe('Figma parity snapshots', () => {
     await page.setViewportSize({ width: 1360, height: 920 });
     await page.goto(`${baseUrl}/src/urls/urls.html`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(220);
+    await page.locator('#view-all').focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(page.locator('#view-starred')).toHaveAttribute('aria-selected', 'true');
+    await page.keyboard.press('Home');
+    await expect(page.locator('#view-all')).toHaveAttribute('aria-selected', 'true');
+    await page.keyboard.press('End');
+    await expect(page.locator('#view-change-log')).toHaveAttribute('aria-selected', 'true');
+    await expect(page.locator('#changeLogView')).not.toHaveClass(/hidden/);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#view-all')).toHaveAttribute('aria-selected', 'true');
+    await expect(page.locator('#urlsView')).not.toHaveClass(/hidden/);
+    await page.evaluate(() => globalThis.document.activeElement?.blur?.());
 
     await expect(page).toHaveScreenshot('urls-library-desktop.png', {
       fullPage: true,
@@ -481,8 +507,15 @@ test.describe('Figma parity snapshots', () => {
 
     await page.evaluate(() => {
       globalThis.document.getElementById('loading').classList.add('hidden');
-      globalThis.document.getElementById('filesOverlay').classList.remove('hidden');
+      const openFilesBtn = globalThis.document.getElementById('openFilesBtn');
+      openFilesBtn.click();
     });
+    await expect(page.locator('#closeFilesBtn')).toBeFocused();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#filesOverlay')).not.toHaveClass(/hidden/);
+    await page.evaluate(() => globalThis.document.activeElement?.blur?.());
     await expect(page).toHaveScreenshot('history-modal-open.png', {
       fullPage: true,
       maxDiffPixels: 7800,

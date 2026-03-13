@@ -130,6 +130,8 @@ body {
 
 .settings-content {
   min-width: 0;
+  display: grid;
+  gap: var(--options-gap);
 }
 
 .settings-section {
@@ -367,6 +369,24 @@ body {
 }
 
 .actions .sc-btn {
+  min-height: var(--options-control-height);
+  min-width: 140px;
+}
+
+.save-bar {
+  position: sticky;
+  bottom: var(--sc-sp-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-sp-3);
+  padding: var(--sc-sp-3) var(--sc-sp-4);
+  border-color: var(--sc-color-warning-border);
+  background: color-mix(in srgb, var(--sc-color-warning-bg) 72%, var(--sc-color-surface));
+  z-index: 2;
+}
+
+.save-bar .sc-btn {
   min-height: var(--options-control-height);
   min-width: 140px;
 }

@@ -51,7 +51,6 @@ const progressFill = document.getElementById('progressFill');
 const progressText = document.getElementById('progressText');
 const doneMsgEl = document.getElementById('doneMsg');
 const doneMsgTextEl = document.getElementById('doneMsgText');
-const errorMsgEl = document.getElementById('errorMsg');
 const historyBtn = document.getElementById('historyBtn');
 const optionsBtn = document.getElementById('optionsBtn');
 const urlCount = document.getElementById('urlCount');
@@ -64,6 +63,9 @@ let currentRevisitNudgeId = null;
 let queueBatchEnabled = false;
 let runningQueue = false;
 let captureQueue = [];
+const ERROR_TOAST_DEDUP_MS = 1200;
+let lastErrorToastMessage = '';
+let lastErrorToastAt = 0;
 
 function reportNonFatal(context, err) {
   console.error('[THE Collector][non-fatal]', context, err);
@@ -199,7 +201,6 @@ function startCapture(tabId, profileId = null, options = {}) {
   capturing = true;
   setCaptureActionState();
   capturePanel.setAttribute('aria-busy', 'true');
-  errorMsgEl.classList.add('hidden');
   if (!runningQueue) doneMsgEl.classList.add('hidden');
   progressEl.classList.remove('hidden');
   setProgress(0, 'Starting...');
@@ -261,9 +262,13 @@ function showError(msg) {
   capturePanel.setAttribute('aria-busy', 'false');
   progressEl.classList.add('hidden');
   const friendly = toFriendlyCaptureError(msg);
-  errorMsgEl.classList.remove('hidden');
-  errorMsgEl.textContent = friendly;
-  showToast(friendly);
+  const now = Date.now();
+  if (friendly === lastErrorToastMessage && now - lastErrorToastAt < ERROR_TOAST_DEDUP_MS) {
+    return;
+  }
+  lastErrorToastMessage = friendly;
+  lastErrorToastAt = now;
+  showToast(friendly, 'error', 2600);
 }
 
 function showDone(payload = {}) {
@@ -432,7 +437,6 @@ async function runCaptureQueue() {
   if (!queueBatchEnabled || runningQueue || capturing || captureQueue.length === 0) return;
   runningQueue = true;
   setCaptureActionState();
-  errorMsgEl.classList.add('hidden');
   doneMsgEl.classList.add('hidden');
   progressEl.classList.remove('hidden');
   setProgress(0, `Queue 0/${captureQueue.length}: starting…`);

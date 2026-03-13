@@ -375,6 +375,10 @@ body {
 .card-body {
   padding: var(--history-card-padding) var(--history-card-padding) var(--sc-sp-2);
   flex: 1;
+  display: grid;
+  grid-template-rows: auto auto 1.35em;
+  align-content: start;
+  gap: 3px;
 }
 
 .card-url {
@@ -384,7 +388,6 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 3px;
 }
 
 .card-meta {
@@ -393,10 +396,16 @@ body {
 }
 
 .card-diagnostic {
-  margin-top: var(--sc-sp-1);
   font-size: 11px;
   color: var(--history-text-muted);
   line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-diagnostic.is-empty {
+  visibility: hidden;
 }
 
 .card-actions {

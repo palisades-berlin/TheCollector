@@ -26,6 +26,23 @@ export function createHistoryFilesOverlay({
 
   const selectedBaseIds = new Set();
   let filesOverlayClosing = false;
+  let openerEl = null;
+
+  function getFocusableInOverlay() {
+    return filesOverlayEl
+      ? Array.from(
+          filesOverlayEl.querySelectorAll(
+            'button:not([disabled]), input:not([disabled]), [href], select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          )
+        ).filter((el) => el instanceof HTMLElement && el.offsetParent !== null)
+      : [];
+  }
+
+  function focusFirstOverlayControl() {
+    const focusables = getFocusableInOverlay();
+    const first = focusables[0] || closeFilesBtn;
+    first?.focus();
+  }
 
   function renderFilesOverlay(resetSelection = false) {
     const groups = getGroups();
@@ -87,15 +104,20 @@ export function createHistoryFilesOverlay({
       filesOverlayEl.classList.add('hidden');
       filesOverlayEl.classList.remove('leaving');
       filesOverlayClosing = false;
+      if (openerEl?.isConnected) openerEl.focus();
+      openerEl = null;
     }, 190);
   }
 
   function wireEvents() {
     openFilesBtn.addEventListener('click', () => {
       if (!filesOverlayEl.classList.contains('hidden')) return;
+      openerEl =
+        document.activeElement instanceof HTMLElement ? document.activeElement : openFilesBtn;
       filesOverlayEl.classList.remove('hidden');
       filesOverlayEl.classList.remove('leaving');
       filesOverlayEl.classList.add('entering');
+      focusFirstOverlayControl();
       setTimeout(() => filesOverlayEl.classList.remove('entering'), 230);
     });
 
@@ -108,9 +130,25 @@ export function createHistoryFilesOverlay({
     });
 
     window.addEventListener('keydown', (e) => {
-      if (e.key !== 'Escape') return;
-      if (!filesOverlayEl.classList.contains('hidden')) {
+      if (filesOverlayEl.classList.contains('hidden')) return;
+      if (e.key === 'Escape') {
         closeFilesOverlay();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const focusables = getFocusableInOverlay();
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+        return;
+      }
+      if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
       }
     });
 

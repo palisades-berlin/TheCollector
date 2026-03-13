@@ -78,6 +78,7 @@ let bulkActionsEnabled = false;
 const URL_NOTE_MAX = 140;
 const selectedUrls = new Set();
 let changeLogReturnFocusEl = null;
+const VIEW_ORDER = ['all', 'starred', 'today', 'domain', 'change-log'];
 
 const TAG_SUGGESTIONS = [
   'Research',
@@ -173,6 +174,7 @@ function setActiveView(view, { focusReturn = false } = {}) {
     const active = key === view;
     btn.classList.toggle('active', active);
     btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    btn.setAttribute('tabindex', active ? '0' : '-1');
   }
   const showChangeLog = view === 'change-log';
   els.urlsView.classList.toggle('hidden', showChangeLog);
@@ -301,6 +303,7 @@ function renderDomainView(filtered) {
 }
 
 function renderUrlRow(record) {
+  const domainLabel = getRegisteredDomain(record.url) || 'unknown domain';
   const selected = selectedUrls.has(normalizeSelectionKey(record.url));
   const tags = Array.isArray(record.tags) ? record.tags : [];
   const note = typeof record.note === 'string' ? record.note : '';
@@ -377,9 +380,9 @@ function renderUrlRow(record) {
             ? '<button class="sc-btn sc-btn-sm" data-action="toggle-note" aria-expanded="false">Note</button>'
             : ''
         }
-        <button class="sc-btn sc-btn-sm" data-action="star" aria-pressed="${record.starred ? 'true' : 'false'}">${record.starred ? 'Unstar' : 'Star'}</button>
-        <button class="sc-btn sc-btn-sm" data-action="open">Open</button>
-        <button class="sc-btn sc-btn-sm sc-btn-danger" data-action="remove">Remove</button>
+        <button class="sc-btn sc-btn-sm" data-action="star" aria-pressed="${record.starred ? 'true' : 'false'}" aria-label="${record.starred ? 'Remove star' : 'Add star'} for ${esc(domainLabel)}">${record.starred ? 'Unstar' : 'Star'}</button>
+        <button class="sc-btn sc-btn-sm" data-action="open" aria-label="Open URL from ${esc(domainLabel)}">Open</button>
+        <button class="sc-btn sc-btn-sm sc-btn-danger" data-action="remove" aria-label="Remove URL from ${esc(domainLabel)}">Remove</button>
       </div>
     </div>`;
 }
@@ -473,24 +476,6 @@ function updateNoteCounter(row) {
 }
 
 els.urlList.addEventListener('click', async (event) => {
-  const rawTarget = event.target instanceof Element ? event.target : null;
-  if (!rawTarget) return;
-  const rowForExpand = rawTarget.closest('.url-row');
-  if (
-    tagsEnabled &&
-    rowForExpand &&
-    !rawTarget.closest('button[data-action]') &&
-    !rawTarget.closest('input[data-action]')
-  ) {
-    const controls = rowForExpand.querySelector('.url-tag-controls');
-    const toggleBtn = rowForExpand.querySelector('button[data-action="toggle-tags"]');
-    if (controls && toggleBtn) {
-      const nextExpanded = controls.classList.contains('hidden');
-      controls.classList.toggle('hidden', !nextExpanded);
-      toggleBtn.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
-    }
-    return;
-  }
   const target =
     event.target instanceof Element ? event.target.closest('button[data-action]') : null;
   if (!target) return;
@@ -727,6 +712,50 @@ els.viewChangeLog.addEventListener('click', async (event) => {
 els.changeLogBackBtn?.addEventListener('click', () => {
   closeChangeLogWithFocusReturn();
 });
+
+for (const tabButton of [
+  els.viewAll,
+  els.viewStarred,
+  els.viewToday,
+  els.viewDomain,
+  els.viewChangeLog,
+]) {
+  tabButton?.addEventListener('keydown', async (event) => {
+    const key = event.key;
+    if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(key)) return;
+    event.preventDefault();
+    const currentIndex = VIEW_ORDER.findIndex((id) => mapViewIdToButton(id) === tabButton);
+    if (currentIndex === -1) return;
+    let nextIndex = currentIndex;
+    if (key === 'Home') nextIndex = 0;
+    else if (key === 'End') nextIndex = VIEW_ORDER.length - 1;
+    else if (key === 'ArrowRight') nextIndex = (currentIndex + 1) % VIEW_ORDER.length;
+    else if (key === 'ArrowLeft')
+      nextIndex = (currentIndex - 1 + VIEW_ORDER.length) % VIEW_ORDER.length;
+    const nextView = VIEW_ORDER[nextIndex];
+    await activateViewFromKeyboard(nextView);
+  });
+}
+
+function mapViewIdToButton(view) {
+  if (view === 'all') return els.viewAll;
+  if (view === 'starred') return els.viewStarred;
+  if (view === 'today') return els.viewToday;
+  if (view === 'domain') return els.viewDomain;
+  if (view === 'change-log') return els.viewChangeLog;
+  return null;
+}
+
+async function activateViewFromKeyboard(view) {
+  if (view === 'change-log') {
+    historyEntries = await refreshHistoryEntries();
+    openChangeLog(els.viewChangeLog);
+    return;
+  }
+  setActiveView(view);
+  const btn = mapViewIdToButton(view);
+  btn?.focus();
+}
 
 for (const input of [els.filterDomain, els.filterTag, els.filterFrom, els.filterTo]) {
   input.addEventListener('input', () => renderUrls());

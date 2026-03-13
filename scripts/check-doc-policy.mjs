@@ -59,6 +59,51 @@ const USER_FACING_STRICT_ALLOWLIST = new Set([
   'src/options/options.html',
 ]);
 
+const HELP_SURFACE_ALLOWLIST = new Set(['docs/help-user-guide.md', 'src/options/options.html']);
+
+const REQUIRED_HELP_CUES = [
+  {
+    key: 'history_compare_visual_diff',
+    any: ['compare', 'visual diff'],
+  },
+  {
+    key: 'queue_capture',
+    any: ['queue current', 'queue window', 'run queue'],
+  },
+  {
+    key: 'url_popup_quick_actions',
+    any: ['copy all urls', 'txt/csv', 'email draft', 'clear', 'restore'],
+  },
+  {
+    key: 'keyboard_shortcut_capture',
+    any: ['alt+shift+p'],
+  },
+  {
+    key: 'preview_editing_export',
+    any: ['crop', 'blur', 'highlight', 'text', 'rectangle', 'emoji', 'png', 'jpg', 'pdf'],
+  },
+  {
+    key: 'screenshots_diagnostics',
+    any: ['diagnostic', 'slow', 'failure'],
+  },
+  {
+    key: 'screenshots_bulk_actions',
+    any: ['bulk'],
+  },
+  {
+    key: 'settings_explicit_save',
+    any: ['save settings'],
+  },
+  {
+    key: 'smart_revisit_nudges',
+    any: ['smart revisit nudges'],
+  },
+  {
+    key: 'weekly_value_report',
+    any: ['weekly value report'],
+  },
+];
+
 const INTERNAL_PLANNING_ALLOWED_PATTERNS = [
   /^docs\/adr\//i,
   /^docs\/.*roadmap.*\.md$/i,
@@ -144,9 +189,26 @@ for (const doc of classified.user_facing_strict) {
   }
 }
 
+for (const doc of classified.user_facing_strict) {
+  if (!HELP_SURFACE_ALLOWLIST.has(doc.relPath)) continue;
+  const text = fs.readFileSync(doc.absPath, 'utf8').toLowerCase();
+  const missingCues = REQUIRED_HELP_CUES.filter(
+    (cue) => !cue.any.some((needle) => text.includes(needle))
+  ).map((cue) => cue.key);
+  if (missingCues.length > 0) {
+    console.error(
+      `FAIL docs policy [help_coverage]: ${doc.relPath} is missing shipped feature cue(s): ${missingCues.join(', ')}`
+    );
+    failed = true;
+  }
+}
+
 if (!failed) {
   console.log(
     `PASS docs policy [user_facing_strict]: scanned ${classified.user_facing_strict.length} file(s).`
+  );
+  console.log(
+    `PASS docs policy [help_coverage]: scanned ${HELP_SURFACE_ALLOWLIST.size} help surface file(s) with ${REQUIRED_HELP_CUES.length} required cue(s).`
   );
 }
 

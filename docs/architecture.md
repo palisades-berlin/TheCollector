@@ -7,7 +7,15 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
 
 ## Runtime Components
 
-- `src/background/service-worker.js`: thin extension runtime adapter and event bootstrap.
+- `src/background/service-worker.js`: thin composition/bootstrap coordinator for background managers.
+- `src/background/background-runtime.js`: shared background runtime helpers (debug-gated non-fatal logging, broadcast, sleep).
+- `src/background/queue-state.js`: capture queue/session storage lifecycle helpers.
+- `src/background/nudge-alarm-manager.js`: nudge alarm scheduling and badge update handlers.
+- `src/background/context-menu-manager.js`: context-menu registration and click routing for capture/URL collection.
+- `src/background/omnibox-manager.js`: omnibox suggestion/entry handlers and Ultra action routing.
+- `src/background/message-router.js`: runtime message routing (`CAPTURE_START`, `CAPTURE_QUEUE_START`, `PT_DOWNLOAD`).
+- `src/background/lifecycle-handler.js`: install/startup lifecycle hooks (menus, alarms, onboarding).
+- `src/background/command-manager.js`: keyboard command routing (`capture-fullpage`).
 - `src/background/capture-service.js`: capture orchestration logic (state checks, retries, progress, stitching handoff).
 - `src/background/downloads.js`: background download helpers and export handoff utilities.
 - `src/background/offscreen-manager.js`: offscreen document lifecycle helpers for stitching/composition work.

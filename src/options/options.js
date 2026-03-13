@@ -42,6 +42,9 @@ const weeklyUniqueDomainsEl = document.getElementById('weeklyUniqueDomains');
 const weeklyUrlsCollectedEl = document.getElementById('weeklyUrlsCollected');
 const weeklyMinutesSavedEl = document.getElementById('weeklyMinutesSaved');
 const saveBtn = document.getElementById('saveBtn');
+const saveBarEl = document.getElementById('globalSaveBar');
+const saveBarTextEl = document.getElementById('saveBarText');
+const saveBarBtn = document.getElementById('saveBarBtn');
 const statusEl = document.getElementById('status');
 const onboardingBannerEl = document.getElementById('onboardingBanner');
 const downloadsStatusEl = document.getElementById('downloadsStatus');
@@ -57,6 +60,8 @@ const permBadgeEls = {
   downloads: document.getElementById('perm-downloads'),
 };
 let permissionPollTimer = null;
+let settingsDirty = false;
+let isHydrating = false;
 const SECTION_IDS = new Set([
   'daily-essentials',
   'capture-export',
@@ -77,6 +82,7 @@ function logNonFatal(context, err) {
 init().catch((err) => showStatus(`Failed to load settings: ${err.message}`, 'error'));
 
 async function init() {
+  isHydrating = true;
   await applySavedTheme();
   wireSettingsNavigation();
   setActiveSection(getInitialSectionId(), { syncUrl: false });
@@ -103,45 +109,64 @@ async function init() {
     notificationCadenceEl.value = normalizeNotificationCadence(settings.notificationCadence);
     notificationCadenceEl.disabled = !(nudgesEnabledEl && nudgesEnabledEl.checked);
   }
+  setDirtyState(false);
   syncProfileRowVisibility(settings);
   syncNudgesVisibility(settings);
   await syncProfileUsageSummary(settings);
   await syncWeeklyValueReportVisibility(settings);
   await refreshPermissionStatus();
   setupPermissionStatusRefresh();
+  wireDirtyTracking();
+  isHydrating = false;
 }
 
-saveBtn.addEventListener('click', async () => {
+saveBtn.addEventListener('click', () => {
+  void handleSave();
+});
+
+saveBarBtn?.addEventListener('click', () => {
+  void handleSave();
+});
+
+async function handleSave() {
   saveBtn.disabled = true;
+  if (saveBarBtn) saveBarBtn.disabled = true;
   try {
-    await setUserSettings({
-      defaultExportFormat: defaultExportFormatEl.value,
-      defaultPdfPageSize: defaultPdfPageSizeEl.value,
-      autoDownloadMode: autoDownloadModeEl.value,
-      downloadDirectory: downloadDirectoryEl.value,
-      saveAs: saveAsEl.checked,
-      fitClipboardToDocsLimit: fitClipboardToDocsLimitEl.checked,
-      theme: themeEl ? themeEl.value : 'system',
-      capabilityTier: capabilityTierEl ? capabilityTierEl.value : 'basic',
-      defaultCaptureProfileId: defaultCaptureProfileIdEl
-        ? normalizeCaptureProfileId(defaultCaptureProfileIdEl.value)
-        : DEFAULT_CAPTURE_PROFILE_ID,
-      nudgesEnabled: nudgesEnabledEl ? nudgesEnabledEl.checked : false,
-      notificationCadence: notificationCadenceEl
-        ? normalizeNotificationCadence(notificationCadenceEl.value)
-        : 'balanced',
-    });
+    await setUserSettings(collectSettingsPayload());
     const normalized = await getUserSettings();
     downloadDirectoryEl.value = normalized.downloadDirectory;
+    setDirtyState(false);
     showStatus('Settings saved.', 'success');
     showToast('Settings saved.', 'success');
   } catch (err) {
+    setDirtyState(true);
     showStatus(`Save failed: ${err.message}`, 'error');
     showToast(`Save failed: ${err.message}`, 'error', 3200);
   } finally {
     saveBtn.disabled = false;
+    if (saveBarBtn) saveBarBtn.disabled = false;
   }
-});
+}
+
+function collectSettingsPayload() {
+  return {
+    defaultExportFormat: defaultExportFormatEl.value,
+    defaultPdfPageSize: defaultPdfPageSizeEl.value,
+    autoDownloadMode: autoDownloadModeEl.value,
+    downloadDirectory: downloadDirectoryEl.value,
+    saveAs: saveAsEl.checked,
+    fitClipboardToDocsLimit: fitClipboardToDocsLimitEl.checked,
+    theme: themeEl ? themeEl.value : 'system',
+    capabilityTier: capabilityTierEl ? capabilityTierEl.value : 'basic',
+    defaultCaptureProfileId: defaultCaptureProfileIdEl
+      ? normalizeCaptureProfileId(defaultCaptureProfileIdEl.value)
+      : DEFAULT_CAPTURE_PROFILE_ID,
+    nudgesEnabled: nudgesEnabledEl ? nudgesEnabledEl.checked : false,
+    notificationCadence: notificationCadenceEl
+      ? normalizeNotificationCadence(notificationCadenceEl.value)
+      : 'balanced',
+  };
+}
 
 themeEl?.addEventListener('change', () => {
   applyThemeToDocument(themeEl.value);
@@ -155,11 +180,17 @@ capabilityTierEl?.addEventListener('change', () => {
   syncWeeklyValueReportVisibility(settings).catch((err) =>
     logNonFatal('syncWeeklyValueReport', err)
   );
+  markSettingsDirty();
 });
 
 nudgesEnabledEl?.addEventListener('change', () => {
   if (!notificationCadenceEl) return;
   notificationCadenceEl.disabled = !nudgesEnabledEl.checked;
+  markSettingsDirty();
+});
+
+notificationCadenceEl?.addEventListener('change', () => {
+  markSettingsDirty();
 });
 
 grantDownloadsBtn.addEventListener('click', async () => {
@@ -272,6 +303,20 @@ function showStatus(msg, tone = 'info') {
   statusEl.classList.add('sc-banner-info');
 }
 
+function setDirtyState(nextDirty) {
+  settingsDirty = nextDirty === true;
+  saveBarEl?.classList.toggle('hidden', !settingsDirty);
+  if (settingsDirty && saveBarTextEl) {
+    saveBarTextEl.textContent = 'Unsaved changes. Click Save Settings.';
+  }
+}
+
+function markSettingsDirty() {
+  if (isHydrating || settingsDirty) return;
+  setDirtyState(true);
+  showStatus('Unsaved changes. Click Save Settings.', 'warn');
+}
+
 async function hasPermission(permission) {
   try {
     return await chrome.permissions.contains({ permissions: [permission] });
@@ -341,9 +386,11 @@ function applySelectedFolder(folder) {
   if (current.includes('/')) {
     const suffix = current.split('/').slice(1).join('/');
     downloadDirectoryEl.value = suffix ? `${folder}/${suffix}` : folder;
+    markSettingsDirty();
     return;
   }
   downloadDirectoryEl.value = folder;
+  markSettingsDirty();
 }
 
 function syncProfileRowVisibility(settings) {
@@ -446,6 +493,25 @@ function wireSettingsNavigation() {
       setActiveSection(normalizeSectionId(btn.dataset.settingsNav), { syncUrl: true });
     });
   }
+}
+
+function wireDirtyTracking() {
+  const changeTrackedControls = [
+    defaultExportFormatEl,
+    defaultPdfPageSizeEl,
+    autoDownloadModeEl,
+    saveAsEl,
+    fitClipboardToDocsLimitEl,
+    themeEl,
+    capabilityTierEl,
+    defaultCaptureProfileIdEl,
+    nudgesEnabledEl,
+    notificationCadenceEl,
+  ];
+  for (const control of changeTrackedControls) {
+    control?.addEventListener('change', () => markSettingsDirty());
+  }
+  downloadDirectoryEl?.addEventListener('input', () => markSettingsDirty());
 }
 
 function setActiveSection(sectionId, { syncUrl = true } = {}) {

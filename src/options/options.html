@@ -199,6 +199,7 @@
                 <option value="high">High</option>
               </select>
             </label>
+            <p class="muted">Changes apply after you click Save Settings.</p>
           </section>
 
           <section id="weeklyValueReportCard" class="card sc-card hidden">
@@ -388,6 +389,13 @@
                 </ol>
               </details>
               <details class="faq-item">
+                <summary>Can I use a keyboard shortcut for capture?</summary>
+                <p>
+                  Yes. Press <b>Alt+Shift+P</b> on a normal website tab to start capture quickly. If
+                  the page is restricted, switch to a regular website and try again.
+                </p>
+              </details>
+              <details class="faq-item">
                 <summary>How do I use Smart Save Profiles (Pro/Ultra)?</summary>
                 <p>
                   Smart Save gives you fixed presets: <b>Research</b>, <b>Interest</b>, and
@@ -404,14 +412,6 @@
                 <p>In this version, profiles are fixed presets.</p>
               </details>
               <details class="faq-item">
-                <summary>How do I find and filter saved captures?</summary>
-                <p>
-                  Open <b>Screenshots</b> to review your saved captures. Use domain, date, export
-                  type, and profile filters to narrow results. Then open, delete, or bulk-manage
-                  items from the list.
-                </p>
-              </details>
-              <details class="faq-item">
                 <summary>How do I run Queue Capture (Pro/Ultra)?</summary>
                 <p>Queue Capture helps you process multiple tabs in one run. Follow these steps:</p>
                 <ol>
@@ -420,6 +420,51 @@
                   <li>Wait for the run to finish.</li>
                   <li>THE Collector opens <b>Screenshots</b> with queue results.</li>
                 </ol>
+              </details>
+              <details class="faq-item">
+                <summary>How do I find, filter, and manage screenshots?</summary>
+                <p>
+                  Open <b>Screenshots</b> to review your saved captures. Use domain, date, export
+                  type, and profile filters to narrow results. Then open, delete, or bulk-manage
+                  items from the list.
+                </p>
+                <p>
+                  Watch for diagnostic hints like slow-run notes or the latest failure note when
+                  they appear.
+                </p>
+              </details>
+              <details class="faq-item">
+                <summary>How do I compare two screenshots?</summary>
+                <p>
+                  Use the compare buttons in <b>Screenshots</b> to pick two items. Then open the
+                  compare view.
+                </p>
+                <p>
+                  You will see <b>Visual Diff</b> overlays where green means added/brighter areas
+                  and red means removed/darker areas.
+                </p>
+              </details>
+              <details class="faq-item">
+                <summary>What can I do in Preview?</summary>
+                <p>
+                  Open any screenshot to enter <b>Preview</b>. You can crop, blur, highlight, add
+                  text, draw rectangles, and place emoji markers.
+                </p>
+                <p>
+                  Export options include <b>PNG</b>, <b>JPG</b>, and <b>PDF</b> (`Auto`, `A4`,
+                  `Letter`), plus quick presets like <b>Email</b>, <b>Docs</b>, and <b>PDF Auto</b>.
+                </p>
+              </details>
+              <details class="faq-item">
+                <summary>How do I use URL quick actions in the popup?</summary>
+                <p>
+                  Go to popup <b>URLs</b> tab. You can copy all URLs, export TXT/CSV, send an email
+                  draft, clear the list, and restore the last cleared list.
+                </p>
+                <p>
+                  Open <b>URL Library</b> when you want full views, filters, tags, notes, and bulk
+                  tools.
+                </p>
               </details>
               <details class="faq-item">
                 <summary>How do I use address bar shortcuts (Ultra)?</summary>
@@ -476,6 +521,21 @@
                 </p>
               </details>
               <details class="faq-item">
+                <summary>How do Settings saves work?</summary>
+                <p>
+                  Update your preferences, then click <b>Save Settings</b>. Changes apply after you
+                  save, including controls like Smart Revisit Nudges.
+                </p>
+              </details>
+              <details class="faq-item">
+                <summary>What do Smart Revisit Nudges and Weekly Value Report do?</summary>
+                <p>
+                  Smart Revisit Nudges help you come back to important saved work. Weekly Value
+                  Report shows your local summary for captures, domains, URLs, and estimated time
+                  saved.
+                </p>
+              </details>
+              <details class="faq-item">
                 <summary>Why is a feature missing?</summary>
                 <p>
                   Your feature surface level controls what you see: <b>Basic</b>, <b>Pro</b>, or
@@ -507,6 +567,10 @@
           </section>
         </section>
       </section>
+      <div id="globalSaveBar" class="save-bar sc-card hidden" role="status" aria-live="polite">
+        <span id="saveBarText">Unsaved changes. Click Save Settings.</span>
+        <button id="saveBarBtn" class="sc-btn sc-btn-primary" type="button">Save Settings</button>
+      </div>
     </main>
 
     <script type="module" src="options.js"></script>

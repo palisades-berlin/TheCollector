@@ -1,5 +1,135 @@
 # Changelog
 
+## 1.9.82 - 2026-03-13
+
+Pre-Release Code Assessment
+
+### Changed
+
+- Completed pre-release UX/UI hardening and accessibility parity fixes:
+  - popup tablist semantics normalized (Library action moved outside tablist),
+  - single-surface popup error feedback retained with accessible toast semantics,
+  - URL Library tab keyboard navigation (`ArrowLeft`/`ArrowRight`/`Home`/`End`) and tabpanel mapping enforced,
+  - implicit URL-row tag expansion removed (explicit action buttons only),
+  - History files overlay now traps keyboard focus while open and restores focus on close.
+- History card and action polish:
+  - compare button now preserves icon while updating selection label text,
+  - card diagnostic slot uses stable reserved layout behavior.
+- Settings save-flow consistency:
+  - added global unsaved-changes save bar to keep explicit-save UX available across sections.
+- Calibration and contract checks expanded:
+  - visual parity now includes keyboard/focus interaction assertions for URL tabs and History overlay,
+  - accessibility contract tests now enforce popup tablist boundary and URL tab-to-panel mapping.
+- Synchronized version pointers to `1.9.82` in manifest/package/docs metadata files.
+
+## 1.9.81 - 2026-03-13
+
+### Changed
+
+- UX/UI calibration remediation pass (pedantic):
+  - fixed popup navigation semantics by keeping only capture/URLs in the tablist and moving Library to a standalone action.
+  - enforced single-surface popup error UX with accessible toast semantics (`alert` for error, `status` for info/success).
+  - restored History card diagnostic slot rendering with stable equal-height card body layout.
+  - preserved History compare button icon while updating compare selected label text.
+  - added History Files overlay keyboard focus trap and focus-return to trigger on close.
+  - removed accidental URL-row click-to-expand behavior; tag/note expansion is now explicit-button only.
+  - added URL Library keyboard tab navigation (`ArrowLeft/ArrowRight/Home/End`) with tab-to-panel aria mapping.
+  - added contextual aria labels for row actions in History and URL Library.
+  - added global Settings save bar for unsaved changes across sections while keeping explicit-save behavior.
+- Calibration and accessibility gate hardening:
+  - expanded visual parity coverage with URL tab keyboard-state checks and History overlay focus interaction checks.
+  - expanded accessibility contract tests for popup tablist boundary and URL tabpanel mapping.
+- Documentation sync:
+  - updated `docs/ui-handoff.md`, `docs/ui-qa-audit.md`, and `docs/dev-workflow.md` with modal focus, tab keyboard, and explicit interaction rules.
+
+## 1.9.80 - 2026-03-13
+
+### Changed
+
+- Popup error UX cleanup (UI-only, no business-logic change):
+  - removed active inline red error banner rendering from popup capture flow,
+  - enforced toast-only error feedback with single-instance toast replacement/refresh behavior,
+  - added local duplicate suppression for repeated identical capture errors in rapid succession.
+- UX/UI calibration hardening:
+  - updated visual popup error-state scenario to toast-driven feedback,
+  - added visual assertion to ensure repeated identical popup errors do not stack to multiple toasts.
+- Documentation updates:
+  - added popup single-error-surface rule to `docs/ui-qa-audit.md`,
+  - updated feedback-state mapping in `docs/ui-handoff.md`,
+  - added popup duplicate-error calibration check to `docs/dev-workflow.md`.
+
+## 1.9.79 - 2026-03-13
+
+### Changed
+
+- Service worker maintainability refactor (no behavior change):
+  - split `src/background/service-worker.js` into focused background modules for runtime helpers, queue state, nudge alarms, context menus, omnibox routing, message routing, lifecycle handlers, and command handlers.
+  - kept alarm/menu/message contracts and queue/omnibox/capture behavior unchanged.
+
+## 1.9.78 - 2026-03-13
+
+### Changed
+
+- History card sizing consistency fix:
+  - reserved a stable diagnostic slot on all cards to prevent mixed-height rows,
+  - clamped diagnostic text to a single line with ellipsis,
+  - kept thumbnail fit/quality behavior and card geometry unchanged.
+
+## 1.9.77 - 2026-03-13
+
+### Changed
+
+- Added shared validation utility module in `src/shared/validation.js`:
+  - kept `toPositiveInt` behavior unchanged,
+  - added pure helpers `isNonEmptyString`, `isValidUrl` (HTTP/HTTPS default), and `isEmail`,
+  - added JSDoc for all exported validation helpers.
+- Extended `tests/ui-state-validation.test.mjs` to cover all shared validation helpers.
+
+## 1.9.76 - 2026-03-13
+
+### Changed
+
+- Repo-wide user-help coverage alignment:
+  - expanded `docs/help-user-guide.md` to cover shipped features including History Compare/Visual Diff, URL popup quick actions, keyboard shortcut capture, Preview edit/export flows, Screenshots diagnostics/bulk behavior, and explicit Settings save behavior.
+  - regenerated `src/options/options.html` Help & FAQ to mirror the updated help guide in user-friendly language.
+- Docs policy drift guard:
+  - extended `scripts/check-doc-policy.mjs` with a required shipped-feature cue check for both strict help surfaces (`docs/help-user-guide.md`, `src/options/options.html`).
+  - `npm run test:docs-policy` now fails if a shipped feature cue is missing from either help surface.
+
+## 1.9.75 - 2026-03-13
+
+### Changed
+
+- History thumbnail rendering quality and crop behavior fix:
+  - History now decodes from the full stitched screenshot blob first, with `thumbBlob` as fallback.
+  - Removed capture-time first-tile thumbnail overwrite so stored thumbnails preserve full screenshot aspect.
+  - Enabled DPR-aware canvas rendering + high-quality image smoothing for sharper card thumbnails.
+  - Kept fixed card size and width-priority top-aligned fit (tall screenshots crop from bottom only).
+
+## 1.9.74 - 2026-03-13
+
+### Changed
+
+- Added product ruleset governance rule: when features/behavior/policy/process change, all impacted documentation must be adapted in the same work cycle.
+
+## 1.9.73 - 2026-03-13
+
+### Changed
+
+- History card thumbnail rendering now uses width-priority, top-aligned fit:
+  - screenshot width is always fully visible inside fixed card size,
+  - very tall screenshots crop from the bottom (not center-cropped),
+  - wide screenshots show remaining vertical space with card-thumb background fill.
+
+## 1.9.72 - 2026-03-13
+
+### Changed
+
+- Clarified Smart Revisit Nudge settings UX on Options:
+  - nudge settings remain explicit-save only (no auto-save),
+  - changing nudge toggle/cadence now shows `Unsaved changes. Click Save Settings.`,
+  - added inline helper copy near nudge controls: `Changes apply after you click Save Settings.`
+
 ## 1.9.71 - 2026-03-13
 
 ### Changed
