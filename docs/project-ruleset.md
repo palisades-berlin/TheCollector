@@ -9,6 +9,8 @@ Normative source note: this file is the policy authority when other docs summari
 
 You are a pragmatic Principal Software Engineer with over 15 years of experience designing and building enterprise-grade Chrome extensions. Your goal is to engineer best-in-class products that rival the quality, UX, and performance of tools made by Google, Apple, or other top-tier software companies.
 
+<!-- GUIDING_PRINCIPLES:START -->
+
 ## Guiding Principles
 
 1. Quality First: Code must be production-grade, structured, maintainable, and fully compliant with Chrome’s latest extension APIs (Manifest V3+).
@@ -18,6 +20,10 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 5. Documentation and Maintainability: Code should be self-explanatory, commented where necessary, and supported by concise README and architecture overviews.
 6. Zero TODOs, full error handling, Chrome Web Store compliant.
 
+<!-- GUIDING_PRINCIPLES:END -->
+
+<!-- CORE_GOVERNANCE:START -->
+
 ## Core Governance
 
 1. `main` is the production/active branch.
@@ -25,6 +31,8 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 3. If protected branch rules block direct push to `main`, use `codex/*` branch + PR as the standard fallback.
 4. Branch hygiene is mandatory: clean stale branches and keep repo structure tidy.
 5. For major/massive changes, create a checkpoint.
+
+<!-- CORE_GOVERNANCE:END -->
 
 ## Roadmap & Product Quality
 
@@ -79,6 +87,8 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 11. When any feature, UX flow, behavior, policy, or release process changes, adapt all impacted documentation in the same work cycle (README, help, ADRs, roadmap/plans, changelog, wiki, and policy docs as applicable).
 12. Attribution note for maintainer-facing documentation should stay explicit and consistent: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
+<!-- HELP_RULES:START -->
+
 ## Help Documentation Rules (added 2026-03-11)
 
 1. **Implementation parity (Rule 1):** All help files, documents, and pages must only describe features that are actually implemented and available in the current release. Planned, roadmap, or future features must never appear in user-facing help content.
@@ -86,10 +96,14 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 3. **Consistency (Rule 3):** `docs/help-user-guide.md` and the `Help & FAQ` section in `src/options/options.html` must always be in sync. Any change to one requires a matching update to the other in the same work cycle.
 4. **Shipping a feature (Rule 4):** When a new feature ships, remove its phrase(s) from the `UNSHIPPED_PHRASES` list in `scripts/check-doc-policy.mjs` and add the feature to both `docs/help-user-guide.md` and the `src/options/options.html` Help & FAQ section in the same work cycle.
 
+<!-- HELP_RULES:END -->
+
 ## Git/Branch Policy
 
 1. Security posture is pragmatic: use GitHub security features (including code scanning) where useful.
 2. Suggest rerunning the production-readiness assessment when pragmatically needed.
+
+<!-- MAINTENANCE:START -->
 
 ## Maintenance Routine
 
@@ -99,6 +113,8 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 4. When architecture/policy rules change, update the relevant ADR references in the same cycle.
 5. If commit/push is requested, verify doc/wiki sync requirements are complete before finalizing.
 6. When a feature changes UX, behavior, or tier availability, update `docs/help-user-guide.md` in the same work cycle.
+
+<!-- MAINTENANCE:END -->
 
 ## Change Log (Ruleset)
 

@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.97.0`.
+Current extension version: `1.9.97.1`.
 
 ## Overview
 
@@ -31,11 +31,9 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- SESSION formatting hardening: added `npm run format:session` and wired it into CI quality + local `npm run check`.
-- Pre-commit workflow docs now explicitly require `format:session` before `format:check` to prevent recurring SESSION formatting failures.
-- Moved `## Behind the Build` to a top-level position near Overview for better visibility.
-- Added `test:version-policy:local` npm script — pre-commit version check now works correctly without manual env var.
-- Added `**Key discussion:**` field to `SESSION.md` + field guide for AI handoff context.
+- Added machine-readable HTML comment markers to critical policy/session sections in `CLAUDE.md`, `AGENTS.md`, `docs/project-ruleset.md`, and `SESSION.md`.
+- Kept all maintainer-facing guidance human-readable while enabling more reliable AI section extraction and synchronization.
+- Synced docs/runtime version pointers to `1.9.97.1` across manifest/package/changelog/maintainer docs.
 
 ## Versioning Migration Note
 

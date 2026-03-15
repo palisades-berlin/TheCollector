@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.97.1 - 2026-03-15
+
+### Changed
+
+- Docs: added HTML comment markers (`<!-- SECTION:START/END -->`) to machine-critical sections in `CLAUDE.md`, `AGENTS.md`, `docs/project-ruleset.md`, and `SESSION.md` to enable reliable section extraction by AI tools without changing human-readable content or breaking any tooling.
+
 ## 1.9.97.0 - 2026-03-15
 
 ### Changed
