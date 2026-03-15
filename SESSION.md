@@ -32,13 +32,16 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
   - `.github/workflows/ci.yml`
   - `.github/workflows/codeql.yml`
   - `.github/workflows/release-assets.yml`
-- Bumped lockstep version to `1.9.94.0` and updated changelog + README Top Changes accordingly.
+- Upgraded CodeQL actions to current supported major:
+  - `github/codeql-action/init@v4`
+  - `github/codeql-action/analyze@v4`
+- Bumped lockstep version to `1.9.95.0` and updated changelog + README Top Changes accordingly.
 
 ---
 
 ## Do next
 
-**Task:** Verify green GitHub CI + CodeQL runs for `1.9.94.0`, then resume Phase 0 Figma unblock and execute `0-A-1` color style tokens.
+**Task:** Verify green GitHub CI + CodeQL runs for `1.9.95.0`, then resume Phase 0 Figma unblock and execute `0-A-1` color style tokens.
 
 Where: Figma file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`)
 What: Phase 0 checklist in master plan §6, steps 0-A through 0-F
@@ -88,4 +91,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session.
 
 ---
 
-_Last updated: 2026-03-15 (Node24 workflow-runtime hardening + lockstep bump to 1.9.94.0; pending push verification)_
+_Last updated: 2026-03-15 (Node24 workflow-runtime hardening + lockstep bump to 1.9.95.0; pending push verification)_

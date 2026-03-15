@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.95.0 - 2026-03-15
+
+### Changed
+
+- CodeQL workflow hardening:
+  - upgraded `github/codeql-action/init` and `github/codeql-action/analyze` from `v3` to `v4` to remove deprecation path warnings and align with current GitHub guidance.
+- Version sync:
+  - synchronized version to `1.9.95.0` across manifest/package/docs pointers.
+
 ## 1.9.94.0 - 2026-03-15
 
 ### Changed
