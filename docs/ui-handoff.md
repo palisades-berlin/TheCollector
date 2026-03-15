@@ -4,12 +4,15 @@ This document defines the implementation contract between design and code for TH
 
 ## Source of Truth
 
-- Figma file: `THECollector - UI Kit & Screens`
-- Figma URL: `https://www.figma.com/design/sECUN6qSqUygWoG7PhC548/THECollector---UI-Kit---Screens?t=UVQ55HTnnPvLrqyo-0`
+<!-- UI_SOURCE_OF_TRUTH:START -->
+
+- Figma file `THECollector - UI Kit & Screens` is the project UI single source of truth.
+- Canonical URL: `https://www.figma.com/design/sECUN6qSqUygWoG7PhC548/THECollector---UI-Kit---Screens?t=UVQ55HTnnPvLrqyo-0`
+- Active handoff authority node: `19:2` (`THECollector - Final Handoff Ops`)
+<!-- UI_SOURCE_OF_TRUTH:END -->
 - Figma file key: `sECUN6qSqUygWoG7PhC548`
 - Rule: this Figma file is the single source of truth for all UX/UI and components.
 - Implementation policy: code should map to Figma tokens, component states, and naming before introducing new visual patterns.
-- Active handoff node (authoritative): `19:2` (`THECollector - Final Handoff Ops`)
 - Canonical UI kit + screens node: `1:2` (`THECollector - UI Kit & Screens`)
 
 ## Figma Node Index (Synced 2026-03-05)
@@ -144,9 +147,12 @@ A tab in a tablist must operate on the same data set as its sibling tabs. An aud
 
 ## Change Policy
 
+<!-- UI_CHANGE_POLICY:START -->
+
 - If Figma changes:
   1. Update shared tokens/components first (`src/shared/ui.css`).
   2. Update surface semantic layers (`--popup-*`, `--history-*`) only where needed.
   3. Keep behavior stable unless interaction requirements changed in Figma.
 - If code changes require new UI patterns:
   - add to Figma first, then implement in shared primitives, then consume in surfaces.
+  <!-- UI_CHANGE_POLICY:END -->

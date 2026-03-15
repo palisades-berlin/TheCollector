@@ -17,6 +17,8 @@ npm install
 
 ## Local Quality Checks
 
+<!-- LOCAL_QUALITY_CHECKS:START -->
+
 > **Version policy note:** Use `npm run test:version-policy:local` (not `test:version-policy`) when running locally with uncommitted changes. The `:local` variant sets `VERSION_POLICY_BASE_SHA=HEAD` so the bump-rule check compares against the current HEAD rather than `HEAD~1`. The bare `test:version-policy` is for CI (GitHub Actions sets the correct base ref automatically) and for post-commit clean-tree validation.
 
 ```bash
@@ -40,6 +42,8 @@ npm run format:session
 npm run format:check
 npm run check
 ```
+
+<!-- LOCAL_QUALITY_CHECKS:END -->
 
 ## Manual Run (Unpacked Extension)
 
@@ -94,6 +98,8 @@ Keep repository metadata aligned with shipped state in the same cycle:
 
 ## Versioning Rule
 
+<!-- VERSIONING_RULE:START -->
+
 - Versioning format is `x.y.z.w` (ADR 0014).
 - Bump rules:
   - code/runtime change: bump `z`, reset `w=0`
@@ -105,13 +111,17 @@ Keep repository metadata aligned with shipped state in the same cycle:
   - `AGENTS.md`
   - `CLAUDE.md`
   - `CHANGELOG.md`
+  <!-- VERSIONING_RULE:END -->
 
 ## Commit/Push -> Wiki Sync Rule (Mandatory)
+
+<!-- WIKI_SYNC_RULE:START -->
 
 - Every requested commit/push cycle must include a matching update to:
   - `https://github.com/palisades-berlin/TheCollector.wiki.git` (`Home.md`)
 - Wiki sync is part of Definition of Done for commit/push operations.
 - Keep wiki section order stable; only refresh impacted sections to avoid drift.
+<!-- WIKI_SYNC_RULE:END -->
 
 Minimum required wiki sync payload on each commit/push:
 
@@ -143,16 +153,30 @@ Publish workflow:
 
 ## Help Documentation Rules
 
-1. **Rule 1 — Implementation parity:** `docs/help-user-guide.md` and the `Help & FAQ` section in `src/options/options.html` must only describe features that exist in the current release. Never document planned or roadmap features in user-facing help content.
-2. **Rule 2 — Pre-commit gate:** `npm run test:docs-policy` includes a help-doc freshness check. Run it and fix any failures before committing. Do not bypass or weaken this gate.
-3. **Rule 3 — Consistency:** Both help surfaces must stay in sync. Any change to `docs/help-user-guide.md` requires a matching update to the options.html FAQ in the same work cycle, and vice versa.
-4. **Rule 4 — Shipping a feature:** When a new feature ships, remove its phrase(s) from `UNSHIPPED_PHRASES` in `scripts/check-doc-policy.mjs` and add the feature to both `docs/help-user-guide.md` and the `src/options/options.html` Help & FAQ in the same work cycle.
+<!-- HELP_RULES:START -->
+
+- **Rule 1 — Implementation parity:** All help files, documents, and pages (`docs/help-user-guide.md`, `src/options/options.html` Help & FAQ) must only describe features that are actually implemented and available in the current release. Roadmap or planned features must never appear in user-facing help content.
+- **Rule 2 — Pre-commit gate:** Before every commit/push, verify that Rule 1 is fulfilled. The `npm run test:docs-policy` gate enforces this automatically; do not bypass it.
+- **Rule 3 — Consistency:** `docs/help-user-guide.md` and the `Help & FAQ` section in `src/options/options.html` must always be in sync. Any change to one requires a matching update to the other in the same work cycle.
+- **Rule 4 — Shipping a feature:** When a new feature ships, remove its phrase(s) from the `UNSHIPPED_PHRASES` list in `scripts/check-doc-policy.mjs` and add the feature to both help surfaces in the same work cycle.
+<!-- HELP_RULES:END -->
 
 ## UI/UX Handoff Rule
+
+<!-- UI_SOURCE_OF_TRUTH:START -->
 
 - Figma file `THECollector - UI Kit & Screens` is the project UI single source of truth.
 - Canonical URL: `https://www.figma.com/design/sECUN6qSqUygWoG7PhC548/THECollector---UI-Kit---Screens?t=UVQ55HTnnPvLrqyo-0`
 - Active handoff authority node: `19:2` (`THECollector - Final Handoff Ops`)
+  <!-- UI_SOURCE_OF_TRUTH:END -->
+  <!-- UI_CHANGE_POLICY:START -->
+- If Figma changes:
+  1. Update shared tokens/components first (`src/shared/ui.css`).
+  2. Update surface semantic layers (`--popup-*`, `--history-*`) only where needed.
+  3. Keep behavior stable unless interaction requirements changed in Figma.
+- If code changes require new UI patterns:
+  - add to Figma first, then implement in shared primitives, then consume in surfaces.
+  <!-- UI_CHANGE_POLICY:END -->
 - Before introducing new screen-level styles, implement or update shared primitives/tokens in `src/shared/ui.css`.
 - Keep surface-level CSS tokenized (`--popup-*`, `--history-*`) and avoid new hardcoded visual values when an existing token exists.
 - Reference `docs/ui-handoff.md` for component/state/accessibility contracts used for engineering handoff.

@@ -91,25 +91,30 @@ Tip: if you added aliases/functions above on all machines, use `sync-main` at se
 
 ## Versioning
 
-Version format is `X.Y.Z.W`.
+<!-- VERSIONING_RULE:START -->
 
-- Code/runtime change: bump `Z`, reset `W=0`.
-- Docs/tests-only change: bump `W` only (smallest bump).
-- Keep all version pointers synchronized:
-
-- `manifest.json`
-- `package.json`
-- `README.md`
-- `AGENTS.md`
-- `CLAUDE.md`
-- `CHANGELOG.md`
+- Versioning format is `x.y.z.w` (ADR 0014).
+- Bump rules:
+  - code/runtime change: bump `z`, reset `w=0`
+  - docs/tests-only change: bump `w` only (smallest bump)
+- Keep versions synchronized in:
+  - `manifest.json`
+  - `package.json`
+  - `README.md`
+  - `AGENTS.md`
+  - `CLAUDE.md`
+  - `CHANGELOG.md`
+  <!-- VERSIONING_RULE:END -->
 
 ## Security and Privacy
+
+<!-- SECURITY_PRIVACY_RULES:START -->
 
 - Local-only and no-tracking policy is mandatory for roadmap features.
 - Do not introduce external network calls without explicit approval and policy updates.
 - Respect manifest permission baseline checks.
 - Vulnerability reporting path and disclosure expectations are defined in [SECURITY.md](./SECURITY.md).
+<!-- SECURITY_PRIVACY_RULES:END -->
 
 ## Community Standards
 
@@ -117,9 +122,12 @@ Version format is `X.Y.Z.W`.
 
 ## Review Standards
 
+<!-- REVIEW_STANDARDS:START -->
+
 - Pull requests are reviewed by at least one human and two AIs (Claude + Codex, if you were curious). The human has final say — mostly to keep everyone humble.
 - All required CI checks must pass.
 - Keep docs and wiki synchronized with shipped behavior/policy changes.
+<!-- REVIEW_STANDARDS:END -->
 
 ## Credit Note
 

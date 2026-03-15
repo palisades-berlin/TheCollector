@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.97.2 - 2026-03-15
+
+### Changed
+
+- Marker sync governance rollout:
+  - added canonical marker contract in `docs/marker-sync-contract.md` (allowed IDs, required presence, canonical/mirror mappings, strict compare policy).
+  - added `scripts/check-marker-sync.mjs` + `scripts/marker-sync-lib.mjs` for marker parsing/validation/sync enforcement.
+  - wired marker sync into docs policy by updating `test:docs-policy` to run `test:marker-sync` before existing docs checks.
+  - added `tests/marker-sync.test.mjs` and included it in `npm run test:unit`.
+  - standardized machine-readable marker blocks across governance-critical docs (`AGENTS.md`, `CLAUDE.md`, `SESSION.md`, `docs/project-ruleset.md`, `docs/dev-workflow.md`, `WORKFLOW.md`, `CONTRIBUTING.md`, `docs/ui-handoff.md`, `docs/thecollector-2.0-90-day-roadmap.md`).
+
 ## 1.9.97.1 - 2026-03-15
 
 ### Changed

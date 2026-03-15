@@ -3,20 +3,28 @@
 ## Project Summary
 
 `THE Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.9.97.1`.
+Current extension version: `1.9.97.2`.
 The extension is **free forever** — no subscriptions, no payments, no paid tiers. The tier selector (Basic / Pro / Ultra) is a UX complexity preference, not a paywall. See ADR 0009.
 Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Product Model
 
-- Always free, local-only, no external connections, no user tracking.
-- Roadmap milestones: **v1.10** (Foundation & Distribution) → **v2.0** (Design System 2.0 first, then URL Collector 2.0 + v2 Depth) → **v2.1** (Intelligence Layer) → **v3.0** (Monitoring & Share).
-- Design System 2.0 is v2.0 item #1: token migration across all surfaces must complete before any v2.0 feature work begins. See ADR 0010.
-- Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
+<!-- ROADMAP_CONSTRAINTS:START -->
 
-<!-- CONSTRAINTS:START -->
+- Always free, local-only, no external connections, no user tracking.
+- The tier selector (`Basic` / `Pro` / `Ultra`) is a UX complexity preference, not a paywall.
+  <!-- ROADMAP_CONSTRAINTS:END -->
+  <!-- ROADMAP_MILESTONES:START -->
+- Roadmap milestones: **v1.10** (Foundation & Distribution) → **v2.0** (Design System 2.0 first, then URL Collector 2.0 + v2 Depth) → **v2.1** (Intelligence Layer) → **v3.0** (Monitoring & Share).
+<!-- ROADMAP_MILESTONES:END -->
+- Design System 2.0 is v2.0 item #1: token migration across all surfaces must complete before any v2.0 feature work begins. See ADR 0010.
+<!-- ROADMAP_AUTHORITY:START -->
+- Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
+<!-- ROADMAP_AUTHORITY:END -->
 
 ## Engineering Rules
+
+<!-- ENGINEERING_RULES:START -->
 
 - Keep behavior stable and avoid core logic rewrites unless required.
 - Versioning policy: use four-part semantic `x.y.z.w` (ADR 0014).
@@ -27,10 +35,9 @@ Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance 
 - On every requested commit/push, sync GitHub Wiki `Home.md` in `https://github.com/palisades-berlin/TheCollector.wiki.git` in the same working session.
 - Packaging discipline: release archives must exclude local/development artifacts (`node_modules`, `.git`, tests, and local notes/docs not required by runtime).
 - Permission-scope policy (Phase A): remove only demonstrably dead permissions; do not remove permissions that are runtime-required for capture/export flows.
+<!-- ENGINEERING_RULES:END -->
 
-<!-- CONSTRAINTS:END -->
-
-<!-- CHECKLIST:START -->
+<!-- PRE_COMMIT_CHECKLIST:START -->
 
 ## Pre-Commit Checklist
 
@@ -42,7 +49,7 @@ Run this in order before every commit/push. No exceptions.
 2. Add a `CHANGELOG.md` entry for the new version
 3. Update `README.md` `## Overview` with the top changes (max 5 lines)
 4. Update `SESSION.md`: today's date + tool, what was completed, exact next task, open decisions/blockers
-5. Run `npm run test:version-policy:local`, `npm run test:docs-policy`, `npm run format:session`, and `npm run format:check` — fix all failures before committing, never bypass
+5. Run `npm run test:version-policy:local`, `npm run test:docs-policy` (includes marker-sync enforcement), `npm run format:session`, and `npm run format:check` — fix all failures before committing, never bypass
 6. Wiki sync: clone `https://github.com/palisades-berlin/TheCollector.wiki.git` → update `Home.md` → commit + push in same session
 
 ### Conditional — only when the commit touches the relevant area
@@ -59,29 +66,27 @@ Run this in order before every commit/push. No exceptions.
 | `docs/ui-handoff.md` changed                      | Refresh wiki Home.md UI/UX section                                                                             |
 | `docs/thecollector-2.0-90-day-roadmap.md` changed | Refresh wiki Home.md roadmap section                                                                           |
 
-<!-- CHECKLIST:END -->
+<!-- PRE_COMMIT_CHECKLIST:END -->
 
 ---
 
-<!-- HELP_RULES:START -->
-
 ## Help Documentation Rules
+
+<!-- HELP_RULES:START -->
 
 - **Rule 1 — Implementation parity:** All help files, documents, and pages (`docs/help-user-guide.md`, `src/options/options.html` Help & FAQ) must only describe features that are actually implemented and available in the current release. Roadmap or planned features must never appear in user-facing help content.
 - **Rule 2 — Pre-commit gate:** Before every commit/push, verify that Rule 1 is fulfilled. The `npm run test:docs-policy` gate enforces this automatically; do not bypass it.
 - **Rule 3 — Consistency:** `docs/help-user-guide.md` and the `Help & FAQ` section in `src/options/options.html` must always be in sync. Any change to one requires a matching update to the other in the same work cycle.
 - **Rule 4 — Shipping a feature:** When a new feature ships, remove its phrase(s) from the `UNSHIPPED_PHRASES` list in `scripts/check-doc-policy.mjs` and add the feature to both help surfaces in the same work cycle.
-
 <!-- HELP_RULES:END -->
 
-<!-- SESSION_RULE:START -->
-
 ## Session State Rule
+
+<!-- SESSION_RULE:START -->
 
 - **At the end of every session** — before any commit/push — update `SESSION.md` in the repo root with: (1) today's date and tool used, (2) what was completed this session, (3) the exact next task, (4) any open decisions or blockers.
 - `SESSION.md` is the handoff file between machines and AI tools. It must always reflect the true current state of the work.
 - Keep it short. 5–10 lines under each heading is enough.
-
 <!-- SESSION_RULE:END -->
 
 ## Canonical Workflow Doc
@@ -90,6 +95,12 @@ Run this in order before every commit/push. No exceptions.
   - `docs/dev-workflow.md`
 - UI handoff/source-of-truth guidance:
   - `docs/ui-handoff.md`
+  <!-- WIKI_SYNC_RULE:START -->
+- Every requested commit/push cycle must include a matching update to:
+  - `https://github.com/palisades-berlin/TheCollector.wiki.git` (`Home.md`)
+- Wiki sync is part of Definition of Done for commit/push operations.
+- Keep wiki section order stable; only refresh impacted sections to avoid drift.
+<!-- WIKI_SYNC_RULE:END -->
 
 - **Rule 5 — Help & FAQ HTML generation:** `docs/help-user-guide.md` is the
   single source of truth for content. `src/options/options.html` (Help & FAQ

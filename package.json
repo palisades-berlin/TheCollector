@@ -1,6 +1,6 @@
 {
   "name": "the-collector",
-  "version": "1.9.97.1",
+  "version": "1.9.97.2",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
@@ -10,10 +10,11 @@
   "scripts": {
     "check:types": "tsc --noEmit -p jsconfig.json",
     "test:repo-hygiene": "node scripts/check-repo-hygiene.mjs",
-    "test:docs-policy": "node scripts/check-doc-policy.mjs",
+    "test:docs-policy": "npm run test:marker-sync && node scripts/check-doc-policy.mjs",
+    "test:marker-sync": "node scripts/check-marker-sync.mjs",
     "test:version-policy": "node scripts/check-version-policy.mjs",
     "test:version-policy:local": "VERSION_POLICY_BASE_SHA=HEAD node scripts/check-version-policy.mjs",
-    "test:unit": "node tests/url-utils.test.mjs && node tests/url-history.test.mjs && node tests/filename.test.mjs && node tests/ui-state-validation.test.mjs && node tests/capture-profiles.test.mjs && node tests/popup-profile-payload.test.mjs && node tests/capture-queue.test.mjs && node tests/nudges.test.mjs && node tests/nudge-repo.test.mjs && node tests/value-report.test.mjs && node tests/settings.test.mjs && node tests/capabilities.test.mjs && node tests/roadmap-guardrails.test.mjs && node tests/history-utils.test.mjs && node tests/history-thumbs.test.mjs && node tests/protocol-validate.test.mjs && node tests/history-filters.test.mjs && node tests/url-repo.test.mjs && node tests/url-library-change-log-accessibility.test.mjs && node tests/preview-export.test.mjs && node tests/manifest-security.test.mjs && node tests/accessibility-contract.test.mjs && node tests/theme-contract.test.mjs && node tests/gap-remediation-contract.test.mjs && node tests/version-policy.test.mjs",
+    "test:unit": "node tests/url-utils.test.mjs && node tests/url-history.test.mjs && node tests/filename.test.mjs && node tests/ui-state-validation.test.mjs && node tests/capture-profiles.test.mjs && node tests/popup-profile-payload.test.mjs && node tests/capture-queue.test.mjs && node tests/nudges.test.mjs && node tests/nudge-repo.test.mjs && node tests/value-report.test.mjs && node tests/settings.test.mjs && node tests/capabilities.test.mjs && node tests/roadmap-guardrails.test.mjs && node tests/history-utils.test.mjs && node tests/history-thumbs.test.mjs && node tests/protocol-validate.test.mjs && node tests/history-filters.test.mjs && node tests/url-repo.test.mjs && node tests/url-library-change-log-accessibility.test.mjs && node tests/preview-export.test.mjs && node tests/manifest-security.test.mjs && node tests/accessibility-contract.test.mjs && node tests/theme-contract.test.mjs && node tests/gap-remediation-contract.test.mjs && node tests/version-policy.test.mjs && node tests/marker-sync.test.mjs",
     "test:coverage": "c8 --all --include='src/shared/settings.js' --include='src/shared/capabilities.js' --include='src/shared/protocol-validate.js' --include='src/shared/filename.js' --include='src/history/history-utils.js' --reporter=text-summary --check-coverage --lines 90 --functions 90 --branches 85 --statements 90 npm run test:unit",
     "test:coverage:runtime": "c8 --all --include='src/background/service-worker.js' --include='src/offscreen/offscreen.js' --reporter=text-summary --check-coverage --lines 18 --functions 0 --branches 15 --statements 18 npm run test:integration",
     "test:coverage:preview-export": "c8 --all --include='src/preview/preview-export.js' --reporter=text-summary --check-coverage --lines 20 --functions 20 --branches 15 --statements 20 node tests/preview-export.test.mjs",

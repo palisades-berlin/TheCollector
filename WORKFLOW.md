@@ -11,6 +11,17 @@
 
 ---
 
+## Session State Rule
+
+<!-- SESSION_RULE:START -->
+
+- **At the end of every session** — before any commit/push — update `SESSION.md` in the repo root with: (1) today's date and tool used, (2) what was completed this session, (3) the exact next task, (4) any open decisions or blockers.
+- `SESSION.md` is the handoff file between machines and AI tools. It must always reflect the true current state of the work.
+- Keep it short. 5–10 lines under each heading is enough.
+<!-- SESSION_RULE:END -->
+
+---
+
 ## Starting a session
 
 **Step 1 — Pull the latest from GitHub**
@@ -25,17 +36,23 @@ Always do this first, on any machine, before touching anything.
 
 **Step 2 — Open your AI tool and paste the opening prompt**
 
-**If using Claude:**
+<!-- OPENING_PROMPT:START -->
+
+## Opening prompt (paste this to start any session)
+
+**Claude:**
 
 ```
 Read CLAUDE.md and SESSION.md, then continue from the last session.
 ```
 
-**If using Codex:**
+**Codex:**
 
 ```
 Read AGENTS.md and SESSION.md, then continue from the last session.
 ```
+
+<!-- OPENING_PROMPT:END -->
 
 The AI reads both files and picks up exactly where the last session ended — no re-explaining needed.
 

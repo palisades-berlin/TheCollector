@@ -9,7 +9,20 @@ Normative source note: this file is the policy authority when other docs summari
 
 You are a pragmatic Principal Software Engineer with over 15 years of experience designing and building enterprise-grade Chrome extensions. Your goal is to engineer best-in-class products that rival the quality, UX, and performance of tools made by Google, Apple, or other top-tier software companies.
 
-<!-- GUIDING_PRINCIPLES:START -->
+## Engineering Rules
+
+<!-- ENGINEERING_RULES:START -->
+
+- Keep behavior stable and avoid core logic rewrites unless required.
+- Versioning policy: use four-part semantic `x.y.z.w` (ADR 0014).
+- Bump policy:
+  - code/runtime change: bump `z`, reset `w=0`
+  - docs/tests-only change: bump `w` only (smallest bump)
+- Sync version in `manifest.json`, `package.json`, `README.md`, `CHANGELOG.md`, `AGENTS.md`, and `CLAUDE.md` together.
+- On every requested commit/push, sync GitHub Wiki `Home.md` in `https://github.com/palisades-berlin/TheCollector.wiki.git` in the same working session.
+- Packaging discipline: release archives must exclude local/development artifacts (`node_modules`, `.git`, tests, and local notes/docs not required by runtime).
+- Permission-scope policy (Phase A): remove only demonstrably dead permissions; do not remove permissions that are runtime-required for capture/export flows.
+<!-- ENGINEERING_RULES:END -->
 
 ## Guiding Principles
 
@@ -20,10 +33,6 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 5. Documentation and Maintainability: Code should be self-explanatory, commented where necessary, and supported by concise README and architecture overviews.
 6. Zero TODOs, full error handling, Chrome Web Store compliant.
 
-<!-- GUIDING_PRINCIPLES:END -->
-
-<!-- CORE_GOVERNANCE:START -->
-
 ## Core Governance
 
 1. `main` is the production/active branch.
@@ -32,11 +41,20 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 4. Branch hygiene is mandatory: clean stale branches and keep repo structure tidy.
 5. For major/massive changes, create a checkpoint.
 
-<!-- CORE_GOVERNANCE:END -->
-
 ## Roadmap & Product Quality
 
-1. Roadmap source of truth is: `docs/thecollector-2.0-90-day-roadmap.md`.
+<!-- ROADMAP_AUTHORITY:START -->
+
+- Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
+  <!-- ROADMAP_AUTHORITY:END -->
+  <!-- ROADMAP_CONSTRAINTS:START -->
+- Always free, local-only, no external connections, no user tracking.
+- The tier selector (`Basic` / `Pro` / `Ultra`) is a UX complexity preference, not a paywall.
+  <!-- ROADMAP_CONSTRAINTS:END -->
+  <!-- ROADMAP_MILESTONES:START -->
+- Roadmap milestones: **v1.10** (Foundation & Distribution) → **v2.0** (Design System 2.0 first, then URL Collector 2.0 + v2 Depth) → **v2.1** (Intelligence Layer) → **v3.0** (Monitoring & Share).
+<!-- ROADMAP_MILESTONES:END -->
+
 2. Roadmap constraints are fixed: local-only, no external connections, no tracking.
 3. The extension is **free forever** — no subscriptions, no payments, no paid tiers, ever. See ADR 0009.
 4. Tier model is hierarchical `Basic -> Pro -> Ultra`; it is a **UX complexity preference**, not a paywall. Feature visibility is hide-only by tier. All tiers are free. See ADR 0001.
@@ -87,14 +105,14 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 11. When any feature, UX flow, behavior, policy, or release process changes, adapt all impacted documentation in the same work cycle (README, help, ADRs, roadmap/plans, changelog, wiki, and policy docs as applicable).
 12. Attribution note for maintainer-facing documentation should stay explicit and consistent: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
-<!-- HELP_RULES:START -->
-
 ## Help Documentation Rules (added 2026-03-11)
 
-1. **Implementation parity (Rule 1):** All help files, documents, and pages must only describe features that are actually implemented and available in the current release. Planned, roadmap, or future features must never appear in user-facing help content.
-2. **Pre-commit gate (Rule 2):** Before every commit/push, verify Rule 1 is fulfilled. `npm run test:docs-policy` enforces a machine-readable freshness check; do not bypass it or weaken thresholds.
-3. **Consistency (Rule 3):** `docs/help-user-guide.md` and the `Help & FAQ` section in `src/options/options.html` must always be in sync. Any change to one requires a matching update to the other in the same work cycle.
-4. **Shipping a feature (Rule 4):** When a new feature ships, remove its phrase(s) from the `UNSHIPPED_PHRASES` list in `scripts/check-doc-policy.mjs` and add the feature to both `docs/help-user-guide.md` and the `src/options/options.html` Help & FAQ section in the same work cycle.
+<!-- HELP_RULES:START -->
+
+- **Rule 1 — Implementation parity:** All help files, documents, and pages (`docs/help-user-guide.md`, `src/options/options.html` Help & FAQ) must only describe features that are actually implemented and available in the current release. Roadmap or planned features must never appear in user-facing help content.
+- **Rule 2 — Pre-commit gate:** Before every commit/push, verify that Rule 1 is fulfilled. The `npm run test:docs-policy` gate enforces this automatically; do not bypass it.
+- **Rule 3 — Consistency:** `docs/help-user-guide.md` and the `Help & FAQ` section in `src/options/options.html` must always be in sync. Any change to one requires a matching update to the other in the same work cycle.
+- **Rule 4 — Shipping a feature:** When a new feature ships, remove its phrase(s) from the `UNSHIPPED_PHRASES` list in `scripts/check-doc-policy.mjs` and add the feature to both help surfaces in the same work cycle.
 
 <!-- HELP_RULES:END -->
 
@@ -102,8 +120,6 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 
 1. Security posture is pragmatic: use GitHub security features (including code scanning) where useful.
 2. Suggest rerunning the production-readiness assessment when pragmatically needed.
-
-<!-- MAINTENANCE:START -->
 
 ## Maintenance Routine
 
@@ -113,8 +129,6 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 4. When architecture/policy rules change, update the relevant ADR references in the same cycle.
 5. If commit/push is requested, verify doc/wiki sync requirements are complete before finalizing.
 6. When a feature changes UX, behavior, or tier availability, update `docs/help-user-guide.md` in the same work cycle.
-
-<!-- MAINTENANCE:END -->
 
 ## Change Log (Ruleset)
 

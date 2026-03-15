@@ -6,6 +6,18 @@ Build a category-defining research command center for individuals. THE Collector
 and local-only** — no backend, no tracking, no accounts, no subscriptions. Goal: make THE Collector
 feel like a premium Google-grade tool with intelligent capture, automation, and visible weekly value.
 
+<!-- ROADMAP_AUTHORITY:START -->
+
+- Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
+  <!-- ROADMAP_AUTHORITY:END -->
+  <!-- ROADMAP_CONSTRAINTS:START -->
+- Always free, local-only, no external connections, no user tracking.
+- The tier selector (`Basic` / `Pro` / `Ultra`) is a UX complexity preference, not a paywall.
+  <!-- ROADMAP_CONSTRAINTS:END -->
+  <!-- ROADMAP_MILESTONES:START -->
+- Roadmap milestones: **v1.10** (Foundation & Distribution) → **v2.0** (Design System 2.0 first, then URL Collector 2.0 + v2 Depth) → **v2.1** (Intelligence Layer) → **v3.0** (Monitoring & Share).
+<!-- ROADMAP_MILESTONES:END -->
+
 Locked strategic decisions:
 
 1. Primary focus: **Power-user B2C**.
