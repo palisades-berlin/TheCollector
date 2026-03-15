@@ -1,6 +1,6 @@
 {
   "name": "the-collector",
-  "version": "1.9.96.1",
+  "version": "1.9.97.0",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
@@ -26,8 +26,9 @@
     "test:e2e:visual": "playwright test --config=playwright.visual.config.mjs",
     "test:e2e:manual": "node scripts/e2e-smoke.mjs --real-extension-manual",
     "lint": "eslint src tests",
+    "format:session": "prettier --write SESSION.md",
     "format:check": "prettier --check .",
-    "check": "npm run check:types && npm run lint && npm run test:repo-hygiene && npm run test:version-policy && npm run test:docs-policy && npm run test:unit && npm run format:check && npm run test:security-policy"
+    "check": "npm run check:types && npm run lint && npm run test:repo-hygiene && npm run test:version-policy && npm run test:docs-policy && npm run test:unit && npm run format:session && npm run format:check && npm run test:security-policy"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

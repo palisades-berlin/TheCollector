@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.96.1`.
+Current extension version: `1.9.97.0`.
 
 ## Overview
 
@@ -20,17 +20,22 @@ All data remains in extension-local storage; there is no backend upload pipeline
 
 Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.md).
 
+## Behind the Build
+
+- 📖 [I Vibe‑Coded a Chrome Extension With Two AIs: 163 Versions, 12 Architecture Decisions, Zero Regrets?](https://medium.com/p/dc3978593933) — the full written story behind this project.
+- 🎬 [Vibe‑Coding a Chrome Extension With Two AIs: 163 Versions in 9 Days](https://www.youtube.com/watch?v=6_zKj3nevG0) — the dev vlog: split-brain AI setup, `SESSION.md` ritual, ADRs, and the Figma seat nobody could hack.
+
 ## Credits
 
 Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- CI fix: formatted `SESSION.md` to satisfy `prettier --check` in GitHub quality gate.
+- SESSION formatting hardening: added `npm run format:session` and wired it into CI quality + local `npm run check`.
+- Pre-commit workflow docs now explicitly require `format:session` before `format:check` to prevent recurring SESSION formatting failures.
+- Moved `## Behind the Build` to a top-level position near Overview for better visibility.
 - Added `test:version-policy:local` npm script — pre-commit version check now works correctly without manual env var.
-- Added `## Behind the Build` section: Medium article + YouTube dev vlog links.
-- Witty PR review line in CONTRIBUTING.md (reviewed by one human, two AIs).
-- Added `**Key discussion:**` field to SESSION.md + field guide for AI handoff context.
+- Added `**Key discussion:**` field to `SESSION.md` + field guide for AI handoff context.
 
 ## Versioning Migration Note
 
@@ -193,7 +198,7 @@ No runtime environment variables are required for the extension. See `.env.examp
 ```bash
 npm run lint
 npm run test:repo-hygiene
-npm run test:version-policy
+npm run test:version-policy:local
 npm run test:docs-policy
 npm run test:unit
 npm run test:coverage
@@ -207,6 +212,7 @@ npx playwright install chromium
 npm run test:e2e:smoke
 npm run test:e2e:visual
 npm run test:e2e:manual
+npm run format:session
 npm run format:check
 npm run check
 ```
@@ -353,8 +359,3 @@ Milestones in delivery order:
 - Firefox baseline (architecture spike first)
 
 Full roadmap: `docs/thecollector-2.0-90-day-roadmap.md`
-
-## Behind the Build
-
-- 📖 [I Vibe‑Coded a Chrome Extension With Two AIs: 163 Versions, 12 Architecture Decisions, Zero Regrets?](https://medium.com/p/dc3978593933) — the full written story behind this project.
-- 🎬 [Vibe‑Coding a Chrome Extension With Two AIs: 163 Versions in 9 Days](https://www.youtube.com/watch?v=6_zKj3nevG0) — the dev vlog: split-brain AI setup, SESSION.md ritual, ADRs, and the Figma seat nobody could hack.

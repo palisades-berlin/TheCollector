@@ -20,25 +20,26 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 **Date:** 2026-03-15
 **Tool:** Codex
 
-**Key discussion:** After pushing `1.9.96.0`, GitHub CI failed only on `format:check` due `SESSION.md`; fixed with Prettier and prepared docs-only follow-up bump.
+**Key discussion:** To prevent recurring CI breakage, SESSION formatting must be auto-stabilized (`format:session`) and enforced consistently across CI + maintainer checklists.
 
 **Done:**
 
-- Pushed two local commits (`f3240b9`, `c76ccb3`) to `main` so remote reflects local truth.
-- Verified GitHub CodeQL run passed for pushed head.
-- Diagnosed CI failure root cause: `prettier --check` warning in `SESSION.md`.
-- Formatted `SESSION.md`, updated release docs, and bumped to `1.9.96.1` as docs-only follow-up.
+- Added `npm run format:session` (`prettier --write SESSION.md`) in `package.json`.
+- Wired `format:session` into CI quality flow and local `npm run check` before `format:check`.
+- Updated pre-commit checklist docs (`AGENTS.md`, `CLAUDE.md`, `docs/dev-workflow.md`) to include `format:session`.
+- Moved `README.md` `## Behind the Build` section to a prominent top position.
+- Bumped to `1.9.97.0` (tooling/ops hardening + docs sync).
 
 ---
 
 ## Do next
 
-**Task:** Verify green GitHub CI + CodeQL runs for `1.9.96.1`, then resume Phase 0 Figma unblock and execute `0-A-1` color style tokens.
+**Task:** Verify green GitHub CI + CodeQL runs for `1.9.97.0`, then resume Phase 0 Figma unblock and execute `0-A-1` color style tokens.
 
 Where: Figma file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`)
 What: Phase 0 checklist in master plan §6, steps 0-A through 0-F
 Gate: ALL Phase 0 Figma work must be complete and approved before any Phase 1 code begins
-First step (GitHub checks track): confirm `1.9.96.1` quality job is green after `SESSION.md` formatting fix.
+First step (GitHub checks track): confirm `1.9.97.0` quality job remains green with `format:session` hardening enabled.
 First step after Figma unblock: 0-A-1 — update colour styles (dark mode surface tokens, light mode surface tokens, border tokens).
 
 **Blocker status:** active — Figma seat/capacity blocker prevents MCP execution (`View` + tool-call limit).
@@ -95,4 +96,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session.
 
 ---
 
-_Last updated: 2026-03-15 (CI format fix: SESSION.md prettified, docs-only bump to 1.9.96.1; pending push verification)_
+_Last updated: 2026-03-15 (SESSION formatting hardening + README prominence update; bumped to 1.9.97.0, pending push verification)_

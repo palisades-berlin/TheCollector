@@ -33,6 +33,7 @@ jobs:
           npm run test:coverage:runtime
           npm run test:coverage:preview-export
           npm run test:security-policy
+          npm run format:session
           npm run format:check
 
   integration:

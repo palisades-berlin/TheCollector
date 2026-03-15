@@ -3,7 +3,7 @@
 ## Project Summary
 
 `THE Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.9.96.1`.
+Current extension version: `1.9.97.0`.
 The extension is **free forever** — no subscriptions, no payments, no paid tiers. The tier selector (Basic / Pro / Ultra) is a UX complexity preference, not a paywall. See ADR 0009.
 Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
@@ -36,7 +36,7 @@ Run this in order before every commit/push. No exceptions.
 2. Add a `CHANGELOG.md` entry for the new version
 3. Update `README.md` `## Overview` with the top changes (max 5 lines)
 4. Update `SESSION.md`: today's date + tool, what was completed, exact next task, open decisions/blockers
-5. Run `npm run test:version-policy:local` and `npm run test:docs-policy` — fix all failures before committing, never bypass
+5. Run `npm run test:version-policy:local`, `npm run test:docs-policy`, `npm run format:session`, and `npm run format:check` — fix all failures before committing, never bypass
 6. Wiki sync: clone `https://github.com/palisades-berlin/TheCollector.wiki.git` → update `Home.md` → commit + push in same session
 
 ### Conditional — only when the commit touches the relevant area

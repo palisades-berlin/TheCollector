@@ -36,6 +36,7 @@ npx playwright install chromium
 npm run test:e2e:smoke
 npm run test:e2e:visual
 npm run test:e2e:manual
+npm run format:session
 npm run format:check
 npm run check
 ```

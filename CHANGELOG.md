@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.9.97.0 - 2026-03-15
+
+### Changed
+
+- SESSION formatting hardening:
+  - added `npm run format:session` (`prettier --write SESSION.md`) in `package.json`.
+  - wired `format:session` into `npm run check` and CI `quality` job before `format:check` to prevent recurring SESSION formatting gate failures.
+- Documentation/workflow alignment:
+  - updated `AGENTS.md`, `CLAUDE.md`, and `docs/dev-workflow.md` checklists to include `format:session`.
+  - moved `README.md` `## Behind the Build` section to a more prominent top position (right after Overview/help).
+- Version sync:
+  - synchronized version to `1.9.97.0` across manifest/package/docs pointers.
+
 ## 1.9.96.1 - 2026-03-15
 
 ### Changed
