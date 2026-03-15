@@ -22,20 +22,19 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
 **Done:**
 
-- Added explicit attribution note across maintainer-facing documentation/ruleset surfaces:
-  - `README.md`, `AGENTS.md`, `CLAUDE.md`, `WORKFLOW.md`, `docs/project-ruleset.md`, `docs/dev-workflow.md`, `CONTRIBUTING.md`, and `SESSION.md`.
-- Updated credit wording by request to:
-  - `Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.`
-- Ran local docs gates:
-  - `npm run test:docs-policy` passed.
-  - `npm run format:check` passed.
+- Switched repository license model from MIT to PolyForm Noncommercial 1.0.0.
+- Replaced `LICENSE` file content with official PolyForm Noncommercial 1.0.0 terms and added project `Required Notice`.
+- Updated package and docs license pointers:
+  - `package.json` license now `SEE LICENSE IN LICENSE`.
+  - README license badge/text now points to PolyForm Noncommercial and states commercial use is not permitted.
+- Bumped synchronized version pointers to `1.9.91` in `manifest.json`, `package.json`, `README.md`, `AGENTS.md`, `CLAUDE.md`, and `CHANGELOG.md`.
 - CI baseline remains green for GitHub Actions; third-party queued-check blocker status unchanged.
 
 ---
 
 ## Do next
 
-**Task:** Resolve stuck third-party `Claude` queued check in GitHub app settings, then resume Figma unblock track.
+**Task:** If requested, commit/push the license model switch (`1.9.91`) and sync wiki `Home.md`; then resume blocked-check and Figma unblock tracks.
 
 Where: Figma file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`)
 What: Phase 0 checklist in master plan §6, steps 0-A through 0-F
@@ -85,4 +84,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session.
 
 ---
 
-_Last updated: 2026-03-15 (attribution-note rollout completed; docs gates green; queued third-party check and Figma unblock still pending)_
+_Last updated: 2026-03-15 (license switched to PolyForm Noncommercial 1.0.0; version pointers moved to 1.9.91; awaiting commit/push decision)_

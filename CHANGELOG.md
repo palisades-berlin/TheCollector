@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.91 - 2026-03-15
+
+### Changed
+
+- License model update:
+  - replaced MIT with PolyForm Noncommercial 1.0.0 (`LICENSE`).
+  - updated package license metadata to `SEE LICENSE IN LICENSE`.
+  - updated README license badge/text to match non-commercial licensing.
+- Version sync:
+  - synchronized version to `1.9.91` across manifest/package/docs pointers.
+
 ## 1.9.90 - 2026-03-15
 
 ### Changed

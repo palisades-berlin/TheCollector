@@ -4,9 +4,9 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 
 [![CI](https://github.com/palisades-berlin/TheCollector/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/palisades-berlin/TheCollector/actions/workflows/ci.yml)
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.90`.
+Current extension version: `1.9.91`.
 
 ## Overview
 
@@ -26,7 +26,7 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- Added explicit project attribution note across maintainer-facing docs and rulesets: `Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.`
+- License model update: switched project license from MIT to PolyForm Noncommercial 1.0.0 (`LICENSE` + package metadata + README badge/text).
 - At screenshot limit, oldest-first auto-purge keeps capture running when enabled; with Auto-purge off, capture save is blocked with actionable guidance.
 - History Domain filter now uses a premium combobox with captured-domain suggestions (count badges), keyboard selection (`Arrow`/`Enter`), TLD typing support, and one-click clear/reset.
 - Popup/URL accessibility pass: popup errors render as a single toast-only surface and URL Library tabs support keyboard navigation (`Left/Right/Home/End`) with explicit tab-to-panel mapping.
@@ -240,7 +240,7 @@ Release notes policy: keep notes in `CHANGELOG.md` only; do not add `GITHUB_RELE
 
 ## Governance & Compliance
 
-- Project license: [MIT](./LICENSE).
+- Project license: [PolyForm Noncommercial 1.0.0](./LICENSE) (commercial use is not permitted).
 - Security policy and vulnerability disclosure: [SECURITY.md](./SECURITY.md).
 - Community standards and conduct policy: [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
 - Contribution and review policy: [CONTRIBUTING.md](./CONTRIBUTING.md).
