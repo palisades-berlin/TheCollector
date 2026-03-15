@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.96.0 - 2026-03-15
+
+### Changed
+
+- Added `test:version-policy:local` npm script (`VERSION_POLICY_BASE_SHA=HEAD`) so pre-commit version checks work correctly with uncommitted changes without requiring manual env var.
+- Updated pre-commit checklist in `CLAUDE.md` and `AGENTS.md` to use `npm run test:version-policy:local`.
+- Updated `docs/dev-workflow.md` Local Quality Checks to use `:local` variant with explanatory note.
+
 ## 1.9.95.1 - 2026-03-15
 
 ### Changed

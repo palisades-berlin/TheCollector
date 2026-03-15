@@ -17,10 +17,12 @@ npm install
 
 ## Local Quality Checks
 
+> **Version policy note:** Use `npm run test:version-policy:local` (not `test:version-policy`) when running locally with uncommitted changes. The `:local` variant sets `VERSION_POLICY_BASE_SHA=HEAD` so the bump-rule check compares against the current HEAD rather than `HEAD~1`. The bare `test:version-policy` is for CI (GitHub Actions sets the correct base ref automatically) and for post-commit clean-tree validation.
+
 ```bash
 npm run lint
 npm run test:repo-hygiene
-npm run test:version-policy
+npm run test:version-policy:local
 npm run test:docs-policy
 npm run test:unit
 npm run test:coverage

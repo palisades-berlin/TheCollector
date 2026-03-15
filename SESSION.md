@@ -20,14 +20,15 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 **Date:** 2026-03-15
 **Tool:** Claude (Cowork)
 
-**Key discussion:** Investigated `create_design_system_rules` MCP tool (prompt generator, not Figma editor); Figma Professional plan (~$15/mo) identified as minimum for Editor seat unblock.
+**Key discussion:** `test:version-policy` fails locally with uncommitted changes (uses HEAD~1 as base); fixed by adding `test:version-policy:local` npm script with `VERSION_POLICY_BASE_SHA=HEAD` baked in.
 
 **Done:**
 
+- Added `test:version-policy:local` npm script; updated CLAUDE.md, AGENTS.md, dev-workflow.md to use it.
 - CONTRIBUTING.md: witty PR review line (one human + two AIs); dev vlog link added to intro.
 - README.md: `## Behind the Build` section with Medium article + YouTube dev vlog links.
 - SESSION.md: `**Key discussion:**` field + field guide table added for AI handoff context.
-- Bumped version to `1.9.95.1` (docs-only W bump).
+- Bumped version to `1.9.96.0` (Z bump — tooling change).
 
 ---
 
@@ -95,4 +96,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session.
 
 ---
 
-_Last updated: 2026-03-15 (docs: Behind the Build links, witty PR review, SESSION.md field guide — bumped to 1.9.95.1)_
+_Last updated: 2026-03-15 (tooling: test:version-policy:local added; docs housekeeping — bumped to 1.9.96.0)_
