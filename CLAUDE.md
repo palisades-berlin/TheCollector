@@ -3,7 +3,7 @@
 ## Project Summary
 
 `THE Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.9.92`.
+Current extension version: `1.9.92.0`.
 The extension is **free forever** — no subscriptions, no payments, no paid tiers. The tier selector (Basic / Pro / Ultra) is a UX complexity preference, not a paywall. See ADR 0009.
 Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
@@ -17,7 +17,10 @@ Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance 
 ## Engineering Rules
 
 - Keep behavior stable and avoid core logic rewrites unless required.
-- Versioning policy: use semantic `x.y.z` and bump on every code change.
+- Versioning policy: use four-part semantic `x.y.z.w` (ADR 0014).
+- Bump policy:
+  - code/runtime change: bump `z`, reset `w=0`
+  - docs/tests-only change: bump `w` only (smallest bump)
 - Sync version in `manifest.json`, `package.json`, `README.md`, `CHANGELOG.md`, `AGENTS.md`, and `CLAUDE.md` together.
 - On every requested commit/push, sync GitHub Wiki `Home.md` in `https://github.com/palisades-berlin/TheCollector.wiki.git` in the same working session.
 - Packaging discipline: release archives must exclude local/development artifacts (`node_modules`, `.git`, tests, and local notes/docs not required by runtime).
@@ -29,11 +32,11 @@ Run this in order before every commit/push. No exceptions.
 
 ### Always — every commit
 
-1. Bump version (`x.y.z`) in all six files: `manifest.json`, `package.json`, `README.md`, `CHANGELOG.md`, `AGENTS.md`, `CLAUDE.md`
+1. Bump version (`x.y.z.w`) in all six files: `manifest.json`, `package.json`, `README.md`, `CHANGELOG.md`, `AGENTS.md`, `CLAUDE.md`
 2. Add a `CHANGELOG.md` entry for the new version
 3. Update `README.md` `## Overview` with the top changes (max 5 lines)
 4. Update `SESSION.md`: today's date + tool, what was completed, exact next task, open decisions/blockers
-5. Run `npm run test:docs-policy` — fix all failures before committing, never bypass
+5. Run `npm run test:version-policy` and `npm run test:docs-policy` — fix all failures before committing, never bypass
 6. Wiki sync: clone `https://github.com/palisades-berlin/TheCollector.wiki.git` → update `Home.md` → commit + push in same session
 
 ### Conditional — only when the commit touches the relevant area

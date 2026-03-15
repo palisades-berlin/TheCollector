@@ -22,22 +22,21 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
 **Done:**
 
-- Triaged failing CI run `23113167036` and identified exact root cause in `quality` job:
-  - `tests/gap-remediation-contract.test.mjs` had brittle hardcoded README badge regexes (`Coverage Gate 90%` + `License: MIT`) that no longer matched valid current state.
-- Implemented permanent prevention fix:
-  - replaced exact-string badge assertions with semantic badge-pattern assertions.
-  - added explicit guard assertions that README project-license line and LICENSE header match PolyForm Noncommercial 1.0.0.
-- Local validation completed:
-  - `node tests/gap-remediation-contract.test.mjs` passed.
-  - `npm run test:unit` passed.
-  - `npm run format:check` passed.
-- Prepared synchronized version bump to `1.9.92` across required version files.
+- Implemented full four-part versioning migration (`X.Y.Z.W`) with baseline `1.9.92.0`.
+- Added canonical policy ADR:
+  - `docs/adr/0014-four-part-versioning-policy.md`.
+- Added version-policy enforcement and anti-regression checks:
+  - new `scripts/check-version-policy.mjs` (format/lockstep/changelog/tag/bump-rule validation),
+  - new `tests/version-policy.test.mjs`,
+  - integrated into `package.json` scripts and CI quality workflow.
+- Hardened release scripts for explicit four-part versions and `vX.Y.Z.W` tag validation.
+- Updated maintainer/ruleset/workflow docs to four-part policy and migration note, preserving historical three-part changelog entries intentionally.
 
 ---
 
 ## Do next
 
-**Task:** Push the CI hardening fix (`1.9.92`) and verify GitHub Actions CI turns green; then resume blocked-check and Figma unblock tracks.
+**Task:** Verify latest GitHub CI/CodeQL runs are green for `1.9.92.0`, then resume blocked-check and Figma unblock tracks.
 
 Where: Figma file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`)
 What: Phase 0 checklist in master plan §6, steps 0-A through 0-F
@@ -87,4 +86,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session.
 
 ---
 
-_Last updated: 2026-03-15 (CI root cause fixed in gap-remediation contract; preventive semantic assertions added; ready to push 1.9.92)_
+_Last updated: 2026-03-15 (four-part versioning migration implemented to 1.9.92.0 with ADR 0014 + CI enforcement; pending push verification)_

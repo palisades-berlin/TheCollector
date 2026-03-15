@@ -89,7 +89,11 @@ Tip: if you added aliases/functions above on all machines, use `sync-main` at se
 
 ## Versioning
 
-For code changes, keep versions synchronized:
+Version format is `X.Y.Z.W`.
+
+- Code/runtime change: bump `Z`, reset `W=0`.
+- Docs/tests-only change: bump `W` only (smallest bump).
+- Keep all version pointers synchronized:
 
 - `manifest.json`
 - `package.json`

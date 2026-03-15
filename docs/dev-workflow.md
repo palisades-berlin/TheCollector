@@ -20,6 +20,7 @@ npm install
 ```bash
 npm run lint
 npm run test:repo-hygiene
+npm run test:version-policy
 npm run test:docs-policy
 npm run test:unit
 npm run test:coverage
@@ -90,7 +91,10 @@ Keep repository metadata aligned with shipped state in the same cycle:
 
 ## Versioning Rule
 
-- Bump semantic version (`x.y.z`) on every code change.
+- Versioning format is `x.y.z.w` (ADR 0014).
+- Bump rules:
+  - code/runtime change: bump `z`, reset `w=0`
+  - docs/tests-only change: bump `w` only (smallest bump)
 - Keep versions synchronized in:
   - `manifest.json`
   - `package.json`

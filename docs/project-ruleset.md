@@ -61,7 +61,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 1. Keep enterprise-grade quality gates strong: functionality, business logic, security, and stability first.
 2. Add/expand tests for gating, privacy/security, and stability as complexity grows.
 3. Add local-only guardrails in code for new roadmap features.
-4. On every code change, bump version in semantic `1.0.0` scheme and keep version files synchronized.
+4. Use four-part versioning `X.Y.Z.W` (ADR 0014): code/runtime changes bump `Z` and reset `W=0`; docs/tests-only changes bump `W` only. Keep version files synchronized.
 5. For every GitHub release, include the generated extension ZIP artifact.
 
 ## Documentation & Wiki Workflow
@@ -119,3 +119,4 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 - 2026-03-11: Product model clarification: extension is free forever (ADR 0009). Tier model updated to UX complexity preference (ADR 0001). Roadmap restructured to v1.10/v2.0/v2.1/v3.0 milestones. Enterprise Controls v1 and URL Bundle Export Packs cut. Rule 3–4 updated to reflect always-free model.
 - 2026-03-11: Added UX/UI Design System rule 6: Design System 2.0 is v2.0 item #1; token migration is prerequisite gate for all v2.0 feature work; visual migration and interaction/IA redesign are separate concerns (ADR 0010).
 - 2026-03-13: Added documentation adaptation rule: any feature/behavior/policy change must update all impacted docs in the same work cycle.
+- 2026-03-15: Versioning policy migrated to four-part `X.Y.Z.W` with docs/tests-only smallest bump (`W`) and code/runtime patch bump (`Z`) per ADR 0014.

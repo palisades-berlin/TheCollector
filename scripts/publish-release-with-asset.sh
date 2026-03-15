@@ -8,6 +8,11 @@ ZIP_PATH="$ROOT_DIR/dist/the-collector-v${VERSION}.zip"
 ATTEST_LINE="manual-smoke: pass"
 ATTEST_VALUE="$(printf '%s' "${MANUAL_SMOKE_ATTEST:-}" | tr '[:upper:]' '[:lower:]')"
 
+if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "Release publish error: manifest version must use X.Y.Z.W format (found $VERSION)."
+  exit 1
+fi
+
 if ! command -v gh >/dev/null 2>&1; then
   echo "Release publish error: gh CLI is required."
   exit 1
