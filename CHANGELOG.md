@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.89 - 2026-03-15
+
+### Changed
+
+- Documentation clarity:
+  - clarified README coverage badge semantics to show threshold behavior (`Coverage Gate ≥90% lines`) rather than implying live measured coverage.
+- Version sync:
+  - synchronized version to `1.9.89` across manifest/package/docs pointers.
+
 ## 1.9.88 - 2026-03-15
 
 ### Changed
