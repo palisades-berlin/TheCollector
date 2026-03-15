@@ -1,4 +1,5 @@
 # UX/UI Consistency Audit — THE Collector
+
 **Date:** 2026-03-13
 **Author:** Principal UX/UI Designer
 **Status:** RECOMMENDATION — input for v1.10 and v2.0 scoping
@@ -26,11 +27,11 @@ Severity: 🔴 Critical · 🟠 High · 🟡 Medium · 🟢 Low
 
 ### P-01 🔴 Navigation: different structure on every surface
 
-| Surface | Nav position | Nav siblings | Nav DOM role |
-|---|---|---|---|
-| Screenshots | Inside `.header-actions` div (right side) | Compare, Bulk, Clear All | `<nav>` inside actions wrapper |
-| URL Library | Direct child of `<header>` (right side) | None — actions moved below to a card | `<nav>` standalone |
-| Preview | Own link group in toolbar (left side) | PDF size, Save PNG/JPG/PDF, Copy, Presets | No `<nav>` element |
+| Surface     | Nav position                              | Nav siblings                              | Nav DOM role                   |
+| ----------- | ----------------------------------------- | ----------------------------------------- | ------------------------------ |
+| Screenshots | Inside `.header-actions` div (right side) | Compare, Bulk, Clear All                  | `<nav>` inside actions wrapper |
+| URL Library | Direct child of `<header>` (right side)   | None — actions moved below to a card      | `<nav>` standalone             |
+| Preview     | Own link group in toolbar (left side)     | PDF size, Save PNG/JPG/PDF, Copy, Presets | No `<nav>` element             |
 
 **Impact:** Users cannot build a spatial memory for navigation. Each page re-teaches the layout. The Preview page is the most severe case — it has no consistent nav to the other surfaces at all.
 
@@ -56,6 +57,7 @@ Five control rows before a single URL is visible. This is the single largest usa
 ### P-03 🟠 Button role is undefined in dense bars
 
 The URL Library quick-actions row renders 8 buttons. Of those:
+
 - 1 is `sc-btn-primary` (Add Current Tab URL) ✓
 - 1 is `sc-btn-secondary` (Add All Tabs) ✓
 - 5 are unstyled `sc-btn` (Copy, TXT, CSV, Email, Restore) — no role signal
@@ -69,11 +71,11 @@ In the Screenshots header, Compare/Bulk/Clear All are all `btn-neutral sc-btn-sm
 
 ### P-04 🟠 Header title and badge pattern is inconsistent
 
-| Surface | Title text | Count badge |
-|---|---|---|
-| Screenshots | `THE Collector Screenshots` | `<span class="badge sc-pill" id="count">` — no text by default |
-| URL Library | `THE Collector URL Library` | `<span class="sc-pill" id="urlCount">0 URLs</span>` — always shows "0 URLs" |
-| Preview | `THE Collector` + URL + date + dimensions | No badge — metadata is inline in a flat string |
+| Surface     | Title text                                | Count badge                                                                 |
+| ----------- | ----------------------------------------- | --------------------------------------------------------------------------- |
+| Screenshots | `THE Collector Screenshots`               | `<span class="badge sc-pill" id="count">` — no text by default              |
+| URL Library | `THE Collector URL Library`               | `<span class="sc-pill" id="urlCount">0 URLs</span>` — always shows "0 URLs" |
+| Preview     | `THE Collector` + URL + date + dimensions | No badge — metadata is inline in a flat string                              |
 
 The Screenshots badge is unlabelled (just a number). The URL Library badge always shows "0 URLs" on load (reads as an error state until the data loads). The Preview surface abandons the badge pattern entirely and spreads metadata inline across the toolbar.
 
@@ -81,10 +83,10 @@ The Screenshots badge is unlabelled (just a number). The URL Library badge alway
 
 ### P-05 🟠 Filters: different controls, different order, different visual treatment
 
-| Surface | Filter controls (left→right) |
-|---|---|
+| Surface     | Filter controls (left→right)                                                               |
+| ----------- | ------------------------------------------------------------------------------------------ |
 | Screenshots | Domain (combobox) · From (date) · To (date) · Export Type (select) · Profile (select, Pro) |
-| URL Library | Domain (input) · Tag (select) · From (date) · To (date) |
+| URL Library | Domain (input) · Tag (select) · From (date) · To (date)                                    |
 
 Screenshots uses a custom combobox for Domain. URL Library uses a plain `<input>`. Both are for the same concept (filter by domain) but behave and render differently. The date pair is in different positions. There is no shared visual rhythm between the two filter bars — they were built independently.
 
@@ -157,7 +159,7 @@ Both pages should share an identical header contract:
 
 The nav is always the centre element. Page-specific actions (Compare, Bulk, Clear All on Screenshots; nothing needed on URLs once QW-02 is applied) live in `header-actions` on the right. This makes the nav spatially stable across pages.
 
-**URL Library currently has no `header-actions` div** — the actions are in a card below the header. Screenshots has the nav *inside* `header-actions`. Swap both to the contract above.
+**URL Library currently has no `header-actions` div** — the actions are in a card below the header. Screenshots has the nav _inside_ `header-actions`. Swap both to the contract above.
 
 ---
 
@@ -172,6 +174,7 @@ Current: `[Add Current Tab] [Add All Tabs] [Copy] [TXT] [CSV] [Email] [Restore L
 Proposed: `[+ Add Current Tab URL] [Add All Tabs ▾]` · `[Export ▾]` · `[Clear All]`
 
 Specifically:
+
 - **Primary capture group (left):** `sc-btn-primary` for "Add Current Tab URL". "Add All Tabs in Window" becomes `sc-btn-secondary`.
 - **Export dropdown (centre):** Collapse Copy / TXT / CSV / Email into a single `[Export ▾]` `sc-btn-secondary` dropdown. These are all export modalities — they belong in one menu. "Restore Last Clear" moves into this dropdown as a recovery action (it is not a frequently used primary action).
 - **Destructive action (right, far):** `[Clear All]` stays as `sc-btn-danger`, separated from the export group by a spacer. Spatial distance reinforces its destructive nature.
@@ -243,6 +246,7 @@ The Screenshots domain filter uses a combobox that auto-suggests previously capt
 **Risk:** Very low
 
 Two changes:
+
 1. Hide the Profile Usage row entirely for Basic tier users (zero value, visible noise).
 2. For Pro/Ultra users: only show pills with count > 0. A pill reading "Interest: 0" communicates nothing useful.
 
@@ -272,6 +276,7 @@ These changes require the semantic token system that Design System 2.0 delivers 
 **Target:** v2.0 Sprint 1–2
 
 Design System 2.0 should define a `sc-command-bar` component — a single-row band between the header and filter row that holds page-level primary actions. It is:
+
 - Present on every full-page surface (Screenshots, URL Library, Settings)
 - Always one row tall
 - Always the same height, padding, and border treatment
@@ -292,6 +297,7 @@ Compare moves to a contextual appearance in the card grid (when 2 items are chec
 **Target:** v2.0 Sprint 1
 
 Define `sc-filter-bar` as a shared component with:
+
 - Consistent control heights (40px standard, matching `--sc-control-std`)
 - Consistent label typography (`--sc-font-xs`, muted)
 - Consistent gap between filter items (`--sc-gap-md`)
@@ -309,6 +315,7 @@ Screenshots filter bar and URL Library filter bar become instances of this compo
 The Preview surface currently lacks a navigation link back to Screenshots or URLs. It has a "History" link that navigates back to history.html — this is functional but non-obvious and the link is named inconsistently with the page title ("THE Collector Screenshots").
 
 Proposed Preview header contract:
+
 ```
 [← Back]    [Screenshots] [URLs] [Settings]    [PDF Size ▾] [Save ▾] [Copy]    [Preset ▾]
 ```
@@ -359,25 +366,25 @@ Tabs in a tablist must all operate on the same data set. An audit log (Change Lo
 
 ### Phase 1 — Quick Wins (v1.10, ship now, no DS 2.0 required)
 
-| ID | Change | Effort | Risk |
-|---|---|---|---|
-| QW-01 | Normalise header DOM structure | XS | Low |
-| QW-04 | Move Change Log out of tabs | XS | Very low |
-| QW-05 | Fix count badge labels | XS | Very low |
-| QW-07 | Gate Profile pills behind Pro + hide zeros | XS | Very low |
-| QW-08 | Capitalisation consistency | XS | Zero |
-| QW-02 | Collapse 8-button action row → 3 groups + Export dropdown | S | Low |
-| QW-03 | Selection bar: contextual only | S | Very low |
-| QW-06 | Domain combobox on URL Library | S | Low |
+| ID    | Change                                                    | Effort | Risk     |
+| ----- | --------------------------------------------------------- | ------ | -------- |
+| QW-01 | Normalise header DOM structure                            | XS     | Low      |
+| QW-04 | Move Change Log out of tabs                               | XS     | Very low |
+| QW-05 | Fix count badge labels                                    | XS     | Very low |
+| QW-07 | Gate Profile pills behind Pro + hide zeros                | XS     | Very low |
+| QW-08 | Capitalisation consistency                                | XS     | Zero     |
+| QW-02 | Collapse 8-button action row → 3 groups + Export dropdown | S      | Low      |
+| QW-03 | Selection bar: contextual only                            | S      | Very low |
+| QW-06 | Domain combobox on URL Library                            | S      | Low      |
 
 ### Phase 2 — DS 2.0 Structural (v2.0 Sprint 1, after token migration)
 
-| ID | Change | Effort | Risk |
-|---|---|---|---|
-| S-02 | Unified `sc-filter-bar` component | M | Low |
-| S-01 | `sc-command-bar` component + apply to all pages | M | Low |
-| S-03 | Preview nav integration + toolbar consolidation | L | Medium |
-| S-04 | Pro-tier filter alignment (Screenshots ↔ URL Library) | S | Low |
+| ID   | Change                                                | Effort | Risk   |
+| ---- | ----------------------------------------------------- | ------ | ------ |
+| S-02 | Unified `sc-filter-bar` component                     | M      | Low    |
+| S-01 | `sc-command-bar` component + apply to all pages       | M      | Low    |
+| S-03 | Preview nav integration + toolbar consolidation       | L      | Medium |
+| S-04 | Pro-tier filter alignment (Screenshots ↔ URL Library) | S      | Low    |
 
 ---
 
@@ -391,4 +398,4 @@ Tabs in a tablist must all operate on the same data set. An audit log (Change Lo
 
 ---
 
-*Next step: validate the header contract and command bar structure in Figma before implementing QW-01 and QW-02. The remaining quick wins can be implemented directly from this spec.*
+_Next step: validate the header contract and command bar structure in Figma before implementing QW-01 and QW-02. The remaining quick wins can be implemented directly from this spec._

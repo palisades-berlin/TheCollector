@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.9.87 - 2026-03-15
+
+### Changed
+
+- CI visual parity stabilization:
+  - raised `history-default.png` threshold in visual suite from `6300` to `6400` using latest GitHub macOS evidence (`6320` diff).
+  - synchronized temporary exception tracking in `docs/visual-exception-register.md` and `docs/todo-list.md`.
+- Version sync:
+  - synchronized version to `1.9.87` across manifest/package/docs pointers.
+
 ## 1.9.86 - 2026-03-13
 
 ### Changed

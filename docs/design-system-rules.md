@@ -18,6 +18,7 @@ All design tokens are defined as CSS custom properties in **`src/shared/ui.css`*
 ```
 
 Surface aliases follow the same pattern but with a surface prefix:
+
 ```
 --popup-<category>: var(--sc-color-<category>);
 --history-<category>: var(--sc-color-<category>);
@@ -37,56 +38,62 @@ Surface-scoped re-exports of Tier 2 tokens. Purpose: future surface-specific ove
 ### Color tokens
 
 #### Surface (light mode → dark mode)
-| Token | Light | Dark |
-|---|---|---|
-| `--sc-color-surface-1` | `#fff` | `#161f2f` |
+
+| Token                  | Light     | Dark      |
+| ---------------------- | --------- | --------- |
+| `--sc-color-surface-1` | `#fff`    | `#161f2f` |
 | `--sc-color-surface-2` | `#fbfdff` | `#1a2435` |
 | `--sc-color-surface-3` | `#f5f8ff` | `#202c40` |
 | `--sc-color-surface-4` | `#e9f0f8` | `#1a2538` |
-| `--sc-color-bg` | `#f0f4f8` | `#111826` |
+| `--sc-color-bg`        | `#f0f4f8` | `#111826` |
 
 #### Brand
-| Token | Value |
-|---|---|
+
+| Token                      | Value     |
+| -------------------------- | --------- |
 | `--sc-color-brand-primary` | `#1976d2` |
-| `--sc-color-brand-accent` | `#42a5f5` |
+| `--sc-color-brand-accent`  | `#42a5f5` |
 | `--sc-color-brand-success` | `#2e7d32` |
 | `--sc-color-brand-warning` | `#8d6e00` |
-| `--sc-color-brand-danger` | `#b71c1c` |
+| `--sc-color-brand-danger`  | `#b71c1c` |
 
 #### Text (light)
-| Token | Value |
-|---|---|
-| `--sc-color-text` | `#1a1a2e` |
-| `--sc-color-text-strong` | `#1d3d61` |
-| `--sc-color-text-muted` | `#607589` |
-| `--sc-color-text-faint` | `#90a4ae` |
-| `--sc-color-text-subtle` | `#5f6f89` |
+
+| Token                       | Value     |
+| --------------------------- | --------- |
+| `--sc-color-text`           | `#1a1a2e` |
+| `--sc-color-text-strong`    | `#1d3d61` |
+| `--sc-color-text-muted`     | `#607589` |
+| `--sc-color-text-faint`     | `#90a4ae` |
+| `--sc-color-text-subtle`    | `#5f6f89` |
 | `--sc-color-text-secondary` | `#455a64` |
-| `--sc-color-text-ui` | `#546678` |
+| `--sc-color-text-ui`        | `#546678` |
 
 #### Border (light)
-| Token | Value |
-|---|---|
-| `--sc-color-border` | `#e3e8ef` |
+
+| Token                      | Value     |
+| -------------------------- | --------- |
+| `--sc-color-border`        | `#e3e8ef` |
 | `--sc-color-border-strong` | `#ccd8e7` |
-| `--sc-color-border-panel` | `#dce5ef` |
-| `--sc-color-border-card` | `#ecf1f6` |
+| `--sc-color-border-panel`  | `#dce5ef` |
+| `--sc-color-border-card`   | `#ecf1f6` |
 | `--sc-color-border-header` | `#dce6f3` |
 
 #### Primary scale
-| Token | Value |
-|---|---|
-| `--sc-color-primary` | `#1976d2` |
+
+| Token                       | Value     |
+| --------------------------- | --------- |
+| `--sc-color-primary`        | `#1976d2` |
 | `--sc-color-primary-strong` | `#1565c0` |
-| `--sc-color-primary-deep` | `#0d47a1` |
+| `--sc-color-primary-deep`   | `#0d47a1` |
 | `--sc-color-primary-active` | `#0f56b3` |
-| `--sc-color-primary-soft` | `#e3f2fd` |
+| `--sc-color-primary-soft`   | `#e3f2fd` |
 | `--sc-color-primary-soft-2` | `#bbdefb` |
 | `--sc-color-primary-border` | `#90caf9` |
-| `--sc-color-primary-glow` | `#42a5f5` |
+| `--sc-color-primary-glow`   | `#42a5f5` |
 
 #### Header gradient
+
 ```css
 --sc-header-grad: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
 /* dark: linear-gradient(135deg, #0f3d7c 0%, #0a2d63 100%) */
@@ -96,10 +103,10 @@ Surface-scoped re-exports of Tier 2 tokens. Purpose: future surface-specific ove
 
 4px base grid with 8px scale:
 
-| Token | Value |
-|---|---|
-| `--sc-sp-1` | `4px` |
-| `--sc-sp-2` | `8px` |
+| Token       | Value  |
+| ----------- | ------ |
+| `--sc-sp-1` | `4px`  |
+| `--sc-sp-2` | `8px`  |
 | `--sc-sp-3` | `12px` |
 | `--sc-sp-4` | `16px` |
 | `--sc-sp-5` | `20px` |
@@ -109,62 +116,63 @@ Surface-scoped re-exports of Tier 2 tokens. Purpose: future surface-specific ove
 
 ### Radius tokens
 
-| Token | Value |
-|---|---|
-| `--sc-radius-xs` | `4px` |
-| `--sc-radius-sm` | `6px` |
-| `--sc-radius-md` | `8px` |
-| `--sc-radius-lg` | `16px` |
+| Token              | Value   |
+| ------------------ | ------- |
+| `--sc-radius-xs`   | `4px`   |
+| `--sc-radius-sm`   | `6px`   |
+| `--sc-radius-md`   | `8px`   |
+| `--sc-radius-lg`   | `16px`  |
 | `--sc-radius-pill` | `999px` |
 
 ### Motion tokens
 
-| Token | Value |
-|---|---|
-| `--sc-motion-quick` | `120ms` |
-| `--sc-motion-base` | `180ms` |
-| `--sc-motion-slow` | `240ms` |
-| `--sc-ease` | `cubic-bezier(0.2, 0, 0, 1)` |
-| `--sc-ease-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` |
+| Token               | Value                               |
+| ------------------- | ----------------------------------- |
+| `--sc-motion-quick` | `120ms`                             |
+| `--sc-motion-base`  | `180ms`                             |
+| `--sc-motion-slow`  | `240ms`                             |
+| `--sc-ease`         | `cubic-bezier(0.2, 0, 0, 1)`        |
+| `--sc-ease-spring`  | `cubic-bezier(0.34, 1.56, 0.64, 1)` |
 
 ### Elevation tokens
 
-| Token | Value |
-|---|---|
-| `--sc-elevation-0` | `none` |
-| `--sc-elevation-1` | `0 1px 3px rgba(0,0,0,0.1)` |
-| `--sc-elevation-2` | `0 2px 8px rgba(0,0,0,0.15)` |
-| `--sc-elevation-3` | `0 4px 14px rgba(21,101,192,0.3)` |
+| Token              | Value                              |
+| ------------------ | ---------------------------------- |
+| `--sc-elevation-0` | `none`                             |
+| `--sc-elevation-1` | `0 1px 3px rgba(0,0,0,0.1)`        |
+| `--sc-elevation-2` | `0 2px 8px rgba(0,0,0,0.15)`       |
+| `--sc-elevation-3` | `0 4px 14px rgba(21,101,192,0.3)`  |
 | `--sc-elevation-4` | `0 4px 16px rgba(25,118,210,0.12)` |
 
 ### Density tokens (control heights)
 
-| Token | Value | Use |
-|---|---|---|
-| `--sc-density-compact` | `32px` | `sc-btn-sm`, row actions |
-| `--sc-density-default` | `40px` | `sc-btn-md`, inputs, selects |
-| `--sc-density-comfortable` | `44px` | tabs |
+| Token                      | Value  | Use                          |
+| -------------------------- | ------ | ---------------------------- |
+| `--sc-density-compact`     | `32px` | `sc-btn-sm`, row actions     |
+| `--sc-density-default`     | `40px` | `sc-btn-md`, inputs, selects |
+| `--sc-density-comfortable` | `44px` | tabs                         |
 
 ### Typography tokens
 
-| Token | Value |
-|---|---|
-| `--sc-font-sans` | `'Poppins', 'Segoe UI', Roboto, Arial, sans-serif` |
-| `--sc-font-mono` | `'Consolas', 'Menlo', 'Courier New', monospace` |
-| `--sc-font-h1-size` | `18px` |
-| `--sc-font-h1-weight` | `700` |
-| `--sc-font-h2-size` | `15px` |
-| `--sc-font-h2-weight` | `700` |
-| `--sc-font-body-size` | `13px` |
-| `--sc-font-body-weight` | `400` |
-| `--sc-font-body-medium-weight` | `500` |
-| `--sc-font-caption-size` | `11px` |
-| `--sc-font-caption-weight` | `500` |
-| `--sc-lh-tight` | `1.2` |
-| `--sc-lh-body` | `1.45` |
-| `--sc-lh-caption` | `1.35` |
+| Token                          | Value                                              |
+| ------------------------------ | -------------------------------------------------- |
+| `--sc-font-sans`               | `'Poppins', 'Segoe UI', Roboto, Arial, sans-serif` |
+| `--sc-font-mono`               | `'Consolas', 'Menlo', 'Courier New', monospace`    |
+| `--sc-font-h1-size`            | `18px`                                             |
+| `--sc-font-h1-weight`          | `700`                                              |
+| `--sc-font-h2-size`            | `15px`                                             |
+| `--sc-font-h2-weight`          | `700`                                              |
+| `--sc-font-body-size`          | `13px`                                             |
+| `--sc-font-body-weight`        | `400`                                              |
+| `--sc-font-body-medium-weight` | `500`                                              |
+| `--sc-font-caption-size`       | `11px`                                             |
+| `--sc-font-caption-weight`     | `500`                                              |
+| `--sc-lh-tight`                | `1.2`                                              |
+| `--sc-lh-body`                 | `1.45`                                             |
+| `--sc-lh-caption`              | `1.35`                                             |
 
 ### Focus token
+
 ```css
 --sc-focus: #64b5f6;
 --sc-focus-glow: 0 0 0 3px rgba(100, 181, 246, 0.22);
@@ -184,57 +192,62 @@ All shared components are plain CSS classes defined in `src/shared/ui.css`. No J
 ### Component inventory
 
 #### Layout / structure
-| Class | Description |
-|---|---|
-| `sc-header` | Sticky header bar with brand gradient |
-| `sc-header-nav` | Inline-flex nav link group inside header |
-| `sc-header-link` | Individual nav link pill with active state |
-| `sc-card` | Surface card (white bg, panel border, md radius) |
-| `sc-modal` | Full-screen overlay scrim + centered content shell |
+
+| Class            | Description                                        |
+| ---------------- | -------------------------------------------------- |
+| `sc-header`      | Sticky header bar with brand gradient              |
+| `sc-header-nav`  | Inline-flex nav link group inside header           |
+| `sc-header-link` | Individual nav link pill with active state         |
+| `sc-card`        | Surface card (white bg, panel border, md radius)   |
+| `sc-modal`       | Full-screen overlay scrim + centered content shell |
 
 #### Controls
-| Class | Description |
-|---|---|
-| `sc-btn` | Base button (32px height, sm radius, body text) |
-| `sc-btn-primary` | Filled blue CTA |
-| `sc-btn-secondary` | Subdued variant (muted text) |
-| `sc-btn-ghost` | Transparent with primary border/text |
-| `sc-btn-danger` | Red-tinted destructive action |
-| `sc-btn-sm` | 32px height, 11px caption font |
-| `sc-btn-md` | 40px height, full padding |
-| `sc-btn-block` | 100% width |
-| `sc-input` | Full-width text input (40px height) |
-| `sc-select` | Full-width dropdown (40px height) |
-| `sc-tablist` | Horizontal tab container with bottom border |
-| `sc-tab` | Individual tab button with bottom-border active indicator |
+
+| Class              | Description                                               |
+| ------------------ | --------------------------------------------------------- |
+| `sc-btn`           | Base button (32px height, sm radius, body text)           |
+| `sc-btn-primary`   | Filled blue CTA                                           |
+| `sc-btn-secondary` | Subdued variant (muted text)                              |
+| `sc-btn-ghost`     | Transparent with primary border/text                      |
+| `sc-btn-danger`    | Red-tinted destructive action                             |
+| `sc-btn-sm`        | 32px height, 11px caption font                            |
+| `sc-btn-md`        | 40px height, full padding                                 |
+| `sc-btn-block`     | 100% width                                                |
+| `sc-input`         | Full-width text input (40px height)                       |
+| `sc-select`        | Full-width dropdown (40px height)                         |
+| `sc-tablist`       | Horizontal tab container with bottom border               |
+| `sc-tab`           | Individual tab button with bottom-border active indicator |
 
 #### Status indicators
-| Class | Description |
-|---|---|
-| `sc-pill` | Compact label badge (pill radius, 11px font, 700 weight) |
-| `sc-pill-ok` | Green success pill |
-| `sc-pill-warn` | Yellow warning pill |
-| `sc-pill-off` / `sc-pill-danger` | Red danger pill |
+
+| Class                            | Description                                              |
+| -------------------------------- | -------------------------------------------------------- |
+| `sc-pill`                        | Compact label badge (pill radius, 11px font, 700 weight) |
+| `sc-pill-ok`                     | Green success pill                                       |
+| `sc-pill-warn`                   | Yellow warning pill                                      |
+| `sc-pill-off` / `sc-pill-danger` | Red danger pill                                          |
 
 #### Feedback
-| Class | Description |
-|---|---|
-| `sc-banner` | Inline notification strip |
-| `sc-banner-info` | Blue info variant |
-| `sc-banner-success` | Green success variant |
-| `sc-banner-warn` | Yellow warning variant |
-| `sc-banner-error` | Red error variant |
-| `sc-state-empty` | Centered empty state container |
-| `sc-state-loading` | Centered loading state container |
-| `sc-skeleton` | Shimmer loading placeholder |
-| `sc-toast-host` | Fixed bottom-right toast stack container |
-| `sc-toast` | Individual toast (info/success/error variants via class) |
+
+| Class               | Description                                              |
+| ------------------- | -------------------------------------------------------- |
+| `sc-banner`         | Inline notification strip                                |
+| `sc-banner-info`    | Blue info variant                                        |
+| `sc-banner-success` | Green success variant                                    |
+| `sc-banner-warn`    | Yellow warning variant                                   |
+| `sc-banner-error`   | Red error variant                                        |
+| `sc-state-empty`    | Centered empty state container                           |
+| `sc-state-loading`  | Centered loading state container                         |
+| `sc-skeleton`       | Shimmer loading placeholder                              |
+| `sc-toast-host`     | Fixed bottom-right toast stack container                 |
+| `sc-toast`          | Individual toast (info/success/error variants via class) |
 
 #### Utility
-| Class | Description |
-|---|---|
-| `sc-kbd` | Keyboard shortcut badge (monospace, border-bottom 2px) |
-| `sc-page-enter` | Page entrance animation (fade + translateY 6px) |
+
+| Class           | Description                                            |
+| --------------- | ------------------------------------------------------ |
+| `sc-kbd`        | Keyboard shortcut badge (monospace, border-bottom 2px) |
+| `sc-page-enter` | Page entrance animation (fade + translateY 6px)        |
 
 ### Component architecture rules
 
@@ -277,17 +290,20 @@ All shared components are plain CSS classes defined in `src/shared/ui.css`. No J
 ## 6. Styling Approach
 
 ### Methodology
+
 - **Global flat CSS** in `src/shared/ui.css` for all shared primitives and tokens.
 - **Surface-specific CSS** files (`popup.css`, `history.css`, `options.css`, `preview.css`, `onboarding.css`) consume globals and add surface layout.
 - **BEM-lite class naming:** `sc-<component>[-<modifier>]` for shared; `<surface>-<element>` for surface-specific.
 - **No utility-first approach.** No Tailwind. No atomic classes.
 
 ### Responsive design
+
 - Extension surfaces are fixed-width (popup: 400px). Full-tab surfaces (history, options, preview) are fluid.
 - No media query breakpoints for popup. Full-tab surfaces use flexible grid layout.
 - `prefers-reduced-motion` media query disables all animations and transitions globally.
 
 ### Global styles
+
 - `box-sizing: border-box` reset in each surface CSS file.
 - `:focus-visible` style defined globally in `src/shared/ui.css`: `2px solid var(--sc-focus)` + glow box-shadow.
 - Global transition shorthand on `button`, `a`, `input`, `select` elements.
@@ -345,6 +361,7 @@ docs/
 ```
 
 ### Feature organization pattern
+
 - Each surface is a self-contained folder: one HTML, one CSS, one or more JS files.
 - Shared logic lives in `src/shared/` — never duplicated per-surface.
 - Repository pattern: all IndexedDB/storage access goes through `src/shared/repos/*.js`.
@@ -354,13 +371,17 @@ docs/
 ## 8. Figma Integration Rules (for Phase 0)
 
 ### Phase 0 goal
+
 Rebuild the Figma file so it is an exact, complete reflection of the live token system above. No new values. No approximations.
 
 ### Token mapping rule
+
 Every Figma color style, spacing token, radius style, and text style must use the exact values from section 1 above. The `--sc-*` token name is the canonical name — use it as the Figma style name (e.g. `color/surface/1`, `color/brand/primary`, `motion/quick`).
 
 ### Component mapping rule
+
 Each class in section 2 maps to one Figma component. The class name is the component name. States map to Figma variants:
+
 - `sc-btn` → Button / default, hover, disabled; variants: primary, secondary, ghost, danger; sizes: sm, md, block
 - `sc-input` / `sc-select` → Input / default, focus, placeholder
 - `sc-tab` → Tab / default, active
@@ -370,15 +391,18 @@ Each class in section 2 maps to one Figma component. The class name is the compo
 - `sc-modal` → Modal shell (overlay scrim only — content is surface-specific)
 
 ### Dark mode
+
 Dark mode is a Figma variable mode toggle on the `:root` token set. All components inherit the mode — no separate dark-mode component variants.
 
 ### Naming convention for Figma
+
 - Token styles: `<category>/<subcategory>/<variant>` e.g. `color/surface/1`, `spacing/4`, `radius/md`
 - Components: `<ComponentName>/<Variant>/<State>` e.g. `Button/Primary/Default`
 - Frames/screens: match surface names — `Popup`, `Screenshots`, `Settings`, `Preview`, `Onboarding`
 - Sections within screens: match Figma Mapping Table in `docs/ui-handoff.md`
 
 ### Design principles (non-negotiable)
+
 Source: `docs/ui-handoff.md` §Design Principles + `docs/design-overhaul-master-plan-2026-03-13.md` §3.2
 
 1. **One nav, always in the same place.** `sc-header-nav` is second child of `<header>` on every full-page surface.
@@ -390,4 +414,4 @@ Source: `docs/ui-handoff.md` §Design Principles + `docs/design-overhaul-master-
 
 ---
 
-*Generated 2026-03-13 · Source: `src/shared/ui.css`, `src/popup/popup.css`, `src/history/history.css`, `docs/ui-handoff.md`, `docs/architecture.md`*
+_Generated 2026-03-13 · Source: `src/shared/ui.css`, `src/popup/popup.css`, `src/history/history.css`, `docs/ui-handoff.md`, `docs/architecture.md`_

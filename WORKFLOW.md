@@ -14,9 +14,11 @@
 ## Starting a session
 
 **Step 1 — Pull the latest from GitHub**
+
 ```
 git pull
 ```
+
 Always do this first, on any machine, before touching anything.
 
 ---
@@ -24,11 +26,13 @@ Always do this first, on any machine, before touching anything.
 **Step 2 — Open your AI tool and paste the opening prompt**
 
 **If using Claude:**
+
 ```
 Read CLAUDE.md and SESSION.md, then continue from the last session.
 ```
 
 **If using Codex:**
+
 ```
 Read AGENTS.md and SESSION.md, then continue from the last session.
 ```
@@ -52,6 +56,7 @@ Both Claude (`CLAUDE.md`) and Codex (`AGENTS.md`) have a standing rule to update
 If the AI didn't update it, ask: `Update SESSION.md with what we did and what's next.`
 
 **Step 4 — Push**
+
 ```
 git push
 ```
@@ -78,4 +83,4 @@ If you don't push, the updated `SESSION.md` stays on one machine and the other s
 
 ---
 
-*That's the whole system.*
+_That's the whole system._

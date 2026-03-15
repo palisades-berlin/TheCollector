@@ -1,4 +1,5 @@
 # Visual System Direction — THE Collector v2.0
+
 **Date:** 2026-03-13
 **Author:** Principal UX/UI Designer
 **Status:** Design direction — Figma-first, implement after DS 2.0 Sprint 1
@@ -37,15 +38,16 @@ Glass border hi:  rgba(255,255,255,0.15)  ← active/hover glass edge
 ```
 
 **Update to existing tokens:**
+
 ```css
 /* Dark mode token updates in :root[data-theme='dark'] */
---sc-color-bg:        #080d18;
---sc-color-surface-1: rgba(255,255,255,0.04);
---sc-color-surface-2: rgba(255,255,255,0.06);
---sc-color-surface-3: rgba(255,255,255,0.09);
---sc-color-surface-4: rgba(255,255,255,0.12);
---sc-color-border:    rgba(255,255,255,0.09);
---sc-color-border-strong: rgba(255,255,255,0.15);
+--sc-color-bg: #080d18;
+--sc-color-surface-1: rgba(255, 255, 255, 0.04);
+--sc-color-surface-2: rgba(255, 255, 255, 0.06);
+--sc-color-surface-3: rgba(255, 255, 255, 0.09);
+--sc-color-surface-4: rgba(255, 255, 255, 0.12);
+--sc-color-border: rgba(255, 255, 255, 0.09);
+--sc-color-border-strong: rgba(255, 255, 255, 0.15);
 ```
 
 ### 1.2 Light mode (secondary)
@@ -64,13 +66,14 @@ Glass border hi:  rgba(0,0,0,0.12)
 ```
 
 **Update to existing tokens:**
+
 ```css
 /* Light mode token updates in :root (default) */
---sc-color-bg:        #f2f3f5;
---sc-color-surface-1: rgba(255,255,255,0.70);
---sc-color-surface-2: rgba(255,255,255,0.80);
---sc-color-surface-3: rgba(255,255,255,0.85);
---sc-color-surface-4: rgba(255,255,255,0.90);
+--sc-color-bg: #f2f3f5;
+--sc-color-surface-1: rgba(255, 255, 255, 0.7);
+--sc-color-surface-2: rgba(255, 255, 255, 0.8);
+--sc-color-surface-3: rgba(255, 255, 255, 0.85);
+--sc-color-surface-4: rgba(255, 255, 255, 0.9);
 ```
 
 ### 1.3 Brand blue: accent only
@@ -88,11 +91,11 @@ Glass border hi:  rgba(0,0,0,0.12)
 
 ### 1.4 Tier temperature signals
 
-| Tier | Accent warmth | Decoration | Density |
-|---|---|---|---|
-| Basic (B2C) | `rgba(25,118,210,0.12)` tint on hover | Card entrance animation ON | Comfortable (44px controls) |
-| Pro | `rgba(25,118,210,0.08)` tint on hover | Card entrance animation ON | Standard (40px controls) |
-| Ultra | `rgba(25,118,210,0.06)` tint on hover | Card entrance animation OFF | Compact (36px controls) |
+| Tier        | Accent warmth                         | Decoration                  | Density                     |
+| ----------- | ------------------------------------- | --------------------------- | --------------------------- |
+| Basic (B2C) | `rgba(25,118,210,0.12)` tint on hover | Card entrance animation ON  | Comfortable (44px controls) |
+| Pro         | `rgba(25,118,210,0.08)` tint on hover | Card entrance animation ON  | Standard (40px controls)    |
+| Ultra       | `rgba(25,118,210,0.06)` tint on hover | Card entrance animation OFF | Compact (36px controls)     |
 
 Ultra users get less animation and less decoration by default — they already know the product. This is not a feature gate; it's a density preference aligned with power-user expectations.
 
@@ -107,17 +110,17 @@ Glass is applied using `backdrop-filter: blur() saturate()` on semi-transparent 
 ```css
 /* Dark mode glass — standard panel */
 .glass-panel {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border: 1px solid rgba(255,255,255,0.09);
+  border: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 /* Light mode glass — standard panel */
 :root:not([data-theme='dark']) .glass-panel {
-  background: rgba(255,255,255,0.75);
+  background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(20px) saturate(200%);
-  border: 1px solid rgba(0,0,0,0.07);
+  border: 1px solid rgba(0, 0, 0, 0.07);
 }
 
 /* Reduced motion / accessibility fallback — REQUIRED */
@@ -125,24 +128,25 @@ Glass is applied using `backdrop-filter: blur() saturate()` on semi-transparent 
   .glass-panel {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: var(--sc-color-surface-2);  /* solid fallback */
+    background: var(--sc-color-surface-2); /* solid fallback */
   }
 }
 ```
 
 ### 2.2 Glass per surface
 
-| Surface | Blur | Background (dark) | Background (light) | Notes |
-|---|---|---|---|---|
-| **Header (sticky)** | `blur(24px) saturate(180%)` | `rgba(8,13,24,0.80)` | `rgba(255,255,255,0.82)` | Scrolling content bleeds through |
-| **Popup header** | `blur(20px) saturate(160%)` | `rgba(8,13,24,0.85)` | `rgba(255,255,255,0.88)` | Constrained surface — heavier opacity |
-| **Popup panels** | `blur(16px) saturate(150%)` | `rgba(255,255,255,0.04)` | `rgba(255,255,255,0.65)` | Inner sections in popup |
-| **Modals / overlays** | `blur(20px) saturate(160%)` | `rgba(10,15,28,0.88)` | `rgba(255,255,255,0.85)` | Modal backdrop is `rgba(0,0,0,0.5)` scrim |
-| **Dropdowns / tooltips** | `blur(16px) saturate(140%)` | `rgba(14,20,36,0.90)` | `rgba(255,255,255,0.90)` | Small surface, heavier opacity for legibility |
-| **Card hover overlay** | `blur(0px)` | `rgba(0,0,0,0.48)` | `rgba(0,0,0,0.36)` | No blur — action icons need sharp legibility |
-| **Screenshot cards** | None | Solid `rgba(255,255,255,0.05)` | Solid `rgba(255,255,255,0.80)` | Too many cards for GPU — solid surfaces only |
+| Surface                  | Blur                        | Background (dark)              | Background (light)             | Notes                                         |
+| ------------------------ | --------------------------- | ------------------------------ | ------------------------------ | --------------------------------------------- |
+| **Header (sticky)**      | `blur(24px) saturate(180%)` | `rgba(8,13,24,0.80)`           | `rgba(255,255,255,0.82)`       | Scrolling content bleeds through              |
+| **Popup header**         | `blur(20px) saturate(160%)` | `rgba(8,13,24,0.85)`           | `rgba(255,255,255,0.88)`       | Constrained surface — heavier opacity         |
+| **Popup panels**         | `blur(16px) saturate(150%)` | `rgba(255,255,255,0.04)`       | `rgba(255,255,255,0.65)`       | Inner sections in popup                       |
+| **Modals / overlays**    | `blur(20px) saturate(160%)` | `rgba(10,15,28,0.88)`          | `rgba(255,255,255,0.85)`       | Modal backdrop is `rgba(0,0,0,0.5)` scrim     |
+| **Dropdowns / tooltips** | `blur(16px) saturate(140%)` | `rgba(14,20,36,0.90)`          | `rgba(255,255,255,0.90)`       | Small surface, heavier opacity for legibility |
+| **Card hover overlay**   | `blur(0px)`                 | `rgba(0,0,0,0.48)`             | `rgba(0,0,0,0.36)`             | No blur — action icons need sharp legibility  |
+| **Screenshot cards**     | None                        | Solid `rgba(255,255,255,0.05)` | Solid `rgba(255,255,255,0.80)` | Too many cards for GPU — solid surfaces only  |
 
 **Critical performance rule:** `backdrop-filter` is only applied to elements that are:
+
 1. Sticky/fixed (header, popup header)
 2. Floating above content (modals, dropdowns, tooltips)
 3. A small number of elements (≤ 5 visible simultaneously)
@@ -157,12 +161,12 @@ The expressive radius language runs from tight (inline elements) to generous (la
 
 ```css
 /* Update --sc-radius-* tokens in :root */
---sc-radius-xs:   5px;    /* inline tags, kbd hints, small badges */
---sc-radius-sm:   10px;   /* buttons, inputs, select, pills */
---sc-radius-md:   14px;   /* cards, panels, filter bar containers */
---sc-radius-lg:   18px;   /* modals, large dropdowns, floating panels */
---sc-radius-xl:   24px;   /* popup shell, onboarding cards */
---sc-radius-pill: 999px;  /* nav pills, tag chips — unchanged */
+--sc-radius-xs: 5px; /* inline tags, kbd hints, small badges */
+--sc-radius-sm: 10px; /* buttons, inputs, select, pills */
+--sc-radius-md: 14px; /* cards, panels, filter bar containers */
+--sc-radius-lg: 18px; /* modals, large dropdowns, floating panels */
+--sc-radius-xl: 24px; /* popup shell, onboarding cards */
+--sc-radius-pill: 999px; /* nav pills, tag chips — unchanged */
 ```
 
 **Card outer radius 14px + inner thumbnail radius 10px = correct optical nesting.**
@@ -181,31 +185,24 @@ Replace blue-tinted shadows with physically accurate neutral shadows, layered fo
 --sc-elevation-0: none;
 
 --sc-elevation-1:
-  0 1px 2px rgba(0,0,0,0.08),
-  0 1px 4px rgba(0,0,0,0.06);          /* subtle — inputs, small panels */
+  0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.06); /* subtle — inputs, small panels */
 
 --sc-elevation-2:
-  0 2px 6px rgba(0,0,0,0.10),
-  0 4px 12px rgba(0,0,0,0.08);         /* default card resting state */
+  0 2px 6px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.08); /* default card resting state */
 
 --sc-elevation-3:
-  0 4px 12px rgba(0,0,0,0.12),
-  0 8px 24px rgba(0,0,0,0.10);         /* card hover, active panel */
+  0 4px 12px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.1); /* card hover, active panel */
 
 --sc-elevation-4:
-  0 8px 20px rgba(0,0,0,0.14),
-  0 16px 40px rgba(0,0,0,0.12);        /* modals, floating panels */
+  0 8px 20px rgba(0, 0, 0, 0.14), 0 16px 40px rgba(0, 0, 0, 0.12); /* modals, floating panels */
 ```
 
 **Dark mode shadow adjustment:** shadows on dark surfaces need higher opacity to be visible against near-black:
+
 ```css
 :root[data-theme='dark'] {
-  --sc-elevation-2:
-    0 1px 3px rgba(0,0,0,0.40),
-    0 4px 12px rgba(0,0,0,0.30);
-  --sc-elevation-3:
-    0 2px 8px rgba(0,0,0,0.50),
-    0 8px 24px rgba(0,0,0,0.36);
+  --sc-elevation-2: 0 1px 3px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3);
+  --sc-elevation-3: 0 2px 8px rgba(0, 0, 0, 0.5), 0 8px 24px rgba(0, 0, 0, 0.36);
 }
 ```
 
@@ -241,15 +238,15 @@ These are already scoped in the roadmap. Implement exactly as specified:
 
 These are additions justified by the glass + dark system:
 
-| Animation | Trigger | Duration | Easing | Surfaces |
-|---|---|---|---|---|
-| **Page entrance** | Surface load | 150ms | ease-out | All full pages — `opacity: 0 → 1, translateY(6px → 0)` |
-| **Card entrance stagger** | Grid load | 180ms base + 30ms per card (max 6 staggered) | ease-out | Screenshots grid, URL Library list |
-| **Glass panel appear** | Dropdown/tooltip open | 120ms | ease-out | `opacity: 0 → 1, scale(0.97 → 1)` |
-| **Glass panel dismiss** | Dropdown/tooltip close | 90ms | ease-in | `opacity: 1 → 0, scale(1 → 0.97)` |
-| **Card hover reveal** | `:hover` on screenshot card | 150ms | ease-out | Action overlay fade in |
-| **Filter bar update** | Filter value changes | 120ms | ease-out | List crossfade on result change |
-| **Button press depth** | `:active` | 80ms | ease-in | `translateY(1px)` — all buttons |
+| Animation                 | Trigger                     | Duration                                     | Easing   | Surfaces                                               |
+| ------------------------- | --------------------------- | -------------------------------------------- | -------- | ------------------------------------------------------ |
+| **Page entrance**         | Surface load                | 150ms                                        | ease-out | All full pages — `opacity: 0 → 1, translateY(6px → 0)` |
+| **Card entrance stagger** | Grid load                   | 180ms base + 30ms per card (max 6 staggered) | ease-out | Screenshots grid, URL Library list                     |
+| **Glass panel appear**    | Dropdown/tooltip open       | 120ms                                        | ease-out | `opacity: 0 → 1, scale(0.97 → 1)`                      |
+| **Glass panel dismiss**   | Dropdown/tooltip close      | 90ms                                         | ease-in  | `opacity: 1 → 0, scale(1 → 0.97)`                      |
+| **Card hover reveal**     | `:hover` on screenshot card | 150ms                                        | ease-out | Action overlay fade in                                 |
+| **Filter bar update**     | Filter value changes        | 120ms                                        | ease-out | List crossfade on result change                        |
+| **Button press depth**    | `:active`                   | 80ms                                         | ease-in  | `translateY(1px)` — all buttons                        |
 
 ### 5.4 What does NOT animate
 
@@ -280,10 +277,11 @@ Dark mode resting:
 ```
 
 **Nav pill — active state:**
+
 ```css
 .sc-header-link[aria-current='page'] {
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--sc-radius-pill);
   padding: 5px 14px;
   font-weight: 600;
@@ -292,25 +290,29 @@ Dark mode resting:
 ```
 
 **Nav pill — inactive state:**
+
 ```css
 .sc-header-link:not([aria-current='page']) {
-  color: rgba(255,255,255,0.55);
+  color: rgba(255, 255, 255, 0.55);
   padding: 5px 12px;
   border-radius: var(--sc-radius-pill);
-  transition: background 120ms ease, color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
 }
 .sc-header-link:not([aria-current='page']):hover {
-  background: rgba(255,255,255,0.07);
-  color: rgba(255,255,255,0.90);
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.9);
 }
 ```
 
 **Count badge on dark header:**
+
 ```css
 .badge {
-  background: rgba(25,118,210,0.30);    /* brand blue tint */
-  border: 1px solid rgba(25,118,210,0.50);
-  color: #90caf9;                        /* brand-accent text */
+  background: rgba(25, 118, 210, 0.3); /* brand blue tint */
+  border: 1px solid rgba(25, 118, 210, 0.5);
+  color: #90caf9; /* brand-accent text */
   font-size: 11px;
   font-weight: 700;
   padding: 2px 10px;
@@ -328,6 +330,7 @@ The count badge is the **only brand-blue element in the header.** It reads as a 
 The card is where the product shows its quality to first-time users.
 
 ### Resting state
+
 ```
 ┌─────────────────────────┐
 │                         │  ← rounded corners: 14px outer
@@ -344,6 +347,7 @@ Border: none in dark mode / 1px rgba(0,0,0,0.06) in light mode
 ```
 
 ### Hover state
+
 ```
 ┌─────────────────────────┐
 │ ░░░░░░░░░░░░░░░░░░░░░░ │  ← overlay: rgba(0,0,0,0.48)
@@ -361,6 +365,7 @@ Transition: 180ms ease-out
 The Compare / Open / Delete buttons become **icon-only** within the hover overlay. Text labels are retained as `aria-label` attributes. This is the standard used by Google Photos, Figma, and Notion gallery.
 
 **Selection state (Bulk mode active):**
+
 ```
 ┌─────────────────────────┐
 │ [✓]                     │  ← checkbox top-left, brand blue fill
@@ -378,6 +383,7 @@ The Compare / Open / Delete buttons become **icon-only** within the hover overla
 The popup is 400px wide and height-constrained. Full glass treatment makes it feel like an iOS widget — premium but not heavy.
 
 ### Structure
+
 ```
 ┌────────────────────────────┐  ← popup shell: no border-radius
 │ ░░░░ GLASS HEADER ░░░░░░░ │  ← blur(20px), height 48px
@@ -404,32 +410,34 @@ Same token system. Subtle rendering differences tied to `data-tier` attribute on
 ```css
 /* Basic — B2C: warmer, more breathing room */
 body[data-tier='basic'] {
-  --tier-accent-tint: rgba(25,118,210,0.12);
-  --tier-card-anim: 1;         /* card entrance stagger ON */
-  --tier-density: var(--sc-density-comfortable);  /* 44px */
+  --tier-accent-tint: rgba(25, 118, 210, 0.12);
+  --tier-card-anim: 1; /* card entrance stagger ON */
+  --tier-density: var(--sc-density-comfortable); /* 44px */
 }
 
 /* Pro — standard workspace */
 body[data-tier='pro'] {
-  --tier-accent-tint: rgba(25,118,210,0.08);
-  --tier-card-anim: 1;         /* card entrance stagger ON */
-  --tier-density: var(--sc-density-default);       /* 40px */
+  --tier-accent-tint: rgba(25, 118, 210, 0.08);
+  --tier-card-anim: 1; /* card entrance stagger ON */
+  --tier-density: var(--sc-density-default); /* 40px */
 }
 
 /* Ultra — power workspace */
 body[data-tier='ultra'] {
-  --tier-accent-tint: rgba(25,118,210,0.06);
-  --tier-card-anim: 0;         /* stagger OFF — they know the product */
-  --tier-density: var(--sc-density-compact);       /* 32px */
+  --tier-accent-tint: rgba(25, 118, 210, 0.06);
+  --tier-card-anim: 0; /* stagger OFF — they know the product */
+  --tier-density: var(--sc-density-compact); /* 32px */
 }
 ```
 
 The card entrance stagger is toggled via CSS:
+
 ```css
 .history-card {
   animation: card-in calc(var(--tier-card-anim) * 180ms) ease-out both;
 }
 ```
+
 When `--tier-card-anim: 0`, `calc(0 * 180ms) = 0ms` → animation effectively disabled.
 
 This gives Ultra users a faster, denser, no-ceremony experience without creating a separate component tree.
@@ -463,8 +471,8 @@ All glass and animation decisions must respect these non-negotiable rules:
    --sc-glass-blur-sm: blur(12px) saturate(140%);
    --sc-glass-blur-md: blur(20px) saturate(160%);
    --sc-glass-blur-lg: blur(24px) saturate(180%);
-   --sc-glass-solid-dark: rgba(8,13,24,0.80);
-   --sc-glass-solid-light: rgba(255,255,255,0.80);
+   --sc-glass-solid-dark: rgba(8, 13, 24, 0.8);
+   --sc-glass-solid-light: rgba(255, 255, 255, 0.8);
    ```
 6. Add tier density tokens (`body[data-tier]` rules)
 7. Establish visual regression baseline — **all subsequent work snapshots against this baseline**
@@ -499,4 +507,4 @@ When complete:
 
 ---
 
-*All changes go to Figma first (per `docs/ui-handoff.md` change policy). Token updates are applied in `src/shared/ui.css` only — surface layers consume them automatically via aliases.*
+_All changes go to Figma first (per `docs/ui-handoff.md` change policy). Token updates are applied in `src/shared/ui.css` only — surface layers consume them automatically via aliases._

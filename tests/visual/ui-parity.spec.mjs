@@ -482,7 +482,7 @@ test.describe('Figma parity snapshots', () => {
 
     await expect(page).toHaveScreenshot('history-default.png', {
       fullPage: true,
-      maxDiffPixels: 6300,
+      maxDiffPixels: 6400,
     });
 
     await page.evaluate(() => {

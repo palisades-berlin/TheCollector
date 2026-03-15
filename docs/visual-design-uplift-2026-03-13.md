@@ -1,4 +1,5 @@
 # Visual Design Uplift — THE Collector
+
 **Date:** 2026-03-13
 **Author:** Principal UX/UI Designer
 **Scope:** Why it looks cheap, and what to fix — ordered by visual impact
@@ -30,8 +31,8 @@ This is the **standard 2016 Material Design blue gradient** — recognisable as 
 ### Issue 3 — Card elevation is nearly invisible
 
 ```css
---sc-elevation-4: 0 4px 16px rgba(25, 118, 210, 0.12);  /* card shadow */
---sc-color-border-card: #ecf1f6;                          /* card border */
+--sc-elevation-4: 0 4px 16px rgba(25, 118, 210, 0.12); /* card shadow */
+--sc-color-border-card: #ecf1f6; /* card border */
 ```
 
 A blue-tinted shadow at 12% opacity, combined with a very light border, produces a card that barely lifts off the background. Cards need to breathe and float. The current treatment makes the screenshot grid read as a flat grid of bordered boxes rather than a gallery of lifted items.
@@ -45,8 +46,8 @@ The header title (`font-size: 15px; font-weight: 600; letter-spacing: 0.3px`) is
 ### Issue 5 — Border radius feels dated
 
 ```css
---sc-r-sm: var(--sc-radius-xs);  /* = 4px */
---sc-r-md: var(--sc-radius-md);  /* = 8px */
+--sc-r-sm: var(--sc-radius-xs); /* = 4px */
+--sc-r-md: var(--sc-radius-md); /* = 8px */
 ```
 
 `--sc-r-sm` resolves to 4px — very sharp. 8px on cards was standard in 2020-2022. In 2025-2026, premium products (Linear, Vercel, Arc, Raycast) use 10–12px on cards and components, with tighter corners reserved for inline elements only. The current treatment makes every surface look slightly boxy.
@@ -82,6 +83,7 @@ Proposed header surface token:
 The brand blue (`#1976d2`) does not disappear — it becomes the accent colour used throughout the content area: active nav indicators, primary buttons, filter focus rings, selected states, the count badge. This is more sophisticated than filling the header with it.
 
 **What changes on-screen:**
+
 - Header: deep navy, not blue gradient. Brand icon and title read clearly at full white opacity.
 - Nav links: unchanged (already use `--sc-color-on-brand-high`)
 - Count badge: add a subtle brand-blue tint: `background: rgba(25, 118, 210, 0.25)` — it becomes a small brand accent dot in the dark header
@@ -99,10 +101,10 @@ The brand blue (`#1976d2`) does not disappear — it becomes the accent colour u
 
 ```css
 /* Current */
---sc-color-bg: #f0f4f8;   /* cold blue-grey */
+--sc-color-bg: #f0f4f8; /* cold blue-grey */
 
 /* Proposed */
---sc-color-bg: #f5f6f8;   /* near-neutral, very slightly warm */
+--sc-color-bg: #f5f6f8; /* near-neutral, very slightly warm */
 ```
 
 The difference is subtle but perceptible: the current value is noticeably blue-tinted; `#f5f6f8` is closer to neutral, making white cards read as genuinely white rather than slightly blue-white. This also makes the brand blue pop more distinctly when it appears in interactive elements.
@@ -121,12 +123,10 @@ For the card surface, ensure `--sc-color-surface-1: #ffffff` (already set — go
 
 ```css
 /* Current */
---sc-elevation-4: 0 4px 16px rgba(25, 118, 210, 0.12);   /* blue-tinted, too subtle */
+--sc-elevation-4: 0 4px 16px rgba(25, 118, 210, 0.12); /* blue-tinted, too subtle */
 
 /* Proposed — replace with layered neutral shadow */
---sc-elevation-4:
-  0 1px 3px rgba(0, 0, 0, 0.07),
-  0 4px 12px rgba(0, 0, 0, 0.07);
+--sc-elevation-4: 0 1px 3px rgba(0, 0, 0, 0.07), 0 4px 12px rgba(0, 0, 0, 0.07);
 ```
 
 Layered shadows (one tight, one spread) produce a more physically believable elevation than a single shadow. Remove the coloured tint — neutral black shadows work in both light and dark themes without needing overrides.
@@ -141,7 +141,7 @@ Layered shadows (one tight, one spread) produce a more physically believable ele
   box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.09),
     0 8px 24px rgba(0, 0, 0, 0.11);
-  transform: translateY(-2px);   /* --sc-lift-y: -2px already defined */
+  transform: translateY(-2px); /* --sc-lift-y: -2px already defined */
 }
 ```
 
@@ -157,14 +157,14 @@ The combination of shadow growth + 2px lift is a satisfying, premium hover signa
 
 ```css
 /* Current */
---sc-radius-md: 8px;    /* used on cards */
---sc-radius-sm: 6px;    /* used on buttons */
---sc-radius-xs: 4px;    /* used as --sc-r-sm */
+--sc-radius-md: 8px; /* used on cards */
+--sc-radius-sm: 6px; /* used on buttons */
+--sc-radius-xs: 4px; /* used as --sc-r-sm */
 
 /* Proposed */
---sc-radius-md: 10px;   /* cards, modals, dropdowns */
---sc-radius-sm: 7px;    /* buttons, inputs, pills */
---sc-radius-xs: 4px;    /* keep — inline tags, badges */
+--sc-radius-md: 10px; /* cards, modals, dropdowns */
+--sc-radius-sm: 7px; /* buttons, inputs, pills */
+--sc-radius-xs: 4px; /* keep — inline tags, badges */
 ```
 
 `8px → 10px` on cards is the difference between "dated flat design" and "2025 premium app". This single change affects every card surface simultaneously via the token system.
@@ -218,10 +218,11 @@ The three actions reduce to icon buttons at 32px within the overlay — no text 
 **Page title in header:** currently `font-size: 15px; font-weight: 600; letter-spacing: 0.3px`.
 
 Proposed changes (header `.header-left` text):
+
 ```css
 font-size: 15px;
-font-weight: 700;             /* stronger — up from 600 */
-letter-spacing: -0.01em;      /* tight tracking on a product name = premium */
+font-weight: 700; /* stronger — up from 600 */
+letter-spacing: -0.01em; /* tight tracking on a product name = premium */
 ```
 
 **Filter section labels** (currently `font-weight: 500; font-size: 13px` or similar):
@@ -288,7 +289,7 @@ The `onerror` fallback hides the image gracefully if a favicon cannot be retriev
 
 .sc-header-link:not([aria-current='page']) {
   color: rgba(255, 255, 255, 0.65);
-  padding: 4px 10px;      /* same geometry, no background */
+  padding: 4px 10px; /* same geometry, no background */
 }
 
 .sc-header-link:not([aria-current='page']):hover {
@@ -309,11 +310,13 @@ This is the pattern used by Vercel's dashboard nav, Arc's sidebar, and Linear's 
 **Risk:** Very low
 
 **Current URL Library empty state:**
+
 ```
 No URLs found for this view.
 ```
 
 **Proposed:**
+
 ```
 [SVG icon: small link/chain illustration, brand blue tint]
 
@@ -337,21 +340,21 @@ The current primary button likely uses a flat `#1976d2` background. Proposed ref
 
 ```css
 .sc-btn-primary {
-  background: var(--sc-color-brand-primary);         /* #1976d2 */
+  background: var(--sc-color-brand-primary); /* #1976d2 */
   /* Add a subtle inner gradient for depth */
   background-image: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0.08) 0%,
     rgba(0, 0, 0, 0.04) 100%
   );
-  border: 1px solid var(--sc-color-primary-strong);  /* #1565c0 — defines the edge */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);          /* grounding shadow */
+  border: 1px solid var(--sc-color-primary-strong); /* #1565c0 — defines the edge */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* grounding shadow */
   font-weight: 600;
   letter-spacing: 0.01em;
 }
 
 .sc-btn-primary:hover {
-  background: var(--sc-color-primary-strong);         /* #1565c0 */
+  background: var(--sc-color-primary-strong); /* #1565c0 */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
 
@@ -369,25 +372,25 @@ The inner gradient + border edge + grounding shadow transforms a flat blue recta
 
 ### Immediate (v1.10 — no DS 2.0 required, CSS-only)
 
-| ID | Change | Impact | Effort |
-|---|---|---|---|
-| V-01 | Dark premium header | ★★★★★ | XS |
-| V-02 | Warm page background | ★★★★☆ | XS |
-| V-04 | Increase border radius (md: 8→10, sm: 6→7) | ★★★★☆ | XS |
-| V-08 | Active nav pill indicator | ★★★☆☆ | S |
-| V-06 | Typography: tighter tracking on title, uppercase filter labels | ★★★☆☆ | S |
-| V-10 | Primary button: gradient + border + grounding shadow | ★★★☆☆ | S |
+| ID   | Change                                                         | Impact | Effort |
+| ---- | -------------------------------------------------------------- | ------ | ------ |
+| V-01 | Dark premium header                                            | ★★★★★  | XS     |
+| V-02 | Warm page background                                           | ★★★★☆  | XS     |
+| V-04 | Increase border radius (md: 8→10, sm: 6→7)                     | ★★★★☆  | XS     |
+| V-08 | Active nav pill indicator                                      | ★★★☆☆  | S      |
+| V-06 | Typography: tighter tracking on title, uppercase filter labels | ★★★☆☆  | S      |
+| V-10 | Primary button: gradient + border + grounding shadow           | ★★★☆☆  | S      |
 
 **These six changes alone will move the product from "developer prototype" to "premium tool" visually. Together they take 2–3 hours of CSS work and zero JS changes.**
 
 ### v2.0 Sprint 1 — alongside Design System 2.0 token migration
 
-| ID | Change | Impact | Effort |
-|---|---|---|---|
-| V-03 | Card elevation: layered neutral shadows, remove visible border | ★★★★☆ | S |
-| V-05 | Hover-reveal card actions in screenshot grid | ★★★★☆ | M |
-| V-09 | Empty states: icon + headline + CTA | ★★★☆☆ | M |
-| V-07 | Domain favicons in URL Library rows | ★★★☆☆ | M |
+| ID   | Change                                                         | Impact | Effort |
+| ---- | -------------------------------------------------------------- | ------ | ------ |
+| V-03 | Card elevation: layered neutral shadows, remove visible border | ★★★★☆  | S      |
+| V-05 | Hover-reveal card actions in screenshot grid                   | ★★★★☆  | M      |
+| V-09 | Empty states: icon + headline + CTA                            | ★★★☆☆  | M      |
+| V-07 | Domain favicons in URL Library rows                            | ★★★☆☆  | M      |
 
 ---
 
