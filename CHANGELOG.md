@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.9.92 - 2026-03-15
+
+### Changed
+
+- CI quality-gate hardening:
+  - fixed brittle `tests/gap-remediation-contract.test.mjs` checks for coverage/license badges so they validate stable semantics instead of one exact badge string.
+  - added explicit assertions for README PolyForm project-license line and LICENSE PolyForm header to preserve non-commercial licensing guarantees.
+- Version sync:
+  - synchronized version to `1.9.92` across manifest/package/docs pointers.
+
 ## 1.9.91 - 2026-03-15
 
 ### Changed

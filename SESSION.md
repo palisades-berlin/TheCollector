@@ -22,19 +22,22 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
 **Done:**
 
-- Switched repository license model from MIT to PolyForm Noncommercial 1.0.0.
-- Replaced `LICENSE` file content with official PolyForm Noncommercial 1.0.0 terms and added project `Required Notice`.
-- Updated package and docs license pointers:
-  - `package.json` license now `SEE LICENSE IN LICENSE`.
-  - README license badge/text now points to PolyForm Noncommercial and states commercial use is not permitted.
-- Bumped synchronized version pointers to `1.9.91` in `manifest.json`, `package.json`, `README.md`, `AGENTS.md`, `CLAUDE.md`, and `CHANGELOG.md`.
-- CI baseline remains green for GitHub Actions; third-party queued-check blocker status unchanged.
+- Triaged failing CI run `23113167036` and identified exact root cause in `quality` job:
+  - `tests/gap-remediation-contract.test.mjs` had brittle hardcoded README badge regexes (`Coverage Gate 90%` + `License: MIT`) that no longer matched valid current state.
+- Implemented permanent prevention fix:
+  - replaced exact-string badge assertions with semantic badge-pattern assertions.
+  - added explicit guard assertions that README project-license line and LICENSE header match PolyForm Noncommercial 1.0.0.
+- Local validation completed:
+  - `node tests/gap-remediation-contract.test.mjs` passed.
+  - `npm run test:unit` passed.
+  - `npm run format:check` passed.
+- Prepared synchronized version bump to `1.9.92` across required version files.
 
 ---
 
 ## Do next
 
-**Task:** If requested, commit/push the license model switch (`1.9.91`) and sync wiki `Home.md`; then resume blocked-check and Figma unblock tracks.
+**Task:** Push the CI hardening fix (`1.9.92`) and verify GitHub Actions CI turns green; then resume blocked-check and Figma unblock tracks.
 
 Where: Figma file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`)
 What: Phase 0 checklist in master plan §6, steps 0-A through 0-F
@@ -84,4 +87,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session.
 
 ---
 
-_Last updated: 2026-03-15 (license switched to PolyForm Noncommercial 1.0.0; version pointers moved to 1.9.91; awaiting commit/push decision)_
+_Last updated: 2026-03-15 (CI root cause fixed in gap-remediation contract; preventive semantic assertions added; ready to push 1.9.92)_

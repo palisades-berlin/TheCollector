@@ -21,13 +21,18 @@ async function main() {
   );
   assert.match(
     readme,
-    /\[!\[Coverage Gate\]\(https:\/\/img\.shields\.io\/badge\/Coverage%20Gate-90%25%20lines-brightgreen\)\]/,
+    /\[!\[Coverage Gate\]\(https:\/\/img\.shields\.io\/badge\/Coverage%20Gate-[^)]+\)\]\(\.\/package\.json\)/,
     'README.md: coverage badge is required'
   );
   assert.match(
     readme,
-    /\[!\[License: MIT\]\(https:\/\/img\.shields\.io\/badge\/License-MIT-yellow\.svg\)\]/,
+    /\[!\[License:[^\]]+\]\(https:\/\/img\.shields\.io\/badge\/License-[^)]+\)\]\(\.\/LICENSE\)/,
     'README.md: license badge is required'
+  );
+  assert.match(
+    readme,
+    /Project license: \[PolyForm Noncommercial 1\.0\.0\]\(\.\/LICENSE\)/,
+    'README.md: project license line must match PolyForm Noncommercial 1.0.0'
   );
   assert.match(
     readme,
@@ -76,6 +81,13 @@ async function main() {
     urlsState,
     /import\('\.\.\/\.\.\/shared\/types\.js'\)\.UrlMutationContext/,
     'urls-state.js: shared UrlMutationContext typedef reference is required'
+  );
+
+  const license = await read('LICENSE');
+  assert.match(
+    license,
+    /^# PolyForm Noncommercial License 1\.0\.0/m,
+    'LICENSE: PolyForm Noncommercial 1.0.0 header is required'
   );
 
   process.stdout.write('PASS gap remediation contract\n');
