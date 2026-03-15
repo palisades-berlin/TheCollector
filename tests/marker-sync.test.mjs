@@ -37,24 +37,19 @@ function testValidateSync() {
   try {
     writeFile(
       root,
-      'docs/marker-sync-contract.md',
-      [
-        '# Contract',
-        '```json',
-        JSON.stringify(
-          {
-            allowedMarkerIds: ['A'],
-            requiredMarkersByFile: {
-              'a.md': ['A'],
-              'b.md': ['A'],
-            },
-            canonicalMirrors: [{ id: 'A', canonical: 'a.md', mirrors: ['b.md'] }],
+      'docs/marker-sync-contract.json',
+      JSON.stringify(
+        {
+          allowedMarkerIds: ['A'],
+          requiredMarkersByFile: {
+            'a.md': ['A'],
+            'b.md': ['A'],
           },
-          null,
-          2
-        ),
-        '```',
-      ].join('\n')
+          canonicalMirrors: [{ id: 'A', canonical: 'a.md', mirrors: ['b.md'] }],
+        },
+        null,
+        2
+      )
     );
     writeFile(root, 'a.md', '<!-- A:START -->\nvalue\n<!-- A:END -->\n');
     writeFile(root, 'b.md', '<!-- A:START -->\nvalue\n<!-- A:END -->\n');

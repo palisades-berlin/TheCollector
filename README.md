@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.97.2`.
+Current extension version: `1.9.97.3`.
 
 ## Overview
 
@@ -31,11 +31,11 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- Added project-wide marker governance with a single machine-readable contract in `docs/marker-sync-contract.md`.
-- Added strict marker sync enforcement (`scripts/check-marker-sync.mjs`) and wired it into `npm run test:docs-policy`.
-- Standardized marker blocks across governance docs (`AGENTS.md`, `CLAUDE.md`, `SESSION.md`, `docs/project-ruleset.md`, `docs/dev-workflow.md`, `WORKFLOW.md`, `CONTRIBUTING.md`, `docs/ui-handoff.md`, roadmap).
-- Added `tests/marker-sync.test.mjs` to validate marker parsing, validation, and canonical/mirror drift detection.
-- Synced docs/runtime version pointers to `1.9.97.2` across manifest/package/changelog/maintainer docs.
+- Resolved workflow policy conflict: `WORKFLOW.md` now aligns with governance rule that commit/push occurs when explicitly requested.
+- Removed stale hardcoded date context from `CLAUDE.md` to avoid AI temporal drift.
+- Hardened marker contract storage by moving machine data to `docs/marker-sync-contract.json` (no markdown regex extraction).
+- Aligned `CONTRIBUTING.md` local checks with mandatory maintainer gates (`test:version-policy:local`, `test:docs-policy`, `format:session`).
+- Synced docs/runtime version pointers to `1.9.97.3` across manifest/package/changelog/maintainer docs.
 
 ## Versioning Migration Note
 

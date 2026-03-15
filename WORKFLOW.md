@@ -72,7 +72,7 @@ Both Claude (`CLAUDE.md`) and Codex (`AGENTS.md`) have a standing rule to update
 
 If the AI didn't update it, ask: `Update SESSION.md with what we did and what's next.`
 
-**Step 4 — Push**
+**Step 4 — Push (when commit/push is requested)**
 
 ```
 git push
@@ -94,9 +94,9 @@ No other setup needed.
 
 ## One rule
 
-**Always push at the end of a session.**
+**Always end in a synced state.**
 
-If you don't push, the updated `SESSION.md` stays on one machine and the other starts blind. The AI does the writing — your only job is the push.
+If you made a requested commit/push, push before switching machines so `SESSION.md` and docs are not stranded. If no commit/push was requested, keep a clean handoff state (`git status` + pull-on-next-machine discipline).
 
 ## Credit Note
 

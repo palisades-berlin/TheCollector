@@ -6,13 +6,8 @@ export function normalizeNewlines(text) {
 }
 
 export function loadContract(rootDir) {
-  const contractPath = path.join(rootDir, 'docs', 'marker-sync-contract.md');
-  const markdown = fs.readFileSync(contractPath, 'utf8');
-  const match = markdown.match(/```json\s*([\s\S]*?)```/);
-  if (!match) {
-    throw new Error(`Could not find JSON contract block in ${contractPath}`);
-  }
-  return JSON.parse(match[1]);
+  const contractPath = path.join(rootDir, 'docs', 'marker-sync-contract.json');
+  return JSON.parse(fs.readFileSync(contractPath, 'utf8'));
 }
 
 export function parseMarkerBlocks(text, relPath) {

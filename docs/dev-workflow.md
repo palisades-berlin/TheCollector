@@ -21,26 +21,21 @@ npm install
 
 > **Version policy note:** Use `npm run test:version-policy:local` (not `test:version-policy`) when running locally with uncommitted changes. The `:local` variant sets `VERSION_POLICY_BASE_SHA=HEAD` so the bump-rule check compares against the current HEAD rather than `HEAD~1`. The bare `test:version-policy` is for CI (GitHub Actions sets the correct base ref automatically) and for post-commit clean-tree validation.
 
+Run exactly one mode:
+
+`Full gate (recommended):`
+
 ```bash
-npm run lint
-npm run test:repo-hygiene
+npm run check
+```
+
+`Targeted docs/workflow gate:`
+
+```bash
 npm run test:version-policy:local
 npm run test:docs-policy
-npm run test:unit
-npm run test:coverage
-npm run test:coverage:runtime
-npm run test:coverage:preview-export
-npm run test:integration
-npm run test:security-policy
-npm run test:stability
-npm run test:performance
-npx playwright install chromium
-npm run test:e2e:smoke
-npm run test:e2e:visual
-npm run test:e2e:manual
 npm run format:session
 npm run format:check
-npm run check
 ```
 
 <!-- LOCAL_QUALITY_CHECKS:END -->

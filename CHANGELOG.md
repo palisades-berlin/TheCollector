@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.9.97.3 - 2026-03-15
+
+### Changed
+
+- Workflow/policy consistency hardening:
+  - reconciled session-ending guidance in `WORKFLOW.md` with governance rule (`docs/project-ruleset.md`) so push behavior is explicit and non-contradictory.
+  - removed stale hardcoded date block from `CLAUDE.md` to prevent AI date-context drift.
+- Contributor and maintainer workflow alignment:
+  - updated `CONTRIBUTING.md` local checks to include required gates (`test:version-policy:local`, `test:docs-policy`, `format:session`).
+  - reduced redundant execution guidance in `docs/dev-workflow.md` by introducing explicit check modes (`npm run check` or targeted docs gate).
+- Marker-governance robustness:
+  - moved machine-readable marker contract payload to `docs/marker-sync-contract.json` and updated loader/tests to parse JSON directly.
+  - normalized marker comment placement across governance docs to improve readability and non-regex tooling compatibility.
+
 ## 1.9.97.2 - 2026-03-15
 
 ### Changed

@@ -12,6 +12,8 @@ Before diving in, the [dev vlog](https://www.youtube.com/watch?v=6_zKj3nevG0) gi
 
 ```bash
 npm run lint
+npm run test:version-policy:local
+npm run test:docs-policy
 npm run test:unit
 npm run test:coverage
 npm run test:coverage:runtime
@@ -21,6 +23,7 @@ npm run test:stability
 npm run test:performance
 npm run test:e2e:smoke
 npm run test:e2e:visual
+npm run format:session
 npm run format:check
 ```
 

@@ -31,26 +31,27 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 **Date:** 2026-03-15
 **Tool:** Codex
 
-**Key discussion:** Marker governance needed to scale from a few docs to all critical policy/session docs with strict canonical-mirror enforcement in the docs-policy gate.
+**Key discussion:** Post-rollout audit findings were executed as documentation/tooling hardening work: resolve contradictory push guidance, remove stale AI date context, and improve marker contract parsing robustness.
 
 **Done:**
 
-- Added `docs/marker-sync-contract.md` as marker governance source of truth (allowed IDs, required presence, canonical/mirror mappings).
-- Added strict sync tooling: `scripts/marker-sync-lib.mjs`, `scripts/check-marker-sync.mjs`, and `tests/marker-sync.test.mjs`.
-- Wired marker sync into `npm run test:docs-policy` via new `npm run test:marker-sync`.
-- Standardized marker blocks across all governance-critical docs: `AGENTS.md`, `CLAUDE.md`, `SESSION.md`, `docs/project-ruleset.md`, `docs/dev-workflow.md`, `WORKFLOW.md`, `CONTRIBUTING.md`, `docs/ui-handoff.md`, and `docs/thecollector-2.0-90-day-roadmap.md`.
-- Bumped docs/tests-only release to `1.9.97.2` with changelog and README Top Changes sync.
+- Resolved push-policy contradiction by updating `WORKFLOW.md` wording to match governance expectations (push when commit/push is requested).
+- Removed stale hardcoded `currentDate` block from `CLAUDE.md`.
+- Moved marker contract machine data from markdown fence to `docs/marker-sync-contract.json` and updated loader/tests accordingly.
+- Updated `CONTRIBUTING.md` local checks to include mandatory maintainer gates (`test:version-policy:local`, `test:docs-policy`, `format:session`).
+- Reduced redundant local check execution guidance in `docs/dev-workflow.md` by defining explicit check modes.
+- Normalized marker placement style across governance docs and bumped docs/tests-only release to `1.9.97.3`.
 
 ---
 
 ## Do next
 
-**Task:** Verify green GitHub CI + CodeQL runs for `1.9.97.2`, then resume Phase 0 Figma unblock and execute `0-A-1` color style tokens.
+**Task:** Verify green GitHub CI + CodeQL runs for `1.9.97.3`, then resume Phase 0 Figma unblock and execute `0-A-1` color style tokens.
 
 Where: Figma file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`)
 What: Phase 0 checklist in master plan §6, steps 0-A through 0-F
 Gate: ALL Phase 0 Figma work must be complete and approved before any Phase 1 code begins
-First step (GitHub checks track): confirm `1.9.97.2` quality + CodeQL jobs remain green after marker-sync governance rollout.
+First step (GitHub checks track): confirm `1.9.97.3` quality + CodeQL jobs remain green after workflow/policy hardening changes.
 First step after Figma unblock: 0-A-1 — update colour styles (dark mode surface tokens, light mode surface tokens, border tokens).
 
 **Blocker status:** active — Figma seat/capacity blocker prevents MCP execution (`View` + tool-call limit).
@@ -111,4 +112,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session.
 
 ---
 
-_Last updated: 2026-03-15 (full marker-sync governance rollout completed; bumped to 1.9.97.2)_
+_Last updated: 2026-03-15 (audit-driven workflow consistency hardening completed; bumped to 1.9.97.3)_
