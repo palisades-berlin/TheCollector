@@ -1,12 +1,22 @@
 # Changelog
 
+## 1.9.94.0 - 2026-03-15
+
+### Changed
+
+- GitHub Actions runtime hardening:
+  - upgraded core GitHub actions to current majors (`actions/checkout@v6`, `actions/setup-node@v6`, `actions/cache@v5`, `actions/upload-artifact@v7`).
+  - retained explicit Node24 JavaScript-actions runtime opt-in via `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'` in `ci.yml`, `codeql.yml`, and `release-assets.yml`.
+- Version sync:
+  - synchronized version to `1.9.94.0` across manifest/package/docs pointers.
+
 ## 1.9.93.0 - 2026-03-15
 
 ### Changed
 
 - GitHub Actions runtime hardening:
   - added workflow-level `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` in `ci.yml`, `codeql.yml`, and `release-assets.yml`.
-  - preemptively removed Node 20 JavaScript action-runtime deprecation risk flagged by GitHub Actions warnings.
+  - preemptively addressed Node 20 JavaScript action-runtime deprecation warnings flagged by GitHub Actions.
 - Version sync:
   - synchronized version to `1.9.93.0` across manifest/package/docs pointers.
 
