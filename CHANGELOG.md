@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.95.1 - 2026-03-15
+
+### Changed
+
+- CONTRIBUTING.md: witty PR review line — reviewed by at least one human and two AIs (Claude + Codex).
+- CONTRIBUTING.md: dev vlog link added to intro for contributor context.
+- README.md: `## Behind the Build` section added with Medium article and YouTube dev vlog links.
+- SESSION.md: `**Key discussion:**` field added to last-session block + field guide table for AI handoff context.
+
 ## 1.9.95.0 - 2026-03-15
 
 ### Changed

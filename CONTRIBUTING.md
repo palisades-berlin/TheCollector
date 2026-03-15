@@ -2,6 +2,8 @@
 
 Thanks for contributing. This repository uses strict quality gates and release discipline.
 
+Before diving in, the [dev vlog](https://www.youtube.com/watch?v=6_zKj3nevG0) gives a useful behind-the-scenes look at the actual workflow — the split-brain AI setup, the SESSION.md handoff ritual, and why the governance exists. Worth 10 minutes of your time.
+
 ## Development Workflow
 
 1. Create a branch from `main`.
@@ -115,7 +117,7 @@ Version format is `X.Y.Z.W`.
 
 ## Review Standards
 
-- At least one human review is required for merges to `main`.
+- Pull requests are reviewed by at least one human and two AIs (Claude + Codex, if you were curious). The human has final say — mostly to keep everyone humble.
 - All required CI checks must pass.
 - Keep docs and wiki synchronized with shipped behavior/policy changes.
 

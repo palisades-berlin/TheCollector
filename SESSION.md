@@ -18,24 +18,16 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 ## Last session
 
 **Date:** 2026-03-15
-**Tool:** Codex
+**Tool:** Claude (Cowork)
+
+**Key discussion:** Investigated `create_design_system_rules` MCP tool (prompt generator, not Figma editor); Figma Professional plan (~$15/mo) identified as minimum for Editor seat unblock.
 
 **Done:**
 
-- Hardened GitHub workflow runtime compatibility ahead of the Node 20 JavaScript action deprecation cutoff.
-- Upgraded workflow actions to current majors and retained Node24 opt-in:
-  - `actions/checkout@v6`
-  - `actions/setup-node@v6`
-  - `actions/cache@v5`
-  - `actions/upload-artifact@v7`
-  - plus `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` in:
-  - `.github/workflows/ci.yml`
-  - `.github/workflows/codeql.yml`
-  - `.github/workflows/release-assets.yml`
-- Upgraded CodeQL actions to current supported major:
-  - `github/codeql-action/init@v4`
-  - `github/codeql-action/analyze@v4`
-- Bumped lockstep version to `1.9.95.0` and updated changelog + README Top Changes accordingly.
+- CONTRIBUTING.md: witty PR review line (one human + two AIs); dev vlog link added to intro.
+- README.md: `## Behind the Build` section with Medium article + YouTube dev vlog links.
+- SESSION.md: `**Key discussion:**` field + field guide table added for AI handoff context.
+- Bumped version to `1.9.95.1` (docs-only W bump).
 
 ---
 
@@ -75,6 +67,18 @@ First step after Figma unblock: 0-A-1 — update colour styles (dark mode surfac
 
 ---
 
+## SESSION.md field guide
+
+| Field | Required | Purpose |
+|---|---|---|
+| **Date / Tool** | Always | Who ran the session |
+| **Key discussion** | When useful | One line — mid-session decision or pivot not captured in any commit or ADR |
+| **Done** | Always | What was completed |
+| **Do next** | Always | Exact next task |
+| **Open decisions / blockers** | When applicable | Unresolved questions or hard blockers |
+
+---
+
 ## Opening prompt (paste this to start any session)
 
 **Claude:**
@@ -91,4 +95,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session.
 
 ---
 
-_Last updated: 2026-03-15 (Node24 workflow-runtime hardening + lockstep bump to 1.9.95.0; pending push verification)_
+_Last updated: 2026-03-15 (docs: Behind the Build links, witty PR review, SESSION.md field guide — bumped to 1.9.95.1)_

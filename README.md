@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.95.0`.
+Current extension version: `1.9.95.1`.
 
 ## Overview
 
@@ -26,11 +26,11 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- GitHub Actions hardening: upgraded workflow actions to current majors (`checkout@v6`, `setup-node@v6`, `cache@v5`, `upload-artifact@v7`) and moved CodeQL action to `v4` (`init`/`analyze`) to clear deprecation paths.
-- At screenshot limit, oldest-first auto-purge keeps capture running when enabled; with Auto-purge off, capture save is blocked with actionable guidance.
-- History Domain filter now uses a premium combobox with captured-domain suggestions (count badges), keyboard selection (`Arrow`/`Enter`), TLD typing support, and one-click clear/reset.
-- Popup/URL accessibility pass: popup errors render as a single toast-only surface and URL Library tabs support keyboard navigation (`Left/Right/Home/End`) with explicit tab-to-panel mapping.
-- History Files overlay traps focus while open and restores focus to the opener on close.
+- Added `## Behind the Build` section: Medium article + YouTube dev vlog links.
+- Witty PR review line in CONTRIBUTING.md (reviewed by one human, two AIs).
+- Added `**Key discussion:**` field to SESSION.md + field guide for AI handoff context.
+- Pre-commit checklist added to CLAUDE.md and AGENTS.md; design-system-rules.md generated for Phase 0 Figma.
+- GitHub Actions hardening: upgraded workflow actions to current majors and CodeQL to `v4`.
 
 ## Versioning Migration Note
 
@@ -353,3 +353,8 @@ Milestones in delivery order:
 - Firefox baseline (architecture spike first)
 
 Full roadmap: `docs/thecollector-2.0-90-day-roadmap.md`
+
+## Behind the Build
+
+- 📖 [I Vibe‑Coded a Chrome Extension With Two AIs: 163 Versions, 12 Architecture Decisions, Zero Regrets?](https://medium.com/p/dc3978593933) — the full written story behind this project.
+- 🎬 [Vibe‑Coding a Chrome Extension With Two AIs: 163 Versions in 9 Days](https://www.youtube.com/watch?v=6_zKj3nevG0) — the dev vlog: split-brain AI setup, SESSION.md ritual, ADRs, and the Figma seat nobody could hack.
