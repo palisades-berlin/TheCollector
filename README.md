@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.96.0`.
+Current extension version: `1.9.96.1`.
 
 ## Overview
 
@@ -26,11 +26,11 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
+- CI fix: formatted `SESSION.md` to satisfy `prettier --check` in GitHub quality gate.
 - Added `test:version-policy:local` npm script — pre-commit version check now works correctly without manual env var.
 - Added `## Behind the Build` section: Medium article + YouTube dev vlog links.
 - Witty PR review line in CONTRIBUTING.md (reviewed by one human, two AIs).
 - Added `**Key discussion:**` field to SESSION.md + field guide for AI handoff context.
-- Pre-commit checklist added to CLAUDE.md and AGENTS.md; design-system-rules.md generated for Phase 0 Figma.
 
 ## Versioning Migration Note
 

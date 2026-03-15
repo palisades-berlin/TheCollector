@@ -18,28 +18,27 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 ## Last session
 
 **Date:** 2026-03-15
-**Tool:** Claude (Cowork)
+**Tool:** Codex
 
-**Key discussion:** `test:version-policy` fails locally with uncommitted changes (uses HEAD~1 as base); fixed by adding `test:version-policy:local` npm script with `VERSION_POLICY_BASE_SHA=HEAD` baked in.
+**Key discussion:** After pushing `1.9.96.0`, GitHub CI failed only on `format:check` due `SESSION.md`; fixed with Prettier and prepared docs-only follow-up bump.
 
 **Done:**
 
-- Added `test:version-policy:local` npm script; updated CLAUDE.md, AGENTS.md, dev-workflow.md to use it.
-- CONTRIBUTING.md: witty PR review line (one human + two AIs); dev vlog link added to intro.
-- README.md: `## Behind the Build` section with Medium article + YouTube dev vlog links.
-- SESSION.md: `**Key discussion:**` field + field guide table added for AI handoff context.
-- Bumped version to `1.9.96.0` (Z bump — tooling change).
+- Pushed two local commits (`f3240b9`, `c76ccb3`) to `main` so remote reflects local truth.
+- Verified GitHub CodeQL run passed for pushed head.
+- Diagnosed CI failure root cause: `prettier --check` warning in `SESSION.md`.
+- Formatted `SESSION.md`, updated release docs, and bumped to `1.9.96.1` as docs-only follow-up.
 
 ---
 
 ## Do next
 
-**Task:** Verify green GitHub CI + CodeQL runs for `1.9.95.0`, then resume Phase 0 Figma unblock and execute `0-A-1` color style tokens.
+**Task:** Verify green GitHub CI + CodeQL runs for `1.9.96.1`, then resume Phase 0 Figma unblock and execute `0-A-1` color style tokens.
 
 Where: Figma file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`)
 What: Phase 0 checklist in master plan §6, steps 0-A through 0-F
 Gate: ALL Phase 0 Figma work must be complete and approved before any Phase 1 code begins
-First step (GitHub checks track): confirm deprecation warnings are gone and no workflow step regressions after Node24 runtime opt-in.
+First step (GitHub checks track): confirm `1.9.96.1` quality job is green after `SESSION.md` formatting fix.
 First step after Figma unblock: 0-A-1 — update colour styles (dark mode surface tokens, light mode surface tokens, border tokens).
 
 **Blocker status:** active — Figma seat/capacity blocker prevents MCP execution (`View` + tool-call limit).
@@ -70,13 +69,13 @@ First step after Figma unblock: 0-A-1 — update colour styles (dark mode surfac
 
 ## SESSION.md field guide
 
-| Field | Required | Purpose |
-|---|---|---|
-| **Date / Tool** | Always | Who ran the session |
-| **Key discussion** | When useful | One line — mid-session decision or pivot not captured in any commit or ADR |
-| **Done** | Always | What was completed |
-| **Do next** | Always | Exact next task |
-| **Open decisions / blockers** | When applicable | Unresolved questions or hard blockers |
+| Field                         | Required        | Purpose                                                                    |
+| ----------------------------- | --------------- | -------------------------------------------------------------------------- |
+| **Date / Tool**               | Always          | Who ran the session                                                        |
+| **Key discussion**            | When useful     | One line — mid-session decision or pivot not captured in any commit or ADR |
+| **Done**                      | Always          | What was completed                                                         |
+| **Do next**                   | Always          | Exact next task                                                            |
+| **Open decisions / blockers** | When applicable | Unresolved questions or hard blockers                                      |
 
 ---
 
@@ -96,4 +95,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session.
 
 ---
 
-_Last updated: 2026-03-15 (tooling: test:version-policy:local added; docs housekeeping — bumped to 1.9.96.0)_
+_Last updated: 2026-03-15 (CI format fix: SESSION.md prettified, docs-only bump to 1.9.96.1; pending push verification)_

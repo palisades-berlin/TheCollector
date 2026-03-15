@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.96.1 - 2026-03-15
+
+### Changed
+
+- CI/docs housekeeping:
+  - fixed GitHub CI `quality` failure by formatting `SESSION.md` to satisfy `prettier --check`.
+  - kept tooling/docs changes from `1.9.96.0` intact; this release is a docs-only follow-up bump.
+
 ## 1.9.96.0 - 2026-03-15
 
 ### Changed
