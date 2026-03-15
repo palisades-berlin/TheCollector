@@ -81,6 +81,10 @@ No other setup needed.
 
 If you don't push, the updated `SESSION.md` stays on one machine and the other starts blind. The AI does the writing — your only job is the push.
 
+## Credit Note
+
+Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
+
 ---
 
 _That's the whole system._

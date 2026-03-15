@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-Current extension version: `1.9.89`.
+Current extension version: `1.9.90`.
 
 ## Overview
 
@@ -20,9 +20,13 @@ All data remains in extension-local storage; there is no backend upload pipeline
 
 Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.md).
 
+## Credits
+
+Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
+
 ## Top Changes
 
-- README trust-signal clarification: Coverage badge now explicitly states threshold semantics as `Coverage Gate ≥90% lines` (minimum gate, not a live measured value).
+- Added explicit project attribution note across maintainer-facing docs and rulesets: `Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.`
 - At screenshot limit, oldest-first auto-purge keeps capture running when enabled; with Auto-purge off, capture save is blocked with actionable guidance.
 - History Domain filter now uses a premium combobox with captured-domain suggestions (count badges), keyboard selection (`Arrow`/`Enter`), TLD typing support, and one-click clear/reset.
 - Popup/URL accessibility pass: popup errors render as a single toast-only surface and URL Library tabs support keyboard navigation (`Left/Right/Home/End`) with explicit tab-to-panel mapping.

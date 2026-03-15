@@ -194,3 +194,7 @@ Publish workflow:
 3. Fix root cause first; avoid weakening thresholds or bypassing gates.
 4. If a policy false-positive is unavoidable, add a narrow allowlist entry with inline rationale and changelog note.
 5. Re-run full local quality checklist before requesting review.
+
+## Documentation Credit Note
+
+Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.

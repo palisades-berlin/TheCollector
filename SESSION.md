@@ -1,5 +1,7 @@
 # Session State — THE Collector
 
+Attribution: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
+
 > **Rule:** Update this file before every `git push`. It is the handoff between machines and AI tools.
 > **How to resume:** `git pull` → read this file → paste the opening prompt below to Claude or Codex.
 
@@ -20,14 +22,14 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
 **Done:**
 
-- Confirmed latest GitHub Actions CI and CodeQL runs are green on commit `748fa2d` after visual calibration fix.
-- Investigated remaining red/pending indicator and isolated non-CI cause:
-  - third-party `Claude` check suite is stuck in `queued` with zero check-runs on latest commit.
-- Applied docs-only trust-signal clarity update:
-  - README coverage badge now explicitly indicates threshold semantics (`Coverage Gate ≥90% lines`).
-- Ran local docs gate:
+- Added explicit attribution note across maintainer-facing documentation/ruleset surfaces:
+  - `README.md`, `AGENTS.md`, `CLAUDE.md`, `WORKFLOW.md`, `docs/project-ruleset.md`, `docs/dev-workflow.md`, `CONTRIBUTING.md`, and `SESSION.md`.
+- Updated credit wording by request to:
+  - `Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.`
+- Ran local docs gates:
   - `npm run test:docs-policy` passed.
-- Figma unblock status unchanged: MCP still blocked by seat/plan limits; Phase 0-A-1 remains pending.
+  - `npm run format:check` passed.
+- CI baseline remains green for GitHub Actions; third-party queued-check blocker status unchanged.
 
 ---
 
@@ -83,4 +85,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session.
 
 ---
 
-_Last updated: 2026-03-15 (CI green confirmed; queued third-party check isolated; README coverage badge semantics clarified; Figma unblock still pending)_
+_Last updated: 2026-03-15 (attribution-note rollout completed; docs gates green; queued third-party check and Figma unblock still pending)_

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.9.90 - 2026-03-15
+
+### Changed
+
+- Documentation attribution update:
+  - added explicit project credit note across maintainer-facing docs and rulesets.
+  - standardized wording to `Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.`
+- Version sync:
+  - synchronized version to `1.9.90` across manifest/package/docs pointers.
+
 ## 1.9.89 - 2026-03-15
 
 ### Changed

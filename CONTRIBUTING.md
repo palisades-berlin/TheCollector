@@ -114,3 +114,7 @@ For code changes, keep versions synchronized:
 - At least one human review is required for merges to `main`.
 - All required CI checks must pass.
 - Keep docs and wiki synchronized with shipped behavior/policy changes.
+
+## Credit Note
+
+Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.

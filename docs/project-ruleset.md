@@ -77,6 +77,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 9. Use `docs/todo-list.md` as the dedicated place for operational follow-ups (for example drift cleanup, housekeeping, and technical chores) so roadmap files remain focused on product planning and execution milestones.
 10. When working from `docs/todo-list.md`, remove each task immediately after it is completed in the same work cycle.
 11. When any feature, UX flow, behavior, policy, or release process changes, adapt all impacted documentation in the same work cycle (README, help, ADRs, roadmap/plans, changelog, wiki, and policy docs as applicable).
+12. Attribution note for maintainer-facing documentation should stay explicit and consistent: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Help Documentation Rules (added 2026-03-11)
 
