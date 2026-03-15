@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.92.0`.
+Current extension version: `1.9.93.0`.
 
 ## Overview
 
@@ -26,7 +26,7 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- Versioning migration: adopted four-part versioning `X.Y.Z.W` (`1.9.92.0` baseline) with enforced bump rules (`Z` for code/runtime, `W` for docs/tests-only).
+- GitHub Actions hardening: CI, CodeQL, and Release Assets workflows now force JavaScript actions on Node 24 runtime (`FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true`) to avoid Node 20 deprecation failures.
 - At screenshot limit, oldest-first auto-purge keeps capture running when enabled; with Auto-purge off, capture save is blocked with actionable guidance.
 - History Domain filter now uses a premium combobox with captured-domain suggestions (count badges), keyboard selection (`Arrow`/`Enter`), TLD typing support, and one-click clear/reset.
 - Popup/URL accessibility pass: popup errors render as a single toast-only surface and URL Library tabs support keyboard navigation (`Left/Right/Home/End`) with explicit tab-to-panel mapping.

@@ -1,23 +1,16 @@
 # Changelog
 
-## 1.9.92.0 - 2026-03-15
+## 1.9.93.0 - 2026-03-15
 
 ### Changed
 
-- Versioning policy migration:
-  - adopted four-part versioning `X.Y.Z.W` across active release/version pointers.
-  - standardized bump rules: code/runtime changes bump `Z` and reset `W=0`; docs/tests-only changes bump `W` only.
-  - added ADR 0014 as canonical policy source.
-- CI/release guardrails:
-  - added `scripts/check-version-policy.mjs` and `tests/version-policy.test.mjs`.
-  - integrated `test:version-policy` into local `check` and CI quality workflow.
-  - hardened release scripts to explicitly enforce `X.Y.Z.W` versions and `vX.Y.Z.W` tags.
-- Historical continuity:
-  - preserved historical three-part changelog entries intentionally (no backfill rewrite).
+- GitHub Actions runtime hardening:
+  - added workflow-level `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` in `ci.yml`, `codeql.yml`, and `release-assets.yml`.
+  - preemptively removed Node 20 JavaScript action-runtime deprecation risk flagged by GitHub Actions warnings.
 - Version sync:
-  - synchronized version to `1.9.92.0` across manifest/package/docs pointers.
+  - synchronized version to `1.9.93.0` across manifest/package/docs pointers.
 
-## 1.9.92 - 2026-03-15
+## 1.9.92.0 - 2026-03-15
 
 ### Changed
 
@@ -25,7 +18,7 @@
   - fixed brittle `tests/gap-remediation-contract.test.mjs` checks for coverage/license badges so they validate stable semantics instead of one exact badge string.
   - added explicit assertions for README PolyForm project-license line and LICENSE PolyForm header to preserve non-commercial licensing guarantees.
 - Version sync:
-  - synchronized version to `1.9.92` across manifest/package/docs pointers.
+  - synchronized version to `1.9.92.0` across manifest/package/docs pointers.
 
 ## 1.9.91 - 2026-03-15
 
