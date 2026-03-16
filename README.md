@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.97.3`.
+Current extension version: `1.9.97.4`.
 
 ## Overview
 
@@ -31,11 +31,11 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- Resolved workflow policy conflict: `WORKFLOW.md` now aligns with governance rule that commit/push occurs when explicitly requested.
-- Removed stale hardcoded date context from `CLAUDE.md` to avoid AI temporal drift.
-- Hardened marker contract storage by moving machine data to `docs/marker-sync-contract.json` (no markdown regex extraction).
-- Aligned `CONTRIBUTING.md` local checks with mandatory maintainer gates (`test:version-policy:local`, `test:docs-policy`, `format:session`).
-- Synced docs/runtime version pointers to `1.9.97.3` across manifest/package/changelog/maintainer docs.
+- Added machine-readable behavioral/tool-routing marker coverage to maintainer/session docs and marker contract policy.
+- Synced canonical `OPENING_PROMPT` content from `SESSION.md` into `WORKFLOW.md` to eliminate marker drift.
+- Prepared Chrome Web Store submission release flow with required attestation-ready docs/session alignment.
+- Verified release governance checks are wired through `npm run test:docs-policy` marker-sync enforcement.
+- Synced docs/runtime version pointers to `1.9.97.4` across manifest/package/changelog/maintainer docs.
 
 ## Versioning Migration Note
 

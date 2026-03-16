@@ -3,7 +3,7 @@
 ## Project Summary
 
 `THE Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.9.97.3`.
+Current extension version: `1.9.97.4`.
 The extension is **free forever** — no subscriptions, no payments, no paid tiers. The tier selector (Basic / Pro / Ultra) is a UX complexity preference, not a paywall. See ADR 0009.
 Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
@@ -21,6 +21,18 @@ Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance 
 <!-- ROADMAP_AUTHORITY:START -->
 - Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
 <!-- ROADMAP_AUTHORITY:END -->
+
+## Behavioural Rules
+
+<!-- BEHAVIOURAL_RULES:START -->
+
+- **When uncertain about scope, intent, or task ownership — ask. Do not anticipate, assume, or proceed speculatively.**
+- If a task feels like it belongs to Claude (design, Figma, docs, ADRs), stop and confirm with the maintainer before acting.
+- Consult the Tool Router in `SESSION.md` whenever the right tool is not obvious.
+
+<!-- BEHAVIOURAL_RULES:END -->
+
+---
 
 ## Engineering Rules
 

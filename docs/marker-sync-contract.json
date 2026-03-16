@@ -2,8 +2,10 @@
   "allowedMarkerIds": [
     "ENGINEERING_RULES",
     "PRE_COMMIT_CHECKLIST",
+    "BEHAVIOURAL_RULES",
     "HELP_RULES",
     "SESSION_RULE",
+    "TOOL_ROUTER",
     "OPENING_PROMPT",
     "LOCAL_QUALITY_CHECKS",
     "VERSIONING_RULE",
@@ -20,6 +22,7 @@
     "AGENTS.md": [
       "ENGINEERING_RULES",
       "PRE_COMMIT_CHECKLIST",
+      "BEHAVIOURAL_RULES",
       "HELP_RULES",
       "SESSION_RULE",
       "ROADMAP_AUTHORITY",
@@ -29,13 +32,14 @@
     "CLAUDE.md": [
       "ENGINEERING_RULES",
       "PRE_COMMIT_CHECKLIST",
+      "BEHAVIOURAL_RULES",
       "HELP_RULES",
       "SESSION_RULE",
       "ROADMAP_AUTHORITY",
       "ROADMAP_CONSTRAINTS",
       "ROADMAP_MILESTONES"
     ],
-    "SESSION.md": ["SESSION_RULE", "OPENING_PROMPT"],
+    "SESSION.md": ["SESSION_RULE", "TOOL_ROUTER", "OPENING_PROMPT"],
     "docs/project-ruleset.md": [
       "ENGINEERING_RULES",
       "HELP_RULES",

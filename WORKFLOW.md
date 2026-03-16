@@ -40,16 +40,22 @@ Always do this first, on any machine, before touching anything.
 
 ## Opening prompt (paste this to start any session)
 
+**Perplexity:**
+
+```
+Read SESSION.md (Do next + Open decisions sections). Your role: research and prompt engineering only. Summarize findings as a concise brief for Claude or Codex to act on — do not implement anything. If the scope or intent of a task is unclear, ask before proceeding.
+```
+
 **Claude:**
 
 ```
-Read CLAUDE.md and SESSION.md, then continue from the last session.
+Read CLAUDE.md and SESSION.md, then continue from the last session. Your role: design (Figma MCP), documentation, ADRs, decisions. Check the Tool Router if unsure whether a task belongs here or in Codex. If scope or intent is unclear, ask — do not anticipate.
 ```
 
 **Codex:**
 
 ```
-Read AGENTS.md and SESSION.md, then continue from the last session.
+Read AGENTS.md and SESSION.md, then continue from the last session. Your role: code, tests, version bumps, git. Check the Tool Router if unsure whether a task belongs here or in Claude. Run the pre-commit checklist before any push. If scope or intent is unclear, ask — do not anticipate.
 ```
 
 <!-- OPENING_PROMPT:END -->

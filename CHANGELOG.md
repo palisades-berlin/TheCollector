@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.97.4 - 2026-03-16
+
+### Changed
+
+- Marker-governance and workflow sync hardening:
+  - added `BEHAVIOURAL_RULES` and `TOOL_ROUTER` marker IDs to `docs/marker-sync-contract.json` and required-marker coverage for `AGENTS.md`, `CLAUDE.md`, and `SESSION.md`.
+  - reconciled `WORKFLOW.md` `OPENING_PROMPT` mirror block to match canonical `SESSION.md` content exactly.
+- Release execution readiness:
+  - incorporated pending maintainer/session doc updates into release scope and synchronized version pointers to `1.9.97.4`.
+  - prepared CI-attested release artifact flow for Chrome Web Store submission (`the-collector-release-zip` as source of truth).
+
 ## 1.9.97.3 - 2026-03-15
 
 ### Changed
