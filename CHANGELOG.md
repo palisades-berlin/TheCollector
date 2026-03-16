@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.97.5 - 2026-03-16
+
+### Changed
+
+- Chrome Web Store visibility:
+  - added readable install link CTA to `README.md`: `Install THE Collector (Chrome Web Store)`.
+- Session/governance handoff integration:
+  - included current local `SESSION.md` updates in this docs-only release cycle and reconciled next-task handoff text.
+- Version sync:
+  - synchronized version pointers to `1.9.97.5` across manifest/package/README/maintainer docs.
+
 ## 1.9.97.4 - 2026-03-16
 
 ### Changed

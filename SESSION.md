@@ -29,29 +29,30 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 ## Last session
 
 **Date:** 2026-03-16
-**Tool:** Codex
+**Tool:** Claude
 
-**Key discussion:** Release execution required including the dirty-tree governance/session docs and resolving marker-contract drift before packaging/publishing.
+**Key discussion:** Session focused on governance/tooling refinements and CWS submission copy — no code changes.
 
 **Done:**
 
-- Added/accepted governance markers in release scope (`BEHAVIOURAL_RULES`, `TOOL_ROUTER`) and updated `docs/marker-sync-contract.json` required/allowed marker taxonomy.
-- Synced `WORKFLOW.md` `OPENING_PROMPT` mirror with canonical `SESSION.md` block to remove marker drift.
-- Bumped docs/tests-only release to `1.9.97.4` across `manifest.json`, `package.json`, `README.md`, `CHANGELOG.md`, `AGENTS.md`, and `CLAUDE.md`.
-- Executed local release gates: `test:version-policy:local`, `test:docs-policy`, `format:session`, `format:check`, `test:unit`, and `test:integration` (all passing).
-- Built local validation package `dist/the-collector-v1.9.97.4.zip` via `./scripts/package-release.sh` with guardrails passing.
+- Differentiated opening prompts in `SESSION.md` for Claude, Codex, and Perplexity with explicit role declarations.
+- Added `## Tool Router` section to `SESSION.md` with task-ownership table, pipeline line, and standing "ask, don't anticipate" rule.
+- Added `## Behavioural Rules` section to `CLAUDE.md` and `AGENTS.md` enforcing ask-before-acting and cross-tool boundary checks.
+- Wrote Chrome Web Store short description (115 chars), long description (plain text, shipped features only), and Single Purpose text for the privacy section.
+- Wrote CWS Privacy Practices justification text for `alarms` and `contextMenus` permissions.
+- Identified that `alarms` is missing from `docs/chrome-web-store-permissions.md` — needs to be added.
 
 ---
 
 ## Do next
 
-**Task:** Verify green GitHub CI + CodeQL for release `v1.9.97.4`, confirm release asset `the-collector-release-zip`, then submit ZIP to Chrome Web Store.
+**Task:** Verify green GitHub CI + CodeQL for docs release `v1.9.97.5`, then update `docs/chrome-web-store-permissions.md` to include `alarms` justification text from this session.
 
 Where: Figma file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`)
 What: Phase 0 checklist in master plan §6, steps 0-A through 0-F
 Gate: ALL Phase 0 Figma work must be complete and approved before any Phase 1 code begins
-First step (release track): inspect the `v1.9.97.4` commit/tag checks and confirm CodeQL + CI + release-assets are green.
-First step after release submission: resume Figma blocker path at 0-A-1 (dark/light surface and border token updates).
+First step (release track): inspect `v1.9.97.5` commit checks and confirm CI + CodeQL are green.
+First step after release verification: patch `docs/chrome-web-store-permissions.md` with the missing `alarms` section, then resume Figma blocker path at 0-A-1.
 
 **Blocker status:** active — Figma seat/capacity blocker prevents MCP execution (`View` + tool-call limit).
 
@@ -62,7 +63,7 @@ First step after release submission: resume Figma blocker path at 0-A-1 (dark/li
 - Figma permission/capacity blocker:
   - file access must be upgraded to `Editor`
   - MCP plan/call allowance must be sufficient for style update + validation pass
-- CI follow-up: if any `v1.9.97.4` release checks fail (`quality`, `codeql`, `release-assets`), fix forward and re-run before submission.
+- CI follow-up: if `v1.9.97.5` checks fail (`quality` or `codeql`), fix forward and re-run before next push.
 - S-07/S-08 remain code-precompleted; design work stays pending until Figma unblock is resolved.
 
 ---
@@ -141,4 +142,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session. Your role: c
 
 ---
 
-_Last updated: 2026-03-16 (release prep completed for v1.9.97.4; awaiting CI/CodeQL/release-assets confirmation and CWS submission)_
+_Last updated: 2026-03-16 · Codex (added readable CWS install link, completed docs-only bump to 1.9.97.5, and queued `alarms` permissions-doc follow-up)_

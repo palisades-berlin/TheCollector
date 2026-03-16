@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.97.4`.
+Current extension version: `1.9.97.5`.
 
 ## Overview
 
@@ -19,6 +19,7 @@ THE Collector includes two modes:
 All data remains in extension-local storage; there is no backend upload pipeline.
 
 Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.md).
+Install from the store: [Install THE Collector (Chrome Web Store)](https://chromewebstore.google.com/detail/the-collector/dkpenkhnggcmkeegcboiagcicanonmpp).
 
 ## Behind the Build
 
@@ -31,11 +32,9 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- Added machine-readable behavioral/tool-routing marker coverage to maintainer/session docs and marker contract policy.
-- Synced canonical `OPENING_PROMPT` content from `SESSION.md` into `WORKFLOW.md` to eliminate marker drift.
-- Prepared Chrome Web Store submission release flow with required attestation-ready docs/session alignment.
-- Verified release governance checks are wired through `npm run test:docs-policy` marker-sync enforcement.
-- Synced docs/runtime version pointers to `1.9.97.4` across manifest/package/changelog/maintainer docs.
+- Added direct install CTA with readable label: [Install THE Collector (Chrome Web Store)](https://chromewebstore.google.com/detail/the-collector/dkpenkhnggcmkeegcboiagcicanonmpp).
+- Included local `SESSION.md` governance/CWS copy handoff updates in this release cycle.
+- Synced docs/runtime version pointers to `1.9.97.5` across manifest/package/changelog/maintainer docs.
 
 ## Versioning Migration Note
 
