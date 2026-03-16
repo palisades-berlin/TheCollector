@@ -24,6 +24,11 @@ Use this text as the canonical listing/policy justification for requested permis
 - Required to query the active tab in the current window for capture and URL collection actions.
 - Required to open extension pages (history/preview/options) in new tabs and manage capture-tab interactions.
 
+### `alarms`
+
+- Required to schedule the periodic revisit-nudge check (every 4 hours) that evaluates whether the user has unreviewed captures and updates the toolbar badge accordingly.
+- The alarm fires locally in the service worker; no data leaves the browser and no network requests are made.
+
 ### `contextMenus`
 
 - Required to provide right-click actions for page capture and URL collection.

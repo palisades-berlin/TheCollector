@@ -31,28 +31,21 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 **Date:** 2026-03-16
 **Tool:** Claude
 
-**Key discussion:** Session focused on governance/tooling refinements and CWS submission copy — no code changes.
-
 **Done:**
 
-- Differentiated opening prompts in `SESSION.md` for Claude, Codex, and Perplexity with explicit role declarations.
-- Added `## Tool Router` section to `SESSION.md` with task-ownership table, pipeline line, and standing "ask, don't anticipate" rule.
-- Added `## Behavioural Rules` section to `CLAUDE.md` and `AGENTS.md` enforcing ask-before-acting and cross-tool boundary checks.
-- Wrote Chrome Web Store short description (115 chars), long description (plain text, shipped features only), and Single Purpose text for the privacy section.
-- Wrote CWS Privacy Practices justification text for `alarms` and `contextMenus` permissions.
-- Identified that `alarms` is missing from `docs/chrome-web-store-permissions.md` — needs to be added.
+- Verified `v1.9.97.5` GitHub CI + CodeQL — both green on `main` (2026-03-16 07:11 UTC).
+- Patched `docs/chrome-web-store-permissions.md` with missing `alarms` justification (periodic revisit-nudge check, local-only, no network).
 
 ---
 
 ## Do next
 
-**Task:** Verify green GitHub CI + CodeQL for docs release `v1.9.97.5`, then update `docs/chrome-web-store-permissions.md` to include `alarms` justification text from this session.
+**Task (Codex):** Docs-only `w` bump → `1.9.97.6`. Bump all six files, add CHANGELOG entry, update SESSION.md footer, run pre-commit checks, commit + push, sync wiki `Home.md`.
 
 Where: Figma file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`)
 What: Phase 0 checklist in master plan §6, steps 0-A through 0-F
 Gate: ALL Phase 0 Figma work must be complete and approved before any Phase 1 code begins
-First step (release track): inspect `v1.9.97.5` commit checks and confirm CI + CodeQL are green.
-First step after release verification: patch `docs/chrome-web-store-permissions.md` with the missing `alarms` section, then resume Figma blocker path at 0-A-1.
+Next Claude task (after Codex ships bump): resume Figma blocker path at Phase 0-A-1 — blocked until Figma Editor seat + MCP capacity is resolved.
 
 **Blocker status:** active — Figma seat/capacity blocker prevents MCP execution (`View` + tool-call limit).
 
@@ -142,4 +135,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session. Your role: c
 
 ---
 
-_Last updated: 2026-03-16 · Codex (added readable CWS install link, completed docs-only bump to 1.9.97.5, and queued `alarms` permissions-doc follow-up)_
+_Last updated: 2026-03-16 · Claude (CI green for v1.9.97.5; patched `alarms` justification in chrome-web-store-permissions.md; bumped to 1.9.97.6)_

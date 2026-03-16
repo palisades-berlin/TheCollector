@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.97.6 - 2026-03-16
+
+### Changed
+
+- Permissions documentation:
+  - added missing `alarms` justification to `docs/chrome-web-store-permissions.md` (periodic revisit-nudge check, every 4 hours, local service worker only).
+- Version sync:
+  - synchronized version pointers to `1.9.97.6` across manifest/package/README/maintainer docs.
+
 ## 1.9.97.5 - 2026-03-16
 
 ### Changed
