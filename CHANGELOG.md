@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.97.7 - 2026-03-16
+
+### Added
+
+- `PRIVACY.md` — user-facing privacy statement at repo root; consolidates local-only and no-tracking stance from ADR 0002 and ADR 0009 into a single readable document.
+- `README.md` Governance & Compliance: added `PRIVACY.md` link alongside `SECURITY.md` and `CODE_OF_CONDUCT.md`.
+
 ## 1.9.97.6 - 2026-03-16
 
 ### Changed

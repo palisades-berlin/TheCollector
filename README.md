@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.97.6`.
+Current extension version: `1.9.97.7`.
 
 ## Overview
 
@@ -17,6 +17,7 @@ THE Collector includes two modes:
 - UX is consolidated across both flows (shared toasts and unified design tokens)
 
 All data remains in extension-local storage; there is no backend upload pipeline.
+Added `PRIVACY.md` — user-readable privacy statement consolidating the local-only, no-tracking stance.
 
 Need help getting started? See the [End-User Help Guide](./docs/help-user-guide.md).
 Install from the store: [Install THE Collector (Chrome Web Store)](https://chromewebstore.google.com/detail/the-collector/dkpenkhnggcmkeegcboiagcicanonmpp).
@@ -253,6 +254,7 @@ Release notes policy: keep notes in `CHANGELOG.md` only; do not add `GITHUB_RELE
 
 - Project license: [PolyForm Noncommercial 1.0.0](./LICENSE) (commercial use is not permitted).
 - Security policy and vulnerability disclosure: [SECURITY.md](./SECURITY.md).
+- Privacy policy (data collection, local-only stance): [PRIVACY.md](./PRIVACY.md).
 - Community standards and conduct policy: [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
 - Contribution and review policy: [CONTRIBUTING.md](./CONTRIBUTING.md).
 - Code ownership is enforced via [CODEOWNERS](./.github/CODEOWNERS).

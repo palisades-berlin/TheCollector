@@ -33,8 +33,9 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
 **Done:**
 
-- Verified `v1.9.97.5` GitHub CI + CodeQL — both green on `main` (2026-03-16 07:11 UTC).
-- Patched `docs/chrome-web-store-permissions.md` with missing `alarms` justification (periodic revisit-nudge check, local-only, no network).
+- Added `PRIVACY.md` — user-facing privacy statement consolidating ADR 0002 + ADR 0009 into one readable doc at repo root.
+- Linked `PRIVACY.md` in `README.md` Governance & Compliance section.
+- Bumped version to `1.9.97.7` (docs-only `w` bump) across all six files.
 
 ---
 
@@ -135,4 +136,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session. Your role: c
 
 ---
 
-_Last updated: 2026-03-16 · Claude (CI green for v1.9.97.5; patched `alarms` justification in chrome-web-store-permissions.md; bumped to 1.9.97.6)_
+_Last updated: 2026-03-16 · Claude (added PRIVACY.md; linked in README Governance; bumped to 1.9.97.7)_
