@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.97.8 - 2026-03-16
+
+### Changed
+
+- Version and handoff docs sync:
+  - synchronized version pointers to `1.9.97.8` across manifest/package/README/maintainer docs.
+  - refreshed `README.md` Top Changes to remove stale prior-release pointer and reflect current docs cycle.
+  - reconciled `SESSION.md` next-task handoff text to remove outdated `1.9.97.6` instruction.
+
 ## 1.9.97.7 - 2026-03-16
 
 ### Added

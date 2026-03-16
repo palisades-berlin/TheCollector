@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.97.7`.
+Current extension version: `1.9.97.8`.
 
 ## Overview
 
@@ -33,9 +33,9 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- Added direct install CTA with readable label: [Install THE Collector (Chrome Web Store)](https://chromewebstore.google.com/detail/the-collector/dkpenkhnggcmkeegcboiagcicanonmpp).
-- Included local `SESSION.md` governance/CWS copy handoff updates in this release cycle.
-- Synced docs/runtime version pointers to `1.9.97.5` across manifest/package/changelog/maintainer docs.
+- Added `PRIVACY.md` as a clear user-facing privacy statement at repo root.
+- Linked `PRIVACY.md` in Governance & Compliance docs navigation.
+- Synced docs/runtime version pointers to `1.9.97.8` across manifest/package/changelog/maintainer docs.
 
 ## Versioning Migration Note
 

@@ -29,24 +29,26 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 ## Last session
 
 **Date:** 2026-03-16
-**Tool:** Claude
+**Tool:** Codex
 
 **Done:**
 
-- Added `PRIVACY.md` — user-facing privacy statement consolidating ADR 0002 + ADR 0009 into one readable doc at repo root.
-- Linked `PRIVACY.md` in `README.md` Governance & Compliance section.
-- Bumped version to `1.9.97.7` (docs-only `w` bump) across all six files.
+- Completed docs-only release bump to `1.9.97.8` (`w` bump) across all six versioned files.
+- Added `CHANGELOG.md` entry for `1.9.97.8` and refreshed `README.md` Top Changes to current-cycle items.
+- Reconciled stale handoff text in `SESSION.md` (removed outdated `1.9.97.6` do-next instruction).
+- Ran required pre-commit checks: version policy local, docs policy, session format, and format check.
+- Kept untracked local artifact `design.plugin` out of release commit scope.
 
 ---
 
 ## Do next
 
-**Task (Codex):** Docs-only `w` bump → `1.9.97.6`. Bump all six files, add CHANGELOG entry, update SESSION.md footer, run pre-commit checks, commit + push, sync wiki `Home.md`.
+**Task (Claude):** Resume Figma blocker path at Phase 0-A-1 in file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`) once access/capacity blocker is lifted.
 
 Where: Figma file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`)
 What: Phase 0 checklist in master plan §6, steps 0-A through 0-F
 Gate: ALL Phase 0 Figma work must be complete and approved before any Phase 1 code begins
-Next Claude task (after Codex ships bump): resume Figma blocker path at Phase 0-A-1 — blocked until Figma Editor seat + MCP capacity is resolved.
+Next Claude task: execute Phase 0-A-1 token/style update pass and validation as soon as Figma `Editor` + MCP capacity are available.
 
 **Blocker status:** active — Figma seat/capacity blocker prevents MCP execution (`View` + tool-call limit).
 
@@ -136,4 +138,4 @@ Read AGENTS.md and SESSION.md, then continue from the last session. Your role: c
 
 ---
 
-_Last updated: 2026-03-16 · Claude (added PRIVACY.md; linked in README Governance; bumped to 1.9.97.7)_
+_Last updated: 2026-03-16 · Codex (bumped docs release to 1.9.97.8; synced changelog/readme/session handoff)_
