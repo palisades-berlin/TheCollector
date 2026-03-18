@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.9.97.12 - 2026-03-18
+
+### Changed
+
+- Penpot DS 2.0 Phase 0-A (design token cleanup):
+  - Deleted 8 stray Figma-import button boards from page root; renamed "Page 1" → "Figma Import Baseline".
+  - Reorganised 36 library colors into `surface/light`, `surface/dark`, `brand`, `text/light`, `text/dark`, `primary`, `primary/light`, `primary/dark`, `border/light`, `border/dark`, `status`, `focus` groups.
+  - Updated surface tokens to DS 2.0 glass values (rgba opacity-based surfaces; bg: #f2f3f5 light / #080d18 dark).
+  - Added 23 new DS 2.0 colors (dark text set, dark border set, dark primary overrides, status group).
+  - Updated border radius across all components: xs=5, sm=10, md=14.
+  - Updated typography: h1/h2 letter-spacing −0.01em; caption weight 700; new `filter-label` style (10px/600/uppercase/0.07em).
+- `docs/ui-handoff.md`: migrated source-of-truth references from Figma to Penpot; added Penpot page/board index.
+- `docs/adr/0015-penpot-replaces-figma.md`: recorded the Figma → Penpot migration decision.
+- `WORKFLOW.md`, `SESSION.md`: updated tool-router and opening prompts to reference Penpot.
+
 ## 1.9.97.11 - 2026-03-18
 
 ### Changed

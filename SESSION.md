@@ -29,30 +29,36 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 ## Last session
 
 **Date:** 2026-03-18
-**Tool:** Codex + Claude
+**Tool:** Claude (Cowork)
 
 **Done:**
 
-- (Codex) Created `CODEX.md` as Codex-only working memory; docs-only bump to `1.9.97.11`.
-- (Claude) Reviewed and extended `CODEX.md` Output And Token Discipline and added `## Output And Response Discipline` to `CLAUDE.md`.
-- (Claude) Updated Codex opening prompt in `WORKFLOW.md` and `SESSION.md` to include `CODEX.md`.
-- (Claude) Added conditional pre-commit triggers for `CLAUDE.md`, `CODEX.md`, and `AGENTS.md` changes to both `CLAUDE.md` and `AGENTS.md`.
-- Ran the required pre-commit checks: version policy local, docs policy, session format, and format check.
-- Pending: commit, sync the wiki `Home.md`, and push the `1.9.97.11` docs-only release bump.
+- Recorded ADR 0015: Penpot replaces Figma as design source of truth.
+- Updated `docs/ui-handoff.md`: Penpot URL/keys, 7-board page index, all Figma references migrated.
+- Updated `WORKFLOW.md` and `SESSION.md` tool-router to reference Penpot.
+- **DS 2.0 Phase 0-A complete in Penpot:**
+  - Deleted 8 stray import boards; renamed "Page 1" → "Figma Import Baseline".
+  - Reorganised color library: 36 existing colors regrouped + 23 new DS 2.0 tokens (glass surfaces, dark text/border sets).
+  - Updated border radius across all components: xs=5, sm=10, md=14.
+  - Updated typography: h1/h2 −0.01em tracking; caption → 700; added `filter-label` (10px/600/uppercase/0.07em).
+- Bumped docs-only version to `1.9.97.12`.
 
 ---
 
 ## Do next
 
-**Task (Codex):** Commit, sync the wiki `Home.md`, and push the `1.9.97.11` docs-only release bump.
+**Task (Claude):** DS 2.0 Phase 0-B — redesign all full-page headers in Penpot (0-B-1 Screenshots, 0-B-2 URL Library, 0-B-3 Preview, 0-B-4 Popup, 0-B-5 Settings).
+**Pre-task:** Run pre-commit checks and push `1.9.97.12` first (Codex or Claude).
 
-**Blocker status:** none for this docs-only release cycle.
+**Blocker status:** none.
 
 ---
 
 ## Open decisions / blockers
 
-- None for the current docs-only release cycle.
+- Penpot file: `THECollector - UI Kit & Screens`, file key `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`. ✅
+- Penpot MCP running at `http://localhost:4401/mcp`. ✅
+- Phase 0-A done. Phase 0-B (headers) is next before any code work starts.
 
 ---
 
@@ -92,7 +98,7 @@ Not sure which tool to reach for? Use this table.
 | ------------------------------------------------------ | ---------- |
 | Research · external docs · best-practice lookup        | Perplexity |
 | Prompt engineering · drafting governance text          | Perplexity |
-| Design · Figma edits · token work                      | Claude     |
+| Design · Penpot edits · token work                     | Claude     |
 | ADRs · documentation · policy decisions                | Claude     |
 | Interactive decisions · open-ended Q&A                 | Claude     |
 | Code changes · refactoring · new features              | Codex      |
@@ -119,7 +125,7 @@ Read SESSION.md (Do next + Open decisions sections). Your role: research and pro
 **Claude:**
 
 ```
-Read CLAUDE.md and SESSION.md, then continue from the last session. Your role: design (Figma MCP), documentation, ADRs, decisions. Check the Tool Router if unsure whether a task belongs here or in Codex. If scope or intent is unclear, ask — do not anticipate.
+Read CLAUDE.md and SESSION.md, then continue from the last session. Your role: design (Penpot MCP), documentation, ADRs, decisions. Check the Tool Router if unsure whether a task belongs here or in Codex. If scope or intent is unclear, ask — do not anticipate.
 ```
 
 **Codex:**

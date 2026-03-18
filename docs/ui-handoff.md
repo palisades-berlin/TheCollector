@@ -6,16 +6,32 @@ This document defines the implementation contract between design and code for TH
 
 <!-- UI_SOURCE_OF_TRUTH:START -->
 
-- Figma file `THECollector - UI Kit & Screens` is the project UI single source of truth.
-- Canonical URL: `https://www.figma.com/design/sECUN6qSqUygWoG7PhC548/THECollector---UI-Kit---Screens?t=UVQ55HTnnPvLrqyo-0`
-- Active handoff authority node: `19:2` (`THECollector - Final Handoff Ops`)
+- Penpot file `THECollector - UI Kit & Screens` is the project UI single source of truth (ADR 0015).
+- Canonical URL: `https://design.penpot.app/#/workspace?team-id=11d3899e-e3cc-80db-8007-bb5a8fa6ade5&file-id=b19dd3d3-9135-8056-8007-bb5e7d6eb5d4&page-id=b19dd3d3-9135-8056-8007-bb5e7d6eb5d5`
+- Penpot file key: `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`
+- Penpot team key: `11d3899e-e3cc-80db-8007-bb5a8fa6ade5`
+- Penpot page key: `b19dd3d3-9135-8056-8007-bb5e7d6eb5d5`
 <!-- UI_SOURCE_OF_TRUTH:END -->
-- Figma file key: `sECUN6qSqUygWoG7PhC548`
-- Rule: this Figma file is the single source of truth for all UX/UI and components.
-- Implementation policy: code should map to Figma tokens, component states, and naming before introducing new visual patterns.
-- Canonical UI kit + screens node: `1:2` (`THECollector - UI Kit & Screens`)
+- Archived Figma file key: `sECUN6qSqUygWoG7PhC548` (no longer source of truth — archived, not deleted)
+- Rule: the Penpot file is the single source of truth for all UX/UI and components.
+- Implementation policy: code should map to Penpot tokens, component states, and naming before introducing new visual patterns.
+- Canonical UI kit + screens page: `THECollector - UI Kit & Screens` (page index to be updated after Figma import is cleaned up)
 
-## Figma Node Index (Synced 2026-03-05)
+## Penpot Page Index
+
+_Synced 2026-03-18. All 7 Figma pages imported as top-level boards on a single Penpot page (`Page 1`)._
+
+| Board name                                         | Penpot ID                              | Figma equivalent                  |
+| -------------------------------------------------- | -------------------------------------- | --------------------------------- |
+| THECollector - UI Kit & Screens                    | `b2c9ceb5-f0e9-5d6b-b95f-5a1275a567cd` | `1:2` — UI kit + screens          |
+| THECollector - Component Hardening Pass            | `6236bf84-be00-50b0-a3ea-4503c45004b2` | Component hardening pass          |
+| THECollector - Atomic Library Pass                 | `a4b25a0f-506b-561f-a8f4-494c5e4136c2` | Atomic library pass               |
+| THECollector - Naming Normalization                | `d4f12dc1-9321-51b4-a86d-7835a4338de7` | Naming normalization              |
+| THECollector - Handoff Checklist + Poppins         | `f995acf0-aed2-5507-a90f-84a1eb6822e3` | Handoff checklist                 |
+| THECollector - Main UI Kit + Key Screens (Poppins) | `5d24b005-9ba1-5218-8133-378fc1b5c254` | `1:4` — Main components/screens   |
+| THECollector - Final Handoff Ops                   | `da7a587c-d2ac-5f6d-896d-d08b2438c516` | `19:2` — Active handoff authority |
+
+**Archived Figma Node Index (reference only — Synced 2026-03-05):**
 
 - `19:2` - FINAL handoff ops page (active handoff marker and final declaration)
 - `1:2` - UI kit + screens page root
@@ -97,9 +113,9 @@ Use these shared classes before creating surface-specific variants:
   - styles: `src/onboarding/onboarding.css`
   - behavior: `src/onboarding/onboarding.js`
 
-## Figma Mapping Table
+## Component Mapping Table
 
-| Figma Section/Component      | Figma Node | State/Variant                             | Code Class Contract                                                                                                                                                                                     | Primary Files                                                                                           |
+| Penpot Section/Component     | Figma Node | State/Variant                             | Code Class Contract                                                                                                                                                                                     | Primary Files                                                                                           |
 | ---------------------------- | ---------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | Components / Button          | `1:4`      | primary, secondary, ghost, danger; sm, md | `sc-btn` + variant + size (`sc-btn-primary`, `sc-btn-secondary`, `sc-btn-ghost`, `sc-btn-danger`, `sc-btn-sm`, `sc-btn-md`, `sc-btn-block`)                                                             | `src/shared/ui.css`, consumed in popup/history/options/preview HTML                                     |
 | Components / Input           | `1:4`      | text/search/dropdown                      | `sc-input`, `sc-select`                                                                                                                                                                                 | `src/shared/ui.css`, `src/history/history.html`, `src/options/options.html`, `src/preview/preview.html` |
@@ -149,10 +165,10 @@ A tab in a tablist must operate on the same data set as its sibling tabs. An aud
 
 <!-- UI_CHANGE_POLICY:START -->
 
-- If Figma changes:
+- If Penpot changes:
   1. Update shared tokens/components first (`src/shared/ui.css`).
   2. Update surface semantic layers (`--popup-*`, `--history-*`) only where needed.
-  3. Keep behavior stable unless interaction requirements changed in Figma.
+  3. Keep behavior stable unless interaction requirements changed in Penpot.
 - If code changes require new UI patterns:
-  - add to Figma first, then implement in shared primitives, then consume in surfaces.
+  - add to Penpot first, then implement in shared primitives, then consume in surfaces.
   <!-- UI_CHANGE_POLICY:END -->

@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.97.11`.
+Current extension version: `1.9.97.12`.
 
 ## Overview
 
@@ -33,10 +33,11 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- Added `PRIVACY.md` as a clear user-facing privacy statement at repo root.
-- Linked `PRIVACY.md` in Governance & Compliance docs navigation.
-- Added `CODEX.md` as the Codex-only working memory and repo knowledge handoff.
-- Synced docs/runtime version pointers to `1.9.97.11` across manifest/package/changelog/maintainer docs.
+- Penpot replaces Figma as design source of truth (ADR 0015); Figma file archived.
+- DS 2.0 Phase 0-A: reorganised color library (59 tokens, glass surfaces, dark mode set).
+- DS 2.0 Phase 0-A: border radius updated to xs=5 / sm=10 / md=14 across all components.
+- DS 2.0 Phase 0-A: typography updated (h1/h2 tracking, caption 700, filter-label added).
+- `docs/ui-handoff.md` and `WORKFLOW.md` updated to reference Penpot throughout.
 
 ## Versioning Migration Note
 
