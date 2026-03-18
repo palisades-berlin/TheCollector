@@ -55,7 +55,7 @@ Read CLAUDE.md and SESSION.md, then continue from the last session. Your role: d
 **Codex:**
 
 ```
-Read AGENTS.md and SESSION.md, then continue from the last session. Your role: code, tests, version bumps, git. Check the Tool Router if unsure whether a task belongs here or in Claude. Run the pre-commit checklist before any push. If scope or intent is unclear, ask — do not anticipate.
+Read CODEX.md, AGENTS.md, and SESSION.md, then continue from the last session. Your role: code, tests, version bumps, git. Check the Tool Router if unsure whether a task belongs here or in Claude. Run the pre-commit checklist before any push. If scope or intent is unclear, ask — do not anticipate.
 ```
 
 <!-- OPENING_PROMPT:END -->

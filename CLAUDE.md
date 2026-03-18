@@ -3,7 +3,7 @@
 ## Project Summary
 
 `THE Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.9.97.10`.
+Current extension version: `1.9.97.11`.
 The extension is **free forever** — no subscriptions, no payments, no paid tiers. The tier selector (Basic / Pro / Ultra) is a UX complexity preference, not a paywall. See ADR 0009.
 Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
@@ -31,6 +31,27 @@ Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance 
 - Consult the Tool Router in `SESSION.md` whenever the right tool is not obvious.
 
 <!-- BEHAVIOURAL_RULES:END -->
+
+## Output And Response Discipline
+
+- Respond with the minimum words necessary to complete the task. Do not pad with context recaps, transition phrases, or meta-commentary.
+- No preamble: do not open responses with "I'll help you with…", "Great question!", "Certainly!", "Of course!", or similar filler.
+- No closing remarks: do not end with "Let me know if you need anything else!", "I hope this helps!", or similar.
+- No apology loops: acknowledge errors with one line and fix them — do not apologize repeatedly or narrate the correction process.
+- No unsolicited caveats: only add a qualification or warning if it is blocking or introduces real risk.
+- After any successful action — file edit, command, or external operation — confirm with a single line: `✓ [action performed]`.
+- For questions or ambiguities, ask one concise question — no padding, no context recap.
+- **Phase detection:** the verb in the instruction signals the phase — "check", "read", "audit", "review", "verify" → `REVIEW / AUDIT`; "write", "draft", "create", "document" → `WRITE / DRAFT`; "update", "change", "fix", "add", "rewrite", "adapt" → `EDIT / UPDATE`; "what", "why", "how", "explain", "summarize" → `ANSWER / EXPLAIN`.
+- **Verbosity by phase:**
+  - `REVIEW / AUDIT` tasks: full structured output — depth over breadth, capped to what is directly relevant to the question.
+  - `WRITE / DRAFT` tasks: produce the content directly — no narration of the writing process.
+  - `EDIT / UPDATE` tasks: show only the changed content plus a `✓` confirmation. Do not reproduce unchanged sections.
+  - `ANSWER / EXPLAIN` tasks: prose answer. Use headers only when the response has three or more distinct parts.
+- **Markdown discipline:** use headers and bullet lists only when the response has three or more distinct sections or the user requests structure. For short enumerations, use inline prose ("x, y, and z") rather than bullet lists.
+- **Mid-task blockers:** if a blocking ambiguity is discovered mid-task, stop and ask one question before continuing — do not guess or proceed speculatively.
+- **On failure:** one-line diagnosis + what was not completed — no apology narrative.
+- Never repeat back the contents of a file you were just asked to read — confirm with `✓ read [filename]` and proceed.
+- When updating CLAUDE.md, change only the lines that are factually affected — do not rewrite unrelated sections or reformat for style.
 
 ---
 
@@ -77,6 +98,9 @@ Run this in order before every commit/push. No exceptions.
 | `docs/dev-workflow.md` changed                    | Refresh wiki Home.md workflow section                                                                          |
 | `docs/ui-handoff.md` changed                      | Refresh wiki Home.md UI/UX section                                                                             |
 | `docs/thecollector-2.0-90-day-roadmap.md` changed | Refresh wiki Home.md roadmap section                                                                           |
+| `AGENTS.md` changed                               | Refresh wiki Home.md workflow section; mirror any structural changes to `CLAUDE.md` in the same work cycle     |
+| `CODEX.md` changed                                | Refresh wiki Home.md workflow section                                                                          |
+| `CLAUDE.md` changed                               | Refresh wiki Home.md workflow section; mirror any structural changes to `AGENTS.md` in the same work cycle     |
 
 <!-- PRE_COMMIT_CHECKLIST:END -->
 

@@ -10,7 +10,7 @@ Codex-only working memory for `THE Collector`.
 
 - `THE Collector` is a Manifest V3 Chrome/Edge extension.
 - It combines full-page screenshot capture with URL collection and review surfaces.
-- Current extension version: `1.9.97.10`.
+- Current extension version: `1.9.97.11`.
 - The product is free forever, local-only, and has no external connections or user tracking.
 - The `Basic` / `Pro` / `Ultra` selector is a UX complexity preference, not a paywall.
 - Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
@@ -207,13 +207,17 @@ Codex-only working memory for `THE Collector`.
 - No preamble: do not open responses with "I will now…", "Here is…", "Sure!", or similar filler phrases.
 - No closing remarks or summaries after completing a task.
 - No inline code comments unless they describe a non-obvious architectural decision.
-- After a successful file edit or action, confirm with a single line: `✓ [action performed]`.
+- After any successful action — edit, command, or external operation — confirm with a single line: `✓ [action performed]`.
 - For questions or ambiguities, ask one concise question — no padding, no context recap.
+- **Phase detection:** the verb in the instruction signals the phase — "audit", "explain", "review" → `LEARN / AUDIT`; "fix", "update", "add" → `EXECUTE / EDIT`; "why isn't", "it broke" → `DEBUG`; "ship", "release", "bump" → `RELEASE`.
 - **Verbosity by phase:**
-  - `LEARN / AUDIT` tasks: full structured output is required — do not suppress briefing documents.
-  - `EXECUTE / EDIT` tasks: code only, plus a `✓` confirmation line.
+  - `LEARN / AUDIT` tasks: full structured output is required — do not suppress briefing documents. Prefer depth over breadth; cap to what is directly relevant to the question.
+  - `EXECUTE / EDIT` tasks: code only, plus a `✓` confirmation line. Always include the filename in the code block header and a language tag.
   - `DEBUG` tasks: one-paragraph diagnosis + fix — no narration of process.
   - `RELEASE` tasks: one confirmation line per completed step.
+- **Mid-task blockers:** if a blocking ambiguity is discovered during an `EXECUTE / EDIT` task, stop and ask one question before continuing — do not guess.
+- **On failure:** one-line diagnosis + what was not completed — no narration of attempts.
+- **Unsolicited concerns:** only raise a concern proactively if it is blocking or introduces risk — do not append observations to completed tasks.
 - Never repeat back the contents of a file you were just asked to read — confirm with `✓ read [filename]` and proceed.
 - When updating CODEX.md, change only the lines that are factually affected —
   do not rewrite unrelated sections or reformat for style.

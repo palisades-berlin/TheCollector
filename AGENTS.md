@@ -3,7 +3,7 @@
 ## Project Summary
 
 `THE Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.9.97.10`.
+Current extension version: `1.9.97.11`.
 The extension is **free forever** — no subscriptions, no payments, no paid tiers. The tier selector (Basic / Pro / Ultra) is a UX complexity preference, not a paywall. See ADR 0009.
 Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
@@ -29,6 +29,7 @@ Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance 
 - **When uncertain about scope, intent, or task ownership — ask. Do not anticipate, assume, or proceed speculatively.**
 - If a task feels like it belongs to Claude (design, Figma, docs, ADRs), stop and confirm with the maintainer before acting.
 - Consult the Tool Router in `SESSION.md` whenever the right tool is not obvious.
+- **Output and token discipline:** see `CODEX.md § Output And Token Discipline` — those rules govern all Codex responses in this repo.
 
 <!-- BEHAVIOURAL_RULES:END -->
 
@@ -77,6 +78,9 @@ Run this in order before every commit/push. No exceptions.
 | `docs/dev-workflow.md` changed                    | Refresh wiki Home.md workflow section                                                                          |
 | `docs/ui-handoff.md` changed                      | Refresh wiki Home.md UI/UX section                                                                             |
 | `docs/thecollector-2.0-90-day-roadmap.md` changed | Refresh wiki Home.md roadmap section                                                                           |
+| `AGENTS.md` changed                               | Refresh wiki Home.md workflow section; mirror any structural changes to `CLAUDE.md` in the same work cycle     |
+| `CODEX.md` changed                                | Refresh wiki Home.md workflow section                                                                          |
+| `CLAUDE.md` changed                               | Refresh wiki Home.md workflow section; mirror any structural changes to `AGENTS.md` in the same work cycle     |
 
 <!-- PRE_COMMIT_CHECKLIST:END -->
 

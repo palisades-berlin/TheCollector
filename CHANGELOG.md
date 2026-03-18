@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.9.97.10 - 2026-03-18
+## 1.9.97.11 - 2026-03-18
 
 ### Changed
 
@@ -8,7 +8,7 @@
   - added living-document guidance for keeping architecture, module, storage, and policy notes current.
   - added Codex output/token discipline and update rules for future sessions.
 - Version sync:
-  - synchronized version pointers to `1.9.97.10` across manifest/package/README/maintainer docs.
+  - synchronized version pointers to `1.9.97.11` across manifest/package/README/maintainer docs.
 
 ## 1.9.97.8 - 2026-03-16
 

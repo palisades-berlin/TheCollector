@@ -29,23 +29,22 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 ## Last session
 
 **Date:** 2026-03-18
-**Tool:** Codex
+**Tool:** Codex + Claude
 
 **Done:**
 
-- Created `CODEX.md` at repo root as the Codex-only working memory file for durable repo knowledge.
-- Completed docs-only release bump to `1.9.97.10` (`w` bump) across versioned files.
-- Added `CHANGELOG.md` entry for `1.9.97.10` and refreshed `README.md` Top Changes to reflect the `CODEX.md` guidance update.
-- Updated `SESSION.md` to reflect the current Codex handoff state and release context.
+- (Codex) Created `CODEX.md` as Codex-only working memory; docs-only bump to `1.9.97.11`.
+- (Claude) Reviewed and extended `CODEX.md` Output And Token Discipline and added `## Output And Response Discipline` to `CLAUDE.md`.
+- (Claude) Updated Codex opening prompt in `WORKFLOW.md` and `SESSION.md` to include `CODEX.md`.
+- (Claude) Added conditional pre-commit triggers for `CLAUDE.md`, `CODEX.md`, and `AGENTS.md` changes to both `CLAUDE.md` and `AGENTS.md`.
 - Ran the required pre-commit checks: version policy local, docs policy, session format, and format check.
-- Ran the required pre-commit checks: version policy local, docs policy, session format, and format check.
-- Pending: commit, sync the wiki `Home.md`, and push the `1.9.97.10` docs-only release bump.
+- Pending: commit, sync the wiki `Home.md`, and push the `1.9.97.11` docs-only release bump.
 
 ---
 
 ## Do next
 
-**Task (Codex):** Commit, sync the wiki `Home.md`, and push the `1.9.97.10` docs-only release bump.
+**Task (Codex):** Commit, sync the wiki `Home.md`, and push the `1.9.97.11` docs-only release bump.
 
 **Blocker status:** none for this docs-only release cycle.
 
@@ -59,13 +58,15 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
 ## Active files (last touched)
 
-| File                                             | Status                                             |
-| ------------------------------------------------ | -------------------------------------------------- |
-| `docs/design-system-rules.md`                    | ✅ New — full DS spec for Phase 0 Figma            |
-| `CLAUDE.md`                                      | ✅ Pre-Commit Checklist added                      |
-| `AGENTS.md`                                      | ✅ Pre-Commit Checklist added                      |
-| `docs/design-overhaul-master-plan-2026-03-13.md` | ✅ Phase 0-A-1 token values remain source of truth |
-| `SESSION.md`                                     | ✅ This file                                       |
+| File                                             | Status                                                          |
+| ------------------------------------------------ | --------------------------------------------------------------- |
+| `CODEX.md`                                       | ✅ Output And Token Discipline extended (phase detection, etc.) |
+| `CLAUDE.md`                                      | ✅ Output And Response Discipline section added                 |
+| `AGENTS.md`                                      | ✅ Conditional triggers + CODEX.md pointer added                |
+| `WORKFLOW.md`                                    | ✅ Codex opening prompt updated to include CODEX.md             |
+| `SESSION.md`                                     | ✅ This file                                                    |
+| `docs/design-system-rules.md`                    | ✅ New — full DS spec for Phase 0 Figma                         |
+| `docs/design-overhaul-master-plan-2026-03-13.md` | ✅ Phase 0-A-1 token values remain source of truth              |
 
 ---
 
@@ -124,11 +125,11 @@ Read CLAUDE.md and SESSION.md, then continue from the last session. Your role: d
 **Codex:**
 
 ```
-Read AGENTS.md and SESSION.md, then continue from the last session. Your role: code, tests, version bumps, git. Check the Tool Router if unsure whether a task belongs here or in Claude. Run the pre-commit checklist before any push. If scope or intent is unclear, ask — do not anticipate.
+Read CODEX.md, AGENTS.md, and SESSION.md, then continue from the last session. Your role: code, tests, version bumps, git. Check the Tool Router if unsure whether a task belongs here or in Claude. Run the pre-commit checklist before any push. If scope or intent is unclear, ask — do not anticipate.
 ```
 
 <!-- OPENING_PROMPT:END -->
 
 ---
 
-_Last updated: 2026-03-16 · Codex (bumped docs release to 1.9.97.8; synced changelog/readme/session handoff)_
+_Last updated: 2026-03-18 · Claude (output discipline rules for CLAUDE.md + CODEX.md; WORKFLOW.md + SESSION.md opening prompt sync)_
