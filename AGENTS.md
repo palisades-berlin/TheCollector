@@ -27,7 +27,7 @@ Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance 
 <!-- BEHAVIOURAL_RULES:START -->
 
 - **When uncertain about scope, intent, or task ownership — ask. Do not anticipate, assume, or proceed speculatively.**
-- If a task feels like it belongs to Claude (design, Figma, docs, ADRs), stop and confirm with the maintainer before acting.
+- If a task feels like it belongs to Claude (design, Penpot, docs, ADRs), stop and confirm with the maintainer before acting.
 - Consult the Tool Router in `SESSION.md` whenever the right tool is not obvious.
 - **Output and token discipline:** see `CODEX.md § Output And Token Discipline` — those rules govern all Codex responses in this repo.
 
