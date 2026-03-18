@@ -33,22 +33,26 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
 **Done:**
 
-- Recorded ADR 0015: Penpot replaces Figma as design source of truth.
-- Updated `docs/ui-handoff.md`: Penpot URL/keys, 7-board page index, all Figma references migrated.
-- Updated `WORKFLOW.md` and `SESSION.md` tool-router to reference Penpot.
-- **DS 2.0 Phase 0-A complete in Penpot:**
-  - Deleted 8 stray import boards; renamed "Page 1" → "Figma Import Baseline".
-  - Reorganised color library: 36 existing colors regrouped + 23 new DS 2.0 tokens (glass surfaces, dark text/border sets).
-  - Updated border radius across all components: xs=5, sm=10, md=14.
-  - Updated typography: h1/h2 −0.01em tracking; caption → 700; added `filter-label` (10px/600/uppercase/0.07em).
-- Bumped docs-only version to `1.9.97.12`.
+- **DS 2.0 Phase 0-B complete** — new Penpot page "DS 2.0 — Headers" (5 boards: Screenshots, URL Library, Preview, Popup, Settings).
+- **DS 2.0 Phase 0-C complete** — new Penpot page "DS 2.0 — Command Bars" (5 items):
+  - 0-C-1 URL Library command bar (primary + 2× secondary + danger).
+  - 0-C-2 Screenshots command bar (ghost + danger).
+  - 0-C-3 URL Library tab bar (4 filter tabs + `↗ History` ghost link).
+  - 0-C-4 Selection bar: hidden state (muted placeholder) + visible state (3 selected × Deselect / Tag ▾ / Copy / Delete).
+  - 0-C-5 URL Library filters (DOMAIN / DATE FROM / DATE TO / TYPE comboboxes).
+- All boards: dark bg + glass surface fill applied; all exports verified visually.
+- v1.9.97.13 bumped, docs updated, pushed.
 
 ---
 
 ## Do next
 
-**Task (Claude):** DS 2.0 Phase 0-B — redesign all full-page headers in Penpot (0-B-1 Screenshots, 0-B-2 URL Library, 0-B-3 Preview, 0-B-4 Popup, 0-B-5 Settings).
-**Pre-task:** Run pre-commit checks and push `1.9.97.12` first (Codex or Claude).
+**Task (Claude):** DS 2.0 Phase 0-D — card & row states in Penpot:
+
+- Screenshot card: resting / hover / selected states
+- URL Library row: 4 item variants
+
+**Pre-task:** Bump to `1.9.97.14` (docs-only), run checks, commit + push.
 
 **Blocker status:** none.
 
@@ -58,7 +62,7 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
 - Penpot file: `THECollector - UI Kit & Screens`, file key `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`. ✅
 - Penpot MCP running at `http://localhost:4401/mcp`. ✅
-- Phase 0-A done. Phase 0-B (headers) is next before any code work starts.
+- Phase 0-A, 0-B, 0-C done. Phase 0-D (card/row states) is next.
 
 ---
 
@@ -138,4 +142,4 @@ Read CODEX.md, AGENTS.md, and SESSION.md, then continue from the last session. Y
 
 ---
 
-_Last updated: 2026-03-18 · Claude (output discipline rules for CLAUDE.md + CODEX.md; WORKFLOW.md + SESSION.md opening prompt sync)_
+_Last updated: 2026-03-18 · Claude (DS 2.0 Phase 0-B + 0-C Penpot boards; v1.9.97.13)_

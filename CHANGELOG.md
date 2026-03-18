@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.9.97.13 - 2026-03-18
+
+### Changed
+
+- Penpot DS 2.0 Phase 0-B (header designs — "DS 2.0 — Headers" page):
+  - Built 5 header boards: `0-B-1 · Screenshots`, `0-B-2 · URL Library`, `0-B-3 · Preview`, `0-B-4 · Popup`, `0-B-5 · Settings`.
+  - Header contract: 56px height, `rgba(8,13,24,0.80)` fill, `blur(24px) saturate(180%)` backdrop, `sc-header-nav` as second child, count badge as sole brand-blue element.
+- Penpot DS 2.0 Phase 0-C (command bars — "DS 2.0 — Command Bars" page):
+  - Built `0-C-1 · URL Library Command Bar` (4 actions: primary / 2× secondary / danger).
+  - Built `0-C-2 · Screenshots Command Bar` (ghost + danger).
+  - Built `0-C-3 · URL Library Tab Bar` (4 filter tabs + `↗ History` ghost link).
+  - Built `0-C-4 · Selection Bar` in hidden and visible states.
+  - Built `0-C-5 · URL Library Filters` (DOMAIN / DATE FROM / DATE TO / TYPE comboboxes).
+  - All boards: dark bg + glass surface fill for correct DS 2.0 rendering on export.
+
 ## 1.9.97.12 - 2026-03-18
 
 ### Changed
