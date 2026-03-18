@@ -4,9 +4,8 @@
 
 This document is the implementation QA contract for exhaustive UX/UI verification across all extension surfaces while preserving business logic and API behavior.
 
-- Source of truth: Figma `THECollector - UI Kit & Screens`
-- Figma URL: `https://www.figma.com/design/sECUN6qSqUygWoG7PhC548/THECollector---UI-Kit---Screens?t=UVQ55HTnnPvLrqyo-0`
-- Figma file key: `sECUN6qSqUygWoG7PhC548`
+- Source of truth: Penpot `THECollector - UI Kit & Screens` (ADR 0015 — replaced Figma)
+- Penpot file key: `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`
 - Active handoff node: `19:2` (`THECollector - Final Handoff Ops`)
 - Code contract source: `src/shared/ui.css` + `docs/ui-handoff.md`
 - Theme scope: Light mode
@@ -95,7 +94,7 @@ State coverage target:
 | Toolbar action grouping          | Medium   | Preview/action groups can shift hierarchy when wrapping      | deterministic group spacing/wrap behavior                     | `src/preview/preview.css`                                                                              |
 | Component-state snapshot breadth | Medium   | page-level snapshots exist but not full primitive matrix     | broaden screenshot matrix to state variants                   | `tests/visual/ui-parity.spec.mjs`                                                                      |
 | Accessibility automation depth   | Medium   | semantic ARIA exists and basic contract checks are automated | deepen keyboard/focus/contrast/state checks in CI             | `tests/accessibility-contract.test.mjs`, `tests/visual/*`                                              |
-| Figma node/frame validation      | Medium   | Direct file key + core node mapping now documented           | wire per-state snapshots to explicit frame/node references    | `docs/ui-handoff.md`, `tests/visual/ui-parity.spec.mjs`                                                |
+| Penpot node/frame validation     | Medium   | Direct file key + core node mapping now documented           | wire per-state snapshots to explicit frame/node references    | `docs/ui-handoff.md`, `tests/visual/ui-parity.spec.mjs`                                                |
 | Tier-gated visibility parity     | High     | Pro/Ultra controls are now feature-gated across surfaces     | Basic/Pro/Ultra visibility must be snapshot-validated         | `src/popup/*`, `src/history/*`, `src/options/*`, `tests/visual/ui-parity.spec.mjs`                     |
 
 ## Remediation Tracking Board
@@ -161,9 +160,9 @@ State coverage target:
 - [ ] URL row expansion only via explicit action buttons (no implicit full-row expand)
 - [x] HTML accessibility/isolation contracts enforced (`tests/accessibility-contract.test.mjs`)
 
-### Pass 5 - Figma Pixel Validation
+### Pass 5 - Penpot Pixel Validation
 
-- [x] Map each audited state family to Figma file key + frame/node IDs
+- [x] Map each audited state family to Penpot file key + frame/node IDs
 - Operational follow-ups for parity deltas/certification are tracked in `docs/todo-list.md`.
 
 ## Testing Contract
@@ -181,11 +180,11 @@ Visual snapshots must be updated only for intentionally changed surfaces/states.
 
 ## Parity Delta Log (2026-03-12)
 
-| Snapshot              | Figma Node | Calibrated Tolerance | Delta Summary                                                                     |
-| --------------------- | ---------- | -------------------- | --------------------------------------------------------------------------------- |
-| `history-default.png` | `1:4`      | `220`                | Remaining drift is concentrated in header/filter text antialiasing and spacing.   |
-| `history-empty.png`   | `1:885`    | `220`                | Residual diff is primarily vertical rhythm/font rendering variance.               |
-| `history-loading.png` | `1:885`    | `220`                | Residual diff is mostly skeleton gradient/antialiasing behavior across renderers. |
+| Snapshot              | Penpot Node | Calibrated Tolerance | Delta Summary                                                                     |
+| --------------------- | ----------- | -------------------- | --------------------------------------------------------------------------------- |
+| `history-default.png` | `1:4`       | `220`                | Remaining drift is concentrated in header/filter text antialiasing and spacing.   |
+| `history-empty.png`   | `1:885`     | `220`                | Residual diff is primarily vertical rhythm/font rendering variance.               |
+| `history-loading.png` | `1:885`     | `220`                | Residual diff is mostly skeleton gradient/antialiasing behavior across renderers. |
 
 Certification status:
 

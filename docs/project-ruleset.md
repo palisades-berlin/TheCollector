@@ -75,8 +75,8 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 
 ## UX/UI & Design System
 
-1. Keep Figma as UX/UI single source of truth: [THECollector - UI Kit & Screens](https://www.figma.com/design/sECUN6qSqUygWoG7PhC548/THECollector---UI-Kit---Screens?t=UVQ55HTnnPvLrqyo-0).
-2. UX/UI must match Figma (tokens, spacing, radii, typography, controls, states).
+1. Keep Penpot as UX/UI single source of truth (ADR 0015 — replaced Figma): `THECollector - UI Kit & Screens` · key `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`.
+2. UX/UI must match Penpot (tokens, spacing, radii, typography, controls, states).
 3. Use and maintain a design-token system with step-by-step refactors.
 4. Run and enforce UX/UI calibration for roadmap/UI changes both early during development and at final release gate.
 5. In card/grid UIs, equal-height consistency is mandatory for mixed-content rows; reserve optional content slots and clamp overflow to avoid row-height drift.

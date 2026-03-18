@@ -127,7 +127,7 @@ Minimum required wiki sync payload on each commit/push:
   - capability tiers (`Basic`, `Pro`, `Ultra`)
   - local-only/no-tracking rules
   - quality/CI gates
-  - UX/UI/Figma source-of-truth references
+  - UX/UI/Penpot source-of-truth references (ADR 0015)
   - roadmap deltas
 
 Source consistency rule:

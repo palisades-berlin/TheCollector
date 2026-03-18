@@ -2,7 +2,7 @@
 
 **Date:** 2026-03-13
 **Author:** Principal UX/UI Designer
-**Status:** Design direction — Figma-first, implement after DS 2.0 Sprint 1
+**Status:** Design direction — Penpot-first (ADR 0015 — replaced Figma), implement after DS 2.0 Sprint 1
 **Aesthetic:** Apple/iOS glass · Linear precision · dark default
 
 ---
@@ -507,4 +507,4 @@ When complete:
 
 ---
 
-_All changes go to Figma first (per `docs/ui-handoff.md` change policy). Token updates are applied in `src/shared/ui.css` only — surface layers consume them automatically via aliases._
+_All changes go to Penpot first (ADR 0015; per `docs/ui-handoff.md` change policy). Token updates are applied in `src/shared/ui.css` only — surface layers consume them automatically via aliases._

@@ -75,5 +75,4 @@ v2.0, not done in parallel with the token migration.
   interaction or IA redesign work for v2.1 or later.
 - All v2.1 and v3.0 features inherit the Design System 2.0 token layer without a migration
   cost.
-- Figma remains the UX/UI single source of truth (see `docs/project-ruleset.md`). Design tokens
-  in code must align with the Figma token definitions at the point of migration.
+- ~~Figma remains the UX/UI single source of truth~~ — superseded by ADR 0015 (Penpot replaces Figma). Penpot is now the UX/UI single source of truth (see `docs/project-ruleset.md`). Design tokens in code must align with the Penpot token definitions at the point of migration.

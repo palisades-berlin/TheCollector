@@ -1,7 +1,7 @@
 # Design System Rules — THE Collector
 
-> **Purpose:** Single source of truth for AI tools (Claude, Codex) integrating Figma designs with the codebase. Generated 2026-03-13 by `create_design_system_rules` analysis of the live codebase.
-> **Note for Phase 0:** This document is the spec for the Figma rebuild. Every token, component, and naming convention here mirrors what is already live in code. Figma must match this — not the other way around.
+> **Purpose:** Single source of truth for AI tools (Claude, Codex) integrating Penpot designs with the codebase. Generated 2026-03-13 by `create_design_system_rules` analysis of the live codebase. (ADR 0015 — Penpot replaced Figma.)
+> **Note for Phase 0:** This document is the spec for the Penpot rebuild. Every token, component, and naming convention here mirrors what is already live in code. Penpot must match this — not the other way around.
 
 ---
 
@@ -353,7 +353,7 @@ src/
   offscreen/
     offscreen.js            ← tile stitching + image persistence
 docs/
-  ui-handoff.md             ← Figma ↔ code mapping table + design principles
+  ui-handoff.md             ← Penpot ↔ code mapping table + design principles
   architecture.md
   design-overhaul-master-plan-2026-03-13.md
   thecollector-2.0-90-day-roadmap.md
@@ -368,19 +368,21 @@ docs/
 
 ---
 
-## 8. Figma Integration Rules (for Phase 0)
+## 8. Penpot Integration Rules (for Phase 0)
+
+> **Note:** ADR 0015 replaced Figma with Penpot as the UX/UI source of truth. All references below that previously said "Figma" now mean Penpot. Penpot file: `THECollector - UI Kit & Screens` · key `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`.
 
 ### Phase 0 goal
 
-Rebuild the Figma file so it is an exact, complete reflection of the live token system above. No new values. No approximations.
+Rebuild the Penpot file so it is an exact, complete reflection of the live token system above. No new values. No approximations.
 
 ### Token mapping rule
 
-Every Figma color style, spacing token, radius style, and text style must use the exact values from section 1 above. The `--sc-*` token name is the canonical name — use it as the Figma style name (e.g. `color/surface/1`, `color/brand/primary`, `motion/quick`).
+Every Penpot color style, spacing token, radius style, and text style must use the exact values from section 1 above. The `--sc-*` token name is the canonical name — use it as the Penpot style name (e.g. `color/surface/1`, `color/brand/primary`, `motion/quick`).
 
 ### Component mapping rule
 
-Each class in section 2 maps to one Figma component. The class name is the component name. States map to Figma variants:
+Each class in section 2 maps to one Penpot component. The class name is the component name. States map to Penpot variants:
 
 - `sc-btn` → Button / default, hover, disabled; variants: primary, secondary, ghost, danger; sizes: sm, md, block
 - `sc-input` / `sc-select` → Input / default, focus, placeholder
@@ -392,14 +394,14 @@ Each class in section 2 maps to one Figma component. The class name is the compo
 
 ### Dark mode
 
-Dark mode is a Figma variable mode toggle on the `:root` token set. All components inherit the mode — no separate dark-mode component variants.
+Dark mode is a Penpot variable mode toggle on the `:root` token set. All components inherit the mode — no separate dark-mode component variants.
 
-### Naming convention for Figma
+### Naming convention for Penpot
 
 - Token styles: `<category>/<subcategory>/<variant>` e.g. `color/surface/1`, `spacing/4`, `radius/md`
 - Components: `<ComponentName>/<Variant>/<State>` e.g. `Button/Primary/Default`
 - Frames/screens: match surface names — `Popup`, `Screenshots`, `Settings`, `Preview`, `Onboarding`
-- Sections within screens: match Figma Mapping Table in `docs/ui-handoff.md`
+- Sections within screens: match Penpot Mapping Table in `docs/ui-handoff.md`
 
 ### Design principles (non-negotiable)
 

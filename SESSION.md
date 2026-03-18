@@ -20,7 +20,7 @@ Attribution: Implemented with Codex AI, Claude, Perplexity assistance and my fan
 
 ## Current sprint
 
-**v2.0 — Design System 2.0 · Phase 0: Figma Rebuild**
+**v2.0 — Design System 2.0 · Phase 0: Penpot Rebuild**
 Roadmap ref: `docs/thecollector-2.0-90-day-roadmap.md`
 Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
@@ -34,14 +34,16 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 **Done:**
 
 - **DS 2.0 Phase 0-B complete** — new Penpot page "DS 2.0 — Headers" (5 boards: Screenshots, URL Library, Preview, Popup, Settings).
-- **DS 2.0 Phase 0-C complete** — new Penpot page "DS 2.0 — Command Bars" (5 items):
-  - 0-C-1 URL Library command bar (primary + 2× secondary + danger).
-  - 0-C-2 Screenshots command bar (ghost + danger).
-  - 0-C-3 URL Library tab bar (4 filter tabs + `↗ History` ghost link).
-  - 0-C-4 Selection bar: hidden state (muted placeholder) + visible state (3 selected × Deselect / Tag ▾ / Copy / Delete).
-  - 0-C-5 URL Library filters (DOMAIN / DATE FROM / DATE TO / TYPE comboboxes).
-- All boards: dark bg + glass surface fill applied; all exports verified visually.
-- v1.9.97.13 bumped, docs updated, pushed.
+- **DS 2.0 Phase 0-C complete** — new Penpot page "DS 2.0 — Command Bars" (5 items: 0-C-1 through 0-C-5).
+- v1.9.97.13 bumped + pushed (Phase 0-B, 0-C Penpot work).
+- **Comprehensive .md audit complete** — all 47 .md files scanned for stale Figma refs and outdated policy content. Figma → Penpot (ADR 0015) corrections applied to:
+  - `CONTRIBUTING.md`, `docs/architecture.md`, `docs/project-ruleset.md`
+  - `docs/design-system-rules.md` (section 8 + purpose note + diagram)
+  - `docs/adr/0010` (strikethrough + ADR 0015 supersession note)
+  - `docs/ui-qa-audit.md`, `docs/ux-consistency-audit-2026-03-13.md`
+  - `docs/visual-system-direction-2026-03-13.md`, `docs/dev-workflow.md`
+  - `SESSION.md`, `AGENTS.md`, `CODEX.md`
+- v1.9.97.14 bumped (docs-only — all .md policy refs updated).
 
 ---
 
@@ -52,7 +54,7 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 - Screenshot card: resting / hover / selected states
 - URL Library row: 4 item variants
 
-**Pre-task:** Bump to `1.9.97.14` (docs-only), run checks, commit + push.
+**Pre-task:** none — v1.9.97.14 already bumped, docs complete.
 
 **Blocker status:** none.
 
@@ -77,7 +79,7 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 | `AGENTS.md`                                      | ✅ Conditional triggers + CODEX.md pointer added                |
 | `WORKFLOW.md`                                    | ✅ Codex opening prompt updated to include CODEX.md             |
 | `SESSION.md`                                     | ✅ This file                                                    |
-| `docs/design-system-rules.md`                    | ✅ New — full DS spec for Phase 0 Figma                         |
+| `docs/design-system-rules.md`                    | ✅ DS spec for Phase 0 Penpot rebuild; Figma refs → Penpot      |
 | `docs/design-overhaul-master-plan-2026-03-13.md` | ✅ Phase 0-A-1 token values remain source of truth              |
 
 ---
@@ -144,4 +146,4 @@ Read CODEX.md, AGENTS.md, and SESSION.md, then continue from the last session. Y
 
 ---
 
-_Last updated: 2026-03-18 · Claude (DS 2.0 Phase 0 progress documented across all repo docs; v1.9.97.14)_
+_Last updated: 2026-03-18 · Claude (comprehensive Figma→Penpot .md audit complete; v1.9.97.14)_

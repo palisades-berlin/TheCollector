@@ -43,8 +43,8 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
 
 ## Design System Contract
 
-- Figma file `THECollector - UI Kit & Screens` is the single source of truth for UX/UI and components.
-- Code mirrors Figma through:
+- Penpot file `THECollector - UI Kit & Screens` (key `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`) is the single source of truth for UX/UI and components. (ADR 0015 — replaced Figma.)
+- Code mirrors Penpot through:
   - global tokens in `src/shared/ui.css`
   - surface semantic tokens in `src/popup/popup.css` (`--popup-*`) and `src/history/history.css` (`--history-*`)
   - shared primitive classes (`sc-btn`, `sc-input`, `sc-select`, `sc-card`, `sc-tab*`, `sc-pill*`, `sc-banner*`, `sc-modal`).

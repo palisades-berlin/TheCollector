@@ -89,8 +89,8 @@ Tip: if you added aliases/functions above on all machines, use `sync-main` at se
 - Use clear PR titles (`feat:`, `fix:`, `chore:` style preferred).
 - Keep runtime API/message contracts backward-compatible unless explicitly planned.
 - Include changelog notes for user-visible or policy-level changes.
-- Keep UX/UI aligned with Figma source of truth:
-  - `https://www.figma.com/design/sECUN6qSqUygWoG7PhC548/THECollector---UI-Kit---Screens?t=UVQ55HTnnPvLrqyo-0`
+- Keep UX/UI aligned with Penpot source of truth (ADR 0015 — replaced Figma):
+  - File: `THECollector - UI Kit & Screens` · key `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`
 
 ## Versioning
 
