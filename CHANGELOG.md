@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.97.15 - 2026-03-18
+
+### Changed
+
+- Penpot DS 2.0 Phase 0-D (partial): new page "DS 2.0 — Cards & Rows" with 5 boards — 0-D-1 (card resting), 0-D-2 (hover), 0-D-3 (selected), 0-D-4 (URL Library rows density variants), 0-D-5 (empty states, rendering fix pending).
+- `docs/design-overhaul-master-plan-2026-03-13.md`: Phase 0-D-1–4 marked ✅; 0-D-5 marked ⚠️.
+- `SESSION.md`: updated to reflect Phase 0-D partial completion; next task is 0-D-5 fix.
+
 ## 1.9.97.14 - 2026-03-18
 
 ### Changed

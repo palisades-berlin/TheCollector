@@ -33,30 +33,23 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
 **Done:**
 
-- **DS 2.0 Phase 0-B complete** — new Penpot page "DS 2.0 — Headers" (5 boards: Screenshots, URL Library, Preview, Popup, Settings).
-- **DS 2.0 Phase 0-C complete** — new Penpot page "DS 2.0 — Command Bars" (5 items: 0-C-1 through 0-C-5).
-- v1.9.97.13 bumped + pushed (Phase 0-B, 0-C Penpot work).
-- **Comprehensive .md audit complete** — all 47 .md files scanned for stale Figma refs and outdated policy content. Figma → Penpot (ADR 0015) corrections applied to:
-  - `CONTRIBUTING.md`, `docs/architecture.md`, `docs/project-ruleset.md`
-  - `docs/design-system-rules.md` (section 8 + purpose note + diagram)
-  - `docs/adr/0010` (strikethrough + ADR 0015 supersession note)
-  - `docs/ui-qa-audit.md`, `docs/ux-consistency-audit-2026-03-13.md`
-  - `docs/visual-system-direction-2026-03-13.md`, `docs/dev-workflow.md`
-  - `SESSION.md`, `AGENTS.md`, `CODEX.md`
-- v1.9.97.14 bumped (docs-only — all .md policy refs updated).
+- **DS 2.0 Phase 0-D (partial) complete** — new Penpot page "DS 2.0 — Cards & Rows" created with 5 boards:
+  - 0-D-1 · Screenshot Card — Resting State ✅ (3 cards, radius 14px, elevation-2, spec label)
+  - 0-D-2 · Screenshot Card — Hover State ✅ (translateY(-3px), elevation-3, overlay, 3×32px icon buttons)
+  - 0-D-3 · Screenshot Card — Selected State ✅ (checkbox, brand-blue border-bottom, tinted bg)
+  - 0-D-4 · URL Library Rows — Density Variants ✅ (44/40/36px rows, favicon, tag chip, note icon, star)
+  - 0-D-5 · Empty States ⚠️ — board + panel frames created; inner content (icon, headline, CTA) not rendering visibly — z-order/rendering fix needed.
+- `docs/design-overhaul-master-plan-2026-03-13.md` Phase 0-D status columns updated (0-D-1–4 ✅, 0-D-5 ⚠️).
 
 ---
 
 ## Do next
 
-**Task (Claude):** DS 2.0 Phase 0-D — card & row states in Penpot:
+**Task (Claude):** Fix 0-D-5 empty states rendering in Penpot — inner content (icon circle, headline, CTA button) invisible despite correct absolute positions. Likely z-order issue: panel background may be covering content. Rebuild 0-D-5 board content from scratch with explicit z-order control (panel bg inserted last → z-bottom).
 
-- Screenshot card: resting / hover / selected states
-- URL Library row: 4 item variants
+After fix: confirm 0-D-5 exports show both empty-state panels with visible content, then mark 0-D-5 ✅ in master plan and proceed to **Phase 0-E** (tier density variants).
 
-**Pre-task:** none — v1.9.97.14 already bumped, docs complete.
-
-**Blocker status:** none.
+**Blocker status:** none — v1.9.97.14 current, no version bump needed until code ships.
 
 ---
 
@@ -64,8 +57,8 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
 - Penpot file: `THECollector - UI Kit & Screens`, file key `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`. ✅
 - Penpot MCP running at `http://localhost:4401/mcp`. ✅
-- Phase 0-A ✅, 0-B ✅, 0-C-1–5 ✅ done. Phase 0-D (card/row states) is next.
-- Phase 0-C-6 (Profile Usage pills), 0-C-7 (URL Notes UI), 0-C-8 (Popup URL panel redesign) are **pending** — required for Phase 4 gate, not Phase 1. Defer until after 0-D and 0-E.
+- Phase 0-A ✅, 0-B ✅, 0-C-1–5 ✅, 0-D-1–4 ✅ done. 0-D-5 ⚠️ rendering fix needed.
+- Phase 0-C-6 (Profile Usage pills), 0-C-7 (URL Notes UI), 0-C-8 (Popup URL panel redesign) are **pending** — required for Phase 4 gate, not Phase 1.
 - Phase 0-A pending items: 0-A-3 (elevation/shadow), 0-A-5 (glass component variants), 0-A-6 (glass token docs), 0-A-7/8/9 (button/pill/badge components) — required for Phase 2 gate.
 
 ---
@@ -80,7 +73,7 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 | `WORKFLOW.md`                                    | ✅ Codex opening prompt updated to include CODEX.md             |
 | `SESSION.md`                                     | ✅ This file                                                    |
 | `docs/design-system-rules.md`                    | ✅ DS spec for Phase 0 Penpot rebuild; Figma refs → Penpot      |
-| `docs/design-overhaul-master-plan-2026-03-13.md` | ✅ Phase 0-A-1 token values remain source of truth              |
+| `docs/design-overhaul-master-plan-2026-03-13.md` | ✅ Phase 0-D-1–4 ✅, 0-D-5 ⚠️ status columns updated            |
 
 ---
 
@@ -146,4 +139,4 @@ Read CODEX.md, AGENTS.md, and SESSION.md, then continue from the last session. Y
 
 ---
 
-_Last updated: 2026-03-18 · Claude (comprehensive Figma→Penpot .md audit complete; v1.9.97.14)_
+_Last updated: 2026-03-18 · Claude (Phase 0-D boards 1–4 complete; 0-D-5 rendering fix pending; v1.9.97.15)_

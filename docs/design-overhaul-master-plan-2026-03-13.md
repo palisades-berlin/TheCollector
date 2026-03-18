@@ -784,13 +784,13 @@ Each phase has an explicit **Penpot gate**: no code work in that phase begins un
 
 **0-D: Redesign card and list surfaces**
 
-| Step  | Action                                                                                                            | Status     |
-| ----- | ----------------------------------------------------------------------------------------------------------------- | ---------- |
-| 0-D-1 | Screenshot card resting state: 14px radius, no visible border (dark), elevation-2 shadow                          | ⬜ Pending |
-| 0-D-2 | Screenshot card hover state: `translateY(-3px)`, overlay with centred icon actions, metadata below always visible | ⬜ Pending |
-| 0-D-3 | Screenshot card selection state: checkbox + brand blue bottom border + tinted background                          | ⬜ Pending |
-| 0-D-4 | URL Library row: add favicon slot; design tier-density variants (44px/40px/36px)                                  | ⬜ Pending |
-| 0-D-5 | Empty states: Screenshots and URL Library — icon + headline + CTA                                                 | ⬜ Pending |
+| Step  | Action                                                                                                            | Status                                                                     |
+| ----- | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| 0-D-1 | Screenshot card resting state: 14px radius, no visible border (dark), elevation-2 shadow                          | ✅ Done (v1.9.97.15)                                                       |
+| 0-D-2 | Screenshot card hover state: `translateY(-3px)`, overlay with centred icon actions, metadata below always visible | ✅ Done (v1.9.97.15)                                                       |
+| 0-D-3 | Screenshot card selection state: checkbox + brand blue bottom border + tinted background                          | ✅ Done (v1.9.97.15)                                                       |
+| 0-D-4 | URL Library row: add favicon slot; design tier-density variants (44px/40px/36px)                                  | ✅ Done (v1.9.97.15)                                                       |
+| 0-D-5 | Empty states: Screenshots and URL Library — icon + headline + CTA                                                 | ⚠️ Board created — inner content visibility fix needed (z-order/rendering) |
 
 **0-E: Design tier density variants**
 
@@ -985,4 +985,4 @@ The source documents remain on disk as audit history. This document is the activ
 
 ---
 
-_Last updated: 2026-03-18 (Phase 0 status columns added; Phase 0-A-1/2/4 ✅, 0-B-1–5 ✅, 0-C-1–5 ✅; 0-A-3/5–9, 0-C-6–8, 0-D, 0-E marked pending; Status typo fixed: "replaces Penpot" → "replaces Figma"). All design decisions require Penpot-first implementation per `docs/ui-handoff.md` change policy._
+_Last updated: 2026-03-18 (Phase 0-D-1–4 ✅ done; 0-D-5 board created, inner content visibility fix pending). All design decisions require Penpot-first implementation per `docs/ui-handoff.md` change policy._
