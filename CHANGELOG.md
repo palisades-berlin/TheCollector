@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.97.9 - 2026-03-18
+
+### Added
+
+- `CODEX.md` — Codex-only working memory file at repo root for durable repo knowledge, release rules, and current watchouts.
+- Version sync:
+  - synchronized version pointers to `1.9.97.9` across manifest/package/README/maintainer docs.
+
 ## 1.9.97.8 - 2026-03-16
 
 ### Changed

@@ -28,39 +28,31 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
 ## Last session
 
-**Date:** 2026-03-16
+**Date:** 2026-03-18
 **Tool:** Codex
 
 **Done:**
 
-- Completed docs-only release bump to `1.9.97.8` (`w` bump) across all six versioned files.
-- Added `CHANGELOG.md` entry for `1.9.97.8` and refreshed `README.md` Top Changes to current-cycle items.
-- Reconciled stale handoff text in `SESSION.md` (removed outdated `1.9.97.6` do-next instruction).
-- Ran required pre-commit checks: version policy local, docs policy, session format, and format check.
-- Kept untracked local artifact `design.plugin` out of release commit scope.
+- Created `CODEX.md` at repo root as the Codex-only working memory file for durable repo knowledge.
+- Completed docs-only release bump to `1.9.97.9` (`w` bump) across versioned files.
+- Added `CHANGELOG.md` entry for `1.9.97.9` and refreshed `README.md` Top Changes to include `CODEX.md`.
+- Updated `SESSION.md` to reflect the current Codex handoff state and release context.
+- Ran the required pre-commit checks: version policy local, docs policy, session format, and format check.
+- Pending: create the commit, sync the wiki Home page, and push the docs-only release cycle.
 
 ---
 
 ## Do next
 
-**Task (Claude):** Resume Figma blocker path at Phase 0-A-1 in file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`) once access/capacity blocker is lifted.
+**Task (Codex):** Create the commit, sync the wiki `Home.md`, and push the `1.9.97.9` docs-only release bump.
 
-Where: Figma file `sECUN6qSqUygWoG7PhC548` (`THECollector - UI Kit & Screens`)
-What: Phase 0 checklist in master plan §6, steps 0-A through 0-F
-Gate: ALL Phase 0 Figma work must be complete and approved before any Phase 1 code begins
-Next Claude task: execute Phase 0-A-1 token/style update pass and validation as soon as Figma `Editor` + MCP capacity are available.
-
-**Blocker status:** active — Figma seat/capacity blocker prevents MCP execution (`View` + tool-call limit).
+**Blocker status:** none for this docs-only release cycle.
 
 ---
 
 ## Open decisions / blockers
 
-- Figma permission/capacity blocker:
-  - file access must be upgraded to `Editor`
-  - MCP plan/call allowance must be sufficient for style update + validation pass
-- CI follow-up: if `v1.9.97.5` checks fail (`quality` or `codeql`), fix forward and re-run before next push.
-- S-07/S-08 remain code-precompleted; design work stays pending until Figma unblock is resolved.
+- None for the current docs-only release cycle.
 
 ---
 
