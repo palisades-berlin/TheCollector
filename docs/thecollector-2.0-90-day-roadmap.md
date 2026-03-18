@@ -52,7 +52,7 @@ North-star outcomes by end of roadmap:
 4. Perceived value uplift: 3x (weekly value report + automation outcomes).
 5. Chrome Web Store featuring: qualify and apply within v1.10 milestone window.
 
-### Persisted Roadmap Progress Baseline (as of 2026-03-12)
+### Persisted Roadmap Progress Baseline (as of 2026-03-18)
 
 Implemented roadmap features and current delivery level:
 
@@ -68,12 +68,20 @@ Implemented roadmap features and current delivery level:
 10. History thumbnail quality improvement: **delivered** (`1.9.85`) — sharp `4:3` top-aligned thumb output, quality-aware runtime fallback for legacy blobs, background regeneration for affected records.
 11. History Domain combobox filter: **delivered** (`1.9.86`) — premium combobox with captured-domain suggestions and per-domain counts, keyboard navigation (`Arrow`/`Enter`), TLD suffix matching, one-click clear.
 
+**DS 2.0 Design Phase (Penpot — no code shipped yet):**
+
+12. DS 2.0 Phase 0-A: **complete** (`1.9.97.12`) — Penpot color library reorganised (59 tokens, glass surfaces, dark mode set); border radius updated; typography updated. Source of truth migrated to Penpot (ADR 0015).
+13. DS 2.0 Phase 0-B: **complete** (`1.9.97.13`) — all 5 header variants designed in Penpot (`DS 2.0 — Headers` page): Screenshots, URL Library, Preview, Popup, Settings.
+14. DS 2.0 Phase 0-C (items 1–5): **complete** (`1.9.97.13`) — URL Library & Screenshots command bars, tab bar, selection bar (hidden + visible states), URL Library filters designed in Penpot (`DS 2.0 — Command Bars` page).
+15. DS 2.0 Phase 0-C (items 6–8), 0-D, 0-E: **pending** — Profile Usage pills, URL Notes UI, Popup URL panel redesign, card/row states, tier density variants.
+
 Versioning status:
 
-1. Current release baseline: **`1.9.86`**.
+1. Last code feature release: **`1.9.86`**. Versions `1.9.97.x` are docs/design-only bumps (no code shipped).
 2. No roadmap **v2** feature is fully shipped yet.
 3. Smart Save Profiles editable management remains planned for v2.0.
 4. Command Palette (Cmd/Ctrl+K) remains **unshipped**; user-facing help/docs are aligned to the shipped feature set.
+5. DS 2.0 Phase 1 code work is **blocked** until Phase 0-A, 0-B-1/2, 0-C-1–5, and 0-D-1/2 are complete in Penpot (0-B and 0-C-1–5 ✅; 0-D pending).
 
 ---
 

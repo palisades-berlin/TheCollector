@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.97.13`.
+Current extension version: `1.9.97.14`.
 
 ## Overview
 
@@ -33,9 +33,9 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- DS 2.0 Phase 0-B: 5 header boards in Penpot (Screenshots, URL Library, Preview, Popup, Settings).
-- DS 2.0 Phase 0-C: 5 command-bar boards in Penpot (URL Library & Screenshots command bars, tab bar, selection bar ×2 states, filters).
-- All DS 2.0 Penpot boards use dark bg + glass surface fill for correct dark-mode export rendering.
+- DS 2.0 Phase 0-A/B/C progress documented across roadmap, master plan, and ui-handoff (✅/⬜ status columns).
+- Roadmap Persisted Progress Baseline updated with DS 2.0 design phase items (items 12–15).
+- `docs/ui-handoff.md` Penpot Page Index restructured: active DS 2.0 pages + Figma Import Baseline reference.
 
 ## Versioning Migration Note
 

@@ -2,7 +2,7 @@
 
 **Date:** 2026-03-13
 **Author:** Principal UX/UI Designer
-**Status:** APPROVED DIRECTION — implement via Penpot-first workflow (ADR 0015: Penpot replaces Penpot)
+**Status:** APPROVED DIRECTION — implement via Penpot-first workflow (ADR 0015: Penpot replaces Figma)
 **Covers:** UX consistency · Visual quality uplift · Visual system direction v2.0
 **Penpot source of truth:** `THECollector - UI Kit & Screens` (file URL/key recorded in `docs/ui-handoff.md` after migration)
 **Archived Penpot file:** `sECUN6qSqUygWoG7PhC548` (no longer source of truth)
@@ -740,40 +740,40 @@ Each phase has an explicit **Penpot gate**: no code work in that phase begins un
 
 **0-A: Update the Penpot UI Kit**
 
-| Step  | Action                                                                                                                        |
-| ----- | ----------------------------------------------------------------------------------------------------------------------------- |
-| 0-A-1 | Update colour styles: dark mode surface tokens (Surface-1 through Surface-4), light mode surface tokens, border tokens        |
-| 0-A-2 | Update border radius styles: xs=5, sm=10, md=14, lg=18, xl=24                                                                 |
-| 0-A-3 | Update elevation/shadow styles: all four elevation levels, dark mode overrides                                                |
-| 0-A-4 | Update typography styles: header title tracking (-0.01em), filter label style (10px/600/uppercase/0.07em), badge weight (700) |
-| 0-A-5 | Add glass component variants: standard panel, header glass, popup header glass, modal glass, dropdown glass                   |
-| 0-A-6 | Add `--sc-glass-*` token documentation to the token page                                                                      |
-| 0-A-7 | Update primary button component: gradient overlay + bottom border + grounding shadow                                          |
-| 0-A-8 | Update nav pill component: active (frosted pill) + inactive + hover states                                                    |
-| 0-A-9 | Update count badge component: brand blue tint treatment for dark header                                                       |
+| Step  | Action                                                                                                                        | Status               |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| 0-A-1 | Update colour styles: dark mode surface tokens (Surface-1 through Surface-4), light mode surface tokens, border tokens        | ✅ Done (v1.9.97.12) |
+| 0-A-2 | Update border radius styles: xs=5, sm=10, md=14, lg=18, xl=24                                                                 | ✅ Done (v1.9.97.12) |
+| 0-A-3 | Update elevation/shadow styles: all four elevation levels, dark mode overrides                                                | ⬜ Pending           |
+| 0-A-4 | Update typography styles: header title tracking (-0.01em), filter label style (10px/600/uppercase/0.07em), badge weight (700) | ✅ Done (v1.9.97.12) |
+| 0-A-5 | Add glass component variants: standard panel, header glass, popup header glass, modal glass, dropdown glass                   | ⬜ Pending           |
+| 0-A-6 | Add `--sc-glass-*` token documentation to the token page                                                                      | ⬜ Pending           |
+| 0-A-7 | Update primary button component: gradient overlay + bottom border + grounding shadow                                          | ⬜ Pending           |
+| 0-A-8 | Update nav pill component: active (frosted pill) + inactive + hover states                                                    | ⬜ Pending           |
+| 0-A-9 | Update count badge component: brand blue tint treatment for dark header                                                       | ⬜ Pending           |
 
 **0-B: Redesign all full-page headers**
 
-| Step  | Action                                                                                                                                                                                         |
-| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0-B-1 | Screenshots header: apply glass dark spec, move nav to position 2 (centre), confirm `header-actions` DOM contract; rename nav link "History" → "Screenshots"                                   |
-| 0-B-2 | URL Library header: apply glass dark spec, confirm nav is position 2, confirm `header-actions` is empty (actions move to command bar)                                                          |
-| 0-B-3 | Preview header: design `sc-header-nav` into Preview for the first time; design `← Back` ghost button; consolidate Save actions into `[Save ▾]` split-button                                    |
-| 0-B-4 | Popup header: apply popup glass spec (blur(20px), constrained opacity)                                                                                                                         |
-| 0-B-5 | Settings header: apply glass dark spec and nav contract. Settings is the fourth surface that receives DS 2.0 token migration — it must be redesigned in Penpot at the same time, not deferred. |
+| Step  | Action                                                                                                                                                                                         | Status               |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| 0-B-1 | Screenshots header: apply glass dark spec, move nav to position 2 (centre), confirm `header-actions` DOM contract; rename nav link "History" → "Screenshots"                                   | ✅ Done (v1.9.97.13) |
+| 0-B-2 | URL Library header: apply glass dark spec, confirm nav is position 2, confirm `header-actions` is empty (actions move to command bar)                                                          | ✅ Done (v1.9.97.13) |
+| 0-B-3 | Preview header: design `sc-header-nav` into Preview for the first time; design `← Back` ghost button; consolidate Save actions into `[Save ▾]` split-button                                    | ✅ Done (v1.9.97.13) |
+| 0-B-4 | Popup header: apply popup glass spec (blur(20px), constrained opacity)                                                                                                                         | ✅ Done (v1.9.97.13) |
+| 0-B-5 | Settings header: apply glass dark spec and nav contract. Settings is the fourth surface that receives DS 2.0 token migration — it must be redesigned in Penpot at the same time, not deferred. | ✅ Done (v1.9.97.13) |
 
 **0-C: Redesign structural UX surfaces**
 
-| Step  | Action                                                                                                                                                                                                                                                         |
-| ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0-C-1 | URL Library command bar: `[+ Add Current Tab]` (primary), `[Add All Tabs]` (secondary), `[Export ▾]` (secondary — Copy/TXT/CSV/Email/Restore inside), `[Clear All]` (danger, far right)                                                                        |
-| 0-C-2 | Screenshots command bar: `[Bulk Select]` (ghost), `[Clear All]` (danger, far right)                                                                                                                                                                            |
-| 0-C-3 | URL Library tab bar: remove Change Log tab, add `[↗ Change Log]` ghost link right-aligned                                                                                                                                                                      |
-| 0-C-4 | URL Library selection bar: design hidden/contextual-only state (appears only when ≥1 selected); design visible state                                                                                                                                           |
-| 0-C-5 | URL Library filters: replace plain domain `<input>` with combobox matching Screenshots filter                                                                                                                                                                  |
-| 0-C-6 | Profile Usage pills: design Pro-gated version (shows only pills with count > 0); confirm Basic tier renders this row hidden                                                                                                                                    |
-| 0-C-7 | URL Notes UI: design note icon on URL rows (inactive/active states), inline 140-char text field expansion, Escape/blur cancel behaviour. This is the first-ever UI for the existing IndexedDB `note` field.                                                    |
-| 0-C-8 | Popup URL panel redesign: strip to capture-only layout with "Open URL Library →" ghost link. Remove all view tabs, tag filter, and inline editors from popup. Design both states: current (before URL Library page) and future (after URL Library page ships). |
+| Step  | Action                                                                                                                                                                                                                                                         | Status                                  |
+| ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| 0-C-1 | URL Library command bar: `[+ Add Current Tab]` (primary), `[Add All Tabs]` (secondary), `[Export ▾]` (secondary — Copy/TXT/CSV/Email/Restore inside), `[Clear All]` (danger, far right)                                                                        | ✅ Done (v1.9.97.13)                    |
+| 0-C-2 | Screenshots command bar: `[Bulk Select]` (ghost), `[Clear All]` (danger, far right)                                                                                                                                                                            | ✅ Done (v1.9.97.13)                    |
+| 0-C-3 | URL Library tab bar: remove Change Log tab, add `[↗ History]` ghost link right-aligned                                                                                                                                                                         | ✅ Done (v1.9.97.13)                    |
+| 0-C-4 | URL Library selection bar: design hidden/contextual-only state (appears only when ≥1 selected); design visible state                                                                                                                                           | ✅ Done (v1.9.97.13)                    |
+| 0-C-5 | URL Library filters: replace plain domain `<input>` with combobox matching Screenshots filter                                                                                                                                                                  | ✅ Done (v1.9.97.13)                    |
+| 0-C-6 | Profile Usage pills: design Pro-gated version (shows only pills with count > 0); confirm Basic tier renders this row hidden                                                                                                                                    | ⬜ Pending (Phase 4 gate — not Phase 1) |
+| 0-C-7 | URL Notes UI: design note icon on URL rows (inactive/active states), inline 140-char text field expansion, Escape/blur cancel behaviour. This is the first-ever UI for the existing IndexedDB `note` field.                                                    | ⬜ Pending (Phase 4 gate — not Phase 1) |
+| 0-C-8 | Popup URL panel redesign: strip to capture-only layout with "Open URL Library →" ghost link. Remove all view tabs, tag filter, and inline editors from popup. Design both states: current (before URL Library page) and future (after URL Library page ships). | ⬜ Pending (Phase 4 gate — not Phase 1) |
 
 > **URL Library Architecture Decisions (baked in — not open):**
 >
@@ -784,21 +784,21 @@ Each phase has an explicit **Penpot gate**: no code work in that phase begins un
 
 **0-D: Redesign card and list surfaces**
 
-| Step  | Action                                                                                                            |
-| ----- | ----------------------------------------------------------------------------------------------------------------- |
-| 0-D-1 | Screenshot card resting state: 14px radius, no visible border (dark), elevation-2 shadow                          |
-| 0-D-2 | Screenshot card hover state: `translateY(-3px)`, overlay with centred icon actions, metadata below always visible |
-| 0-D-3 | Screenshot card selection state: checkbox + brand blue bottom border + tinted background                          |
-| 0-D-4 | URL Library row: add favicon slot; design tier-density variants (44px/40px/36px)                                  |
-| 0-D-5 | Empty states: Screenshots and URL Library — icon + headline + CTA                                                 |
+| Step  | Action                                                                                                            | Status     |
+| ----- | ----------------------------------------------------------------------------------------------------------------- | ---------- |
+| 0-D-1 | Screenshot card resting state: 14px radius, no visible border (dark), elevation-2 shadow                          | ⬜ Pending |
+| 0-D-2 | Screenshot card hover state: `translateY(-3px)`, overlay with centred icon actions, metadata below always visible | ⬜ Pending |
+| 0-D-3 | Screenshot card selection state: checkbox + brand blue bottom border + tinted background                          | ⬜ Pending |
+| 0-D-4 | URL Library row: add favicon slot; design tier-density variants (44px/40px/36px)                                  | ⬜ Pending |
+| 0-D-5 | Empty states: Screenshots and URL Library — icon + headline + CTA                                                 | ⬜ Pending |
 
 **0-E: Design tier density variants**
 
-| Step  | Action                                                                                        |
-| ----- | --------------------------------------------------------------------------------------------- |
-| 0-E-1 | Document Basic tier at comfortable density (44px controls, card stagger ON, 0.12 accent tint) |
-| 0-E-2 | Document Pro tier at standard density (40px controls, card stagger ON, 0.08 accent tint)      |
-| 0-E-3 | Document Ultra tier at compact density (36px controls, card stagger OFF, 0.06 accent tint)    |
+| Step  | Action                                                                                        | Status     |
+| ----- | --------------------------------------------------------------------------------------------- | ---------- |
+| 0-E-1 | Document Basic tier at comfortable density (44px controls, card stagger ON, 0.12 accent tint) | ⬜ Pending |
+| 0-E-2 | Document Pro tier at standard density (40px controls, card stagger ON, 0.08 accent tint)      | ⬜ Pending |
+| 0-E-3 | Document Ultra tier at compact density (36px controls, card stagger OFF, 0.06 accent tint)    | ⬜ Pending |
 
 **0-F: Review and approval gate**
 
@@ -985,4 +985,4 @@ The source documents remain on disk as audit history. This document is the activ
 
 ---
 
-_Last updated: 2026-03-13 (housekeeping pass: BF-01–04 and S-07/S-08 pre-completed notes added; post-phase 1 gate updated). All design decisions require Penpot-first implementation per `docs/ui-handoff.md` change policy._
+_Last updated: 2026-03-18 (Phase 0 status columns added; Phase 0-A-1/2/4 ✅, 0-B-1–5 ✅, 0-C-1–5 ✅; 0-A-3/5–9, 0-C-6–8, 0-D, 0-E marked pending; Status typo fixed: "replaces Penpot" → "replaces Figma"). All design decisions require Penpot-first implementation per `docs/ui-handoff.md` change policy._

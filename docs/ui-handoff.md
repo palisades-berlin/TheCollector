@@ -15,11 +15,23 @@ This document defines the implementation contract between design and code for TH
 - Archived Figma file key: `sECUN6qSqUygWoG7PhC548` (no longer source of truth — archived, not deleted)
 - Rule: the Penpot file is the single source of truth for all UX/UI and components.
 - Implementation policy: code should map to Penpot tokens, component states, and naming before introducing new visual patterns.
-- Canonical UI kit + screens page: `THECollector - UI Kit & Screens` (page index to be updated after Figma import is cleaned up)
+- Canonical UI kit + screens page: `THECollector - UI Kit & Screens`
 
 ## Penpot Page Index
 
-_Synced 2026-03-18. All 7 Figma pages imported as top-level boards on a single Penpot page (`Page 1`)._
+_Synced 2026-03-18._
+
+### DS 2.0 Active Pages
+
+| Page name                | Purpose                                       | DS 2.0 Phase status                       |
+| ------------------------ | --------------------------------------------- | ----------------------------------------- |
+| DS 2.0 Component Library | Token colour library, typography, base styles | ✅ Phase 0-A done (colours, radius, type) |
+| DS 2.0 — Headers         | All full-page + popup header variants         | ✅ Phase 0-B done (0-B-1 through 0-B-5)   |
+| DS 2.0 — Command Bars    | Command bars, tab bar, selection bar, filters | ✅ Phase 0-C-1–5 done; 0-C-6–8 pending    |
+
+### Figma Import Baseline (reference only)
+
+_All 7 Figma pages imported as top-level boards on Penpot page `Figma Import Baseline` (renamed from `Page 1`). Reference only — not source of truth for DS 2.0 work._
 
 | Board name                                         | Penpot ID                              | Figma equivalent                  |
 | -------------------------------------------------- | -------------------------------------- | --------------------------------- |

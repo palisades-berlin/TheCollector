@@ -62,7 +62,9 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
 - Penpot file: `THECollector - UI Kit & Screens`, file key `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`. ✅
 - Penpot MCP running at `http://localhost:4401/mcp`. ✅
-- Phase 0-A, 0-B, 0-C done. Phase 0-D (card/row states) is next.
+- Phase 0-A ✅, 0-B ✅, 0-C-1–5 ✅ done. Phase 0-D (card/row states) is next.
+- Phase 0-C-6 (Profile Usage pills), 0-C-7 (URL Notes UI), 0-C-8 (Popup URL panel redesign) are **pending** — required for Phase 4 gate, not Phase 1. Defer until after 0-D and 0-E.
+- Phase 0-A pending items: 0-A-3 (elevation/shadow), 0-A-5 (glass component variants), 0-A-6 (glass token docs), 0-A-7/8/9 (button/pill/badge components) — required for Phase 2 gate.
 
 ---
 
@@ -142,4 +144,4 @@ Read CODEX.md, AGENTS.md, and SESSION.md, then continue from the last session. Y
 
 ---
 
-_Last updated: 2026-03-18 · Claude (DS 2.0 Phase 0-B + 0-C Penpot boards; v1.9.97.13)_
+_Last updated: 2026-03-18 · Claude (DS 2.0 Phase 0 progress documented across all repo docs; v1.9.97.14)_
