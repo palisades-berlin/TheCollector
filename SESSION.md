@@ -40,6 +40,7 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
   - 0-D-4 · URL Library Rows — Density Variants ✅ (44/40/36px rows, favicon, tag chip, note icon, star)
   - 0-D-5 · Empty States ⚠️ — board + panel frames created; inner content (icon, headline, CTA) not rendering visibly — z-order/rendering fix needed.
 - `docs/design-overhaul-master-plan-2026-03-13.md` Phase 0-D status columns updated (0-D-1–4 ✅, 0-D-5 ⚠️).
+- **Penpot MCP start instructions** added to `WORKFLOW.md`, `CLAUDE.md`, and `CODEX.md` — `npm run bootstrap` (first time) / `npm run start:all` (subsequent).
 
 ---
 
@@ -65,15 +66,15 @@ After fix: confirm 0-D-5 exports show both empty-state panels with visible conte
 
 ## Active files (last touched)
 
-| File                                             | Status                                                          |
-| ------------------------------------------------ | --------------------------------------------------------------- |
-| `CODEX.md`                                       | ✅ Output And Token Discipline extended (phase detection, etc.) |
-| `CLAUDE.md`                                      | ✅ Output And Response Discipline section added                 |
-| `AGENTS.md`                                      | ✅ Conditional triggers + CODEX.md pointer added                |
-| `WORKFLOW.md`                                    | ✅ Codex opening prompt updated to include CODEX.md             |
-| `SESSION.md`                                     | ✅ This file                                                    |
-| `docs/design-system-rules.md`                    | ✅ DS spec for Phase 0 Penpot rebuild; Figma refs → Penpot      |
-| `docs/design-overhaul-master-plan-2026-03-13.md` | ✅ Phase 0-D-1–4 ✅, 0-D-5 ⚠️ status columns updated            |
+| File                                             | Status                                                     |
+| ------------------------------------------------ | ---------------------------------------------------------- |
+| `CODEX.md`                                       | ✅ Penpot MCP start instructions added                     |
+| `CLAUDE.md`                                      | ✅ Penpot MCP start instructions added                     |
+| `AGENTS.md`                                      | ✅ Penpot MCP start instructions added                     |
+| `WORKFLOW.md`                                    | ✅ Penpot MCP bootstrap/start:all instructions added       |
+| `SESSION.md`                                     | ✅ This file                                               |
+| `docs/design-system-rules.md`                    | ✅ DS spec for Phase 0 Penpot rebuild; Figma refs → Penpot |
+| `docs/design-overhaul-master-plan-2026-03-13.md` | ✅ Phase 0-D-1–4 ✅, 0-D-5 ⚠️ status columns updated       |
 
 ---
 
@@ -139,4 +140,4 @@ Read CODEX.md, AGENTS.md, and SESSION.md, then continue from the last session. Y
 
 ---
 
-_Last updated: 2026-03-18 · Claude (Phase 0-D boards 1–4 complete; 0-D-5 rendering fix pending; v1.9.97.15)_
+_Last updated: 2026-03-18 · Claude (Penpot MCP start instructions added to WORKFLOW.md, CLAUDE.md, CODEX.md; v1.9.97.15)_

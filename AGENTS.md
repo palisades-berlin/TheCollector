@@ -22,6 +22,16 @@ Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance 
 - Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
 <!-- ROADMAP_AUTHORITY:END -->
 
+## Penpot MCP
+
+- All design work (Phase 0 and beyond) uses the Penpot MCP server at `http://localhost:4401/mcp`.
+- **At the start of any session involving Penpot work:** check whether the Penpot MCP tools are available. If they are not reachable, instruct the user to start the server before proceeding:
+  ```
+  cd ~/penpot-mcp && npm run start:all
+  ```
+  First time on a machine: `npm run bootstrap` instead (installs + builds + starts).
+- Do not attempt Penpot operations if the MCP is unreachable — stop and ask the user to start it first.
+
 ## Behavioural Rules
 
 <!-- BEHAVIOURAL_RULES:START -->

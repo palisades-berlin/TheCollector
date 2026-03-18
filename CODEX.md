@@ -190,6 +190,16 @@ Codex-only working memory for `THE Collector`.
 - User-facing help should only describe features that are actually implemented.
 - If a feature ships, remove its unshipped phrase(s) from `scripts/check-doc-policy.mjs` and update both help surfaces.
 
+## Penpot MCP
+
+- All design work (Phase 0 and beyond) uses the Penpot MCP server at `http://localhost:4401/mcp`.
+- **At the start of any session involving Penpot work:** check whether the Penpot MCP tools are available. If they are not reachable, instruct the user to start the server before proceeding:
+  ```
+  cd ~/penpot-mcp && npm run start:all
+  ```
+  First time on a machine: `npm run bootstrap` instead (installs + builds + starts).
+- Do not attempt Penpot operations if the MCP is unreachable — stop and ask the user to start it first.
+
 ## Workflow Notes For Codex
 
 - Prefer reading the repo before editing.

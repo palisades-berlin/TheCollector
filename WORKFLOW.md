@@ -34,6 +34,28 @@ Always do this first, on any machine, before touching anything.
 
 ---
 
+**Step 1b — Start the Penpot MCP server (Claude design sessions only)**
+
+If the session involves Penpot design work, start the MCP server before opening Claude:
+
+```
+cd ~/penpot-mcp && npm run start:all
+```
+
+**First time on a machine (or after a clean clone)** — install and build first:
+
+```
+cd ~/penpot-mcp && npm run bootstrap
+```
+
+`bootstrap` = install all deps + build all packages + start. After the first successful bootstrap, `npm run start:all` alone is sufficient on subsequent sessions.
+
+This starts both the MCP server (port 4401) and the Penpot plugin server. Keep the terminal open for the duration of the session. Claude connects via `http://localhost:4401/mcp` (configured in `claude_desktop_config.json`).
+
+Skip this step for Codex (code/tests) or Perplexity (research) sessions.
+
+---
+
 **Step 2 — Open your AI tool and paste the opening prompt**
 
 <!-- OPENING_PROMPT:START -->
