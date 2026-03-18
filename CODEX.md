@@ -10,7 +10,7 @@ Codex-only working memory for `THE Collector`.
 
 - `THE Collector` is a Manifest V3 Chrome/Edge extension.
 - It combines full-page screenshot capture with URL collection and review surfaces.
-- Current extension version: `1.9.97.9`.
+- Current extension version: `1.9.97.10`.
 - The product is free forever, local-only, and has no external connections or user tracking.
 - The `Basic` / `Pro` / `Ultra` selector is a UX complexity preference, not a paywall.
 - Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
@@ -196,4 +196,24 @@ Codex-only working memory for `THE Collector`.
 - Use minimal changes that preserve behavior.
 - Avoid unnecessary subagents; use them only when they are truly helpful and keep the count low.
 - Keep a short memory of what was learned in this file rather than scattering it across the repo.
-- Do not Assume or guess, ask if unsure but you are allowed to make sugesstions.
+- Do not assume or guess — ask if unsure, but you are allowed to make suggestions.
+- **Keep CODEX.md current:** after any session that changes architecture, modules, storage model,
+  hard limits, feature gating, watchouts, or documentation state — update the relevant section(s)
+  in this file before closing the task. Treat CODEX.md as a living document, not a snapshot.
+
+## Output And Token Discipline
+
+- Respond with the minimum tokens necessary to complete the task.
+- No preamble: do not open responses with "I will now…", "Here is…", "Sure!", or similar filler phrases.
+- No closing remarks or summaries after completing a task.
+- No inline code comments unless they describe a non-obvious architectural decision.
+- After a successful file edit or action, confirm with a single line: `✓ [action performed]`.
+- For questions or ambiguities, ask one concise question — no padding, no context recap.
+- **Verbosity by phase:**
+  - `LEARN / AUDIT` tasks: full structured output is required — do not suppress briefing documents.
+  - `EXECUTE / EDIT` tasks: code only, plus a `✓` confirmation line.
+  - `DEBUG` tasks: one-paragraph diagnosis + fix — no narration of process.
+  - `RELEASE` tasks: one confirmation line per completed step.
+- Never repeat back the contents of a file you were just asked to read — confirm with `✓ read [filename]` and proceed.
+- When updating CODEX.md, change only the lines that are factually affected —
+  do not rewrite unrelated sections or reformat for style.

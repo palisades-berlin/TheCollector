@@ -34,17 +34,18 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 **Done:**
 
 - Created `CODEX.md` at repo root as the Codex-only working memory file for durable repo knowledge.
-- Completed docs-only release bump to `1.9.97.9` (`w` bump) across versioned files.
-- Added `CHANGELOG.md` entry for `1.9.97.9` and refreshed `README.md` Top Changes to include `CODEX.md`.
+- Completed docs-only release bump to `1.9.97.10` (`w` bump) across versioned files.
+- Added `CHANGELOG.md` entry for `1.9.97.10` and refreshed `README.md` Top Changes to reflect the `CODEX.md` guidance update.
 - Updated `SESSION.md` to reflect the current Codex handoff state and release context.
 - Ran the required pre-commit checks: version policy local, docs policy, session format, and format check.
-- Pending: create the commit, sync the wiki Home page, and push the docs-only release cycle.
+- Ran the required pre-commit checks: version policy local, docs policy, session format, and format check.
+- Pending: commit, sync the wiki `Home.md`, and push the `1.9.97.10` docs-only release bump.
 
 ---
 
 ## Do next
 
-**Task (Codex):** Create the commit, sync the wiki `Home.md`, and push the `1.9.97.9` docs-only release bump.
+**Task (Codex):** Commit, sync the wiki `Home.md`, and push the `1.9.97.10` docs-only release bump.
 
 **Blocker status:** none for this docs-only release cycle.
 
