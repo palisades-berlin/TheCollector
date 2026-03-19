@@ -1,7 +1,8 @@
 # ADR 0015 — Penpot Replaces Figma as Design Source of Truth
 
 **Date:** 2026-03-18
-**Status:** Accepted
+**Status:** superseded
+**Superseded by:** ADR 0016 — Figma Restored as UX/UI Source of Truth
 **Deciders:** Stefan (maintainer)
 
 ---

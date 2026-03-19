@@ -19,6 +19,7 @@ This file is the source of truth for machine-readable marker governance across m
 
 - Canonical marker blocks are authoritative.
 - When a canonical block changes, all mirror blocks must be updated in the same work cycle.
+- Optional helper: run `npm run sync:marker-blocks` to copy canonical marker content into mirror files before validation.
 - `npm run test:docs-policy` enforces this rule through `test:marker-sync`.
 
 ## Contract Data

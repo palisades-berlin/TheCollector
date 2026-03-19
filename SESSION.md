@@ -20,76 +20,64 @@ Attribution: Implemented with Codex AI, Claude, Perplexity assistance and my fan
 
 ## Current sprint
 
-**v1.10 — Phase 1: Quick Wins Visual + UX (Codex)**
+**v2.0 — DS 2.0 Design Phase Reset (Figma-first governance)**
 Roadmap ref: `docs/thecollector-2.0-90-day-roadmap.md`
-Master plan: `docs/design-overhaul-master-plan-2026-03-13.md` § PHASE 1
+Master plan: `docs/design-overhaul-master-plan-2026-03-13.md` § PHASE 0
 
 ---
 
 ## Last session
 
 **Date:** 2026-03-19
-**Tool:** Claude (Cowork)
+**Tool:** Codex
 
 **Done:**
 
-- **Full housekeeping audit** (OMISSIONS, DUPLICATES, CONTRADICTIONS across all root `.md` files and `docs/`):
-  - O-1: Created `docs/codex-prompt-help-faq-regeneration.md` (referenced 4× but missing).
-  - O-2/C-4: `docs/architecture.md` — `non-fatal.js` annotated as removed.
-  - C-2/C-3: `SESSION.md` sprint heading + active files table updated.
-  - C-5: `docs/project-ruleset.md` Rule 4 — TypeScript claim replaced with JSDoc annotation truth.
-  - C-6: `README.md` `## Top Changes` rewritten for v1.9.97.18 state.
-  - Systemic fix: phase-gate alignment sweep row added to pre-commit checklist in `CLAUDE.md`, `AGENTS.md`, `docs/project-ruleset.md`.
-  - Figma→Penpot residue cleaned up: `ui-handoff.md`, `ui-qa-audit.md`, `visual-design-uplift.md`, `design-system-rules.md`.
-  - `docs/thecollector-2.0-90-day-roadmap.md` corrections and Phase 0-F item added.
-  - `CODEX.md` Current Sprint section added with Phase 1 scope and two pre-tasks.
-- **Test suite audit** — all 30 tests cross-referenced against source files, ADRs, and policy docs:
-  - T-1/T-2: Figma→Penpot migration in `check-ui-calibration-contract.mjs` and `tests/visual/ui-parity.spec.mjs` — confirmed as Codex pre-tasks (already in CODEX.md).
-  - T-3: `docs/architecture.md` visual regression threshold description corrected (inaccurate `maxDiffPixels <= 2` claim removed).
-- **Version bumped to `1.9.97.19`** (docs-only W bump). CHANGELOG backfilled for .18; .19 entry added.
+- Completed full housekeeping remediation cycle across local docs/config surfaces (approved audit findings only).
+- Added `.github/PULL_REQUEST_TEMPLATE.md`; updated stale PR-template reference in `docs/repo-assessment-2026-03-13.md`.
+- Updated `CONTRIBUTING.md` to active Figma-first authority (ADR 0016).
+- Synchronized `CODEX.md` sprint/watchouts with current reset state (Phase 0 restart-required; Phase 1 blocked).
+- Corrected historical ID labeling in `docs/ui-handoff.md` to `Penpot Import ID (historical)`.
+- Added marker-sync helper script (`scripts/sync-marker-blocks.mjs`) and npm command `sync:marker-blocks`; documented helper in `docs/marker-sync-contract.md`.
+- Updated pre-commit checklist wording drift (`AGENTS.md`, `CLAUDE.md`) from `README ## Overview` to `README ## Top Changes`.
+- Synced the GitHub wiki `Home.md` for the same housekeeping cycle.
+- Version bumped to `1.9.97.21` (docs-only).
 
 ---
 
 ## Do next
 
-**Task (Codex):** Phase 1 — Quick Wins: Visual + UX (v1.10, CSS/HTML only).
-See `docs/design-overhaul-master-plan-2026-03-13.md` § PHASE 1 for full scope (QW-01 through QW-08, V-01, V-02, V-04a, V-06, V-08, V-10, BF-01 through BF-04).
+**Task (Codex):** Commit/push the housekeeping remediation cycle in the main repo.
 
-**Blocker status:** none — Phase 0 gate passed ✅. v1.9.97.19 current. All docs aligned.
+**Blocker status:** none for this docs/config cycle; local checks are green and wiki sync is complete.
 
 ---
 
 ## Open decisions / blockers
 
-- Penpot file: `THECollector - UI Kit & Screens`, file key `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`. ✅
-- Penpot MCP running at `http://localhost:4401/mcp`. ✅
-- Phase 0 fully complete: 0-A ✅, 0-B ✅, 0-C-1–5 ✅, 0-D-1–5 ✅, 0-E-1–3 ✅, 0-F ✅. Phase 1 code next (Codex).
-- Phase 0-C-6 (Profile Usage pills), 0-C-7 (URL Notes UI), 0-C-8 (Popup URL panel redesign) are **pending** — required for Phase 4 gate, not Phase 1.
-- Phase 0-A pending items: 0-A-3 (elevation/shadow), 0-A-5 (glass component variants), 0-A-6 (glass token docs), 0-A-7/8/9 (button/pill/badge components) — required for Phase 2 gate.
+- Figma file `THECollector - UI Kit & Screens` (key `sECUN6qSqUygWoG7PhC548`) remains active authority (ADR 0016).
+- ADR 0015 remains historical; all active planning/governance points to ADR 0016.
+- This cycle is docs/config-only and intentionally avoids runtime behavior changes.
+- Wiki `Home.md` sync is complete for this working session.
 
 ---
 
 ## Active files (last touched)
 
-| File                                             | Status                                                                         |
-| ------------------------------------------------ | ------------------------------------------------------------------------------ |
-| `SESSION.md`                                     | ✅ This file — updated for v1.9.97.19                                          |
-| `CHANGELOG.md`                                   | ✅ .18 entry backfilled (full alignment pass); .19 entry added                 |
-| `manifest.json` / `package.json`                 | ✅ Version bumped to 1.9.97.19                                                 |
-| `CODEX.md`                                       | ✅ Version bumped; Current Sprint section current                              |
-| `CLAUDE.md`                                      | ✅ Version bumped; phase-gate checklist row present                            |
-| `AGENTS.md`                                      | ✅ Version bumped; phase-gate checklist row present                            |
-| `README.md`                                      | ✅ Version bumped; Top Changes current                                         |
-| `docs/architecture.md`                           | ✅ non-fatal.js annotated removed; visual regression threshold corrected (T-3) |
-| `docs/project-ruleset.md`                        | ✅ Rule 5 added; phase-gate rule 13 added; Rule 4 JSDoc correction (C-5)       |
-| `docs/codex-prompt-help-faq-regeneration.md`     | ✅ Created — Help & FAQ HTML regeneration procedure (O-1)                      |
-| `docs/thecollector-2.0-90-day-roadmap.md`        | ✅ Phase 1 unblocked; item 16 version fixed; item 18 (0-F) added               |
-| `docs/design-system-rules.md`                    | ✅ Phase 0/Phase 1 direction note updated; section 8 heading corrected         |
-| `docs/design-overhaul-master-plan-2026-03-13.md` | ✅ Phase 0-F sign-off; Phase 1 Penpot gate marked passed                       |
-| `docs/ui-handoff.md`                             | ✅ Figma Node column annotated as archived ref                                 |
-| `docs/ui-qa-audit.md`                            | ✅ Figma Sync Status section marked superseded (ADR 0015)                      |
-| `docs/visual-design-uplift-2026-03-13.md`        | ✅ "For Figma work" → "For Penpot work"                                        |
-| `WORKFLOW.md`                                    | ✅ Penpot plugin connect steps + Codex Desktop MCP note added                  |
+| File                                 | Status                                                                     |
+| ------------------------------------ | -------------------------------------------------------------------------- |
+| `SESSION.md`                         | ✅ Session state refreshed for housekeeping cycle (`1.9.97.21`)            |
+| `CHANGELOG.md`                       | ✅ Added `1.9.97.21` housekeeping remediation entry                        |
+| `manifest.json` / `package.json`     | ✅ Version bumped to `1.9.97.21`                                           |
+| `README.md`                          | ✅ Version + Top Changes refreshed for housekeeping cycle                  |
+| `AGENTS.md`, `CLAUDE.md`             | ✅ Version bump + checklist wording corrected (`## Top Changes`)           |
+| `CODEX.md`                           | ✅ Current Sprint + Watchouts aligned to ADR 0016 reset state              |
+| `CONTRIBUTING.md`                    | ✅ Source-of-truth guidance switched to Figma (ADR 0016)                   |
+| `docs/ui-handoff.md`                 | ✅ Historical column renamed to `Penpot Import ID (historical)`            |
+| `docs/repo-assessment-2026-03-13.md` | ✅ Marked as historical snapshot/non-authoritative; PR template path fixed |
+| `.github/PULL_REQUEST_TEMPLATE.md`   | ✅ Added minimal PR checklist template                                     |
+| `scripts/sync-marker-blocks.mjs`     | ✅ Added canonical->mirror marker sync helper                              |
+| `docs/marker-sync-contract.md`       | ✅ Added helper command note (`npm run sync:marker-blocks`)                |
 
 ---
 
@@ -115,7 +103,7 @@ Not sure which tool to reach for? Use this table.
 | ------------------------------------------------------ | ---------- |
 | Research · external docs · best-practice lookup        | Perplexity |
 | Prompt engineering · drafting governance text          | Perplexity |
-| Design · Penpot edits · token work                     | Claude     |
+| Design · Figma edits · token work                      | Claude     |
 | ADRs · documentation · policy decisions                | Claude     |
 | Interactive decisions · open-ended Q&A                 | Claude     |
 | Code changes · refactoring · new features              | Codex      |
@@ -142,7 +130,7 @@ Read SESSION.md (Do next + Open decisions sections). Your role: research and pro
 **Claude:**
 
 ```
-Read CLAUDE.md and SESSION.md, then continue from the last session. Your role: design (Penpot MCP), documentation, ADRs, decisions. Check the Tool Router if unsure whether a task belongs here or in Codex. If scope or intent is unclear, ask — do not anticipate.
+Read CLAUDE.md and SESSION.md, then continue from the last session. Your role: design (Figma MCP), documentation, ADRs, decisions. Check the Tool Router if unsure whether a task belongs here or in Codex. If scope or intent is unclear, ask — do not anticipate.
 ```
 
 **Codex:**
@@ -155,4 +143,4 @@ Read CODEX.md, AGENTS.md, and SESSION.md, then continue from the last session. Y
 
 ---
 
-_Last updated: 2026-03-19 · Claude (v1.9.97.19 — housekeeping audit O-1/C-1–C-6 complete; test suite audit 30 tests, T-3 fixed; version bumped across all 6 files; CHANGELOG backfilled; all local, uncommitted)_
+_Last updated: 2026-03-19 · Codex (v1.9.97.21 — housekeeping remediation cycle complete; docs/config aligned; checks pending local run)_

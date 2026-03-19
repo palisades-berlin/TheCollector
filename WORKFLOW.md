@@ -34,27 +34,13 @@ Always do this first, on any machine, before touching anything.
 
 ---
 
-**Step 1b — Start the Penpot MCP server (Claude design sessions only)**
+**Step 1b — Verify Figma MCP access (design sessions only)**
 
-If the session involves Penpot design work, start the MCP server before opening Claude:
+If the session involves design work, verify Figma MCP is authenticated before opening Claude/Codex design workflows:
 
-```
-cd ~/penpot-mcp && npm run start:all
-```
-
-**First time on a machine (or after a clean clone)** — install and build first:
-
-```
-cd ~/penpot-mcp && npm run bootstrap
-```
-
-`bootstrap` = install all deps + build all packages + start. After the first successful bootstrap, `npm run start:all` alone is sufficient on subsequent sessions.
-
-This starts both the MCP server (port 4401) and the Penpot plugin server. Keep the terminal open for the duration of the session. Claude connects via `http://localhost:4401/mcp` (configured in `claude_desktop_config.json`).
-
-After starting the server, open Penpot in the browser, load the plugin from `http://localhost:4400/manifest.json`, and click **Connect to MCP server** in the plugin panel. Do not close the plugin panel during the session.
-
-Codex Desktop also connects to the Penpot MCP when needed (configured in `~/.codex/config.toml` — `[mcp_servers.penpot]` entry). Start the server before opening Codex Desktop for any design-reference session.
+1. Confirm Figma MCP account/seat access (`whoami` in the toolchain).
+2. Confirm the target Figma file/node is reachable for context fetches.
+3. If Figma MCP is unavailable, stop and resolve access with the maintainer before design-derived edits.
 
 Skip this step for Perplexity (research) sessions.
 
@@ -75,7 +61,7 @@ Read SESSION.md (Do next + Open decisions sections). Your role: research and pro
 **Claude:**
 
 ```
-Read CLAUDE.md and SESSION.md, then continue from the last session. Your role: design (Penpot MCP), documentation, ADRs, decisions. Check the Tool Router if unsure whether a task belongs here or in Codex. If scope or intent is unclear, ask — do not anticipate.
+Read CLAUDE.md and SESSION.md, then continue from the last session. Your role: design (Figma MCP), documentation, ADRs, decisions. Check the Tool Router if unsure whether a task belongs here or in Codex. If scope or intent is unclear, ask — do not anticipate.
 ```
 
 **Codex:**

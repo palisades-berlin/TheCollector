@@ -1,6 +1,6 @@
 {
   "name": "the-collector",
-  "version": "1.9.97.19",
+  "version": "1.9.97.21",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
@@ -11,6 +11,7 @@
     "check:types": "tsc --noEmit -p jsconfig.json",
     "test:repo-hygiene": "node scripts/check-repo-hygiene.mjs",
     "test:docs-policy": "npm run test:marker-sync && node scripts/check-doc-policy.mjs",
+    "sync:marker-blocks": "node scripts/sync-marker-blocks.mjs",
     "test:marker-sync": "node scripts/check-marker-sync.mjs",
     "test:version-policy": "node scripts/check-version-policy.mjs",
     "test:version-policy:local": "VERSION_POLICY_BASE_SHA=HEAD node scripts/check-version-policy.mjs",

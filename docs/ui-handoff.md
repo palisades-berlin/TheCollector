@@ -6,36 +6,34 @@ This document defines the implementation contract between design and code for TH
 
 <!-- UI_SOURCE_OF_TRUTH:START -->
 
-- Penpot file `THECollector - UI Kit & Screens` is the project UI single source of truth (ADR 0015).
-- Canonical URL: `https://design.penpot.app/#/workspace?team-id=11d3899e-e3cc-80db-8007-bb5a8fa6ade5&file-id=b19dd3d3-9135-8056-8007-bb5e7d6eb5d4&page-id=b19dd3d3-9135-8056-8007-bb5e7d6eb5d5`
-- Penpot file key: `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`
-- Penpot team key: `11d3899e-e3cc-80db-8007-bb5a8fa6ade5`
-- Penpot page key: `b19dd3d3-9135-8056-8007-bb5e7d6eb5d5`
+- Figma file `THECollector - UI Kit & Screens` is the project UI single source of truth (ADR 0016).
+- Canonical URL: `https://www.figma.com/design/sECUN6qSqUygWoG7PhC548/THECollector---UI-Kit---Screens?t=UVQ55HTnnPvLrqyo-0`
+- Figma file key: `sECUN6qSqUygWoG7PhC548`
+- Active handoff node key: `19:2`
 <!-- UI_SOURCE_OF_TRUTH:END -->
-- Archived Figma file key: `sECUN6qSqUygWoG7PhC548` (no longer source of truth — archived, not deleted)
-- Rule: the Penpot file is the single source of truth for all UX/UI and components.
-- Implementation policy: code should map to Penpot tokens, component states, and naming before introducing new visual patterns.
+- Rule: the Figma file is the single source of truth for all UX/UI and components.
+- Implementation policy: code should map to Figma tokens, component states, and naming before introducing new visual patterns.
 - Canonical UI kit + screens page: `THECollector - UI Kit & Screens`
 
-## Penpot Page Index
+## Figma Page Index
 
-_Synced 2026-03-19._
+_Synced 2026-03-19 (authority restored to Figma by ADR 0016)._
 
-### DS 2.0 Active Pages
+### DS 2.0 Active Pages (Figma)
 
-| Page name                | Purpose                                                | DS 2.0 Phase status                       |
-| ------------------------ | ------------------------------------------------------ | ----------------------------------------- |
-| DS 2.0 Component Library | Token colour library, typography, base styles          | ✅ Phase 0-A done (colours, radius, type) |
-| DS 2.0 — Headers         | All full-page + popup header variants                  | ✅ Phase 0-B done (0-B-1 through 0-B-5)   |
-| DS 2.0 — Command Bars    | Command bars, tab bar, selection bar, filters          | ✅ Phase 0-C-1–5 done; 0-C-6–8 pending    |
-| DS 2.0 — Cards & Rows    | Screenshot card states, URL row variants, empty states | ✅ Phase 0-D done (0-D-1 through 0-D-5)   |
-| DS 2.0 — Tier Density    | Basic / Pro / Ultra density spec boards                | ✅ Phase 0-E done (0-E-1 through 0-E-3)   |
+| Page name                | Purpose                                                | DS 2.0 Phase status                  |
+| ------------------------ | ------------------------------------------------------ | ------------------------------------ |
+| DS 2.0 Component Library | Token colour library, typography, base styles          | ↺ Restart required under Figma (0-A) |
+| DS 2.0 — Headers         | All full-page + popup header variants                  | ↺ Restart required under Figma (0-B) |
+| DS 2.0 — Command Bars    | Command bars, tab bar, selection bar, filters          | ↺ Restart required under Figma (0-C) |
+| DS 2.0 — Cards & Rows    | Screenshot card states, URL row variants, empty states | ↺ Restart required under Figma (0-D) |
+| DS 2.0 — Tier Density    | Basic / Pro / Ultra density spec boards                | ↺ Restart required under Figma (0-E) |
 
-### Figma Import Baseline (reference only)
+### Legacy Figma Baseline (historical reference only)
 
-_All 7 Figma pages imported as top-level boards on Penpot page `Figma Import Baseline` (renamed from `Page 1`). Reference only — not source of truth for DS 2.0 work._
+_Penpot import IDs below are retained as historical references only. Figma is the active source of truth._
 
-| Board name                                         | Penpot ID                              | Figma equivalent                  |
+| Board name                                         | Penpot Import ID (historical)          | Figma equivalent                  |
 | -------------------------------------------------- | -------------------------------------- | --------------------------------- |
 | THECollector - UI Kit & Screens                    | `b2c9ceb5-f0e9-5d6b-b95f-5a1275a567cd` | `1:2` — UI kit + screens          |
 | THECollector - Component Hardening Pass            | `6236bf84-be00-50b0-a3ea-4503c45004b2` | Component hardening pass          |
@@ -129,27 +127,27 @@ Use these shared classes before creating surface-specific variants:
 
 ## Component Mapping Table
 
-| Penpot Section/Component     | Figma Node (archived ref) | State/Variant                             | Code Class Contract                                                                                                                                                                                     | Primary Files                                                                                           |
-| ---------------------------- | ------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Components / Button          | `1:4`                     | primary, secondary, ghost, danger; sm, md | `sc-btn` + variant + size (`sc-btn-primary`, `sc-btn-secondary`, `sc-btn-ghost`, `sc-btn-danger`, `sc-btn-sm`, `sc-btn-md`, `sc-btn-block`)                                                             | `src/shared/ui.css`, consumed in popup/history/options/preview HTML                                     |
-| Components / Input           | `1:4`                     | text/search/dropdown                      | `sc-input`, `sc-select`                                                                                                                                                                                 | `src/shared/ui.css`, `src/history/history.html`, `src/options/options.html`, `src/preview/preview.html` |
-| Components / Tabs            | `1:4`                     | horizontal tabs                           | `sc-tablist`, `sc-tab`                                                                                                                                                                                  | `src/shared/ui.css`, `src/popup/popup.html`                                                             |
-| Components / Pills/Tags      | `1:4`                     | status/info labels                        | `sc-pill` + `sc-pill-ok/warn/off`                                                                                                                                                                       | `src/shared/ui.css`, `src/history/history.html`, `src/options/options.html`                             |
-| Components / Toast + Banners | `1:4`                     | info/success/warn/error                   | `sc-banner` + variant classes; toast via `.sc-toast.*`                                                                                                                                                  | `src/shared/ui.css`, popup/history/options/preview HTML                                                 |
-| Components / Modal shell     | `1:4`                     | overlay dialog                            | `sc-modal`                                                                                                                                                                                              | `src/shared/ui.css`, `src/history/history.html`                                                         |
-| Popup / Capture              | `1:4`                     | default/progress/success/error            | `sc-btn*`, `sc-banner*`, `sc-kbd` + `--popup-*` aliases                                                                                                                                                 | `src/popup/popup.html`, `src/popup/popup.css`                                                           |
-| Popup / Smart Save Profiles  | `1:4`                     | quick preset actions (Pro/Ultra)          | `sc-btn`/`sc-btn-secondary` in compact action row; hidden unless tier >= Pro                                                                                                                            | `src/popup/popup.html`, `src/popup/popup.css`, `src/popup/popup.js`                                     |
-| Popup / Capture Queue        | `1:4`                     | queue current/window + run/clear (Pro)    | `sc-btn*` controls in compact queue card/list; hidden unless tier >= Pro                                                                                                                                | `src/popup/popup.html`, `src/popup/popup.css`, `src/popup/popup.js`                                     |
-| Screenshots / History        | `1:4`                     | default/filter/empty/loading/overlay      | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-modal`, `sc-state-*` + `--history-*` aliases; cards enforce equal-height body slots for URL/meta/diagnostic and use viewport-driven thumbnail loading | `src/history/history.html`, `src/history/history.css`, `src/history/history-thumbs.js`                  |
-| Screenshots / Filters        | `1:4`                     | domain/date/export/profile filters        | `sc-input`, `sc-select`, `sc-btn`; profile filter hidden unless tier >= Pro                                                                                                                             | `src/history/history.html`, `src/history/history.css`, `src/history/history.js`                         |
-| Screenshots / Bulk Actions   | `1:4`                     | multi-select overlay (Pro/Ultra)          | `sc-modal`, `sc-btn`, checkbox list rows; entry action hidden unless tier >= Pro                                                                                                                        | `src/history/history.html`, `src/history/history-files-overlay.js`, `src/history/history.js`            |
-| Settings / Account           | `1:753`                   | default/status/permission badges          | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-pill*`, `sc-banner*`                                                                                                                                  | `src/options/options.html`, `src/options/options.css`                                                   |
-| Settings / Navigation Shell  | `1:753`                   | left nav + section switching              | tokenized nav buttons + section panels; URL section state via `?section=<id>`                                                                                                                           | `src/options/options.html`, `src/options/options.css`, `src/options/options.js`                         |
-| Settings / Save Contract     | `1:753`                   | section editing + save feedback           | explicit save model with global dirty-state bar (`#globalSaveBar`) and status banner guidance; includes Auto-purge toggle + storage usage counter (`000/500`)                                           | `src/options/options.html`, `src/options/options.css`, `src/options/options.js`                         |
-| Settings / Weekly Report     | `1:753`                   | Pro/Ultra summary card                    | `sc-card` with tokenized stat tiles; hidden unless tier >= Pro                                                                                                                                          | `src/options/options.html`, `src/options/options.css`, `src/options/options.js`                         |
-| Preview / Inspector          | `1:4`                     | toolbar/editing/loading/error             | `sc-btn*`, `sc-select`, `sc-banner*`, `sc-state-loading` + `--preview-*` aliases                                                                                                                        | `src/preview/preview.html`, `src/preview/preview.css`                                                   |
-| Onboarding / First run       | `1:830`                   | install guidance + quick entry actions    | `sc-card`, `sc-btn*`, `sc-banner*`                                                                                                                                                                      | `src/onboarding/onboarding.html`, `src/onboarding/onboarding.css`                                       |
-| System States                | `1:885`                   | permission/offline/storage/confirmation   | `sc-banner*`, `sc-btn*`, `sc-modal`                                                                                                                                                                     | `src/popup/popup.html`, `src/options/options.html`, `src/history/history.html`                          |
+| Figma Section/Component      | Figma Node | State/Variant                             | Code Class Contract                                                                                                                                                                                     | Primary Files                                                                                           |
+| ---------------------------- | ---------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Components / Button          | `1:4`      | primary, secondary, ghost, danger; sm, md | `sc-btn` + variant + size (`sc-btn-primary`, `sc-btn-secondary`, `sc-btn-ghost`, `sc-btn-danger`, `sc-btn-sm`, `sc-btn-md`, `sc-btn-block`)                                                             | `src/shared/ui.css`, consumed in popup/history/options/preview HTML                                     |
+| Components / Input           | `1:4`      | text/search/dropdown                      | `sc-input`, `sc-select`                                                                                                                                                                                 | `src/shared/ui.css`, `src/history/history.html`, `src/options/options.html`, `src/preview/preview.html` |
+| Components / Tabs            | `1:4`      | horizontal tabs                           | `sc-tablist`, `sc-tab`                                                                                                                                                                                  | `src/shared/ui.css`, `src/popup/popup.html`                                                             |
+| Components / Pills/Tags      | `1:4`      | status/info labels                        | `sc-pill` + `sc-pill-ok/warn/off`                                                                                                                                                                       | `src/shared/ui.css`, `src/history/history.html`, `src/options/options.html`                             |
+| Components / Toast + Banners | `1:4`      | info/success/warn/error                   | `sc-banner` + variant classes; toast via `.sc-toast.*`                                                                                                                                                  | `src/shared/ui.css`, popup/history/options/preview HTML                                                 |
+| Components / Modal shell     | `1:4`      | overlay dialog                            | `sc-modal`                                                                                                                                                                                              | `src/shared/ui.css`, `src/history/history.html`                                                         |
+| Popup / Capture              | `1:4`      | default/progress/success/error            | `sc-btn*`, `sc-banner*`, `sc-kbd` + `--popup-*` aliases                                                                                                                                                 | `src/popup/popup.html`, `src/popup/popup.css`                                                           |
+| Popup / Smart Save Profiles  | `1:4`      | quick preset actions (Pro/Ultra)          | `sc-btn`/`sc-btn-secondary` in compact action row; hidden unless tier >= Pro                                                                                                                            | `src/popup/popup.html`, `src/popup/popup.css`, `src/popup/popup.js`                                     |
+| Popup / Capture Queue        | `1:4`      | queue current/window + run/clear (Pro)    | `sc-btn*` controls in compact queue card/list; hidden unless tier >= Pro                                                                                                                                | `src/popup/popup.html`, `src/popup/popup.css`, `src/popup/popup.js`                                     |
+| Screenshots / History        | `1:4`      | default/filter/empty/loading/overlay      | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-modal`, `sc-state-*` + `--history-*` aliases; cards enforce equal-height body slots for URL/meta/diagnostic and use viewport-driven thumbnail loading | `src/history/history.html`, `src/history/history.css`, `src/history/history-thumbs.js`                  |
+| Screenshots / Filters        | `1:4`      | domain/date/export/profile filters        | `sc-input`, `sc-select`, `sc-btn`; profile filter hidden unless tier >= Pro                                                                                                                             | `src/history/history.html`, `src/history/history.css`, `src/history/history.js`                         |
+| Screenshots / Bulk Actions   | `1:4`      | multi-select overlay (Pro/Ultra)          | `sc-modal`, `sc-btn`, checkbox list rows; entry action hidden unless tier >= Pro                                                                                                                        | `src/history/history.html`, `src/history/history-files-overlay.js`, `src/history/history.js`            |
+| Settings / Account           | `1:753`    | default/status/permission badges          | `sc-card`, `sc-input`, `sc-select`, `sc-btn`, `sc-pill*`, `sc-banner*`                                                                                                                                  | `src/options/options.html`, `src/options/options.css`                                                   |
+| Settings / Navigation Shell  | `1:753`    | left nav + section switching              | tokenized nav buttons + section panels; URL section state via `?section=<id>`                                                                                                                           | `src/options/options.html`, `src/options/options.css`, `src/options/options.js`                         |
+| Settings / Save Contract     | `1:753`    | section editing + save feedback           | explicit save model with global dirty-state bar (`#globalSaveBar`) and status banner guidance; includes Auto-purge toggle + storage usage counter (`000/500`)                                           | `src/options/options.html`, `src/options/options.css`, `src/options/options.js`                         |
+| Settings / Weekly Report     | `1:753`    | Pro/Ultra summary card                    | `sc-card` with tokenized stat tiles; hidden unless tier >= Pro                                                                                                                                          | `src/options/options.html`, `src/options/options.css`, `src/options/options.js`                         |
+| Preview / Inspector          | `1:4`      | toolbar/editing/loading/error             | `sc-btn*`, `sc-select`, `sc-banner*`, `sc-state-loading` + `--preview-*` aliases                                                                                                                        | `src/preview/preview.html`, `src/preview/preview.css`                                                   |
+| Onboarding / First run       | `1:830`    | install guidance + quick entry actions    | `sc-card`, `sc-btn*`, `sc-banner*`                                                                                                                                                                      | `src/onboarding/onboarding.html`, `src/onboarding/onboarding.css`                                       |
+| System States                | `1:885`    | permission/offline/storage/confirmation   | `sc-banner*`, `sc-btn*`, `sc-modal`                                                                                                                                                                     | `src/popup/popup.html`, `src/options/options.html`, `src/history/history.html`                          |
 
 ## Design Principles
 
@@ -179,10 +177,10 @@ A tab in a tablist must operate on the same data set as its sibling tabs. An aud
 
 <!-- UI_CHANGE_POLICY:START -->
 
-- If Penpot changes:
+- If Figma changes:
   1. Update shared tokens/components first (`src/shared/ui.css`).
   2. Update surface semantic layers (`--popup-*`, `--history-*`) only where needed.
-  3. Keep behavior stable unless interaction requirements changed in Penpot.
+  3. Keep behavior stable unless interaction requirements changed in Figma.
 - If code changes require new UI patterns:
-  - add to Penpot first, then implement in shared primitives, then consume in surfaces.
+  - add to Figma first, then implement in shared primitives, then consume in surfaces.
   <!-- UI_CHANGE_POLICY:END -->

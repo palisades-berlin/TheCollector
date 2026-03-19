@@ -4,7 +4,7 @@
 **Author:** Principal UX/UI Designer
 **Status:** RECOMMENDATION — input for v1.10 and v2.0 scoping
 **Surfaces audited:** Screenshots (history.html) · URL Library (urls.html) · Preview (preview.html)
-**Design source of truth:** Penpot `THECollector - UI Kit & Screens` · key `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4` (ADR 0015 — replaced Figma; original audit referenced Figma key `sECUN6qSqUygWoG7PhC548`)
+**Design source of truth:** Figma `THECollector - UI Kit & Screens` · key `sECUN6qSqUygWoG7PhC548` (ADR 0016; original audit predates the temporary ADR 0015 Penpot period)
 
 ---
 
@@ -394,8 +394,8 @@ Tabs in a tablist must all operate on the same data set. An audit log (Change Lo
 - Tier gating rules are untouched.
 - The roadmap sequence (DS 2.0 before v2.0 feature work) is respected.
 - No net-new features are introduced. These are consistency and reduction changes only.
-- The Penpot file remains the source of truth (ADR 0015). Each structural change above requires a corresponding Penpot update before code implementation (per `docs/ui-handoff.md` change policy).
+- The Figma file remains the source of truth (ADR 0016). Each structural change above requires a corresponding Figma update before code implementation (per `docs/ui-handoff.md` change policy).
 
 ---
 
-_Next step: validate the header contract and command bar structure in Penpot before implementing QW-01 and QW-02. The remaining quick wins can be implemented directly from this spec._
+_Next step: validate the header contract and command bar structure in Figma before implementing QW-01 and QW-02. The remaining quick wins can be implemented directly from this spec._

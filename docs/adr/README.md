@@ -25,3 +25,5 @@ operations, or governance.
 - [0012-navigation-and-naming-semantics.md](./0012-navigation-and-naming-semantics.md)
 - [0013-screenshot-storage-retention-guardrails.md](./0013-screenshot-storage-retention-guardrails.md)
 - [0014-four-part-versioning-policy.md](./0014-four-part-versioning-policy.md)
+- [0015-penpot-replaces-figma.md](./0015-penpot-replaces-figma.md)
+- [0016-figma-restored-as-source-of-truth.md](./0016-figma-restored-as-source-of-truth.md)

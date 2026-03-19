@@ -1,5 +1,8 @@
 # Repository Assessment: TheCollector
 
+> Historical snapshot (2026-03-13, read-only). This file is not a current governance authority.
+> Current authority docs: `docs/project-ruleset.md`, `docs/dev-workflow.md`, `SESSION.md`.
+
 **Assessed:** 2026-03-13  
 **Assessor:** Staff Engineer (read-only audit — no changes made)
 
@@ -47,7 +50,7 @@ TheCollector is a well-engineered, solo/small-team Manifest V3 Chrome/Edge exten
 
 **[Minor] No ISSUE_TEMPLATE or PULL_REQUEST_TEMPLATE defined**
 
-> Evidence: `.github/` directory — only `CODEOWNERS`, `dependabot.yml`, and `workflows/` are present. No `ISSUE_TEMPLATE/` subdirectory or `PULL_REQUEST_TEMPLATE.md` was found.
+> Evidence: `.github/` directory at assessment time — only `CODEOWNERS`, `dependabot.yml`, and `workflows/` were present. No `ISSUE_TEMPLATE/` subdirectory or `.github/PULL_REQUEST_TEMPLATE.md` was found.
 > Without templates, contributors have no structured guidance when filing bugs or opening PRs. A minimal bug-report template and a PR checklist (linking to the pre-commit check sequence in `CONTRIBUTING.md`) would reduce maintenance friction as the contributor base grows.
 
 **[Minor] CodeQL upload is gated behind an unset repository variable**

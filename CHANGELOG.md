@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.9.97.21 - 2026-03-19
+
+### Changed
+
+- Housekeeping remediation cycle completed for documentation/config governance (no runtime behavior changes).
+- Added `.github/PULL_REQUEST_TEMPLATE.md` and updated stale PR-template reference in `docs/repo-assessment-2026-03-13.md`.
+- `CONTRIBUTING.md`: restored active UX/UI authority guidance to Figma-first (ADR 0016) with canonical file key.
+- `CODEX.md`: synchronized current sprint/watchouts to ADR 0016 reset state (Phase 0 restart-required, Phase 1 blocked) and removed stale resolved-watchout claims.
+- `docs/ui-handoff.md`: corrected historical identifier labeling to `Penpot Import ID (historical)` for legacy imported UUIDs.
+- `AGENTS.md` + `CLAUDE.md`: pre-commit checklist wording corrected from `README ## Overview` to `README ## Top Changes`; version synchronized.
+- `docs/repo-assessment-2026-03-13.md`: added explicit historical/non-authoritative banner with links to current authority docs.
+- Added marker-block sync helper script (`scripts/sync-marker-blocks.mjs`) plus npm command `npm run sync:marker-blocks`; documented helper usage in `docs/marker-sync-contract.md`.
+
+## 1.9.97.20 - 2026-03-19
+
+### Changed
+
+- Governance rollback completed: Figma restored as active UX/UI source of truth across maintainer control docs (`AGENTS.md`, `CLAUDE.md`, `CODEX.md`, `WORKFLOW.md`) and policy docs.
+- Added `docs/adr/0016-figma-restored-as-source-of-truth.md` to supersede ADR 0015; updated ADR chain/index (`docs/adr/0015-penpot-replaces-figma.md`, `docs/adr/0010-design-system-2.0-sequencing.md`, `docs/adr/README.md`).
+- DS 2.0 design-phase current-state reset to restart/pending under Figma in planning/handoff docs (`docs/thecollector-2.0-90-day-roadmap.md`, `docs/design-overhaul-master-plan-2026-03-13.md`, `docs/ui-handoff.md`, `docs/design-system-rules.md`).
+- Documentation consistency sweep for Figma authority and calibration references (`docs/ui-qa-audit.md`, `docs/ux-consistency-audit-2026-03-13.md`, `docs/visual-system-direction-2026-03-13.md`, `docs/project-ruleset.md`, `docs/dev-workflow.md`, `docs/architecture.md`).
+- Version sync for docs-only governance reversal bump to `1.9.97.20`.
+
 ## 1.9.97.19 - 2026-03-19
 
 ### Changed

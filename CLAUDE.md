@@ -3,7 +3,7 @@
 ## Project Summary
 
 `THE Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.9.97.19`.
+Current extension version: `1.9.97.21`.
 The extension is **free forever** — no subscriptions, no payments, no paid tiers. The tier selector (Basic / Pro / Ultra) is a UX complexity preference, not a paywall. See ADR 0009.
 Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
@@ -22,15 +22,11 @@ Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance 
 - Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
 <!-- ROADMAP_AUTHORITY:END -->
 
-## Penpot MCP
+## Figma MCP
 
-- All design work (Phase 0 and beyond) uses the Penpot MCP server at `http://localhost:4401/mcp`.
-- **At the start of any session involving Penpot work:** check whether the Penpot MCP tools are available. If they are not reachable, instruct the user to start the server before proceeding:
-  ```
-  cd ~/penpot-mcp && npm run start:all
-  ```
-  First time on a machine: `npm run bootstrap` instead (installs + builds + starts).
-- Do not attempt Penpot operations if the MCP is unreachable — stop and ask the user to start it first.
+- All design work uses Figma as the UX/UI source of truth.
+- Figma MCP should be available for design-context fetches (`get_design_context`, `get_screenshot`, `get_metadata`) during implementation and audits.
+- If Figma MCP is unavailable, stop and ask the maintainer before proceeding with design-derived changes.
 
 ## Behavioural Rules
 
@@ -90,7 +86,7 @@ Run this in order before every commit/push. No exceptions.
 
 1. Bump version (`x.y.z.w`) in all six files: `manifest.json`, `package.json`, `README.md`, `CHANGELOG.md`, `AGENTS.md`, `CLAUDE.md`
 2. Add a `CHANGELOG.md` entry for the new version
-3. Update `README.md` `## Overview` with the top changes (max 5 lines)
+3. Update `README.md` `## Top Changes` with the top changes (max 5 lines)
 4. Update `SESSION.md`: today's date + tool, what was completed, exact next task, open decisions/blockers
 5. Run `npm run test:version-policy:local`, `npm run test:docs-policy` (includes marker-sync enforcement), `npm run format:session`, and `npm run format:check` — fix all failures before committing, never bypass
 6. Wiki sync: clone `https://github.com/palisades-berlin/TheCollector.wiki.git` → update `Home.md` → commit + push in same session

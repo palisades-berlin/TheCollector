@@ -8,19 +8,19 @@ Codex-only working memory for `THE Collector`.
 
 ## Current Sprint
 
-- **Active phase:** Phase 1 — Quick Wins: Visual + UX (v1.10, CSS/HTML only).
-- Phase 0 is fully complete (sign-off 2026-03-19). Phase 1 gate passed ✅.
-- Full scope: `docs/design-overhaul-master-plan-2026-03-13.md` § PHASE 1 (QW-01 through QW-08, V-01, V-02, V-04a, V-06, V-08, V-10, BF-01 through BF-04).
-- **Before starting — two pre-tasks:**
-  1. Verify BF-01 through BF-04 against the live codebase — likely pre-completed (Sprint 2A/2B/2C). If confirmed present, they are doc/snapshot steps only, not fresh implementations.
-  2. Migrate `scripts/check-ui-calibration-contract.mjs` and `tests/visual/ui-parity.spec.mjs` Figma constants to Penpot equivalents (see Current Watchouts). Do this before running any visual snapshot work.
-- Phase 1 produces no JS logic changes, no data model changes, no behaviour changes. CSS/HTML only (QW-03 requires a JS class toggle — see plan note).
+- **Active phase:** v2.0 — DS 2.0 Design Phase Reset (Figma-first governance).
+- Phase 0 is restart-required under ADR 0016 (no active sign-off in force).
+- Phase 1 code remains blocked until Figma Phase 0 (0-A through 0-F) is re-completed and signed off.
+- Immediate focus: keep governance/planning docs aligned while design restarts in Figma.
+- **Before starting design-derived code work — two pre-tasks:**
+  1. Verify Figma Phase 0 gate status in roadmap/master/handoff docs is current and consistent.
+  2. Verify Figma calibration contracts (`scripts/check-ui-calibration-contract.mjs` and `tests/visual/ui-parity.spec.mjs`) remain aligned to the canonical Figma source-of-truth.
 
 ## Project Identity
 
 - `THE Collector` is a Manifest V3 Chrome/Edge extension.
 - It combines full-page screenshot capture with URL collection and review surfaces.
-- Current extension version: `1.9.97.19`.
+- Current extension version: `1.9.97.21`.
 - The product is free forever, local-only, and has no external connections or user tracking.
 - The `Basic` / `Pro` / `Ultra` selector is a UX complexity preference, not a paywall.
 - Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
@@ -186,15 +186,12 @@ Codex-only working memory for `THE Collector`.
 
 ## Current Watchouts
 
-- `docs/architecture.md` still references `src/shared/non-fatal.js`, which does not exist.
-- `docs/project-ruleset.md` still gestures at TypeScript-style typing even though the repo is JavaScript-first.
 - `docs/repo-assessment-2026-03-13.md` is a historical snapshot, not current state.
-- `docs/thecollector-2.0-90-day-roadmap.md` still contains historical baseline wording.
+- `docs/thecollector-2.0-90-day-roadmap.md` intentionally preserves historical baseline entries while marking current-state reset under ADR 0016.
 - `src/popup/urls-panel.js` is a transitional quick surface that coexists with the canonical `src/urls/urls.js`.
 - `src/background/message-router.js` and `src/shared/url-repo.js` are high-coupling seams.
 - The protocol injection bridge in capture is a brittle seam and should be handled carefully.
-- **Phase 1 snapshot baseline reset required:** V-01, V-02, V-04a, V-08, and BF-01 produce intentional visual changes. After Phase 1 ships, run `npm run test:visual` with `--update-snapshots` to reset baselines. Do not treat these as regressions — they are expected diffs. See master plan § PHASE 1 post-phase note.
-- **`scripts/check-ui-calibration-contract.mjs` is stale (Codex task):** still validates old Figma URL/key (`sECUN6qSqUygWoG7PhC548`). ADR 0015 replaced Figma with Penpot — this script must be updated to validate the Penpot file URL/key instead. `tests/visual/ui-parity.spec.mjs` also has `FIGMA_FILE_URL`, `FIGMA_FILE_KEY`, `FIGMA_NODE_MAP`, and `FIGMA_SNAPSHOT_NODE_MAP` constants that need migrating to Penpot equivalents. Penpot file key: `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`. Update both in the same cycle.
+- Figma calibration constants are authoritative for visual parity (`scripts/check-ui-calibration-contract.mjs`, `tests/visual/ui-parity.spec.mjs`) and must stay in sync with `docs/ui-handoff.md`.
 
 ## Documentation Integrity
 
@@ -202,15 +199,11 @@ Codex-only working memory for `THE Collector`.
 - User-facing help should only describe features that are actually implemented.
 - If a feature ships, remove its unshipped phrase(s) from `scripts/check-doc-policy.mjs` and update both help surfaces.
 
-## Penpot MCP
+## Figma MCP
 
-- All design work (Phase 0 and beyond) uses the Penpot MCP server at `http://localhost:4401/mcp`.
-- **At the start of any session involving Penpot work:** check whether the Penpot MCP tools are available. If they are not reachable, instruct the user to start the server before proceeding:
-  ```
-  cd ~/penpot-mcp && npm run start:all
-  ```
-  First time on a machine: `npm run bootstrap` instead (installs + builds + starts).
-- Do not attempt Penpot operations if the MCP is unreachable — stop and ask the user to start it first.
+- All design work uses Figma as the UX/UI source of truth.
+- Figma MCP should be reachable for design-context pulls and screenshot verification.
+- If Figma MCP is unavailable, stop and ask the maintainer before proceeding with design-derived work.
 
 ## Workflow Notes For Codex
 

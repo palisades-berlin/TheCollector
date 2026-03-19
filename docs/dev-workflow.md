@@ -127,7 +127,7 @@ Minimum required wiki sync payload on each commit/push:
   - capability tiers (`Basic`, `Pro`, `Ultra`)
   - local-only/no-tracking rules
   - quality/CI gates
-  - UX/UI/Penpot source-of-truth references (ADR 0015)
+- UX/UI/Figma source-of-truth references (ADR 0016)
   - roadmap deltas
 
 Source consistency rule:
@@ -160,19 +160,18 @@ Publish workflow:
 
 <!-- UI_SOURCE_OF_TRUTH:START -->
 
-- Penpot file `THECollector - UI Kit & Screens` is the project UI single source of truth (ADR 0015).
-- Canonical URL: `https://design.penpot.app/#/workspace?team-id=11d3899e-e3cc-80db-8007-bb5a8fa6ade5&file-id=b19dd3d3-9135-8056-8007-bb5e7d6eb5d4&page-id=b19dd3d3-9135-8056-8007-bb5e7d6eb5d5`
-- Penpot file key: `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`
-- Penpot team key: `11d3899e-e3cc-80db-8007-bb5a8fa6ade5`
-- Penpot page key: `b19dd3d3-9135-8056-8007-bb5e7d6eb5d5`
+- Figma file `THECollector - UI Kit & Screens` is the project UI single source of truth (ADR 0016).
+- Canonical URL: `https://www.figma.com/design/sECUN6qSqUygWoG7PhC548/THECollector---UI-Kit---Screens?t=UVQ55HTnnPvLrqyo-0`
+- Figma file key: `sECUN6qSqUygWoG7PhC548`
+- Active handoff node key: `19:2`
   <!-- UI_SOURCE_OF_TRUTH:END -->
   <!-- UI_CHANGE_POLICY:START -->
-- If Penpot changes:
+- If Figma changes:
   1. Update shared tokens/components first (`src/shared/ui.css`).
   2. Update surface semantic layers (`--popup-*`, `--history-*`) only where needed.
-  3. Keep behavior stable unless interaction requirements changed in Penpot.
+  3. Keep behavior stable unless interaction requirements changed in Figma.
 - If code changes require new UI patterns:
-  - add to Penpot first, then implement in shared primitives, then consume in surfaces.
+  - add to Figma first, then implement in shared primitives, then consume in surfaces.
   <!-- UI_CHANGE_POLICY:END -->
 - Before introducing new screen-level styles, implement or update shared primitives/tokens in `src/shared/ui.css`.
 - Keep surface-level CSS tokenized (`--popup-*`, `--history-*`) and avoid new hardcoded visual values when an existing token exists.

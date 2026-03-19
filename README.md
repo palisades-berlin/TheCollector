@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.97.19`.
+Current extension version: `1.9.97.21`.
 
 ## Overview
 
@@ -33,11 +33,11 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- DS 2.0 Phase 0 complete (sign-off 2026-03-19): all 5 Penpot pages verified, spec compliance confirmed; Phase 1 code (Quick Wins Visual + UX) cleared to proceed.
-- Full cross-doc alignment pass at v1.9.97.18: SESSION.md, roadmap, CODEX.md Current Sprint, CLAUDE.md/AGENTS.md pre-commit checklist, design-system-rules, ui-handoff, ui-qa-audit, visual-design-uplift, project-ruleset all updated.
-- Figma references cleaned up post-ADR-0015: ui-handoff column annotated, ui-qa-audit section marked superseded, design-system-rules direction note updated.
-- `docs/codex-prompt-help-faq-regeneration.md` created — procedure for regenerating Help & FAQ HTML from markdown source.
-- Systemic fix: "Phase gate or milestone sign-off recorded" trigger added to pre-commit checklist in CLAUDE.md, AGENTS.md, and project-ruleset.md.
+- Housekeeping remediation cycle completed across docs/config governance surfaces (docs-only).
+- Contributor guidance now points to Figma authority (ADR 0016) with canonical file/key; Penpot authority wording removed from active contributor path.
+- Codex operational memory (`CODEX.md`) now matches roadmap/session state: DS 2.0 Phase 0 restart-required, Phase 1 blocked pending renewed sign-off.
+- Historical labeling corrected in UI handoff (`Penpot Import ID`) and repository assessment marked explicitly as historical/non-authoritative.
+- Added `.github/PULL_REQUEST_TEMPLATE.md` and marker-block sync helper script to reduce documentation drift risk.
 
 ## Versioning Migration Note
 
