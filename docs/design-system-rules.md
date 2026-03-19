@@ -1,7 +1,8 @@
 # Design System Rules — THE Collector
 
 > **Purpose:** Single source of truth for AI tools (Claude, Codex) integrating Penpot designs with the codebase. Generated 2026-03-13 by `create_design_system_rules` analysis of the live codebase. (ADR 0015 — Penpot replaced Figma.)
-> **Note for Phase 0:** This document is the spec for the Penpot rebuild. Every token, component, and naming convention here mirrors what is already live in code. Penpot must match this — not the other way around.
+> **Phase 0 (complete ✅):** This document was the spec for the Penpot rebuild — every token, component, and naming convention mirrors what is live in code. Penpot was built to match this.
+> **Phase 1 and beyond:** direction inverts — the approved Penpot boards are now the source of truth. Code must be updated to match Penpot, not the other way around.
 
 ---
 
@@ -368,7 +369,7 @@ docs/
 
 ---
 
-## 8. Penpot Integration Rules (for Phase 0)
+## 8. Penpot Integration Rules
 
 > **Note:** ADR 0015 replaced Figma with Penpot as the UX/UI source of truth. All references below that previously said "Figma" now mean Penpot. Penpot file: `THECollector - UI Kit & Screens` · key `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`.
 

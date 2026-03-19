@@ -205,6 +205,8 @@ Final pixel-perfect certification still requires a full per-state node matrix an
 
 ## Figma Sync Status (2026-03-05)
 
+> ⚠️ Superseded by ADR 0015 — Penpot replaced Figma as source of truth (2026-03-18). This section is a historical snapshot only.
+
 - Synced canonical Figma URL and file key into repo docs.
 - Synced active handoff authority node (`19:2`) into repo docs.
 - Synced core section nodes for settings/onboarding/system states and UI kit roots into repo docs.

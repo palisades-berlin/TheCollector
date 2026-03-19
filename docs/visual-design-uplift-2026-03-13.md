@@ -408,6 +408,6 @@ The inner gradient + border edge + grounding shadow transforms a flat blue recta
 
 ## The Reference Aesthetic
 
-For Figma work: the target is the product category occupied by **Linear** (information density + dark header), **Vercel dashboard** (clean card grid + frosted active states), and **Raycast** (precise typography + hover affordances). The common thread: confident typography, dark/neutral chrome, clean card surfaces that float, and brand colour used as an accent rather than a fill.
+For Penpot work: the target is the product category occupied by **Linear** (information density + dark header), **Vercel dashboard** (clean card grid + frosted active states), and **Raycast** (precise typography + hover affordances). The common thread: confident typography, dark/neutral chrome, clean card surfaces that float, and brand colour used as an accent rather than a fill.
 
 The product already has the right structure. It needs the right finish.

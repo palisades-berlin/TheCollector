@@ -1,12 +1,32 @@
 # Changelog
 
+## 1.9.97.19 - 2026-03-19
+
+### Changed
+
+- `docs/project-ruleset.md`: Rule 4 — corrected "typed safety (TypeScript)" → "typed safety (JSDoc annotations — repo is JavaScript-first)".
+- `README.md`: `## Top Changes` rewritten to reflect v1.9.97.18 state — Phase 0 complete, Phase 1 cleared, full alignment pass, Figma clean-up, `codex-prompt-help-faq-regeneration.md` created, systemic phase-gate checklist fix.
+- `docs/architecture.md`: visual regression paragraph corrected — removed inaccurate "calibrated targets use `maxDiffPixels <= 2`" claim; replaced with accurate description of per-snapshot budgets and progressive tightening intent.
+- Test suite audit (30 tests): full cross-reference against source files, ADRs, and policy docs. T-1 and T-2 (Figma→Penpot migration in calibration script and visual parity spec) confirmed as known Codex pre-tasks. T-3 fixed above. All other tests fully aligned.
+
 ## 1.9.97.18 - 2026-03-19
 
 ### Changed
 
-- `CODEX.md`: version corrected from stale `1.9.97.14` → `1.9.97.18`.
-- `docs/design-overhaul-master-plan-2026-03-13.md`: `_Last updated` line updated to reflect Phase 0 fully complete and Phase 1 cleared.
+- `docs/codex-prompt-help-faq-regeneration.md`: created — procedure spec for regenerating Help & FAQ HTML from markdown source (resolves O-1: file was referenced 4× but did not exist).
+- `docs/architecture.md`: `~~src/shared/non-fatal.js~~` annotated as removed; non-fatal logging now handled in `background-runtime.js` (O-2/C-4).
+- `SESSION.md`: current sprint heading updated to "v1.10 — Phase 1: Quick Wins Visual + UX (Codex)"; active files table fully replaced to reflect alignment pass (C-2, C-3).
+- `CODEX.md`: `## Current Sprint` section added at top — active phase, two pre-tasks (BF-01–04 verification + calibration script migration), scope pointer. Current Watchouts updated with Phase 1 snapshot baseline reset note and calibration script stale warning with Penpot file key.
+- `CLAUDE.md` + `AGENTS.md`: "Phase gate or milestone sign-off recorded" trigger row added to conditional pre-commit checklist table — requires cross-doc alignment sweep before committing.
+- `docs/design-system-rules.md`: Section 8 heading de-scoped from "for Phase 0" to generic; top note updated to two-line Phase 0 complete / Phase 1 direction-inversion statement.
+- `docs/design-overhaul-master-plan-2026-03-13.md`: Phase 1 Penpot gate line appended — `✅ Gate passed — 2026-03-19`.
+- `docs/ui-handoff.md`: Component Mapping Table column header updated — "Figma Node" → "Figma Node (archived ref)".
+- `docs/ui-qa-audit.md`: superseded banner added above "Figma Sync Status (2026-03-05)" — section marked historical snapshot per ADR 0015.
+- `docs/visual-design-uplift-2026-03-13.md`: "For Figma work:" → "For Penpot work:" in § Reference Aesthetic.
+- `docs/project-ruleset.md`: Rule 5 added (Help & FAQ HTML generation); Rule 13 added (phase-gate cross-doc alignment sweep).
+- `docs/thecollector-2.0-90-day-roadmap.md`: versioning item 5 unblocked ✅; item 16 version corrected (1.9.97.15 → 1.9.97.16); item 18 added (Phase 0-F complete, sign-off 2026-03-19); baseline date updated to 2026-03-19.
 - `WORKFLOW.md`: Step 1b expanded with Penpot plugin connect instructions and Codex Desktop MCP config note.
+- `CODEX.md`: version string corrected from stale `1.9.97.14` → `1.9.97.18`.
 
 ## 1.9.97.17 - 2026-03-19
 

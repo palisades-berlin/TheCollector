@@ -30,7 +30,7 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
 
 - `src/shared/messages.js`: message protocol IDs used across extension contexts.
 - `src/shared/constants.js`: capture/export limits and shared constants.
-- `src/shared/non-fatal.js`: shared debug-gated non-fatal logging helper for extension contexts.
+- ~~`src/shared/non-fatal.js`~~: removed — non-fatal logging is now handled in `src/background/background-runtime.js`.
 - `src/shared/db.js`: IndexedDB access primitives plus screenshot storage guardrails (metadata-first listing, oldest-first auto-purge policy, quota fallback handling) and a dedicated thumbnail fast-path store for History rendering.
 - `src/shared/capture-profiles.js`: fixed Smart Save Profiles catalog and capture override resolver.
 - `src/popup/popup-profile-payload.js`: canonical popup payload builders for Smart Save capture and queue actions.
@@ -88,7 +88,7 @@ THE Collector is a Manifest V3 browser extension that combines two user-facing w
 - Context-specific bootstraps stay thin and delegate to focused helpers.
 - Popup and Settings now follow their visible panel/section boundaries in code structure.
 - Repository abstraction centralizes storage access and lowers coupling to raw storage APIs.
-- UI parity is validated by Playwright visual regression tests (`npm run test:e2e:visual`); calibrated targets use `maxDiffPixels <= 2` with any temporary per-snapshot exceptions defined in `tests/visual/ui-parity.spec.mjs`.
+- UI parity is validated by Playwright visual regression tests (`npm run test:e2e:visual`). Per-snapshot `maxDiffPixels` budgets are defined directly in `tests/visual/ui-parity.spec.mjs`; thresholds are set to the minimum that remains stable across CI environments and will tighten progressively as Phase 1 CSS/HTML work stabilises the visual baselines.
 
 ## Architecture Decisions
 

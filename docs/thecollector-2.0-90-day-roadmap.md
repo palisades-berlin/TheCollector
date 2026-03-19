@@ -52,7 +52,7 @@ North-star outcomes by end of roadmap:
 4. Perceived value uplift: 3x (weekly value report + automation outcomes).
 5. Chrome Web Store featuring: qualify and apply within v1.10 milestone window.
 
-### Persisted Roadmap Progress Baseline (as of 2026-03-18)
+### Persisted Roadmap Progress Baseline (as of 2026-03-19)
 
 Implemented roadmap features and current delivery level:
 
@@ -74,8 +74,9 @@ Implemented roadmap features and current delivery level:
 13. DS 2.0 Phase 0-B: **complete** (`1.9.97.13`) — all 5 header variants designed in Penpot (`DS 2.0 — Headers` page): Screenshots, URL Library, Preview, Popup, Settings.
 14. DS 2.0 Phase 0-C (items 1–5): **complete** (`1.9.97.13`) — URL Library & Screenshots command bars, tab bar, selection bar (hidden + visible states), URL Library filters designed in Penpot (`DS 2.0 — Command Bars` page).
 15. DS 2.0 Phase 0-D: **complete** (`1.9.97.15`) — Screenshot card states (resting/hover/selected), URL Library row density variants, empty states designed in Penpot (`DS 2.0 — Cards & Rows` page).
-16. DS 2.0 Phase 0-E: **complete** (`1.9.97.15`) — Tier density spec boards (Basic/Pro/Ultra) designed in Penpot (`DS 2.0 — Tier Density` page).
+16. DS 2.0 Phase 0-E: **complete** (`1.9.97.16`) — Tier density spec boards (Basic/Pro/Ultra) designed in Penpot (`DS 2.0 — Tier Density` page).
 17. DS 2.0 Phase 0-C (items 6–8): **pending** — Profile Usage pills, URL Notes UI, Popup URL panel redesign (Phase 4 gate).
+18. DS 2.0 Phase 0-F: **complete** (`1.9.97.17`) — full Phase 0 review and approval gate passed; all 5 Penpot pages verified (Component Library, Headers, Command Bars, Cards & Rows, Tier Density); spec compliance confirmed; sign-off 2026-03-19. Phase 1 code cleared to proceed.
 
 Versioning status:
 
@@ -83,7 +84,7 @@ Versioning status:
 2. No roadmap **v2** feature is fully shipped yet.
 3. Smart Save Profiles editable management remains planned for v2.0.
 4. Command Palette (Cmd/Ctrl+K) remains **unshipped**; user-facing help/docs are aligned to the shipped feature set.
-5. DS 2.0 Phase 1 code work is **blocked** until Phase 0-A, 0-B-1/2, 0-C-1–5, and 0-D-1/2 are complete in Penpot (0-B ✅, 0-C-1–5 ✅, 0-D ✅, 0-E ✅).
+5. DS 2.0 Phase 1 code work is **unblocked** ✅ — Phase 0 fully complete (0-A ✅, 0-B ✅, 0-C-1–5 ✅, 0-D ✅, 0-E ✅, 0-F ✅; sign-off 2026-03-19). Phase 1 code may proceed.
 
 ---
 

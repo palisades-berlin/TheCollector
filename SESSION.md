@@ -20,9 +20,9 @@ Attribution: Implemented with Codex AI, Claude, Perplexity assistance and my fan
 
 ## Current sprint
 
-**v2.0 — Design System 2.0 · Phase 0: Penpot Rebuild**
+**v1.10 — Phase 1: Quick Wins Visual + UX (Codex)**
 Roadmap ref: `docs/thecollector-2.0-90-day-roadmap.md`
-Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
+Master plan: `docs/design-overhaul-master-plan-2026-03-13.md` § PHASE 1
 
 ---
 
@@ -33,12 +33,20 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 
 **Done:**
 
-- **DS 2.0 Phase 0-F complete** — full Phase 0 review and approval gate passed.
-  - All 5 Phase 0 Penpot pages verified: Component Library (18 boards), Headers (5 boards), Command Bars (6 boards), Cards & Rows (5 boards), Tier Density (3 boards).
-  - Spec compliance confirmed: glass fills, nav active pill, tier height annotations, stagger signals.
-  - Stray `0-D-1` ghost on DS 2.0 — Headers page removed.
-  - Sign-off recorded in `docs/design-overhaul-master-plan-2026-03-13.md`.
-- **Phase 0 is fully complete. Phase 1 code may proceed (Codex task).**
+- **Full housekeeping audit** (OMISSIONS, DUPLICATES, CONTRADICTIONS across all root `.md` files and `docs/`):
+  - O-1: Created `docs/codex-prompt-help-faq-regeneration.md` (referenced 4× but missing).
+  - O-2/C-4: `docs/architecture.md` — `non-fatal.js` annotated as removed.
+  - C-2/C-3: `SESSION.md` sprint heading + active files table updated.
+  - C-5: `docs/project-ruleset.md` Rule 4 — TypeScript claim replaced with JSDoc annotation truth.
+  - C-6: `README.md` `## Top Changes` rewritten for v1.9.97.18 state.
+  - Systemic fix: phase-gate alignment sweep row added to pre-commit checklist in `CLAUDE.md`, `AGENTS.md`, `docs/project-ruleset.md`.
+  - Figma→Penpot residue cleaned up: `ui-handoff.md`, `ui-qa-audit.md`, `visual-design-uplift.md`, `design-system-rules.md`.
+  - `docs/thecollector-2.0-90-day-roadmap.md` corrections and Phase 0-F item added.
+  - `CODEX.md` Current Sprint section added with Phase 1 scope and two pre-tasks.
+- **Test suite audit** — all 30 tests cross-referenced against source files, ADRs, and policy docs:
+  - T-1/T-2: Figma→Penpot migration in `check-ui-calibration-contract.mjs` and `tests/visual/ui-parity.spec.mjs` — confirmed as Codex pre-tasks (already in CODEX.md).
+  - T-3: `docs/architecture.md` visual regression threshold description corrected (inaccurate `maxDiffPixels <= 2` claim removed).
+- **Version bumped to `1.9.97.19`** (docs-only W bump). CHANGELOG backfilled for .18; .19 entry added.
 
 ---
 
@@ -47,7 +55,7 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md`
 **Task (Codex):** Phase 1 — Quick Wins: Visual + UX (v1.10, CSS/HTML only).
 See `docs/design-overhaul-master-plan-2026-03-13.md` § PHASE 1 for full scope (QW-01 through QW-08, V-01, V-02, V-04a, V-06, V-08, V-10, BF-01 through BF-04).
 
-**Blocker status:** none — Phase 0 gate passed ✅. v1.9.97.17 current.
+**Blocker status:** none — Phase 0 gate passed ✅. v1.9.97.19 current. All docs aligned.
 
 ---
 
@@ -63,15 +71,25 @@ See `docs/design-overhaul-master-plan-2026-03-13.md` § PHASE 1 for full scope (
 
 ## Active files (last touched)
 
-| File                                             | Status                                                     |
-| ------------------------------------------------ | ---------------------------------------------------------- |
-| `CODEX.md`                                       | ✅ Penpot MCP start instructions added                     |
-| `CLAUDE.md`                                      | ✅ Penpot MCP start instructions added                     |
-| `AGENTS.md`                                      | ✅ Penpot MCP start instructions added                     |
-| `WORKFLOW.md`                                    | ✅ Penpot MCP bootstrap/start:all instructions added       |
-| `SESSION.md`                                     | ✅ This file                                               |
-| `docs/design-system-rules.md`                    | ✅ DS spec for Phase 0 Penpot rebuild; Figma refs → Penpot |
-| `docs/design-overhaul-master-plan-2026-03-13.md` | ✅ Phase 0-F sign-off recorded; Phase 0 complete           |
+| File                                             | Status                                                                         |
+| ------------------------------------------------ | ------------------------------------------------------------------------------ |
+| `SESSION.md`                                     | ✅ This file — updated for v1.9.97.19                                          |
+| `CHANGELOG.md`                                   | ✅ .18 entry backfilled (full alignment pass); .19 entry added                 |
+| `manifest.json` / `package.json`                 | ✅ Version bumped to 1.9.97.19                                                 |
+| `CODEX.md`                                       | ✅ Version bumped; Current Sprint section current                              |
+| `CLAUDE.md`                                      | ✅ Version bumped; phase-gate checklist row present                            |
+| `AGENTS.md`                                      | ✅ Version bumped; phase-gate checklist row present                            |
+| `README.md`                                      | ✅ Version bumped; Top Changes current                                         |
+| `docs/architecture.md`                           | ✅ non-fatal.js annotated removed; visual regression threshold corrected (T-3) |
+| `docs/project-ruleset.md`                        | ✅ Rule 5 added; phase-gate rule 13 added; Rule 4 JSDoc correction (C-5)       |
+| `docs/codex-prompt-help-faq-regeneration.md`     | ✅ Created — Help & FAQ HTML regeneration procedure (O-1)                      |
+| `docs/thecollector-2.0-90-day-roadmap.md`        | ✅ Phase 1 unblocked; item 16 version fixed; item 18 (0-F) added               |
+| `docs/design-system-rules.md`                    | ✅ Phase 0/Phase 1 direction note updated; section 8 heading corrected         |
+| `docs/design-overhaul-master-plan-2026-03-13.md` | ✅ Phase 0-F sign-off; Phase 1 Penpot gate marked passed                       |
+| `docs/ui-handoff.md`                             | ✅ Figma Node column annotated as archived ref                                 |
+| `docs/ui-qa-audit.md`                            | ✅ Figma Sync Status section marked superseded (ADR 0015)                      |
+| `docs/visual-design-uplift-2026-03-13.md`        | ✅ "For Figma work" → "For Penpot work"                                        |
+| `WORKFLOW.md`                                    | ✅ Penpot plugin connect steps + Codex Desktop MCP note added                  |
 
 ---
 
@@ -137,4 +155,4 @@ Read CODEX.md, AGENTS.md, and SESSION.md, then continue from the last session. Y
 
 ---
 
-_Last updated: 2026-03-19 · Claude (housekeeping: CODEX.md version fix, master plan footer, WORKFLOW.md Codex Desktop MCP note; v1.9.97.18)_
+_Last updated: 2026-03-19 · Claude (v1.9.97.19 — housekeeping audit O-1/C-1–C-6 complete; test suite audit 30 tests, T-3 fixed; version bumped across all 6 files; CHANGELOG backfilled; all local, uncommitted)_

@@ -6,11 +6,21 @@ Codex-only working memory for `THE Collector`.
 - It is not product documentation and should not be treated as user-facing truth.
 - Keep it focused on durable repo knowledge, operational rules, and current watchouts.
 
+## Current Sprint
+
+- **Active phase:** Phase 1 — Quick Wins: Visual + UX (v1.10, CSS/HTML only).
+- Phase 0 is fully complete (sign-off 2026-03-19). Phase 1 gate passed ✅.
+- Full scope: `docs/design-overhaul-master-plan-2026-03-13.md` § PHASE 1 (QW-01 through QW-08, V-01, V-02, V-04a, V-06, V-08, V-10, BF-01 through BF-04).
+- **Before starting — two pre-tasks:**
+  1. Verify BF-01 through BF-04 against the live codebase — likely pre-completed (Sprint 2A/2B/2C). If confirmed present, they are doc/snapshot steps only, not fresh implementations.
+  2. Migrate `scripts/check-ui-calibration-contract.mjs` and `tests/visual/ui-parity.spec.mjs` Figma constants to Penpot equivalents (see Current Watchouts). Do this before running any visual snapshot work.
+- Phase 1 produces no JS logic changes, no data model changes, no behaviour changes. CSS/HTML only (QW-03 requires a JS class toggle — see plan note).
+
 ## Project Identity
 
 - `THE Collector` is a Manifest V3 Chrome/Edge extension.
 - It combines full-page screenshot capture with URL collection and review surfaces.
-- Current extension version: `1.9.97.18`.
+- Current extension version: `1.9.97.19`.
 - The product is free forever, local-only, and has no external connections or user tracking.
 - The `Basic` / `Pro` / `Ultra` selector is a UX complexity preference, not a paywall.
 - Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
@@ -183,6 +193,8 @@ Codex-only working memory for `THE Collector`.
 - `src/popup/urls-panel.js` is a transitional quick surface that coexists with the canonical `src/urls/urls.js`.
 - `src/background/message-router.js` and `src/shared/url-repo.js` are high-coupling seams.
 - The protocol injection bridge in capture is a brittle seam and should be handled carefully.
+- **Phase 1 snapshot baseline reset required:** V-01, V-02, V-04a, V-08, and BF-01 produce intentional visual changes. After Phase 1 ships, run `npm run test:visual` with `--update-snapshots` to reset baselines. Do not treat these as regressions — they are expected diffs. See master plan § PHASE 1 post-phase note.
+- **`scripts/check-ui-calibration-contract.mjs` is stale (Codex task):** still validates old Figma URL/key (`sECUN6qSqUygWoG7PhC548`). ADR 0015 replaced Figma with Penpot — this script must be updated to validate the Penpot file URL/key instead. `tests/visual/ui-parity.spec.mjs` also has `FIGMA_FILE_URL`, `FIGMA_FILE_KEY`, `FIGMA_NODE_MAP`, and `FIGMA_SNAPSHOT_NODE_MAP` constants that need migrating to Penpot equivalents. Penpot file key: `b19dd3d3-9135-8056-8007-bb5e7d6eb5d4`. Update both in the same cycle.
 
 ## Documentation Integrity
 

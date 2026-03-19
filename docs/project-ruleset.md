@@ -29,7 +29,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 1. Quality First: Code must be production-grade, structured, maintainable, and fully compliant with Chrome’s latest extension APIs (Manifest V3+).
 2. User-Centered Design: Every detail (UI, UX, interaction) must feel smooth, intuitive, and delightful. Respect established design systems (Material, Fluent, or Apple HIG) while delivering consistent visual polish.
 3. Performance and Security: Optimize for speed, minimal footprint, and privacy. Avoid unnecessary permissions or background processes. Handle errors gracefully.
-4. Enterprise Readiness: Build with scalability, testability, and code clarity in mind. Support CI/CD, linting, typed safety (TypeScript), and modular architecture.
+4. Enterprise Readiness: Build with scalability, testability, and code clarity in mind. Support CI/CD, linting, typed safety (JSDoc annotations — repo is JavaScript-first), and modular architecture.
 5. Documentation and Maintainability: Code should be self-explanatory, commented where necessary, and supported by concise README and architecture overviews.
 6. Zero TODOs, full error handling, Chrome Web Store compliant.
 
@@ -104,6 +104,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 10. When working from `docs/todo-list.md`, remove each task immediately after it is completed in the same work cycle.
 11. When any feature, UX flow, behavior, policy, or release process changes, adapt all impacted documentation in the same work cycle (README, help, ADRs, roadmap/plans, changelog, wiki, and policy docs as applicable).
 12. Attribution note for maintainer-facing documentation should stay explicit and consistent: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
+13. **Phase gate or milestone sign-off recorded:** run a cross-doc alignment sweep before committing — (1) SESSION.md version current, (2) roadmap phase status updated, (3) CODEX.md `## Current Sprint` updated, (4) scan all docs for stale "blocked" or "in progress" markers that should now be "✅".
 
 ## Help Documentation Rules (added 2026-03-11)
 
@@ -115,6 +116,8 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 - **Rule 4 — Shipping a feature:** When a new feature ships, remove its phrase(s) from the `UNSHIPPED_PHRASES` list in `scripts/check-doc-policy.mjs` and add the feature to both help surfaces in the same work cycle.
 
 <!-- HELP_RULES:END -->
+
+- **Rule 5 — Help & FAQ HTML generation:** `docs/help-user-guide.md` is the single source of truth for content. `src/options/options.html` (Help & FAQ section) is the _user-friendly rendering_ of that source. Whenever `docs/help-user-guide.md` is modified, follow `docs/codex-prompt-help-faq-regeneration.md` in the same work cycle to regenerate the HTML section with plain, goal-oriented language. The markdown and the HTML must never diverge in content coverage (Rule 3), but they may — and should — differ in tone and phrasing.
 
 ## Git/Branch Policy
 

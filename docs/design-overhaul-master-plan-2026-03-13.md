@@ -829,7 +829,7 @@ Surfaces covered: Screenshots · URL Library · Preview · Settings · Popup. On
 
 ### PHASE 1 — Quick Wins: Visual + UX (v1.10, CSS/HTML only)
 
-> **Penpot gate:** Phase 0-A (token styles), 0-B-1/0-B-2 (page headers), 0-C-1 through 0-C-5 (structural UX), and 0-D-1 through 0-D-2 (card resting + hover) must be complete and approved in Penpot before phase 1 code begins.
+> **Penpot gate:** Phase 0-A (token styles), 0-B-1/0-B-2 (page headers), 0-C-1 through 0-C-5 (structural UX), and 0-D-1 through 0-D-2 (card resting + hover) must be complete and approved in Penpot before phase 1 code begins. ✅ Gate passed — 2026-03-19.
 
 These changes require no JS logic changes, no data model changes, and no behaviour changes. Each is independently deployable and covered by snapshot tests.
 

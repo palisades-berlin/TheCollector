@@ -3,7 +3,7 @@
 ## Project Summary
 
 `THE Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.9.97.18`.
+Current extension version: `1.9.97.19`.
 The extension is **free forever** — no subscriptions, no payments, no paid tiers. The tier selector (Basic / Pro / Ultra) is a UX complexity preference, not a paywall. See ADR 0009.
 Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
@@ -77,20 +77,21 @@ Run this in order before every commit/push. No exceptions.
 
 ### Conditional — only when the commit touches the relevant area
 
-| Trigger                                           | Required action                                                                                                |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| Feature, UX, or tier behavior changed             | Update `docs/help-user-guide.md` + `src/options/options.html` Help & FAQ                                       |
-| New feature ships                                 | Remove phrase(s) from `UNSHIPPED_PHRASES` in `scripts/check-doc-policy.mjs`; add feature to both help surfaces |
-| Roadmap scope or status changed                   | Update `docs/thecollector-2.0-90-day-roadmap.md`                                                               |
-| Architecture or policy decision made              | Create or update ADR in `docs/adr/`                                                                            |
-| `docs/help-user-guide.md` changed                 | Run `docs/codex-prompt-help-faq-regeneration.md` to regenerate `src/options/options.html` FAQ section          |
-| `README.md` changed                               | Refresh wiki Home.md Overview section                                                                          |
-| `docs/dev-workflow.md` changed                    | Refresh wiki Home.md workflow section                                                                          |
-| `docs/ui-handoff.md` changed                      | Refresh wiki Home.md UI/UX section                                                                             |
-| `docs/thecollector-2.0-90-day-roadmap.md` changed | Refresh wiki Home.md roadmap section                                                                           |
-| `AGENTS.md` changed                               | Refresh wiki Home.md workflow section; mirror any structural changes to `CLAUDE.md` in the same work cycle     |
-| `CODEX.md` changed                                | Refresh wiki Home.md workflow section                                                                          |
-| `CLAUDE.md` changed                               | Refresh wiki Home.md workflow section; mirror any structural changes to `AGENTS.md` in the same work cycle     |
+| Trigger                                           | Required action                                                                                                                                                                                                            |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Feature, UX, or tier behavior changed             | Update `docs/help-user-guide.md` + `src/options/options.html` Help & FAQ                                                                                                                                                   |
+| New feature ships                                 | Remove phrase(s) from `UNSHIPPED_PHRASES` in `scripts/check-doc-policy.mjs`; add feature to both help surfaces                                                                                                             |
+| Roadmap scope or status changed                   | Update `docs/thecollector-2.0-90-day-roadmap.md`                                                                                                                                                                           |
+| Architecture or policy decision made              | Create or update ADR in `docs/adr/`                                                                                                                                                                                        |
+| `docs/help-user-guide.md` changed                 | Run `docs/codex-prompt-help-faq-regeneration.md` to regenerate `src/options/options.html` FAQ section                                                                                                                      |
+| `README.md` changed                               | Refresh wiki Home.md Overview section                                                                                                                                                                                      |
+| `docs/dev-workflow.md` changed                    | Refresh wiki Home.md workflow section                                                                                                                                                                                      |
+| `docs/ui-handoff.md` changed                      | Refresh wiki Home.md UI/UX section                                                                                                                                                                                         |
+| `docs/thecollector-2.0-90-day-roadmap.md` changed | Refresh wiki Home.md roadmap section                                                                                                                                                                                       |
+| `AGENTS.md` changed                               | Refresh wiki Home.md workflow section; mirror any structural changes to `CLAUDE.md` in the same work cycle                                                                                                                 |
+| `CODEX.md` changed                                | Refresh wiki Home.md workflow section                                                                                                                                                                                      |
+| `CLAUDE.md` changed                               | Refresh wiki Home.md workflow section; mirror any structural changes to `AGENTS.md` in the same work cycle                                                                                                                 |
+| Phase gate or milestone sign-off recorded         | Cross-doc alignment sweep: (1) SESSION.md version current, (2) roadmap phase status updated, (3) CODEX.md `## Current Sprint` updated, (4) scan all docs for stale "blocked"/"in progress" markers that should now be "✅" |
 
 <!-- PRE_COMMIT_CHECKLIST:END -->
 
