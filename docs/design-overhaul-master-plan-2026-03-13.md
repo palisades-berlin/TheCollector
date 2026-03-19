@@ -806,6 +806,25 @@ All Penpot frames reviewed by stakeholders. No phase 1 work begins until this si
 
 Surfaces covered: Screenshots · URL Library · Preview · Settings · Popup. Onboarding (`onboarding.html`) is out of scope for this design overhaul — it is a one-time first-run flow and carries low visual risk; it inherits token changes automatically from `src/shared/ui.css`.
 
+| Step  | Action                                                 | Status               |
+| ----- | ------------------------------------------------------ | -------------------- |
+| 0-F-1 | Verify all Phase 0 boards present on correct pages     | ✅ Done (v1.9.97.16) |
+| 0-F-2 | Spec compliance check: fills, glass, nav active, tints | ✅ Done (v1.9.97.16) |
+| 0-F-3 | Clean up stray shapes (0-D-1 ghost on Headers page)    | ✅ Done (v1.9.97.16) |
+| 0-F-4 | Stakeholder sign-off recorded                          | ✅ Done (v1.9.97.16) |
+
+**Review findings (2026-03-19):**
+
+- Phase 0-A — Component Library: 18 component boards present ✅
+- Phase 0-B — Headers: all 5 boards (0-B-1 through 0-B-5), 56px height, glass fill `rgba(8,13,24,0.80)` / popup `0.85` ✅
+- Phase 0-C — Command Bars: all 6 boards (0-C-1 through 0-C-5 + 0-C-4 hidden), correct heights (48/40/40/56px) ✅
+- Phase 0-D — Cards & Rows: all 5 boards (0-D-1 through 0-D-5) ✅
+- Phase 0-E — Tier Density: all 3 boards (0-E-1 through 0-E-3), correct height annotations (44/40/36px), stagger signals correct ✅
+- Nav active pill fill `rgba(255,255,255,0.10)` matches spec ✅
+- Stray `0-D-1` ghost on DS 2.0 — Headers page removed ✅
+
+**Sign-off: Stefan — 2026-03-19. Phase 0 complete. Phase 1 code may proceed.**
+
 ---
 
 ### PHASE 1 — Quick Wins: Visual + UX (v1.10, CSS/HTML only)

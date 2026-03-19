@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.97.17 - 2026-03-19
+
+### Changed
+
+- DS 2.0 Phase 0-F complete: full Phase 0 review and approval gate passed. All boards verified across 5 Penpot pages (Component Library, Headers, Command Bars, Cards & Rows, Tier Density). Spec compliance confirmed. Stray 0-D-1 ghost on Headers page removed.
+- `docs/design-overhaul-master-plan-2026-03-13.md`: Phase 0-F sign-off table added; review findings recorded; sign-off dated 2026-03-19.
+- `SESSION.md`: Phase 0 marked fully complete; next task updated to Phase 1 (Codex).
+
 ## 1.9.97.16 - 2026-03-19
 
 ### Changed
