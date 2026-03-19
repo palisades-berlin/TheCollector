@@ -10,7 +10,7 @@ Codex-only working memory for `THE Collector`.
 
 - `THE Collector` is a Manifest V3 Chrome/Edge extension.
 - It combines full-page screenshot capture with URL collection and review surfaces.
-- Current extension version: `1.9.97.14`.
+- Current extension version: `1.9.97.18`.
 - The product is free forever, local-only, and has no external connections or user tracking.
 - The `Basic` / `Pro` / `Ultra` selector is a UX complexity preference, not a paywall.
 - Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.

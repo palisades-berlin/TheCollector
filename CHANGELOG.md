@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.97.18 - 2026-03-19
+
+### Changed
+
+- `CODEX.md`: version corrected from stale `1.9.97.14` → `1.9.97.18`.
+- `docs/design-overhaul-master-plan-2026-03-13.md`: `_Last updated` line updated to reflect Phase 0 fully complete and Phase 1 cleared.
+- `WORKFLOW.md`: Step 1b expanded with Penpot plugin connect instructions and Codex Desktop MCP config note.
+
 ## 1.9.97.17 - 2026-03-19
 
 ### Changed

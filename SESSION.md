@@ -137,4 +137,4 @@ Read CODEX.md, AGENTS.md, and SESSION.md, then continue from the last session. Y
 
 ---
 
-_Last updated: 2026-03-19 · Claude (Phase 0-F ✅; Phase 0 fully complete; stray ghost removed; v1.9.97.17)_
+_Last updated: 2026-03-19 · Claude (housekeeping: CODEX.md version fix, master plan footer, WORKFLOW.md Codex Desktop MCP note; v1.9.97.18)_

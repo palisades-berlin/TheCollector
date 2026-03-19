@@ -52,7 +52,11 @@ cd ~/penpot-mcp && npm run bootstrap
 
 This starts both the MCP server (port 4401) and the Penpot plugin server. Keep the terminal open for the duration of the session. Claude connects via `http://localhost:4401/mcp` (configured in `claude_desktop_config.json`).
 
-Skip this step for Codex (code/tests) or Perplexity (research) sessions.
+After starting the server, open Penpot in the browser, load the plugin from `http://localhost:4400/manifest.json`, and click **Connect to MCP server** in the plugin panel. Do not close the plugin panel during the session.
+
+Codex Desktop also connects to the Penpot MCP when needed (configured in `~/.codex/config.toml` — `[mcp_servers.penpot]` entry). Start the server before opening Codex Desktop for any design-reference session.
+
+Skip this step for Perplexity (research) sessions.
 
 ---
 
