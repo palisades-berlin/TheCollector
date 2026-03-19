@@ -73,7 +73,9 @@ Implemented roadmap features and current delivery level:
 12. DS 2.0 Phase 0-A: **complete** (`1.9.97.12`) — Penpot color library reorganised (59 tokens, glass surfaces, dark mode set); border radius updated; typography updated. Source of truth migrated to Penpot (ADR 0015).
 13. DS 2.0 Phase 0-B: **complete** (`1.9.97.13`) — all 5 header variants designed in Penpot (`DS 2.0 — Headers` page): Screenshots, URL Library, Preview, Popup, Settings.
 14. DS 2.0 Phase 0-C (items 1–5): **complete** (`1.9.97.13`) — URL Library & Screenshots command bars, tab bar, selection bar (hidden + visible states), URL Library filters designed in Penpot (`DS 2.0 — Command Bars` page).
-15. DS 2.0 Phase 0-C (items 6–8), 0-D, 0-E: **pending** — Profile Usage pills, URL Notes UI, Popup URL panel redesign, card/row states, tier density variants.
+15. DS 2.0 Phase 0-D: **complete** (`1.9.97.15`) — Screenshot card states (resting/hover/selected), URL Library row density variants, empty states designed in Penpot (`DS 2.0 — Cards & Rows` page).
+16. DS 2.0 Phase 0-E: **complete** (`1.9.97.15`) — Tier density spec boards (Basic/Pro/Ultra) designed in Penpot (`DS 2.0 — Tier Density` page).
+17. DS 2.0 Phase 0-C (items 6–8): **pending** — Profile Usage pills, URL Notes UI, Popup URL panel redesign (Phase 4 gate).
 
 Versioning status:
 
@@ -81,7 +83,7 @@ Versioning status:
 2. No roadmap **v2** feature is fully shipped yet.
 3. Smart Save Profiles editable management remains planned for v2.0.
 4. Command Palette (Cmd/Ctrl+K) remains **unshipped**; user-facing help/docs are aligned to the shipped feature set.
-5. DS 2.0 Phase 1 code work is **blocked** until Phase 0-A, 0-B-1/2, 0-C-1–5, and 0-D-1/2 are complete in Penpot (0-B and 0-C-1–5 ✅; 0-D pending).
+5. DS 2.0 Phase 1 code work is **blocked** until Phase 0-A, 0-B-1/2, 0-C-1–5, and 0-D-1/2 are complete in Penpot (0-B ✅, 0-C-1–5 ✅, 0-D ✅, 0-E ✅).
 
 ---
 

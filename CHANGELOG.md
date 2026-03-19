@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.9.97.16 - 2026-03-19
+
+### Changed
+
+- Penpot DS 2.0 Phase 0-E complete: new page "DS 2.0 — Tier Density" with 3 boards — 0-E-1 (Basic, 44px), 0-E-2 (Pro, 40px), 0-E-3 (Ultra, 36px); each board has URL Library row demo + tint strip + stagger flag + token spec panel.
+- `docs/design-overhaul-master-plan-2026-03-13.md`: Phase 0-E-1/2/3 marked ✅ Done; last-updated line updated.
+- `docs/ui-handoff.md`: DS 2.0 Active Pages table — 0-E row added; sync date updated to 2026-03-19.
+- `docs/thecollector-2.0-90-day-roadmap.md`: item 16 split — 0-E ✅ (item 16), 0-C-6–8 pending (item 17); versioning item 5 updated (0-E ✅).
+- `SESSION.md`: updated for Phase 0-E completion; next task Phase 0-F (review gate).
+
 ## 1.9.97.15 - 2026-03-18
 
 ### Changed

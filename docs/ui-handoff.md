@@ -19,15 +19,17 @@ This document defines the implementation contract between design and code for TH
 
 ## Penpot Page Index
 
-_Synced 2026-03-18._
+_Synced 2026-03-19._
 
 ### DS 2.0 Active Pages
 
-| Page name                | Purpose                                       | DS 2.0 Phase status                       |
-| ------------------------ | --------------------------------------------- | ----------------------------------------- |
-| DS 2.0 Component Library | Token colour library, typography, base styles | ✅ Phase 0-A done (colours, radius, type) |
-| DS 2.0 — Headers         | All full-page + popup header variants         | ✅ Phase 0-B done (0-B-1 through 0-B-5)   |
-| DS 2.0 — Command Bars    | Command bars, tab bar, selection bar, filters | ✅ Phase 0-C-1–5 done; 0-C-6–8 pending    |
+| Page name                | Purpose                                                | DS 2.0 Phase status                       |
+| ------------------------ | ------------------------------------------------------ | ----------------------------------------- |
+| DS 2.0 Component Library | Token colour library, typography, base styles          | ✅ Phase 0-A done (colours, radius, type) |
+| DS 2.0 — Headers         | All full-page + popup header variants                  | ✅ Phase 0-B done (0-B-1 through 0-B-5)   |
+| DS 2.0 — Command Bars    | Command bars, tab bar, selection bar, filters          | ✅ Phase 0-C-1–5 done; 0-C-6–8 pending    |
+| DS 2.0 — Cards & Rows    | Screenshot card states, URL row variants, empty states | ✅ Phase 0-D done (0-D-1 through 0-D-5)   |
+| DS 2.0 — Tier Density    | Basic / Pro / Ultra density spec boards                | ✅ Phase 0-E done (0-E-1 through 0-E-3)   |
 
 ### Figma Import Baseline (reference only)
 
