@@ -107,6 +107,7 @@ Tip: if you added aliases/functions above on all machines, use `sync-main` at se
   - `AGENTS.md`
   - `CLAUDE.md`
   - `CHANGELOG.md`
+  - `CODEX.md`
   <!-- VERSIONING_RULE:END -->
 
 ## Security and Privacy

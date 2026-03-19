@@ -29,6 +29,9 @@ const imageSkeletonEl = document.getElementById('imageSkeleton');
 const loadingEl = document.getElementById('loading');
 const errorMsgEl = document.getElementById('errorMsg');
 const modeNoticeEl = document.getElementById('modeNotice');
+const previewEmptyStateEl = document.getElementById('previewEmptyState');
+const previewEmptyTitleEl = document.getElementById('previewEmptyTitle');
+const previewEmptyCopyEl = document.getElementById('previewEmptyCopy');
 const sourceUrlEl = document.getElementById('sourceUrl');
 const captureTimeEl = document.getElementById('captureTime');
 const dimensionsEl = document.getElementById('dimensions');
@@ -113,16 +116,35 @@ const exportController = createPreviewExportController({
 function showError(msg) {
   loadingEl.classList.add('hidden');
   imageSkeletonEl.classList.add('hidden');
+  stageEl.classList.add('hidden');
+  previewEmptyStateEl?.classList.add('hidden');
+  if (previewEmptyStateEl) previewEmptyStateEl.hidden = true;
   imageContainer.setAttribute('aria-busy', 'false');
   errorMsgEl.textContent = msg;
   errorMsgEl.classList.remove('hidden');
+}
+
+function showEmptyState(title, copy) {
+  loadingEl.classList.add('hidden');
+  imageSkeletonEl.classList.add('hidden');
+  stageEl.classList.add('hidden');
+  errorMsgEl.classList.add('hidden');
+  errorMsgEl.textContent = '';
+  imageContainer.setAttribute('aria-busy', 'false');
+  if (previewEmptyTitleEl) previewEmptyTitleEl.textContent = title;
+  if (previewEmptyCopyEl) previewEmptyCopyEl.textContent = copy;
+  previewEmptyStateEl?.classList.remove('hidden');
+  if (previewEmptyStateEl) previewEmptyStateEl.hidden = false;
 }
 
 async function init() {
   await applySavedTheme();
   imageContainer.setAttribute('aria-busy', 'true');
   if (!id) {
-    showError('No screenshot ID in URL.');
+    showEmptyState(
+      'No screenshot selected',
+      'Choose a capture from History to open this preview, or return to the page and try again.'
+    );
     return;
   }
 
@@ -132,14 +154,20 @@ async function init() {
 
     const record = await getScreenshotById(id);
     if (!record) {
-      showError('Screenshot not found. It may have been deleted.');
+      showEmptyState(
+        'Screenshot not found',
+        'This capture may have been deleted. Open History to review your saved screenshots or capture the page again.'
+      );
       return;
     }
 
     if (isDiffMode) {
       const second = await getScreenshotById(compareId || '');
       if (!second) {
-        showError('Comparison screenshot not found. It may have been deleted.');
+        showEmptyState(
+          'Comparison screenshot not found',
+          'The comparison capture is missing. Open History and choose another screenshot pair.'
+        );
         return;
       }
       await setupDiffPreview(record, second);

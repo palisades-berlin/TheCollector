@@ -13,7 +13,7 @@ function detectSystemTheme() {
 }
 
 export function normalizeThemeValue(value) {
-  return THEME_VALUES.has(value) ? value : 'system';
+  return THEME_VALUES.has(value) ? value : 'dark';
 }
 
 export function resolveTheme(value) {
@@ -33,6 +33,6 @@ export async function applySavedTheme() {
     const settings = await getUserSettings();
     return applyThemeToDocument(settings?.theme);
   } catch {
-    return applyThemeToDocument('system');
+    return applyThemeToDocument('dark');
   }
 }

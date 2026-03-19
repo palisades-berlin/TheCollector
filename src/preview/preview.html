@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <title>THE Collector: Preview</title>
-    <link rel="stylesheet" href="../shared/ui.css" />
-    <link rel="stylesheet" href="preview.css" />
+    <link rel="stylesheet" href="../shared/ui.css?v=1.9.99.0" />
+    <link rel="stylesheet" href="preview.css?v=1.9.99.0" />
+    <script src="../shared/browser-chrome-shim.js?v=1.9.99.0"></script>
   </head>
   <body class="sc-page-enter">
     <!-- Toolbar -->
@@ -25,67 +26,96 @@
         </div>
       </div>
       <div class="toolbar-actions">
-        <div class="toolbar-nav-group">
-          <nav class="sc-header-nav" aria-label="Primary">
-            <a class="sc-header-link" href="../history/history.html">History</a>
-            <a class="sc-header-link" href="../options/options.html">Settings</a>
-          </nav>
+        <div class="toolbar-cluster toolbar-browse-group" role="group" aria-label="Browse controls">
+          <span class="toolbar-group-label">Browse</span>
+          <div class="toolbar-browse-row">
+            <nav class="sc-header-nav" aria-label="Primary">
+              <a class="sc-header-link" href="../history/history.html">History</a>
+              <a class="sc-header-link" href="../urls/urls.html">URLs</a>
+              <a class="sc-header-link" href="../options/options.html">Settings</a>
+            </nav>
+            <div class="toolbar-pdf-group">
+              <label class="pdf-size-wrap" for="pdfPageSize">PDF size</label>
+              <select id="pdfPageSize" class="pdf-size sc-select" aria-label="PDF page size">
+                <option value="auto">Auto</option>
+                <option value="a4">A4</option>
+                <option value="letter">Letter</option>
+              </select>
+            </div>
+          </div>
         </div>
-        <div class="toolbar-pdf-group">
-          <label class="pdf-size-wrap" for="pdfPageSize">PDF size</label>
-          <select id="pdfPageSize" class="pdf-size sc-select" aria-label="PDF page size">
-            <option value="auto">Auto</option>
-            <option value="a4">A4</option>
-            <option value="letter">Letter</option>
-          </select>
+        <div class="toolbar-cluster toolbar-export-group" role="group" aria-label="Export actions">
+          <span class="toolbar-group-label">Export</span>
+          <div class="toolbar-export-row">
+            <button id="downloadPng" class="btn-dl sc-btn sc-btn-primary">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+              </svg>
+              Save PNG
+            </button>
+            <button id="downloadJpg" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+              </svg>
+              Save JPG
+            </button>
+            <button id="downloadPdf" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+              </svg>
+              Save PDF
+            </button>
+            <button id="copyImage" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">
+              Copy
+            </button>
+          </div>
         </div>
-        <div class="toolbar-export-group">
-          <button id="downloadPng" class="btn-dl sc-btn sc-btn-primary">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-            </svg>
-            Save PNG
-          </button>
-          <button id="downloadJpg" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-            </svg>
-            Save JPG
-          </button>
-          <button id="downloadPdf" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-            </svg>
-            Save PDF
-          </button>
-          <button id="copyImage" class="btn-dl btn-dl-secondary sc-btn sc-btn-secondary">
-            Copy
-          </button>
+        <div class="toolbar-cluster toolbar-preset-group" role="group" aria-label="Export presets">
+          <span class="toolbar-group-label">Presets</span>
+          <div class="toolbar-preset-row preset-group">
+            <button
+              id="presetEmail"
+              class="btn-dl btn-dl-preset sc-btn sc-btn-ghost"
+              title="Export JPG and open email draft"
+            >
+              Preset: Email
+            </button>
+            <button
+              id="presetDocs"
+              class="btn-dl btn-dl-preset sc-btn sc-btn-ghost"
+              title="Copy image resized for Google Docs limits"
+            >
+              Preset: Docs
+            </button>
+            <button
+              id="presetPdfAuto"
+              class="btn-dl btn-dl-preset sc-btn sc-btn-ghost"
+              title="Export PDF using Auto page size"
+            >
+              Preset: PDF Auto
+            </button>
+          </div>
         </div>
-        <div class="toolbar-preset-group preset-group" role="group" aria-label="Export presets">
-          <button
-            id="presetEmail"
-            class="btn-dl btn-dl-preset sc-btn sc-btn-ghost"
-            title="Export JPG and open email draft"
-          >
-            Preset: Email
-          </button>
-          <button
-            id="presetDocs"
-            class="btn-dl btn-dl-preset sc-btn sc-btn-ghost"
-            title="Copy image resized for Google Docs limits"
-          >
-            Preset: Docs
-          </button>
-          <button
-            id="presetPdfAuto"
-            class="btn-dl btn-dl-preset sc-btn sc-btn-ghost"
-            title="Export PDF using Auto page size"
-          >
-            Preset: PDF Auto
-          </button>
-        </div>
-        <div class="toolbar-hint-group">
+        <div class="toolbar-cluster toolbar-hint-group" aria-label="Zoom hint">
+          <span class="toolbar-group-label">Zoom</span>
           <span class="zoom-hint">Click image to zoom</span>
         </div>
       </div>
@@ -110,9 +140,42 @@
       </label>
     </div>
 
+    <section class="preview-intro sc-card" aria-label="Preview overview">
+      <div class="preview-intro-copy">
+        <div class="preview-intro-kicker">Preview workspace</div>
+        <div class="preview-intro-title">Review, refine, and export the current capture</div>
+        <p class="preview-intro-body">
+          Use the edit tools for quick markup, then switch between PNG, JPG, PDF, and preset exports
+          without leaving the page.
+        </p>
+      </div>
+      <div class="preview-intro-pills" aria-label="Preview capabilities">
+        <span class="sc-pill">Crop / Blur / Highlight</span>
+        <span class="sc-pill">PNG · JPG · PDF</span>
+        <span class="sc-pill">Click image to zoom</span>
+      </div>
+    </section>
+
     <!-- Image area -->
     <div id="imageContainer" class="image-container" aria-busy="true">
       <div id="imageSkeleton" class="preview-skeleton sc-skeleton"></div>
+      <section id="previewEmptyState" class="preview-empty-state sc-empty-card hidden" hidden>
+        <div class="sc-empty-card-visual" aria-hidden="true"></div>
+        <div class="empty-copy-wrap">
+          <div id="previewEmptyTitle" class="sc-empty-card-title">Screenshot unavailable</div>
+          <div id="previewEmptyCopy" class="sc-empty-card-copy">
+            We could not load this preview. Try opening History or capturing the page again.
+          </div>
+        </div>
+        <div class="preview-empty-actions">
+          <a class="sc-btn sc-btn-primary sc-empty-card-cta" href="../history/history.html">
+            Open History
+          </a>
+          <a class="sc-btn sc-btn-secondary sc-empty-card-cta" href="../options/options.html">
+            Open Settings
+          </a>
+        </div>
+      </section>
       <div id="stage" class="stage hidden">
         <img id="screenshot" class="screenshot fit" alt="Full-page screenshot" />
         <canvas id="annotationLayer" class="annotation-layer"></canvas>
@@ -130,6 +193,6 @@
       aria-atomic="true"
     ></div>
 
-    <script type="module" src="preview.js"></script>
+    <script type="module" src="preview.js?v=1.9.99.0"></script>
   </body>
 </html>

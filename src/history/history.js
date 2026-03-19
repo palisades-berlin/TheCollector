@@ -38,6 +38,7 @@ const countEl = document.getElementById('count');
 const clearAllBtn = document.getElementById('clearAllBtn');
 const openFilesBtn = document.getElementById('openFilesBtn');
 const compareBtn = document.getElementById('compareBtn');
+const emptyCaptureBtn = document.getElementById('emptyCaptureBtn');
 const cardTpl = document.getElementById('cardTpl');
 const filterDomainEl = document.getElementById('filterDomain');
 const filterDomainComboboxEl = document.getElementById('filterDomainCombobox');
@@ -396,9 +397,25 @@ function buildFriendlyCaptureFailureText({ error, durationPart, tilePart }) {
   return `${details} ${message}`;
 }
 
+async function openCapturePopup() {
+  try {
+    if (chrome.action?.openPopup) {
+      await chrome.action.openPopup();
+      return;
+    }
+  } catch (err) {
+    logNonFatal('openCapturePopup', err);
+  }
+  chrome.tabs.create({ url: chrome.runtime.getURL('src/popup/popup.html') });
+}
+
 captureDiagnosticsDismissEl?.addEventListener('click', () => {
   persistDismissedDiagnosticKey(captureDiagnosticsDismissEl.getAttribute('data-key') || '');
   captureDiagnosticsEl?.classList.add('hidden');
+});
+
+emptyCaptureBtn?.addEventListener('click', () => {
+  void openCapturePopup();
 });
 
 clearAllBtn.addEventListener('click', async () => {

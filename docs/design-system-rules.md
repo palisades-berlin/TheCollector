@@ -1,6 +1,10 @@
 # Design System Rules — THE Collector
 
-> **Purpose:** Single source of truth for AI tools (Claude, Codex) integrating Figma designs with the codebase. Generated 2026-03-13 by `create_design_system_rules` analysis of the live codebase.
+> **Legacy snapshot:** This document preserves the pre-reset DS 2.0 contract for historical reference only. It is **not** the active implementation authority.
+> **Active authority:** Figma-first dark premium direction, documented in `docs/visual-system-direction-2026-03-13.md`, `docs/visual-design-uplift-2026-03-13.md`, and `docs/design-overhaul-master-plan-2026-03-13.md`.
+> **Use this file only** to understand the old token contract and the migration history that preceded the current dark premium baseline.
+
+> **Purpose:** Historical token ruleset for AI tools (Claude, Codex) integrating the pre-reset Figma-era design contract with the codebase. Generated 2026-03-13 by `create_design_system_rules` analysis of the live codebase.
 > **Phase 0 reset:** DS 2.0 design-phase is reset to restart under Figma authority (ADR 0016).
 > **Phase 1 and beyond:** direction inverts — the approved Figma boards are now the source of truth. Code must be updated to match Figma, not the other way around.
 

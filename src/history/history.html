@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <title>THE Collector Screenshots</title>
-    <link rel="stylesheet" href="../shared/ui.css" />
-    <link rel="stylesheet" href="history.css" />
+    <link rel="stylesheet" href="../shared/ui.css?v=1.9.99.0" />
+    <link rel="stylesheet" href="history.css?v=1.9.99.0" />
+    <script src="../shared/browser-chrome-shim.js?v=1.9.99.0"></script>
   </head>
   <body class="sc-page-enter">
     <!-- Header -->
@@ -53,6 +54,18 @@
         </button>
       </div>
     </div>
+
+    <section class="history-intro sc-card" aria-label="History overview">
+      <div class="history-intro-copy">
+        <div class="history-intro-kicker">Saved captures</div>
+        <p>Search, compare, and bulk-manage screenshots without leaving the page.</p>
+      </div>
+      <div class="history-intro-pills" aria-label="History shortcuts">
+        <span class="sc-pill">Search by domain</span>
+        <span class="sc-pill">Compare 2</span>
+        <span class="sc-pill">Bulk actions</span>
+      </div>
+    </section>
 
     <section class="filters" aria-label="History filters">
       <label class="filter-item filter-item-domain">
@@ -201,20 +214,28 @@
 
     <!-- Empty state -->
     <div id="empty" class="empty sc-state-empty hidden" role="status" aria-live="polite">
-      <svg
-        width="52"
-        height="52"
-        viewBox="0 0 24 24"
-        fill="#b0bec5"
-        aria-hidden="true"
-        class="empty-icon"
-      >
-        <path
-          d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
-        />
-      </svg>
-      <span class="empty-title">No screenshots yet</span>
-      <span class="empty-sub">Click the extension icon on any page to capture it.</span>
+      <div class="sc-empty-card history-empty-card">
+        <div class="sc-empty-card-visual" aria-hidden="true"></div>
+        <div class="empty-copy-wrap">
+          <span class="empty-title sc-empty-card-title">No screenshots yet</span>
+          <p class="empty-sub sc-empty-card-copy">
+            Click the extension icon on any page to capture it.
+          </p>
+        </div>
+        <button
+          id="emptyCaptureBtn"
+          class="empty-cta sc-btn sc-btn-primary sc-btn-md sc-btn-block sc-empty-card-cta"
+          type="button"
+        >
+          Save current page
+        </button>
+        <a
+          class="empty-cta sc-btn sc-btn-secondary sc-btn-md sc-btn-block sc-empty-card-cta"
+          href="../urls/urls.html"
+        >
+          Open URL Library
+        </a>
+      </div>
     </div>
 
     <!-- Loading -->
@@ -247,8 +268,22 @@
             <span id="selectedCount">(0 Selected)</span>
           </label>
           <div class="files-actions">
-            <button id="downloadSelected" class="btn-file sc-btn" disabled>Download</button>
-            <button id="deleteSelected" class="btn-file sc-btn" disabled>Delete</button>
+            <button
+              id="downloadSelected"
+              class="btn-file sc-btn sc-btn-secondary"
+              type="button"
+              disabled
+            >
+              Download
+            </button>
+            <button
+              id="deleteSelected"
+              class="btn-file sc-btn sc-btn-danger"
+              type="button"
+              disabled
+            >
+              Delete
+            </button>
           </div>
         </div>
         <div id="filesList" class="files-list"></div>
@@ -264,6 +299,7 @@
         </div>
         <div class="card-body">
           <div class="card-url"></div>
+          <div class="card-pills"></div>
           <div class="card-meta"></div>
           <div class="card-diagnostic is-empty"></div>
         </div>
@@ -310,6 +346,6 @@
       </div>
     </template>
 
-    <script type="module" src="history.js"></script>
+    <script type="module" src="history.js?v=1.9.99.0"></script>
   </body>
 </html>

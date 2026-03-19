@@ -3,7 +3,7 @@
 ## Project Summary
 
 `THE Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.9.97.21`.
+Current extension version: `1.9.99.1`.
 The extension is **free forever** — no subscriptions, no payments, no paid tiers. The tier selector (Basic / Pro / Ultra) is a UX complexity preference, not a paywall. See ADR 0009.
 Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
@@ -84,7 +84,7 @@ Run this in order before every commit/push. No exceptions.
 
 ### Always — every commit
 
-1. Bump version (`x.y.z.w`) in all six files: `manifest.json`, `package.json`, `README.md`, `CHANGELOG.md`, `AGENTS.md`, `CLAUDE.md`
+1. Bump version (`x.y.z.w`) in all seven files: `manifest.json`, `package.json`, `README.md`, `CHANGELOG.md`, `AGENTS.md`, `CLAUDE.md`, `CODEX.md`
 2. Add a `CHANGELOG.md` entry for the new version
 3. Update `README.md` `## Top Changes` with the top changes (max 5 lines)
 4. Update `SESSION.md`: today's date + tool, what was completed, exact next task, open decisions/blockers

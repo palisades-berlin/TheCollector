@@ -12,6 +12,7 @@ Codex-only working memory for `THE Collector`.
 - Phase 0 is restart-required under ADR 0016 (no active sign-off in force).
 - Phase 1 code remains blocked until Figma Phase 0 (0-A through 0-F) is re-completed and signed off.
 - Immediate focus: keep governance/planning docs aligned while design restarts in Figma.
+- `docs/archive/repo-assessment-2026-03-13.md` has been archived; keep any lingering references pointed at the archived copy.
 - **Before starting design-derived code work — two pre-tasks:**
   1. Verify Figma Phase 0 gate status in roadmap/master/handoff docs is current and consistent.
   2. Verify Figma calibration contracts (`scripts/check-ui-calibration-contract.mjs` and `tests/visual/ui-parity.spec.mjs`) remain aligned to the canonical Figma source-of-truth.
@@ -20,7 +21,7 @@ Codex-only working memory for `THE Collector`.
 
 - `THE Collector` is a Manifest V3 Chrome/Edge extension.
 - It combines full-page screenshot capture with URL collection and review surfaces.
-- Current extension version: `1.9.97.21`.
+- Current extension version: `1.9.99.1`.
 - The product is free forever, local-only, and has no external connections or user tracking.
 - The `Basic` / `Pro` / `Ultra` selector is a UX complexity preference, not a paywall.
 - Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
@@ -186,7 +187,7 @@ Codex-only working memory for `THE Collector`.
 
 ## Current Watchouts
 
-- `docs/repo-assessment-2026-03-13.md` is a historical snapshot, not current state.
+- `docs/archive/repo-assessment-2026-03-13.md` is a historical snapshot, not current state.
 - `docs/thecollector-2.0-90-day-roadmap.md` intentionally preserves historical baseline entries while marking current-state reset under ADR 0016.
 - `src/popup/urls-panel.js` is a transitional quick surface that coexists with the canonical `src/urls/urls.js`.
 - `src/background/message-router.js` and `src/shared/url-repo.js` are high-coupling seams.

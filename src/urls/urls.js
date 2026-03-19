@@ -55,6 +55,8 @@ const els = {
   bulkDeleteBtn: document.getElementById('bulkDeleteBtn'),
   urlList: document.getElementById('urlList'),
   emptyState: document.getElementById('emptyState'),
+  emptyAddCurrentBtn: document.getElementById('emptyAddCurrentBtn'),
+  emptyAddAllBtn: document.getElementById('emptyAddAllBtn'),
   urlsView: document.getElementById('urlsView'),
   changeLogView: document.getElementById('changeLogView'),
   changeLogBackBtn: document.getElementById('changeLogBackBtn'),
@@ -308,6 +310,15 @@ function renderUrlRow(record) {
   const tags = Array.isArray(record.tags) ? record.tags : [];
   const note = typeof record.note === 'string' ? record.note : '';
   const hasNote = note.length > 0;
+  const createdAtLabel = new Date(record.createdAt || Date.now()).toLocaleDateString();
+  const statePills = [
+    `<span class="sc-pill">${esc(domainLabel)}</span>`,
+    `<span class="sc-pill">${esc(createdAtLabel)}</span>`,
+  ];
+  if (selected) statePills.push('<span class="sc-pill sc-pill-ok">Selected</span>');
+  if (record.starred) statePills.push('<span class="sc-pill sc-pill-ok">Starred</span>');
+  if (hasNote) statePills.push('<span class="sc-pill sc-pill-warn">Note saved</span>');
+  if (tags.length) statePills.push(`<span class="sc-pill">${tags.length} tags</span>`);
   const tagsHtml = tags.length
     ? `<div class="url-tags">${tags
         .map(
@@ -354,6 +365,7 @@ function renderUrlRow(record) {
   return `
     <div class="url-row" data-url="${esc(record.url)}">
       <div class="url-main">
+        <div class="url-row-pills">${statePills.join('')}</div>
         <div class="url-title" title="${esc(record.url)}">${esc(record.url)}</div>
         <div class="url-meta">
           <span>${esc(getRegisteredDomain(record.url) || 'unknown')}</span>
@@ -416,11 +428,13 @@ function renderChangeLog() {
       (entry) => `
       <div class="change-log-row" data-history-id="${esc(entry.id)}">
         <div>
+          <div class="change-log-pills">
+            <span class="sc-pill">${entry.urls.length} URL${entry.urls.length === 1 ? '' : 's'}</span>
+            <span class="sc-pill">${esc(entry.actionType || 'unknown')}</span>
+          </div>
           <div><strong>${esc(entry.urls[0] || '(no URL)')}</strong></div>
           <div class="url-meta">
             <span>${new Date(entry.createdAt || Date.now()).toLocaleString()}</span>
-            <span>${esc(entry.actionType || 'unknown')}</span>
-            <span>${entry.urls.length} URL${entry.urls.length === 1 ? '' : 's'}</span>
           </div>
         </div>
         <div class="change-log-actions">
@@ -460,6 +474,14 @@ async function reload() {
     renderUrls();
   }
 }
+
+els.emptyAddCurrentBtn?.addEventListener('click', () => {
+  els.addBtn?.click();
+});
+
+els.emptyAddAllBtn?.addEventListener('click', () => {
+  els.addAllBtn?.click();
+});
 
 function reportError(err, fallback) {
   console.error('[URL Library]', err);

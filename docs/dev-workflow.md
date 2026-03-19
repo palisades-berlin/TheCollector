@@ -1,6 +1,6 @@
 # Developer Workflow
 
-This file is the canonical source for developer/release operations to keep `README.md` and `CLAUDE.md` aligned.
+This file is the canonical source for developer/release operations to keep `README.md`, `CLAUDE.md`, and `CODEX.md` aligned.
 Policy precedence: `docs/project-ruleset.md` is the normative rules source when guidance overlaps.
 Terminology convention: use `Settings` for user-facing text and keep `options` only for code/file paths (`src/options/*`).
 
@@ -106,6 +106,7 @@ Keep repository metadata aligned with shipped state in the same cycle:
   - `AGENTS.md`
   - `CLAUDE.md`
   - `CHANGELOG.md`
+  - `CODEX.md`
   <!-- VERSIONING_RULE:END -->
 
 ## Commit/Push -> Wiki Sync Rule (Mandatory)
@@ -138,6 +139,7 @@ Source consistency rule:
   - `docs/ui-handoff.md`
   - `docs/thecollector-2.0-90-day-roadmap.md`
   - `docs/help-user-guide.md`
+  - `CODEX.md`
 
 Publish workflow:
 

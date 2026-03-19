@@ -47,9 +47,63 @@ body {
   gap: 14px;
 }
 
+.urls-intro {
+  padding: 16px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.urls-intro-copy {
+  display: grid;
+  gap: 6px;
+  min-width: min(100%, 360px);
+  flex: 1 1 360px;
+}
+
+.urls-intro-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sc-color-text-muted);
+}
+
+.urls-intro-title {
+  font-size: 18px;
+  line-height: var(--sc-lh-tight);
+  font-weight: 700;
+  color: var(--sc-color-text-strong);
+}
+
+.urls-intro-body {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--sc-color-text-muted);
+  max-width: 62ch;
+}
+
+.urls-intro-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: flex-end;
+  flex: 0 1 280px;
+}
+
 .control-card,
 .list-card {
   padding: 12px;
+}
+
+.list-card {
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
 }
 
 .quick-actions {
@@ -81,12 +135,28 @@ body {
   display: flex;
   gap: 6px;
   margin-bottom: 10px;
+  padding: 4px;
+  border: 1px solid var(--sc-color-border);
+  border-radius: 10px;
+  background: var(--sc-color-surface-alt);
 }
 
 .url-list,
 .change-log-list {
   display: grid;
   gap: 8px;
+}
+
+#urlsView,
+#changeLogView {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+#urlList,
+#changeLogList {
+  flex: 1;
 }
 
 .change-log-toolbar {
@@ -106,9 +176,10 @@ body {
 .bulk-actions-bar {
   margin-bottom: 10px;
   padding: 8px;
-  border: 1px solid var(--sc-color-border);
-  border-radius: 8px;
-  background: var(--sc-color-surface-alt);
+  border: 1px solid var(--sc-color-border-panel);
+  border-radius: 12px;
+  background: var(--sc-color-surface-card);
+  backdrop-filter: blur(10px);
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -124,7 +195,26 @@ body {
 .bulk-actions-controls {
   display: flex;
   flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.bulk-actions-primary,
+.bulk-actions-secondary {
+  display: flex;
+  flex-wrap: wrap;
   gap: 6px;
+  align-items: center;
+}
+
+.bulk-actions-primary {
+  padding-right: 10px;
+  border-right: 1px solid var(--sc-color-border-soft);
+}
+
+.bulk-actions-secondary {
+  padding-left: 2px;
 }
 
 .url-row,
@@ -139,12 +229,55 @@ body {
   background: var(--sc-color-surface-alt);
 }
 
+.url-row-pills,
+.change-log-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.change-log-pills {
+  margin-bottom: 6px;
+}
+
+.empty-copy-wrap {
+  display: grid;
+  gap: var(--sc-sp-2);
+}
+
+.empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.empty-actions .sc-btn {
+  min-width: 132px;
+}
+
+.sc-empty-card {
+  margin: 12px auto 0;
+}
+
+#emptyState,
+#changeLogEmpty {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.change-log-empty {
+  margin-top: 12px;
+}
+
 .url-main {
   min-width: 0;
 }
 
 .url-title {
   font-size: 13px;
+  font-weight: 700;
+  line-height: var(--sc-lh-tight);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -157,6 +290,10 @@ body {
   flex-wrap: wrap;
   font-size: 11px;
   color: var(--sc-color-text-muted);
+}
+
+.change-log-row .url-meta {
+  margin-top: 2px;
 }
 
 .url-tags {
@@ -244,6 +381,10 @@ body {
   justify-content: flex-end;
 }
 
+.change-log-actions {
+  align-self: start;
+}
+
 .url-select-control {
   display: inline-flex;
   align-items: center;
@@ -268,5 +409,17 @@ body {
 
   .filters-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .urls-intro {
+    padding: 14px;
+  }
+
+  .urls-intro {
+    flex-direction: column;
+  }
+
+  .urls-intro-pills {
+    justify-content: flex-start;
   }
 }

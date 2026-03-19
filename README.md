@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.97.21`.
+Current extension version: `1.9.99.1`.
 
 ## Overview
 
@@ -33,11 +33,10 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- Housekeeping remediation cycle completed across docs/config governance surfaces (docs-only).
-- Contributor guidance now points to Figma authority (ADR 0016) with canonical file/key; Penpot authority wording removed from active contributor path.
-- Codex operational memory (`CODEX.md`) now matches roadmap/session state: DS 2.0 Phase 0 restart-required, Phase 1 blocked pending renewed sign-off.
-- Historical labeling corrected in UI handoff (`Penpot Import ID`) and repository assessment marked explicitly as historical/non-authoritative.
-- Added `.github/PULL_REQUEST_TEMPLATE.md` and marker-block sync helper script to reduce documentation drift risk.
+- Docs-only housekeeping cleanup bumped the repo to `1.9.99.1`, synchronized `CODEX.md`, and archived the repo assessment snapshot.
+- Policy wording now says `README.md ## Top Changes`, and maintainer docs treat `CODEX.md` as live handoff/current-state memory.
+- Dark premium baseline remains intact; Preview and URL Library hierarchy changes stay in place.
+- Legacy docs remain historical snapshots, not active authority.
 
 ## Versioning Migration Note
 

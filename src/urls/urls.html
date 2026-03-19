@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <title>THE Collector URL Library</title>
-    <link rel="stylesheet" href="../shared/ui.css" />
-    <link rel="stylesheet" href="urls.css" />
+    <link rel="stylesheet" href="../shared/ui.css?v=1.9.99.0" />
+    <link rel="stylesheet" href="urls.css?v=1.9.99.0" />
+    <script src="../shared/browser-chrome-shim.js?v=1.9.99.0"></script>
   </head>
   <body class="sc-page-enter">
     <header class="header sc-header">
@@ -25,15 +26,31 @@
     </header>
 
     <main class="urls-shell">
+      <section class="urls-intro sc-card" aria-label="URL library overview">
+        <div class="urls-intro-copy">
+          <div class="urls-intro-kicker">URL library</div>
+          <div class="urls-intro-title">Collect, filter, and bulk-manage saved URLs</div>
+          <p class="urls-intro-body">
+            Add the current tab or an entire window, then switch between starred, today, and
+            change-log views without leaving the library.
+          </p>
+        </div>
+        <div class="urls-intro-pills" aria-label="URL library capabilities">
+          <span class="sc-pill">Current tab</span>
+          <span class="sc-pill">Bulk add</span>
+          <span class="sc-pill">Change log</span>
+        </div>
+      </section>
+
       <section class="sc-card control-card">
         <div class="quick-actions">
           <button id="btn-add" class="sc-btn sc-btn-primary">Add Current Tab URL</button>
           <button id="btn-add-all" class="sc-btn sc-btn-secondary">Add All Tabs in Window</button>
-          <button id="btn-copy" class="sc-btn">Copy</button>
-          <button id="btn-export" class="sc-btn">TXT</button>
-          <button id="btn-export-csv" class="sc-btn">CSV</button>
-          <button id="btn-email" class="sc-btn">Email</button>
-          <button id="btn-restore" class="sc-btn">Restore Last Clear</button>
+          <button id="btn-copy" class="sc-btn sc-btn-secondary">Copy</button>
+          <button id="btn-export" class="sc-btn sc-btn-ghost">TXT</button>
+          <button id="btn-export-csv" class="sc-btn sc-btn-ghost">CSV</button>
+          <button id="btn-email" class="sc-btn sc-btn-secondary">Email</button>
+          <button id="btn-restore" class="sc-btn sc-btn-secondary">Restore Last Clear</button>
           <button id="btn-clear" class="sc-btn sc-btn-danger">Clear All</button>
         </div>
         <div class="filters-grid">
@@ -118,21 +135,56 @@
               <strong id="bulkSelectedCount">0 selected</strong>
             </div>
             <div class="bulk-actions-controls">
-              <button id="bulkSelectVisibleBtn" class="sc-btn sc-btn-sm" type="button">
-                Select Visible
-              </button>
-              <button id="bulkClearBtn" class="sc-btn sc-btn-sm" type="button">Clear</button>
-              <button id="bulkCopyBtn" class="sc-btn sc-btn-sm" type="button">Copy</button>
-              <button id="bulkOpenBtn" class="sc-btn sc-btn-sm" type="button">Open</button>
-              <button id="bulkExportTxtBtn" class="sc-btn sc-btn-sm" type="button">TXT</button>
-              <button id="bulkExportCsvBtn" class="sc-btn sc-btn-sm" type="button">CSV</button>
-              <button id="bulkDeleteBtn" class="sc-btn sc-btn-danger sc-btn-sm" type="button">
-                Delete
-              </button>
+              <div class="bulk-actions-primary">
+                <button
+                  id="bulkSelectVisibleBtn"
+                  class="sc-btn sc-btn-primary sc-btn-sm"
+                  type="button"
+                >
+                  Select Visible
+                </button>
+                <button id="bulkClearBtn" class="sc-btn sc-btn-secondary sc-btn-sm" type="button">
+                  Clear
+                </button>
+              </div>
+              <div class="bulk-actions-secondary">
+                <button id="bulkCopyBtn" class="sc-btn sc-btn-secondary sc-btn-sm" type="button">
+                  Copy
+                </button>
+                <button id="bulkOpenBtn" class="sc-btn sc-btn-secondary sc-btn-sm" type="button">
+                  Open
+                </button>
+                <button id="bulkExportTxtBtn" class="sc-btn sc-btn-ghost sc-btn-sm" type="button">
+                  TXT
+                </button>
+                <button id="bulkExportCsvBtn" class="sc-btn sc-btn-ghost sc-btn-sm" type="button">
+                  CSV
+                </button>
+                <button id="bulkDeleteBtn" class="sc-btn sc-btn-danger sc-btn-sm" type="button">
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
           <div id="urlList" class="url-list"></div>
-          <div id="emptyState" class="sc-state-empty hidden">No URLs found for this view.</div>
+          <div id="emptyState" class="sc-empty-card hidden">
+            <div class="sc-empty-card-visual" aria-hidden="true"></div>
+            <div class="empty-copy-wrap">
+              <div class="sc-empty-card-title">No URLs collected yet</div>
+              <div class="sc-empty-card-copy">
+                Save the current tab or collect every tab in the window to start building your URL
+                library.
+              </div>
+            </div>
+            <div class="empty-actions">
+              <button id="emptyAddCurrentBtn" class="sc-btn sc-btn-primary sc-empty-card-cta">
+                Add Current Tab
+              </button>
+              <button id="emptyAddAllBtn" class="sc-btn sc-btn-secondary sc-empty-card-cta">
+                Add All Tabs
+              </button>
+            </div>
+          </div>
         </div>
 
         <div id="changeLogView" class="hidden" role="tabpanel" aria-label="URL change log view">
@@ -143,11 +195,19 @@
             <span class="change-log-hint">Press Esc to return to the previous control</span>
           </div>
           <div id="changeLogList" class="change-log-list"></div>
-          <div id="changeLogEmpty" class="sc-state-empty hidden">No change log entries yet.</div>
+          <div id="changeLogEmpty" class="sc-empty-card hidden">
+            <div class="sc-empty-card-visual" aria-hidden="true"></div>
+            <div class="empty-copy-wrap">
+              <div class="sc-empty-card-title">Change log is empty</div>
+              <div class="sc-empty-card-copy">
+                URL change history will appear here after you save or clear library entries.
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
-    <script type="module" src="urls.js"></script>
+    <script type="module" src="urls.js?v=1.9.99.0"></script>
   </body>
 </html>

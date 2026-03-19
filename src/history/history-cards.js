@@ -1,4 +1,4 @@
-import { buildRecordHints, buildCardDiagnosticText } from './history-utils.js';
+import { buildRecordHints, buildCardDiagnosticText, getRecordExportType } from './history-utils.js';
 
 export function createHistoryCards({
   cardTpl,
@@ -14,6 +14,7 @@ export function createHistoryCards({
     const card = node.querySelector('.card');
     const canvas = node.querySelector('.thumb-canvas');
     const urlEl = node.querySelector('.card-url');
+    const pillsEl = node.querySelector('.card-pills');
     const metaEl = node.querySelector('.card-meta');
     const diagnosticEl = node.querySelector('.card-diagnostic');
     const compareCardBtn = node.querySelector('.btn-compare');
@@ -37,7 +38,22 @@ export function createHistoryCards({
     } catch {
       urlEl.textContent = record.url;
     }
+    const pills = [];
+    const exportType = getRecordExportType(record);
+    if (exportType) pills.push(`<span class="sc-pill">${exportType.toUpperCase()}</span>`);
+    if (record.captureProfileId) {
+      pills.push(
+        `<span class="sc-pill">${String(record.captureProfileId).replace(/_/g, ' ')}</span>`
+      );
+    }
     const hints = buildRecordHints(record);
+    if (hints.length) {
+      for (const hint of hints) pills.push(`<span class="sc-pill">${hint}</span>`);
+    }
+    if (pillsEl) {
+      pillsEl.innerHTML = pills.join('');
+      pillsEl.classList.toggle('hidden', pills.length === 0);
+    }
     const suffix = hints.length ? ` · ${hints.join(' · ')}` : '';
     metaEl.textContent = `${new Date(record.timestamp).toLocaleDateString()} · ${record.width}×${record.height}px${suffix}`;
     const diagnosticText = buildCardDiagnosticText(record);

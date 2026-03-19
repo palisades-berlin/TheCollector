@@ -33,23 +33,24 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md` § PHASE 0
 
 **Done:**
 
-- Completed full housekeeping remediation cycle across local docs/config surfaces (approved audit findings only).
-- Added `.github/PULL_REQUEST_TEMPLATE.md`; updated stale PR-template reference in `docs/repo-assessment-2026-03-13.md`.
-- Updated `CONTRIBUTING.md` to active Figma-first authority (ADR 0016).
-- Synchronized `CODEX.md` sprint/watchouts with current reset state (Phase 0 restart-required; Phase 1 blocked).
-- Corrected historical ID labeling in `docs/ui-handoff.md` to `Penpot Import ID (historical)`.
-- Added marker-sync helper script (`scripts/sync-marker-blocks.mjs`) and npm command `sync:marker-blocks`; documented helper in `docs/marker-sync-contract.md`.
-- Updated pre-commit checklist wording drift (`AGENTS.md`, `CLAUDE.md`) from `README ## Overview` to `README ## Top Changes`.
-- Synced the GitHub wiki `Home.md` for the same housekeeping cycle.
-- Version bumped to `1.9.97.21` (docs-only).
+- Restored the dark premium visual baseline in the shared tokens and main surfaces so the extension opens on the documented dark default.
+- Reinstated the documented Poppins stack and pushed the shared surfaces closer to the glass-layered dark recipe from the visual direction docs.
+- Marked the legacy design-system docs explicitly as historical snapshots so the active target is unambiguous.
+- Grouped the Preview toolbar into labeled browse/export/preset/zoom clusters for clearer hierarchy.
+- Split URL Library bulk actions into primary selection controls and secondary operations.
+- Reworked the History files overlay and compare card controls into a more gallery-like, frosted utility panel.
+- Regenerated the Playwright visual snapshots for the new baseline and confirmed the parity suite passes.
+- Kept the DS 2.0 Phase 0 surface work intact while correcting the visual direction back toward the documented Apple/Linear-style premium baseline.
+- Completed the docs-only housekeeping cleanup: versioned handoff docs are now aligned at `1.9.99.1`, the repo assessment snapshot is archived, and policy wording now says `README.md ## Top Changes`.
+- Validation passed: version policy, docs policy, format check, lint, and type checks all succeeded after the cleanup.
 
 ---
 
 ## Do next
 
-**Task (Codex):** Commit/push the housekeeping remediation cycle in the main repo.
+**Task (Codex):** Commit/push the docs-only housekeeping cleanup, then sync the wiki Home.md in the same working session.
 
-**Blocker status:** none for this docs/config cycle; local checks are green and wiki sync is complete.
+**Blocker status:** none currently blocking capture or the docs-only commit.
 
 ---
 
@@ -57,27 +58,28 @@ Master plan: `docs/design-overhaul-master-plan-2026-03-13.md` § PHASE 0
 
 - Figma file `THECollector - UI Kit & Screens` (key `sECUN6qSqUygWoG7PhC548`) remains active authority (ADR 0016).
 - ADR 0015 remains historical; all active planning/governance points to ADR 0016.
-- This cycle is docs/config-only and intentionally avoids runtime behavior changes.
-- Wiki `Home.md` sync is complete for this working session.
+- Browser-captured shell work is still in progress and should keep reflecting back into Figma as slices are completed.
+- The browser shim now covers `chrome.storage.sync` and `chrome.permissions` for standalone local captures.
+- Wiki `Home.md` sync will need to be refreshed for this housekeeping cycle before push.
 
 ---
 
 ## Active files (last touched)
 
-| File                                 | Status                                                                     |
-| ------------------------------------ | -------------------------------------------------------------------------- |
-| `SESSION.md`                         | ✅ Session state refreshed for housekeeping cycle (`1.9.97.21`)            |
-| `CHANGELOG.md`                       | ✅ Added `1.9.97.21` housekeeping remediation entry                        |
-| `manifest.json` / `package.json`     | ✅ Version bumped to `1.9.97.21`                                           |
-| `README.md`                          | ✅ Version + Top Changes refreshed for housekeeping cycle                  |
-| `AGENTS.md`, `CLAUDE.md`             | ✅ Version bump + checklist wording corrected (`## Top Changes`)           |
-| `CODEX.md`                           | ✅ Current Sprint + Watchouts aligned to ADR 0016 reset state              |
-| `CONTRIBUTING.md`                    | ✅ Source-of-truth guidance switched to Figma (ADR 0016)                   |
-| `docs/ui-handoff.md`                 | ✅ Historical column renamed to `Penpot Import ID (historical)`            |
-| `docs/repo-assessment-2026-03-13.md` | ✅ Marked as historical snapshot/non-authoritative; PR template path fixed |
-| `.github/PULL_REQUEST_TEMPLATE.md`   | ✅ Added minimal PR checklist template                                     |
-| `scripts/sync-marker-blocks.mjs`     | ✅ Added canonical->mirror marker sync helper                              |
-| `docs/marker-sync-contract.md`       | ✅ Added helper command note (`npm run sync:marker-blocks`)                |
+| File                                         | Status                                                                                    |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `SESSION.md`                                 | ✅ Session state refreshed for toolbar hierarchy refinement and housekeeping (`1.9.99.1`) |
+| `CHANGELOG.md`                               | ✅ Added `1.9.99.1` docs-only housekeeping entry                                          |
+| `manifest.json` / `package.json`             | ✅ Version bumped to `1.9.99.1`                                                           |
+| `README.md`                                  | ✅ Version + Top Changes refreshed for housekeeping cleanup                               |
+| `AGENTS.md`, `CLAUDE.md`, `CODEX.md`         | ✅ Version bump + current version synchronized (`1.9.99.1`)                               |
+| `docs/archive/repo-assessment-2026-03-13.md` | ✅ Moved to `docs/archive/` and inbound references updated                                |
+| `CONTRIBUTING.md`                            | ✅ Source-of-truth guidance switched to Figma (ADR 0016)                                  |
+| `docs/ui-handoff.md`                         | ✅ Historical column renamed to `Penpot Import ID (historical)`                           |
+| `docs/archive/repo-assessment-2026-03-13.md` | ✅ Marked as historical snapshot/non-authoritative; PR template path fixed                |
+| `.github/PULL_REQUEST_TEMPLATE.md`           | ✅ Added minimal PR checklist template                                                    |
+| `scripts/sync-marker-blocks.mjs`             | ✅ Added canonical->mirror marker sync helper                                             |
+| `docs/marker-sync-contract.md`               | ✅ Added helper command note (`npm run sync:marker-blocks`)                               |
 
 ---
 
@@ -143,4 +145,4 @@ Read CODEX.md, AGENTS.md, and SESSION.md, then continue from the last session. Y
 
 ---
 
-_Last updated: 2026-03-19 · Codex (v1.9.97.21 — housekeeping remediation cycle complete; docs/config aligned; checks pending local run)_
+_Last updated: 2026-03-19 · Codex (v1.9.99.1 — docs-only housekeeping cleanup; CODEX and maintainer policy sync; repo assessment archived)_

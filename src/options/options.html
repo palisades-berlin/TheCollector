@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <title>THE Collector Settings</title>
-    <link rel="stylesheet" href="../shared/ui.css" />
-    <link rel="stylesheet" href="options.css" />
+    <link rel="stylesheet" href="../shared/ui.css?v=1.9.99.0" />
+    <link rel="stylesheet" href="options.css?v=1.9.99.0" />
+    <script src="../shared/browser-chrome-shim.js?v=1.9.99.0"></script>
   </head>
   <body class="sc-page-enter">
     <header class="header sc-header">
@@ -51,8 +52,20 @@
       <section class="settings-content">
         <section class="settings-section" data-settings-section="daily-essentials">
           <section class="card sc-card">
-            <h2>Daily Essentials</h2>
-            <p class="muted">Your most-used controls for day-to-day capture and export behavior.</p>
+            <div class="section-header">
+              <div class="section-copy">
+                <div class="section-kicker">Core defaults</div>
+                <h2>Daily Essentials</h2>
+                <p class="muted">
+                  Your most-used controls for day-to-day capture and export behavior.
+                </p>
+              </div>
+              <div class="spec-pill-row" aria-label="Daily essentials summary">
+                <span class="spec-pill sc-pill">Tier</span>
+                <span class="spec-pill sc-pill">Theme</span>
+                <span class="spec-pill sc-pill">Primary save</span>
+              </div>
+            </div>
             <label class="row">
               <span>Capability tier</span>
               <select id="capabilityTier" class="sc-select">
@@ -92,7 +105,21 @@
 
         <section class="settings-section hidden" data-settings-section="capture-export">
           <section class="card sc-card">
-            <h2>Capture &amp; Export</h2>
+            <div class="section-header">
+              <div class="section-copy">
+                <div class="section-kicker">Export defaults</div>
+                <h2>Capture &amp; Export</h2>
+                <p class="muted">
+                  Set the default output format, PDF size, and clipboard behavior used from preview
+                  and quick capture.
+                </p>
+              </div>
+              <div class="spec-pill-row" aria-label="Export summary">
+                <span class="spec-pill sc-pill">PNG / JPG / PDF</span>
+                <span class="spec-pill sc-pill">PDF Auto</span>
+                <span class="spec-pill sc-pill">Docs-safe copy</span>
+              </div>
+            </div>
             <label class="row">
               <span>Default export format</span>
               <select id="defaultExportFormat" class="sc-select">
@@ -118,7 +145,20 @@
 
         <section class="settings-section hidden" data-settings-section="downloads">
           <section class="card sc-card">
-            <h2>Downloads</h2>
+            <div class="section-header">
+              <div class="section-copy">
+                <div class="section-kicker">File delivery</div>
+                <h2>Downloads</h2>
+                <p class="muted">
+                  Control how files land on disk and how the browser handles direct saves.
+                </p>
+              </div>
+              <div class="spec-pill-row" aria-label="Download summary">
+                <span class="spec-pill sc-pill">Direct save</span>
+                <span class="spec-pill sc-pill">Folder pinning</span>
+                <span class="spec-pill sc-pill">Save As</span>
+              </div>
+            </div>
             <label class="row">
               <span>Auto-download behavior</span>
               <select id="autoDownloadMode" class="sc-select">
@@ -154,16 +194,29 @@
               <input id="saveAs" type="checkbox" />
               <span>Show Save As dialog for single-file downloads</span>
             </label>
+            <p class="muted">
+              These settings apply to direct file saves from preview and export flows.
+            </p>
           </section>
         </section>
 
         <section class="settings-section hidden" data-settings-section="feature-access">
           <section class="card sc-card">
-            <h2>Feature Access</h2>
-            <p class="muted">
-              Pro includes Basic features. Ultra includes Basic + Pro features. Non-entitled
-              features are hidden.
-            </p>
+            <div class="section-header">
+              <div class="section-copy">
+                <div class="section-kicker">Visibility ladder</div>
+                <h2>Feature Access</h2>
+                <p class="muted">
+                  Pro includes Basic features. Ultra includes Basic + Pro features. Non-entitled
+                  features are hidden.
+                </p>
+              </div>
+              <div class="spec-pill-row" aria-label="Feature access summary">
+                <span class="spec-pill sc-pill">Hide-only</span>
+                <span class="spec-pill sc-pill">Free tiers</span>
+                <span class="spec-pill sc-pill">Progressive reveal</span>
+              </div>
+            </div>
             <div
               id="profileUsageCard"
               class="value-report-grid hidden"
@@ -208,10 +261,20 @@
           </section>
 
           <section id="weeklyValueReportCard" class="card sc-card hidden">
-            <h2>Weekly Value Report</h2>
-            <p class="muted">
-              Local-only weekly summary from your saved captures and collected URLs.
-            </p>
+            <div class="section-header">
+              <div class="section-copy">
+                <div class="section-kicker">Local summary</div>
+                <h2>Weekly Value Report</h2>
+                <p class="muted">
+                  Local-only weekly summary from your saved captures and collected URLs.
+                </p>
+              </div>
+              <div class="spec-pill-row" aria-label="Weekly report summary">
+                <span class="spec-pill sc-pill">7 days</span>
+                <span class="spec-pill sc-pill">Captures</span>
+                <span class="spec-pill sc-pill">URLs</span>
+              </div>
+            </div>
             <div class="value-report-grid">
               <div class="value-report-item">
                 <span class="value-report-label">Captures saved (7d)</span>
@@ -235,8 +298,20 @@
 
         <section class="settings-section hidden" data-settings-section="privacy-permissions">
           <section class="card sc-card">
-            <h2>Optional Permissions</h2>
-            <p class="muted">Downloads permission can be granted or revoked on demand.</p>
+            <div class="section-header">
+              <div class="section-copy">
+                <div class="section-kicker">Access control</div>
+                <h2>Optional Permissions</h2>
+                <p class="muted">
+                  Grant or revoke downloads access on demand without changing the core capture flow.
+                </p>
+              </div>
+              <div class="spec-pill-row" aria-label="Permission summary">
+                <span class="spec-pill sc-pill">Local only</span>
+                <span class="spec-pill sc-pill">One-click saves</span>
+                <span class="spec-pill sc-pill">Fallback supported</span>
+              </div>
+            </div>
             <p class="muted">
               Why this permission: enables one-click file saving directly from preview exports.
               Without it, browser fallback downloads are used.
@@ -253,10 +328,15 @@
           </section>
 
           <section class="card sc-card">
-            <h2>Permission Scope &amp; Status</h2>
-            <p class="muted">
-              What each permission does for you and whether it is currently available.
-            </p>
+            <div class="section-header">
+              <div class="section-copy">
+                <div class="section-kicker">Availability map</div>
+                <h2>Permission Scope &amp; Status</h2>
+                <p class="muted">
+                  What each permission does for you and whether it is currently available.
+                </p>
+              </div>
+            </div>
             <div class="perm-list" role="list" aria-label="Permission status list">
               <div class="perm-item" role="listitem">
                 <div class="perm-text">
@@ -344,18 +424,38 @@
 
         <section class="settings-section hidden" data-settings-section="advanced">
           <section id="onboardingBanner" class="card sc-card onboarding-banner hidden">
-            <h2>Welcome to THE Collector</h2>
-            <p class="muted">
-              Capture full pages and collect links quickly. Start in the popup, and use this page to
-              tune behavior and permissions.
-            </p>
+            <div class="section-header">
+              <div class="section-copy">
+                <div class="section-kicker">First run</div>
+                <h2>Welcome to THE Collector</h2>
+                <p class="muted">
+                  Capture full pages and collect links quickly. Start in the popup, and use this
+                  page to tune behavior and permissions.
+                </p>
+              </div>
+              <div class="spec-pill-row" aria-label="Onboarding summary">
+                <span class="spec-pill sc-pill">Popup first</span>
+                <span class="spec-pill sc-pill">Local save</span>
+                <span class="spec-pill sc-pill">Restricted pages stay restricted</span>
+              </div>
+            </div>
             <p class="muted">
               If capture fails on restricted pages, switch to a regular website tab and try again.
             </p>
           </section>
           <section class="card sc-card">
-            <h2>Host Access</h2>
-            <p class="muted">This build uses active-tab capture scope by default.</p>
+            <div class="section-header">
+              <div class="section-copy">
+                <div class="section-kicker">Scope</div>
+                <h2>Host Access</h2>
+                <p class="muted">This build uses active-tab capture scope by default.</p>
+              </div>
+              <div class="spec-pill-row" aria-label="Host access summary">
+                <span class="spec-pill sc-pill">Active tab</span>
+                <span class="spec-pill sc-pill">Browser controls apply</span>
+                <span class="spec-pill sc-pill">No remote calls</span>
+              </div>
+            </div>
             <p class="muted">
               For restricted pages, browser-level site access controls still apply.
             </p>
@@ -364,11 +464,40 @@
 
         <section class="settings-section hidden" data-settings-section="help-faq">
           <section class="card sc-card">
-            <h2>Help &amp; FAQ</h2>
-            <p class="muted">
-              THE Collector helps you save useful pages fast and find them again when you need them.
-              You can capture full pages, collect URLs, and organize everything in one place.
-            </p>
+            <div class="section-header">
+              <div class="section-copy">
+                <div class="section-kicker">Guidance</div>
+                <h2>Help &amp; FAQ</h2>
+                <p class="muted">
+                  THE Collector helps you save useful pages fast and find them again when you need
+                  them.
+                </p>
+              </div>
+              <div class="spec-pill-row" aria-label="Help summary">
+                <span class="spec-pill sc-pill">Local only</span>
+                <span class="spec-pill sc-pill">Free forever</span>
+                <span class="spec-pill sc-pill">Basic / Pro / Ultra</span>
+              </div>
+            </div>
+            <div class="help-steps" aria-label="Quick start summary">
+              <div class="help-step">
+                <strong>1. Capture</strong>
+                <span>Use the popup to save a page or collect a URL in a single pass.</span>
+              </div>
+              <div class="help-step">
+                <strong>2. Organize</strong>
+                <span
+                  >Pick your tier, profile, and defaults from Settings when you want more
+                  control.</span
+                >
+              </div>
+              <div class="help-step">
+                <strong>3. Return later</strong>
+                <span
+                  >Use Screenshots or URL Library to search, filter, and revisit saved work.</span
+                >
+              </div>
+            </div>
             <p class="muted">
               Don&apos;t worry, your data stays on your device. The extension does not upload your
               screenshots, URL lists, or settings. THE Collector is free forever.
@@ -381,7 +510,15 @@
           </section>
 
           <section class="card sc-card">
-            <h2>Frequently Asked Questions</h2>
+            <div class="section-header">
+              <div class="section-copy">
+                <div class="section-kicker">FAQ</div>
+                <h2>Frequently Asked Questions</h2>
+                <p class="muted">
+                  Fast answers for the most common capture, review, and settings questions.
+                </p>
+              </div>
+            </div>
             <div class="faq-list">
               <details class="faq-item">
                 <summary>How do I save a page quickly?</summary>
@@ -595,6 +732,6 @@
       </div>
     </main>
 
-    <script type="module" src="options.js"></script>
+    <script type="module" src="options.js?v=1.9.99.0"></script>
   </body>
 </html>

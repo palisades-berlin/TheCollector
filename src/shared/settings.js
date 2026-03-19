@@ -8,7 +8,7 @@ const SETTINGS_DEFAULTS = {
   downloadDirectory: '',
   saveAs: false,
   fitClipboardToDocsLimit: true,
-  theme: 'system', // system | light | dark
+  theme: 'dark', // dark | light | system
   nudgesEnabled: false,
   notificationCadence: 'balanced', // low | balanced | high
   autoPurgeEnabled: true,
@@ -116,7 +116,7 @@ function normalizeFitClipboardToDocsLimit(v) {
 
 function normalizeTheme(v) {
   if (v === 'light' || v === 'dark') return v;
-  return 'system';
+  return 'dark';
 }
 
 function normalizeNudgesEnabled(v) {

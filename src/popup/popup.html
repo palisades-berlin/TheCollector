@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <title>THE Collector</title>
-    <link rel="stylesheet" href="../shared/ui.css" />
-    <link rel="stylesheet" href="popup.css" />
+    <link rel="stylesheet" href="../shared/ui.css?v=1.9.99.0" />
+    <link rel="stylesheet" href="popup.css?v=1.9.99.0" />
+    <script src="../shared/browser-chrome-shim.js?v=1.9.99.0"></script>
   </head>
   <body>
     <div class="header">
@@ -49,6 +50,21 @@
         Library
       </button>
     </div>
+
+    <section class="capture-intro sc-card" aria-label="Quick capture overview">
+      <div class="capture-intro-copy">
+        <div class="capture-intro-kicker">Quick capture</div>
+        <p>
+          Save the current page, queue multiple tabs, or jump to the URL library when you need more
+          structure.
+        </p>
+      </div>
+      <div class="capture-intro-pills" aria-label="Capture shortcuts">
+        <span class="sc-pill">One click</span>
+        <span class="sc-pill">Queue tabs</span>
+        <span class="sc-pill">Library view</span>
+      </div>
+    </section>
 
     <section id="capturePanel" class="panel" role="tabpanel" aria-labelledby="captureTabBtn">
       <div class="action-section">
@@ -177,7 +193,19 @@
     </section>
 
     <section id="urlsPanel" class="panel hidden" role="tabpanel" aria-labelledby="urlsTabBtn">
-      <div class="add-section">
+      <div class="add-section sc-card">
+        <div class="section-copy popup-panel-copy">
+          <div class="capture-intro-kicker">URL capture</div>
+          <p>
+            Collect the current tab, bulk-add windows, or jump to the full library when you need
+            filters, notes, and tags.
+          </p>
+        </div>
+        <div class="capture-intro-pills" aria-label="URL capture shortcuts">
+          <span class="sc-pill">Current tab</span>
+          <span class="sc-pill">Bulk add</span>
+          <span class="sc-pill">Library view</span>
+        </div>
         <button
           class="btn-add sc-btn sc-btn-primary sc-btn-md sc-btn-block"
           id="btn-add"
@@ -205,24 +233,43 @@
       <div class="list-wrapper">
         <div id="url-list"></div>
         <div id="empty-state" class="empty sc-state-empty" role="status" aria-live="polite">
-          <span class="empty-title">No URLs collected yet</span>
+          <div class="sc-empty-card">
+            <div class="sc-empty-card-visual" aria-hidden="true"></div>
+            <div class="empty-copy-wrap">
+              <span class="empty-title sc-empty-card-title">No URLs collected yet</span>
+              <p class="empty-copy sc-empty-card-copy">
+                Save any page, snippet, or screenshot to build your collection.
+              </p>
+            </div>
+            <button
+              id="emptySaveCurrentBtn"
+              class="empty-cta sc-btn sc-btn-primary sc-btn-md sc-btn-block sc-empty-card-cta"
+              type="button"
+            >
+              Save current page
+            </button>
+          </div>
         </div>
       </div>
 
       <div class="footer url-footer">
         <div class="footer-row">
-          <button class="btn-footer sc-btn sc-btn-sm" id="btn-copy" aria-label="Copy all URLs">
+          <button
+            class="btn-footer sc-btn sc-btn-secondary sc-btn-sm"
+            id="btn-copy"
+            aria-label="Copy all URLs"
+          >
             Copy
           </button>
           <button
-            class="btn-footer sc-btn sc-btn-sm"
+            class="btn-footer sc-btn sc-btn-ghost sc-btn-sm"
             id="btn-export"
             aria-label="Save URLs as text file"
           >
             TXT
           </button>
           <button
-            class="btn-footer sc-btn sc-btn-sm"
+            class="btn-footer sc-btn sc-btn-ghost sc-btn-sm"
             id="btn-export-csv"
             aria-label="Save URLs as CSV file"
           >
@@ -231,13 +278,17 @@
         </div>
         <div class="footer-row">
           <button
-            class="btn-footer sc-btn sc-btn-sm"
+            class="btn-footer sc-btn sc-btn-secondary sc-btn-sm"
             id="btn-restore"
             aria-label="Restore last cleared URLs"
           >
             Restore Last Clear
           </button>
-          <button class="btn-footer sc-btn sc-btn-sm" id="btn-email" aria-label="Email URLs">
+          <button
+            class="btn-footer sc-btn sc-btn-secondary sc-btn-sm"
+            id="btn-email"
+            aria-label="Email URLs"
+          >
             Email
           </button>
           <button
@@ -260,6 +311,6 @@
       </div>
     </section>
 
-    <script type="module" src="popup.js"></script>
+    <script type="module" src="popup.js?v=1.9.99.0"></script>
   </body>
 </html>

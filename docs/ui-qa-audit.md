@@ -1,5 +1,9 @@
 # UI QA Audit - Multi-Pass Calibration
 
+> **Legacy snapshot:** This document preserves the historical QA contract for the pre-reset light/Poppins baseline. It is **not authoritative** for current DS 2.0 implementation work.
+> **Active authority:** use the dark premium Figma direction documented in `docs/visual-system-direction-2026-03-13.md`, `docs/visual-design-uplift-2026-03-13.md`, `docs/design-overhaul-master-plan-2026-03-13.md`, plus Figma itself.
+> **Historical value only:** keep this file for regression context, not as a target spec.
+
 ## Purpose
 
 This document is the implementation QA contract for exhaustive UX/UI verification across all extension surfaces while preserving business logic and API behavior.
@@ -8,7 +12,7 @@ This document is the implementation QA contract for exhaustive UX/UI verificatio
 - Figma file key: `sECUN6qSqUygWoG7PhC548`
 - Active handoff node: `19:2` (`THECollector - Final Handoff Ops`)
 - Code contract source: `src/shared/ui.css` + `docs/ui-handoff.md`
-- Theme scope: Light mode
+- Theme scope: Light mode (historical baseline)
 
 ## Audit Scope
 
@@ -78,7 +82,7 @@ State coverage target:
 
 ### Typography and Color
 
-- Font family: Poppins
+- Font family: Poppins (historical baseline)
 - Semantic sizes from shared tokens (`--sc-font-*`)
 - Line heights from shared tokens (`--sc-lh-*`)
 - Semantic color usage only (`--sc-color-*` and surface aliases)

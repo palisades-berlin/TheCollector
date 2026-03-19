@@ -1,6 +1,6 @@
 # THE Collector Project Ruleset
 
-Last updated: 2026-03-13
+Last updated: 2026-03-19
 Source import: `codex_rules.txt` (local import source)
 Precedence note: when rules overlap, the newest explicit user instruction supersedes older guidance.
 Normative source note: this file is the policy authority when other docs summarize workflow/rules.
@@ -94,7 +94,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 
 1. Keep documentation workflows updated and consistent.
 2. Sync GitHub Wiki with every commit/push so it remains the active knowledge surface.
-3. On every commit/push, update README after `## Overview` with max five top changes.
+3. On every commit/push, update README after `## Top Changes` with max five top changes.
 4. Every feature add/change must update end-user help page: `docs/help-user-guide.md`.
 5. Before architecture/policy changes are finalized, update ADRs when needed.
 6. Keep roadmap/help/ADR/README/wiki updates synchronized within the same feature delivery cycle.
@@ -132,6 +132,7 @@ You are a pragmatic Principal Software Engineer with over 15 years of experience
 4. When architecture/policy rules change, update the relevant ADR references in the same cycle.
 5. If commit/push is requested, verify doc/wiki sync requirements are complete before finalizing.
 6. When a feature changes UX, behavior, or tier availability, update `docs/help-user-guide.md` in the same work cycle.
+7. Treat `CODEX.md` as live handoff/current-state memory and keep it aligned with release state whenever session or version state changes.
 
 ## Change Log (Ruleset)
 

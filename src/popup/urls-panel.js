@@ -35,6 +35,7 @@ const emailBtn = document.getElementById('btn-email');
 const restoreBtn = document.getElementById('btn-restore');
 const clearBtn = document.getElementById('btn-clear');
 const openLibraryBtn = document.getElementById('btn-open-url-library');
+const emptySaveCurrentBtn = document.getElementById('emptySaveCurrentBtn');
 
 const mutations = createUrlMutations({
   isHistoryViewOpen: () => false,
@@ -204,6 +205,10 @@ function wirePrimaryEvents() {
     } catch (err) {
       reportError(err, 'Could not add current tab URL');
     }
+  });
+
+  emptySaveCurrentBtn?.addEventListener('click', () => {
+    addBtn.click();
   });
 
   addAllBtn.addEventListener('click', async () => {

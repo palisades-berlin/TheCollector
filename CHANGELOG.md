@@ -1,16 +1,40 @@
 # Changelog
 
+## 1.9.99.1 - 2026-03-19
+
+### Changed
+
+- Docs-only housekeeping cleanup synced `CODEX.md` with the current release state, corrected maintainer policy wording (`README.md ## Top Changes`), and archived the repo assessment snapshot.
+- `docs/dev-workflow.md` and the maintainer policy docs now treat `CODEX.md` as live handoff/current-state memory and include it in version-sync guidance.
+- `docs/repo-assessment-2026-03-13.md` moved to `docs/archive/repo-assessment-2026-03-13.md`; remaining references were updated accordingly.
+
+## 1.9.99.0 - 2026-03-19
+
+### Changed
+
+- Preview toolbar regrouped into labeled browse/export/preset/zoom clusters for clearer hierarchy.
+- URL Library bulk actions now separate primary selection controls from secondary operations.
+- Dark premium visual baseline remains intact; this pass refined control grouping on the busiest surfaces.
+
+## 1.9.98.0 - 2026-03-19
+
+### Changed
+
+- Restored the dark premium visual baseline in shared tokens and main surfaces; legacy design-system docs are now explicitly marked historical/non-authoritative.
+- Reinstated the documented Poppins stack and moved the shared surfaces closer to the glass-layered dark recipe from the visual direction docs.
+- De-emphasized secondary action rows in the URL Library and popup so the hierarchy reads more like a premium workspace.
+
 ## 1.9.97.21 - 2026-03-19
 
 ### Changed
 
 - Housekeeping remediation cycle completed for documentation/config governance (no runtime behavior changes).
-- Added `.github/PULL_REQUEST_TEMPLATE.md` and updated stale PR-template reference in `docs/repo-assessment-2026-03-13.md`.
+- Added `.github/PULL_REQUEST_TEMPLATE.md` and updated stale PR-template reference in `docs/archive/repo-assessment-2026-03-13.md`.
 - `CONTRIBUTING.md`: restored active UX/UI authority guidance to Figma-first (ADR 0016) with canonical file key.
 - `CODEX.md`: synchronized current sprint/watchouts to ADR 0016 reset state (Phase 0 restart-required, Phase 1 blocked) and removed stale resolved-watchout claims.
 - `docs/ui-handoff.md`: corrected historical identifier labeling to `Penpot Import ID (historical)` for legacy imported UUIDs.
 - `AGENTS.md` + `CLAUDE.md`: pre-commit checklist wording corrected from `README ## Overview` to `README ## Top Changes`; version synchronized.
-- `docs/repo-assessment-2026-03-13.md`: added explicit historical/non-authoritative banner with links to current authority docs.
+- `docs/archive/repo-assessment-2026-03-13.md`: added explicit historical/non-authoritative banner with links to current authority docs.
 - Added marker-block sync helper script (`scripts/sync-marker-blocks.mjs`) plus npm command `npm run sync:marker-blocks`; documented helper usage in `docs/marker-sync-contract.md`.
 
 ## 1.9.97.20 - 2026-03-19
