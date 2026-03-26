@@ -6,7 +6,7 @@ Manifest V3 browser extension for Chrome and Edge that combines full-page screen
 [![Coverage Gate](https://img.shields.io/badge/Coverage%20Gate-%E2%89%A590%25%20lines-brightgreen)](./package.json)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
-Current extension version: `1.9.99.1`.
+Current extension version: `1.9.98.0`.
 
 ## Overview
 
@@ -33,10 +33,11 @@ Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
 ## Top Changes
 
-- Docs-only housekeeping cleanup bumped the repo to `1.9.99.1`, synchronized `CODEX.md`, and archived the repo assessment snapshot.
-- Policy wording now says `README.md ## Top Changes`, and maintainer docs treat `CODEX.md` as live handoff/current-state memory.
-- Dark premium baseline remains intact; Preview and URL Library hierarchy changes stay in place.
-- Legacy docs remain historical snapshots, not active authority.
+- Synced the THECollector Notion hub current version line to `1.9.98.0` and refreshed the commit/push handoff docs (`1.9.98.0`).
+- Added rule: if an unknown Notion page is found outside a session, read it and ask maintainer before proceeding (`1.9.99.3`).
+- All `/docs` directory files moved to Notion as single source of truth (`1.9.99.2`).
+- `CLAUDE.md`, `AGENTS.md`, `CODEX.md`, `SESSION.md` updated with Notion URLs replacing `docs/` path references.
+- Only `docs/help-user-guide.md` and `docs/marker-sync-contract.json` remain in repo (runtime dependencies).
 
 ## Versioning Migration Note
 
@@ -220,7 +221,7 @@ npm run check
 
 ## Developer checks
 
-Canonical developer and release operations live in `docs/dev-workflow.md` to avoid drift:
+Canonical developer and release operations live in [Notion: Developer Workflow](https://www.notion.so/32fcb6782fcf8117ac25e12e9ac76432) to avoid drift:
 
 - install/setup
 - local quality checks
@@ -286,11 +287,9 @@ Phase A focuses on dead-permission cleanup only. Current audit result: no remova
 - Optional: `downloads`
   - Requested/revoked by user in Settings; used only for explicit export/download flows.
 
-Canonical store-facing permission rationale: [docs/chrome-web-store-permissions.md](./docs/chrome-web-store-permissions.md).
+Canonical store-facing permission rationale: [Notion: Chrome Web Store Permissions](https://www.notion.so/32fcb6782fcf81d38318c5d80ace9612).
 
 Next refinement phases should focus on architectural reductions (not blind permission removal), especially around large-capture storage strategy.
-
-For Chrome Web Store submission copy text, see `docs/chrome-web-store-permissions.md`.
 
 ## Current Constraints
 
@@ -307,6 +306,8 @@ THE Collector/
 ├── manifest.json
 ├── assets/icons/
 ├── docs/
+│   ├── help-user-guide.md        # runtime: user-facing help content
+│   └── marker-sync-contract.json # runtime: doc-policy enforcement
 ├── tools/            # local developer utilities
 └── src/
    ├── background/      # service worker
@@ -321,10 +322,13 @@ THE Collector/
 
 ## Internal Docs
 
-- [Architecture](./docs/architecture.md)
-- [Developer Workflow](./docs/dev-workflow.md)
-- [UI Handoff](./docs/ui-handoff.md)
-- [Roadmap](./docs/thecollector-2.0-90-day-roadmap.md)
+All project documentation lives in [Notion: THECollector](https://www.notion.so/32fcb6782fcf81a5bc9dc9c3ace3c873).
+
+- [Architecture](https://www.notion.so/32fcb6782fcf81b5904ecb5322257386)
+- [Developer Workflow](https://www.notion.so/32fcb6782fcf8117ac25e12e9ac76432)
+- [UI Handoff](https://www.notion.so/32fcb6782fcf811f904ddacb264806bd)
+- [90-Day Roadmap](https://www.notion.so/32fcb6782fcf8111aafbe748a4c2a040)
+- [ADRs](https://www.notion.so/32fcb6782fcf81fd9b93da7d29c86084)
 - [End-User Help Guide](./docs/help-user-guide.md)
 - [Contributing Guide](./CONTRIBUTING.md)
 
@@ -360,4 +364,4 @@ Milestones in delivery order:
 - Team Spaces Lite MVP (self-contained ZIP + viewer.html export)
 - Firefox baseline (architecture spike first)
 
-Full roadmap: `docs/thecollector-2.0-90-day-roadmap.md`
+Full roadmap: [Notion: 90-Day Roadmap](https://www.notion.so/32fcb6782fcf8111aafbe748a4c2a040)

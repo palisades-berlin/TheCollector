@@ -12,7 +12,7 @@ Codex-only working memory for `THE Collector`.
 - Phase 0 is restart-required under ADR 0016 (no active sign-off in force).
 - Phase 1 code remains blocked until Figma Phase 0 (0-A through 0-F) is re-completed and signed off.
 - Immediate focus: keep governance/planning docs aligned while design restarts in Figma.
-- `docs/archive/repo-assessment-2026-03-13.md` has been archived; keep any lingering references pointed at the archived copy.
+- [Notion: Repo Assessment 2026-03-13](https://www.notion.so/32fcb6782fcf81e09ea7cf90c70a85cc) has been archived in Notion (Archive section); keep any lingering references pointed at the archived copy.
 - **Before starting design-derived code work — two pre-tasks:**
   1. Verify Figma Phase 0 gate status in roadmap/master/handoff docs is current and consistent.
   2. Verify Figma calibration contracts (`scripts/check-ui-calibration-contract.mjs` and `tests/visual/ui-parity.spec.mjs`) remain aligned to the canonical Figma source-of-truth.
@@ -21,10 +21,41 @@ Codex-only working memory for `THE Collector`.
 
 - `THE Collector` is a Manifest V3 Chrome/Edge extension.
 - It combines full-page screenshot capture with URL collection and review surfaces.
-- Current extension version: `1.9.99.1`.
+- Current extension version: `1.9.98.0`.
 - The product is free forever, local-only, and has no external connections or user tracking.
 - The `Basic` / `Pro` / `Ultra` selector is a UX complexity preference, not a paywall.
-- Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
+- Roadmap source of truth: [Notion: 90-Day Roadmap](https://www.notion.so/32fcb6782fcf8111aafbe748a4c2a040).
+
+## Notion Sync Rule
+
+**Notion is the single source of truth for all project documentation.**
+Workspace: [THECollector](https://www.notion.so/32fcb6782fcf81a5bc9dc9c3ace3c873)
+Policy precedence: [Project Ruleset](https://www.notion.so/32fcb6782fcf813f93d6ed2aa1b8a6aa) is the normative rules source.
+
+**Session start — read, compare, reconcile before any work:** fetch these Notion pages:
+
+- [Developer Workflow](https://www.notion.so/32fcb6782fcf8117ac25e12e9ac76432) — release policy, local checks, packaging
+- [Project Ruleset](https://www.notion.so/32fcb6782fcf813f93d6ed2aa1b8a6aa) — engineering rules, help rules, versioning
+- [90-Day Roadmap](https://www.notion.so/32fcb6782fcf8111aafbe748a4c2a040) — milestone status, constraints
+- [ADRs](https://www.notion.so/32fcb6782fcf81fd9b93da7d29c86084) — active architectural decisions
+- [UI Handoff](https://www.notion.so/32fcb6782fcf811f904ddacb264806bd) — Claude / design sessions only
+
+If Notion MCP is unavailable at session start, **stop and inform the maintainer**. Do not proceed on stale local copies.
+
+After fetching, compare Notion content against `CODEX.md`, `AGENTS.md`, and `SESSION.md`. If Notion has changed since the last session, update the affected repo files to match Notion before starting any task. If the difference is ambiguous or contradictory — **stop and ask the maintainer. Do not silently reconcile.**
+
+When browsing the [THECollector Notion workspace](https://www.notion.so/32fcb6782fcf81a5bc9dc9c3ace3c873), if you discover a page that was created outside a session (i.e., it has no reference in any repo context file and was not created by this tool in a prior session), **read it in full, then stop and ask the maintainer how to handle it** before proceeding. Do not assume it is stale, duplicate, or irrelevant.
+
+**During session and at session end:** update the relevant Notion page(s) in the same work cycle when:
+
+- Architecture or policy decision made → [ADRs](https://www.notion.so/32fcb6782fcf81fd9b93da7d29c86084) (create or update)
+- Roadmap scope or milestone status changes → [90-Day Roadmap](https://www.notion.so/32fcb6782fcf8111aafbe748a4c2a040)
+- Dev workflow, release, or quality policy changes → [Developer Workflow](https://www.notion.so/32fcb6782fcf8117ac25e12e9ac76432)
+- Project rules, help rules, or versioning policy changes → [Project Ruleset](https://www.notion.so/32fcb6782fcf813f93d6ed2aa1b8a6aa)
+
+Before updating `SESSION.md`, verify that all affected Notion pages reflect the current state.
+
+**New documentation must be created in Notion only.** Do not create new `.md` or doc files in the repo. All new ADRs, design specs, planning docs, and reference material go into the [THECollector Notion workspace](https://www.notion.so/32fcb6782fcf81a5bc9dc9c3ace3c873). Repo exceptions (runtime only): `docs/help-user-guide.md` and `docs/marker-sync-contract.json`.
 
 ## Non-Negotiable Rules
 
@@ -187,12 +218,12 @@ Codex-only working memory for `THE Collector`.
 
 ## Current Watchouts
 
-- `docs/archive/repo-assessment-2026-03-13.md` is a historical snapshot, not current state.
-- `docs/thecollector-2.0-90-day-roadmap.md` intentionally preserves historical baseline entries while marking current-state reset under ADR 0016.
+- [Notion: Repo Assessment 2026-03-13](https://www.notion.so/32fcb6782fcf81e09ea7cf90c70a85cc) is a historical snapshot in Notion (Archive), not current state.
+- [Notion: 90-Day Roadmap](https://www.notion.so/32fcb6782fcf8111aafbe748a4c2a040) intentionally preserves historical baseline entries while marking current-state reset under ADR 0016.
 - `src/popup/urls-panel.js` is a transitional quick surface that coexists with the canonical `src/urls/urls.js`.
 - `src/background/message-router.js` and `src/shared/url-repo.js` are high-coupling seams.
 - The protocol injection bridge in capture is a brittle seam and should be handled carefully.
-- Figma calibration constants are authoritative for visual parity (`scripts/check-ui-calibration-contract.mjs`, `tests/visual/ui-parity.spec.mjs`) and must stay in sync with `docs/ui-handoff.md`.
+- Figma calibration constants are authoritative for visual parity (`scripts/check-ui-calibration-contract.mjs`, `tests/visual/ui-parity.spec.mjs`) and must stay in sync with [Notion: UI Handoff](https://www.notion.so/32fcb6782fcf811f904ddacb264806bd).
 
 ## Documentation Integrity
 

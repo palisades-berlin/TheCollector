@@ -47,7 +47,7 @@ await runTest('getSettings normalizes invalid values and legacy autoDownload fla
     downloadDirectory: 'UnsafeFolder/nested',
     saveAs: true,
     fitClipboardToDocsLimit: true,
-    theme: 'system',
+    theme: 'dark',
     nudgesEnabled: false,
     notificationCadence: 'balanced',
     autoPurgeEnabled: true,

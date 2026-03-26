@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.9.98.0 - 2026-03-26
+
+### Changed
+
+- Bumped the commit/push checkpoint to `1.9.98.0` across repo handoff files and synchronized the THECollector Notion hub current version line.
+- Refreshed `SESSION.md` to reflect the current commit/push checkpoint.
+
+## 1.9.99.3 - 2026-03-26
+
+### Changed
+
+- Added unknown-Notion-page rule to all AI context files (`AGENTS.md`, `CLAUDE.md`, `CODEX.md`) and all opening prompts (`SESSION.md`, `WORKFLOW.md`): if a Notion page is discovered with no repo reference and not created in a prior session, read it and ask the maintainer how to handle it before proceeding.
+- Updated Developer Workflow and Project Ruleset Notion pages with same rule (Inbound section).
+
+## 1.9.99.2 - 2026-03-26
+
+### Changed
+
+- All `/docs` directory files (35 docs: ADRs, roadmap, design plans, engineering refs, AI prompts, archive) moved to Notion as single source of truth.
+- `CLAUDE.md`, `AGENTS.md`, `CODEX.md`, `SESSION.md` updated with Notion URLs replacing all `docs/` path references.
+- `docs/help-user-guide.md` and `docs/marker-sync-contract.json` remain in repo as runtime dependencies.
+- THECollector Notion workspace: https://www.notion.so/32fcb6782fcf81a5bc9dc9c3ace3c873
+
 ## 1.9.99.1 - 2026-03-19
 
 ### Changed

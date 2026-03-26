@@ -3,7 +3,7 @@
 ## Project Summary
 
 `THE Collector` is a Chrome/Edge extension (Manifest V3) that combines full-page screenshot capture with URL collection.
-Current extension version: `1.9.99.1`.
+Current extension version: `1.9.98.0`.
 The extension is **free forever** — no subscriptions, no payments, no paid tiers. The tier selector (Basic / Pro / Ultra) is a UX complexity preference, not a paywall. See ADR 0009.
 Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance and my fantasy.
 
@@ -19,7 +19,7 @@ Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance 
 <!-- ROADMAP_MILESTONES:END -->
 - Design System 2.0 is v2.0 item #1: token migration across all surfaces must complete before any v2.0 feature work begins. See ADR 0010.
 <!-- ROADMAP_AUTHORITY:START -->
-- Roadmap source of truth: `docs/thecollector-2.0-90-day-roadmap.md`.
+- Roadmap source of truth: [Notion: 90-Day Roadmap](https://www.notion.so/32fcb6782fcf8111aafbe748a4c2a040).
 <!-- ROADMAP_AUTHORITY:END -->
 
 ## Figma MCP
@@ -27,6 +27,56 @@ Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance 
 - All design work uses Figma as the UX/UI source of truth.
 - Figma MCP should be available for design-context fetches (`get_design_context`, `get_screenshot`, `get_metadata`) during implementation and audits.
 - If Figma MCP is unavailable, stop and ask the maintainer before proceeding with design-derived changes.
+
+## Notion Sync Rule
+
+<!-- NOTION_SYNC_RULE:START -->
+
+**Notion is the single source of truth for all project documentation.**
+Workspace: [THECollector](https://www.notion.so/32fcb6782fcf81a5bc9dc9c3ace3c873)
+Policy precedence: [Project Ruleset](https://www.notion.so/32fcb6782fcf813f93d6ed2aa1b8a6aa) is the normative rules source.
+
+### Mandatory at session start — read, compare, reconcile before any work
+
+Every tool (Claude, Codex, Perplexity) **must** fetch the following Notion pages before starting any task:
+
+- [Developer Workflow](https://www.notion.so/32fcb6782fcf8117ac25e12e9ac76432) — release policy, local checks, packaging
+- [Project Ruleset](https://www.notion.so/32fcb6782fcf813f93d6ed2aa1b8a6aa) — engineering rules, help rules, versioning
+- [90-Day Roadmap](https://www.notion.so/32fcb6782fcf8111aafbe748a4c2a040) — milestone status, constraints
+- [ADRs](https://www.notion.so/32fcb6782fcf81fd9b93da7d29c86084) — active architectural decisions
+- [UI Handoff](https://www.notion.so/32fcb6782fcf811f904ddacb264806bd) — Claude / design sessions only
+
+If Notion MCP is unavailable at session start, **stop and inform the maintainer**. Do not proceed on stale local copies.
+
+After fetching, compare Notion content against `CLAUDE.md`, `AGENTS.md`, `CODEX.md`, and `SESSION.md`. If Notion has changed since the last session, update the affected repo files to match Notion before starting any task. If the difference is ambiguous or contradictory — **stop and ask the maintainer. Do not silently reconcile.**
+
+When browsing the [THECollector Notion workspace](https://www.notion.so/32fcb6782fcf81a5bc9dc9c3ace3c873), if you discover a page that was created outside a session (i.e., it has no reference in any repo context file and was not created by this tool in a prior session), **read it in full, then stop and ask the maintainer how to handle it** before proceeding with any task. Do not assume it is stale, duplicate, or irrelevant.
+
+### Mandatory during session and at session end — update Notion when affected
+
+Any tool that modifies content covered by a Notion-hosted doc must update the relevant Notion page(s) in the same work cycle — do not defer to the next session.
+
+| Change or decision                       | Required Notion update                                                                |
+| ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| Architecture or policy decision          | [ADRs](https://www.notion.so/32fcb6782fcf81fd9b93da7d29c86084) — create or update ADR |
+| Roadmap scope or milestone status        | [90-Day Roadmap](https://www.notion.so/32fcb6782fcf8111aafbe748a4c2a040)              |
+| Dev workflow, release, or quality policy | [Developer Workflow](https://www.notion.so/32fcb6782fcf8117ac25e12e9ac76432)          |
+| Project rules, help rules, or versioning | [Project Ruleset](https://www.notion.so/32fcb6782fcf813f93d6ed2aa1b8a6aa)             |
+| UI/UX source of truth or handoff spec    | [UI Handoff](https://www.notion.so/32fcb6782fcf811f904ddacb264806bd)                  |
+| Design plans or visual direction         | [Design & UX](https://www.notion.so/32fcb6782fcf81878705f3fa30fd195e)                 |
+
+**At session end:** before updating `SESSION.md`, verify that all affected Notion pages reflect the current state.
+
+### New documentation must be created in Notion only
+
+Do not create new documentation files in the repo. All new ADRs, design specs, planning docs, workflow docs, and reference material must be created in the [THECollector Notion workspace](https://www.notion.so/32fcb6782fcf81a5bc9dc9c3ace3c873).
+
+Repo exceptions (runtime dependencies — do not move or duplicate these):
+
+- `docs/help-user-guide.md` — consumed by `scripts/check-doc-policy.mjs`
+- `docs/marker-sync-contract.json` — consumed by `scripts/marker-sync-lib.mjs`
+
+<!-- NOTION_SYNC_RULE:END -->
 
 ## Behavioural Rules
 
@@ -70,7 +120,7 @@ Implementation credit: Implemented with Codex AI, Claude, Perplexity assistance 
 - Bump policy:
   - code/runtime change: bump `z`, reset `w=0`
   - docs/tests-only change: bump `w` only (smallest bump)
-- Sync version in `manifest.json`, `package.json`, `README.md`, `CHANGELOG.md`, `AGENTS.md`, and `CLAUDE.md` together.
+- Sync version in `manifest.json`, `package.json`, `README.md`, `CHANGELOG.md`, `AGENTS.md`, `CLAUDE.md`, and `CODEX.md` together.
 - On every requested commit/push, sync GitHub Wiki `Home.md` in `https://github.com/palisades-berlin/TheCollector.wiki.git` in the same working session.
 - Packaging discipline: release archives must exclude local/development artifacts (`node_modules`, `.git`, tests, and local notes/docs not required by runtime).
 - Permission-scope policy (Phase A): remove only demonstrably dead permissions; do not remove permissions that are runtime-required for capture/export flows.
@@ -93,21 +143,21 @@ Run this in order before every commit/push. No exceptions.
 
 ### Conditional — only when the commit touches the relevant area
 
-| Trigger                                           | Required action                                                                                                                                                                                                            |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Feature, UX, or tier behavior changed             | Update `docs/help-user-guide.md` + `src/options/options.html` Help & FAQ                                                                                                                                                   |
-| New feature ships                                 | Remove phrase(s) from `UNSHIPPED_PHRASES` in `scripts/check-doc-policy.mjs`; add feature to both help surfaces                                                                                                             |
-| Roadmap scope or status changed                   | Update `docs/thecollector-2.0-90-day-roadmap.md`                                                                                                                                                                           |
-| Architecture or policy decision made              | Create or update ADR in `docs/adr/`                                                                                                                                                                                        |
-| `docs/help-user-guide.md` changed                 | Run `docs/codex-prompt-help-faq-regeneration.md` to regenerate `src/options/options.html` FAQ section                                                                                                                      |
-| `README.md` changed                               | Refresh wiki Home.md Overview section                                                                                                                                                                                      |
-| `docs/dev-workflow.md` changed                    | Refresh wiki Home.md workflow section                                                                                                                                                                                      |
-| `docs/ui-handoff.md` changed                      | Refresh wiki Home.md UI/UX section                                                                                                                                                                                         |
-| `docs/thecollector-2.0-90-day-roadmap.md` changed | Refresh wiki Home.md roadmap section                                                                                                                                                                                       |
-| `AGENTS.md` changed                               | Refresh wiki Home.md workflow section; mirror any structural changes to `CLAUDE.md` in the same work cycle                                                                                                                 |
-| `CODEX.md` changed                                | Refresh wiki Home.md workflow section                                                                                                                                                                                      |
-| `CLAUDE.md` changed                               | Refresh wiki Home.md workflow section; mirror any structural changes to `AGENTS.md` in the same work cycle                                                                                                                 |
-| Phase gate or milestone sign-off recorded         | Cross-doc alignment sweep: (1) SESSION.md version current, (2) roadmap phase status updated, (3) CODEX.md `## Current Sprint` updated, (4) scan all docs for stale "blocked"/"in progress" markers that should now be "✅" |
+| Trigger                                   | Required action                                                                                                                                                                                                            |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Feature, UX, or tier behavior changed     | Update `docs/help-user-guide.md` + `src/options/options.html` Help & FAQ                                                                                                                                                   |
+| New feature ships                         | Remove phrase(s) from `UNSHIPPED_PHRASES` in `scripts/check-doc-policy.mjs`; add feature to both help surfaces                                                                                                             |
+| Roadmap scope or status changed           | Update [Notion: 90-Day Roadmap](https://www.notion.so/32fcb6782fcf8111aafbe748a4c2a040)                                                                                                                                    |
+| Architecture or policy decision made      | Create or update ADR in [Notion: ADRs](https://www.notion.so/32fcb6782fcf81fd9b93da7d29c86084)                                                                                                                             |
+| `docs/help-user-guide.md` changed         | Run [Notion: Help FAQ Regeneration Prompt](https://www.notion.so/32fcb6782fcf8102a63fd3cd62953e25) to regenerate `src/options/options.html` FAQ section                                                                    |
+| `README.md` changed                       | Refresh wiki Home.md Overview section                                                                                                                                                                                      |
+| Notion Developer Workflow updated         | Refresh wiki Home.md workflow section                                                                                                                                                                                      |
+| Notion UI Handoff updated                 | Refresh wiki Home.md UI/UX section                                                                                                                                                                                         |
+| Notion 90-Day Roadmap updated             | Refresh wiki Home.md roadmap section                                                                                                                                                                                       |
+| `AGENTS.md` changed                       | Refresh wiki Home.md workflow section; mirror any structural changes to `CLAUDE.md` in the same work cycle                                                                                                                 |
+| `CODEX.md` changed                        | Refresh wiki Home.md workflow section                                                                                                                                                                                      |
+| `CLAUDE.md` changed                       | Refresh wiki Home.md workflow section; mirror any structural changes to `AGENTS.md` in the same work cycle                                                                                                                 |
+| Phase gate or milestone sign-off recorded | Cross-doc alignment sweep: (1) SESSION.md version current, (2) roadmap phase status updated, (3) CODEX.md `## Current Sprint` updated, (4) scan all docs for stale "blocked"/"in progress" markers that should now be "✅" |
 
 <!-- PRE_COMMIT_CHECKLIST:END -->
 
@@ -135,9 +185,9 @@ Run this in order before every commit/push. No exceptions.
 ## Canonical Workflow Doc
 
 - Source of truth for local checks, manual smoke flow, packaging, and release policy:
-  - `docs/dev-workflow.md`
+  - [Notion: Developer Workflow](https://www.notion.so/32fcb6782fcf8117ac25e12e9ac76432)
 - UI handoff/source-of-truth guidance:
-  - `docs/ui-handoff.md`
+  - [Notion: UI Handoff](https://www.notion.so/32fcb6782fcf811f904ddacb264806bd)
   <!-- WIKI_SYNC_RULE:START -->
 - Every requested commit/push cycle must include a matching update to:
   - `https://github.com/palisades-berlin/TheCollector.wiki.git` (`Home.md`)
@@ -149,7 +199,47 @@ Run this in order before every commit/push. No exceptions.
   single source of truth for content. `src/options/options.html` (Help & FAQ
   section) is the _user-friendly rendering_ of that source. Whenever
   `docs/help-user-guide.md` is modified, run
-  `docs/codex-prompt-help-faq-regeneration.md` in the same work cycle to
+  [Notion: Help FAQ Regeneration Prompt](https://www.notion.so/32fcb6782fcf8102a63fd3cd62953e25) in the same work cycle to
   regenerate the HTML section with plain, goal-oriented language. The markdown
   and the HTML must never diverge in content coverage (Rule 3), but they may —
   and should — differ in tone and phrasing.
+
+---
+
+## Common Commands
+
+```bash
+npm install              # Install dependencies
+npm run lint             # ESLint
+npm run check:types      # TypeScript checking (checkJs)
+npm run format:check     # Prettier check
+npm run test:unit        # Unit tests only
+npm run test:coverage    # Unit tests + coverage gates (lines 90%, branches 85%, functions 90%)
+npm run test:integration # Integration tests
+npm run check            # Full CI-equivalent check (lint + types + all tests)
+npm run test:version-policy:local  # Version alignment check (uncommitted changes)
+npm run test:docs-policy           # Help/docs parity check
+npm run format:session             # Format SESSION.md
+./scripts/package-release.sh      # Build release archive
+```
+
+To run the extension locally: open `chrome://extensions`, enable Developer mode, click "Load unpacked", select the repo root.
+
+## Architecture
+
+**Data flow:**
+
+- `Popup` → `Service Worker` (`src/background/service-worker.js`) → `Content Script` (`src/content/capture-agent.js`) → `Offscreen Document` (`src/offscreen/offscreen.js`) → `IndexedDB`
+- Export path: `History`/`Preview` → screenshot records → PNG / JPG / PDF / Clipboard
+
+**Key layers:**
+
+- `src/background/` — service worker bootstrap + capture orchestration
+- `src/content/` — page-side scroll/metrics agent (injected)
+- `src/offscreen/` — tile stitching and image composition (off-screen canvas)
+- `src/popup/` — primary capture + URL collection UI
+- `src/history/` — screenshot browser with filters and bulk actions
+- `src/preview/` — review, edit (crop/blur/highlight/text), export
+- `src/shared/` — message protocol (`messages.js`), IndexedDB access (`db.js`), persistence repos (`repos/`), global design tokens (`ui.css`)
+
+**Design tokens:** global CSS custom properties (`--sc-*`) defined in `src/shared/ui.css`; surface-level tokens in each page's own CSS.

@@ -7,11 +7,9 @@
     "SESSION_RULE",
     "TOOL_ROUTER",
     "OPENING_PROMPT",
-    "LOCAL_QUALITY_CHECKS",
     "VERSIONING_RULE",
     "WIKI_SYNC_RULE",
-    "UI_SOURCE_OF_TRUTH",
-    "UI_CHANGE_POLICY",
+    "NOTION_SYNC_RULE",
     "ROADMAP_AUTHORITY",
     "ROADMAP_CONSTRAINTS",
     "ROADMAP_MILESTONES",
@@ -25,6 +23,8 @@
       "BEHAVIOURAL_RULES",
       "HELP_RULES",
       "SESSION_RULE",
+      "WIKI_SYNC_RULE",
+      "NOTION_SYNC_RULE",
       "ROADMAP_AUTHORITY",
       "ROADMAP_CONSTRAINTS",
       "ROADMAP_MILESTONES"
@@ -35,34 +35,15 @@
       "BEHAVIOURAL_RULES",
       "HELP_RULES",
       "SESSION_RULE",
+      "WIKI_SYNC_RULE",
+      "NOTION_SYNC_RULE",
       "ROADMAP_AUTHORITY",
       "ROADMAP_CONSTRAINTS",
       "ROADMAP_MILESTONES"
     ],
     "SESSION.md": ["SESSION_RULE", "TOOL_ROUTER", "OPENING_PROMPT"],
-    "docs/project-ruleset.md": [
-      "ENGINEERING_RULES",
-      "HELP_RULES",
-      "ROADMAP_AUTHORITY",
-      "ROADMAP_CONSTRAINTS",
-      "ROADMAP_MILESTONES"
-    ],
-    "docs/dev-workflow.md": [
-      "LOCAL_QUALITY_CHECKS",
-      "VERSIONING_RULE",
-      "WIKI_SYNC_RULE",
-      "HELP_RULES",
-      "UI_SOURCE_OF_TRUTH",
-      "UI_CHANGE_POLICY"
-    ],
     "WORKFLOW.md": ["SESSION_RULE", "OPENING_PROMPT"],
-    "CONTRIBUTING.md": ["VERSIONING_RULE", "SECURITY_PRIVACY_RULES", "REVIEW_STANDARDS"],
-    "docs/ui-handoff.md": ["UI_SOURCE_OF_TRUTH", "UI_CHANGE_POLICY"],
-    "docs/thecollector-2.0-90-day-roadmap.md": [
-      "ROADMAP_AUTHORITY",
-      "ROADMAP_CONSTRAINTS",
-      "ROADMAP_MILESTONES"
-    ]
+    "CONTRIBUTING.md": ["VERSIONING_RULE", "SECURITY_PRIVACY_RULES", "REVIEW_STANDARDS"]
   },
   "canonicalMirrors": [
     {
@@ -72,13 +53,13 @@
     },
     {
       "id": "ENGINEERING_RULES",
-      "canonical": "docs/project-ruleset.md",
-      "mirrors": ["AGENTS.md", "CLAUDE.md"]
+      "canonical": "AGENTS.md",
+      "mirrors": ["CLAUDE.md"]
     },
     {
       "id": "HELP_RULES",
-      "canonical": "docs/project-ruleset.md",
-      "mirrors": ["AGENTS.md", "CLAUDE.md", "docs/dev-workflow.md"]
+      "canonical": "AGENTS.md",
+      "mirrors": ["CLAUDE.md"]
     },
     {
       "id": "SESSION_RULE",
@@ -92,38 +73,33 @@
     },
     {
       "id": "VERSIONING_RULE",
-      "canonical": "docs/dev-workflow.md",
-      "mirrors": ["CONTRIBUTING.md"]
+      "canonical": "CONTRIBUTING.md",
+      "mirrors": []
     },
     {
       "id": "WIKI_SYNC_RULE",
-      "canonical": "docs/dev-workflow.md",
-      "mirrors": ["AGENTS.md", "CLAUDE.md"]
+      "canonical": "AGENTS.md",
+      "mirrors": ["CLAUDE.md"]
     },
     {
-      "id": "UI_SOURCE_OF_TRUTH",
-      "canonical": "docs/ui-handoff.md",
-      "mirrors": ["docs/dev-workflow.md"]
-    },
-    {
-      "id": "UI_CHANGE_POLICY",
-      "canonical": "docs/ui-handoff.md",
-      "mirrors": ["docs/dev-workflow.md"]
+      "id": "NOTION_SYNC_RULE",
+      "canonical": "AGENTS.md",
+      "mirrors": ["CLAUDE.md"]
     },
     {
       "id": "ROADMAP_AUTHORITY",
-      "canonical": "docs/thecollector-2.0-90-day-roadmap.md",
-      "mirrors": ["AGENTS.md", "CLAUDE.md", "docs/project-ruleset.md"]
+      "canonical": "AGENTS.md",
+      "mirrors": ["CLAUDE.md"]
     },
     {
       "id": "ROADMAP_CONSTRAINTS",
-      "canonical": "docs/thecollector-2.0-90-day-roadmap.md",
-      "mirrors": ["AGENTS.md", "CLAUDE.md", "docs/project-ruleset.md"]
+      "canonical": "AGENTS.md",
+      "mirrors": ["CLAUDE.md"]
     },
     {
       "id": "ROADMAP_MILESTONES",
-      "canonical": "docs/thecollector-2.0-90-day-roadmap.md",
-      "mirrors": ["AGENTS.md", "CLAUDE.md", "docs/project-ruleset.md"]
+      "canonical": "AGENTS.md",
+      "mirrors": ["CLAUDE.md"]
     }
   ]
 }
